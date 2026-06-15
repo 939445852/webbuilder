@@ -1,0 +1,13 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Select key list
+  serverScript: function main(){let e,a="select * from wb_key where rid={?rid?}";if(Params.searchList){Wb.setLike("searchList");a+="
+    and (map_k like {?searchList?} or map_v like {?searchList?})"}a+=" order by map_k";e=Wb.getDict(a,"wb,");if(Params.keyType=="1"){e.items.sort(((e,a)=>parseInt(e.map_k)-parseInt(a.map_k)))}Wb.send(e)}main();
+tags: ''
+text: module
+title: ''

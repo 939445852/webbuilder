@@ -1,0 +1,1 @@
+class Util{static isReservedRole(e){const t=["admin","default"];return t.includes(e)}}export default Util;

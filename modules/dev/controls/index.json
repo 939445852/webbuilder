@@ -1,0 +1,9 @@
+{
+  "title": "@controlsMng",
+  "icon": "",
+  "img": "",
+  "hideInMenu": "true",
+  "items": [
+    "save.xwl"
+  ]
+}

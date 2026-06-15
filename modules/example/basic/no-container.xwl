@@ -1,0 +1,37 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+items:
+- _expanded: false
+  _icon: window
+  cls: Wb.Window
+  events:
+    destroy: Wb.tip('The module is destroyed.');
+  properties:
+    autoScroll: 'true'
+    cid: main
+    closeAction: destroy
+    height: 20em
+    html: |-
+      <p>
+        This example demonstrates that there is no default container (usually a tab card) when the module is displayed, and
+        the
+        entire module is automatically destroyed when the main window is closed.
+      </p>
+      <p>
+        The module has parameters: {container: false}.
+        Please click the [Properties] button to view the module parameters on the IDE.
+      </p>
+    padding: 'true'
+    title: No container module
+    visible: 'true'
+    width: 50em
+  text: main
+properties:
+  cid: module
+tags: '{container: false}'
+text: module
+title: ''

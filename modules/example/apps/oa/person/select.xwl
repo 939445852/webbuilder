@@ -1,0 +1,44 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  serverScript: |-
+    function main() {
+      let download = Wb.getObject('download');
+      if (download) {
+        //download blob
+        let row = Wb.getRow({
+          sql: 'select full_name, photo from wb_staff where sid={?$sid?}',
+          blob: true,
+          params: download
+        });
+        if (row?.photo)
+          Wb.exportData(row.photo, row.full_name + '.png');
+        else
+          Wb.raise('Photo not found.');
+      } else {
+        // select rows
+        // getOrderSql will not cause SQL injection
+        let sql;
+
+        sql = `
+            select a.*,b.user_name,c.dept_name,c.dept_code from wb_staff a, wb_user b, wb_dept c
+            where a.user_id=b.sid and a.dept_id=c.sid
+            `;
+        if (Params.searchText) {
+          Wb.setLike('searchText');
+          sql += ' and (a.full_name like {?searchText?} or a.code like {?searchText?})';
+        } else if (Params.searchDeptId) {
+          sql += ' and a.dept_id={?searchDeptId?}';
+        }
+        sql += Wb.getOrderSql({ email: 'a.email' });// There are 2 emails fields in the tables
+        Wb.sendRowx({ sql, kv: { gender: 'gender' } }); // or Wb.sendRowx({ sql, kv: 'gender' });
+      }
+    }
+    main();
+tags: ''
+text: module
+title: ''

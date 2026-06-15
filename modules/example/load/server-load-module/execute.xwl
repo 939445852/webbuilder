@@ -1,0 +1,61 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  serverScript: |-
+    let actions = {
+      /**
+       * Load a javascript library.
+       */
+      loadJs() {
+        let result;
+
+        Wb.load('./util.js');
+        result = My.Util.add(Wb.getInt('value1'), Wb.getInt('value2'));
+        Wb.send(result);
+      },
+      /**
+       * Synchronous load a javascript module.
+       */
+      loadMjs() {
+        let result, Util = Wb.load('./util.mjs');
+
+        result = Util.add(Wb.getInt('value1'), Wb.getInt('value2'));
+        Wb.send(result);
+      },
+      /**
+       * Asynchronous import a javascript module. This method is not recommended, please use Wb.load instead.
+       */
+      importMjs() {
+        import('wb/modules/example/load/server-load-module/util.mjs').then(m => {
+          let result = m.default.add(Wb.getInt('value1'), Wb.getInt('value2'));
+          Wb.send(result);
+        }).catch(e => {
+          Wb.error(e?.toString());
+        });
+      },
+      /**
+       * Run a xwl module serverscript function.
+       */
+      runXwl() {
+        let result;
+
+        Wb.run('./util.xwl');
+        result = app.add(Wb.getInt('value1'), Wb.getInt('value2'));
+        Wb.send(result);
+      },
+      /**
+       * Invoke a xwl module execute serverscript and obtain client script.
+       */
+      invokeXwl() {
+        let script = Wb.execute('./query');
+        Wb.send(script);
+      }
+    };
+    actions[Params.xaction]();
+tags: ''
+text: module
+title: ''

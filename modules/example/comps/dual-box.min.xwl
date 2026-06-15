@@ -1,0 +1,27 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: 'Wb.make(app,{cname:"viewport",layout:"grid1",cid:"viewport1",items:[{cname:"label",cid:"mainLabel",cls:"w-title3",text:"DualBox"},{cname:"title",title:"Local
+    data",cid:"localDataTitle"},{cname:"label",cid:"localDataLabel",text:"Use local
+    data to select"},{cname:"dualBox",sourceData:[{code:"10001",full_name:"Terri Duffy"},{code:"10002",full_name:"Roberto
+    Tamburello"},{code:"10003",full_name:"Michael Sullivan"},{code:"10004",full_name:"Sharon
+    Salavaria"},{code:"10005",full_name:"Gail Erickson"},{code:"10006",full_name:"Jossef
+    Goldberg"}],cid:"localDataDualBox",destData:[{code:"10007",full_name:"Ovidiu Cracium"},{code:"10008",full_name:"Janice
+    Galvin"},{code:"10009",full_name:"Thierry D''Hers"}],height:"15em",subtextField:"code",textField:"full_name"},{cname:"button",justifySelf:"start",cid:"getSelectedDataBtn",text:"Get
+    Selected Data",events:{click(e,a){Wb.tip("Selected: "+Wb.encode(app.localDataDualBox.destData))}}},{cname:"title",title:"Remote
+    data",cid:"remoteDataTitle"},{cname:"label",cid:"remoteDataLabel",text:"Use remote
+    data to select and sync selections in database"},{cname:"dualBox",autoLoad:false,sourceUrl:"demo-source?xaction=selectNoneAdminStaff",destUrl:"demo-source?xaction=selectAdminStaff",cid:"remoteDataDualBox",height:"15em",searchBar:true,sourceGridConfigs:{cname:"grid",title:"User
+    List"},destGridConfigs:{cname:"grid",title:"Admin Users"},events:{ready(e,a){let
+    t=this;t.sourceGrid.pageSize=10;t.sourceGrid.load();t.destGrid.pageSize=10;t.destGrid.load()},beforemove(e,a,t){Wb.ajax({url:xpath+"/sync-select",params:{items:e,include:a},success:e=>{this.acceptMove()}});return
+    false}}},{cname:"title",title:"Customize Columns",cid:"customizeColsTitle"},{cname:"label",cid:"customizeColsLabel",text:"Customize
+    grid columns"},{cname:"dualBox",sourceUrl:"demo-source?xaction=staffDict",gridHeader:true,cid:"customizeColsDualBox",height:"15em",columns:[{cname:"column",cid:"rowNumCol",rowNum:true},{cname:"column",cid:"codeCol",fieldName:"code",text:"Code"},{cname:"column",width:-1,fieldName:"full_name",text:"Full
+    name",cid:"fullNameCol"}],sourceGridConfigs:{cname:"grid",pagingBar:false}}]});'
+hideInMenu: 'false'
+icon: dual-box
+img: ''
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

@@ -1,0 +1,64 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: |-
+    Wb.define(app, {
+      /** @property {String} src The src of image to preview. */
+      get$src() {
+        return app.imageEl.src;
+      },
+      set$src(value) {
+        app.imageEl.src = value;
+      }
+    });
+    Wb.define(app, {
+      /** @property {String} path The file path to edit.  @priv */
+      path: _$path$_,
+      /** @property {Boolean} - Whether not auto load.  */
+      notLoad: '_$notLoad',
+      /**
+       * Preview the image file. @priv
+       */
+      preview(callback) {
+        let path = app.path;
+        Wb.ajax({
+          url: 'm?xwl=sys/file/open',
+          params: { path },
+          success(resp) {
+            app.imageEl.src = 'data:image/' + Wb.getFileExt(path) + ';base64,' + resp;
+          }
+        });
+      },
+      /**
+       * Execute after on load. @priv
+       */
+      onLoad() {
+        if (!app.notLoad)
+          app.preview();
+        if (!Globals.WbMainTab)
+          document.title = Wb.getFilename(app.path);
+      }
+    });
+hideInMenu: 'false'
+icon: image
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  events:
+    ready: app.imageEl = this.bodyEl.addEl('w-margin-center', 'img');
+  properties:
+    autoScroll: 'true'
+    bodyCls: w-prev-ct
+    border: 'false'
+    cid: viewport1
+  text: viewport1
+properties:
+  cid: module
+  remark: Image viewer shell
+  serverScript: 'Wb.set({ path: Wb.encode(Params.path) });'
+tags: ''
+text: module
+title: ''

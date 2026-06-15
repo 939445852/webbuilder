@@ -1,0 +1,84 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+items:
+- _expanded: true
+  _icon: edit
+  cls: Wb.CodeEditor
+  properties:
+    cid: codeEditor1
+    full: 'true'
+    readonly: 'true'
+    value: |-
+      //Gets the parameters submitted by the client. It is commonly used in application/x-www-form-urlencoded,
+      //multipart/form-data and application/json
+      let val = Wb.get('paramName'); //Gets session attribute, request attribute and request parameters
+      val = Wb.getString('paramName'); //Gets the parameter and converts it to string
+      val = Wb.getBool('paramName'); //Gets the parameter and converts it to boolean
+      val = Wb.getInt('paramName'); //Gets the parameter and converts it to int
+      val = Wb.getFloat('paramName'); //Gets the parameter and converts it to float
+      val = Wb.getDate('paramName'); //Gets the parameter and converts it to date
+      val = Wb.getObject('paramName'); //Gets the parameter and converts it to Object/Array
+      //Gets multiple parameters with the same name, always returning array or Java List. Example: Get multiple uploaded files
+      val = Wb.getParams('paramName');
+      val = Params.paramName; //Get the value through the proxy, same as Wb.get
+      val = Params[name];
+      let hasParam = Wb.has('paramName'); //Determines whether the parameter exists
+      let payload = Wb.payload; //Gets the payload content of the request
+      let payloadParams = Wb.payloadParams; //Gets the application/json payload object
+
+      //Set attribute values
+      Wb.set('paramName', 'abc'); //set "abc" to request attribute "paramName", same as request.setAttribute('paramName', 'abc');
+      Params.paramName = 'abc'; //Set attribute by Proxy, same as above
+      Params[name] = 'abc'; //Same as above
+
+      //Send object to the client
+      Wb.send('text'); //Send text
+      Wb.send(123); //Send after converting the number to text
+      Wb.send(new Date()); //Send after converting the date to text
+      Wb.send({ foo: 'bar' }); //Send after encoding the object to text
+      Wb.send([1, 2, 3]); //Send after encoding the array to text
+      Wb.send(inputStream); //Send inputstream
+      Wb.send(bytes); //Send byte array
+      Wb.send('text', 'mySocket'); //Send text to the current user webSocket with the name "mySocket"
+      Wb.send(inputStream, 'mySocket', 'admin'); ///Send inputStream to all "admin" users webSocket with the name "mySocket"
+      Wb.send({ type: 'log', style: 3, data: 'msg' }, '$ide', true); //Send content to the webSocket of the IDE
+
+      //Gets the uploaded file
+      let file = Wb.getParams('fileInput'); //Gets single file
+      filename = file.name; //Gets filename
+      stream = file.stream; //Gets file inputstream
+      size = file.size; //Gets file size
+      let files = Wb.getParams('fileInput'); //Gets single or multiple files
+      files.forEach(file => {
+        new Wb.File(true, 'upload/' + filename).stream = file.stream; //Save the uploaded file to the specified directory
+        //Set the stream to a parameter named "myStream". Note that the inputstream is unidirectional,
+        //and if the stream is already in use, the stream pointer will point to the end of the stream.
+        Params.myStream = file.stream;
+        Wb.sql('insert into table values({?blob|myStream?})'); //Insert the uploaded file into the database table blob field
+      });
+
+      //Send HTTP requests
+      let html = Wb.submit('https://developer.mozilla.org'); //Sends a GET request to the specified URL and gets the returned content
+      //Sends with parameters
+      Wb.submit({ url: 'http://localhost:8080/wb/m?xwl=test2', params: { foo: 'bar' } });
+      //Sends with payload data
+      Wb.submit({ url: 'http://localhost:8080/wb/m?xwl=test2', data: payloadObject });
+      //Login to the system, verify the username and password, and get the cookie token
+      let cookie = Wb.submit({
+        url: 'http://localhost:8080/wb/verify', all: true, params: { username: 'admin', password: 'admin' }
+      }).cookie;
+      //Access module1 with login cookie token
+      let result = Wb.submit({ url: 'http://localhost:8080/wb/m?xwl=module1', cookie }, { foo: 'bar' });
+      //Logout
+      Wb.submit({ url: 'http://localhost:8080/wb/logout', cookie });
+    wrapBorder: '0'
+  text: codeEditor1
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

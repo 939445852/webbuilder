@@ -1,0 +1,1 @@
+class Util{static add(l,t){return l+t}}Wb.log("util.mjs only load once.");export default Util;

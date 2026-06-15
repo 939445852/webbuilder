@@ -1,0 +1,21 @@
+{
+  "items": [
+    "search.xwl",
+    "replace.xwl",
+    "select-debug.xwl",
+    "set-debug.xwl",
+    "create-docs.xwl",
+    "create-wb-css.xwl",
+    "create-release.xwl",
+    "reload-system.xwl",
+    "compress.xwl",
+    "view-source.xwl",
+    "checkin.xwl",
+    "actions.xwl",
+    "ide-ss.js"
+  ],
+  "title": "@ide",
+  "icon": "",
+  "img": "",
+  "hideInMenu": "true"
+}

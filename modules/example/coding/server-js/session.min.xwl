@@ -1,0 +1,28 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.make(app,{cname:"codeEditor",readonly:true,wrapBorder:0,value:"//Gets
+    the current user session\nlet session = request.getSession();\n//Gets the current
+    user name\nlet username = Wb.username;\n//Gets the current user ID\nlet userid
+    = Wb.userid;\n//Gets the current user display name\nlet dispname = Wb.dispname;\n//Gets
+    the current user role\nlet roles = Wb.roles;\n\n//Determines whether the current
+    user can access dbe.xwl\nlet result = Wb.permit('admin/dbe.xwl');\n//Determines
+    whether the current user contains a role\nlet hasRole = Wb.hasRole('admin');\n//Determines
+    whether the current user contains some roles\nhasRole = Wb.hasRole(['admin', 'manager']);\n//If
+    the specified role is not included, the specified exception information is thrown\nWb.permitRole('manager',
+    'Only manager is allowed');\nWb.permitRole(['manager', 'test'], 'Only manager
+    and test are allowed');\n//If the specified role is included, the specified exception
+    information is thrown\nWb.forbidRole('manager', 'manager is not allowed');\nWb.forbidRole(['manager',
+    'test'], 'manager and test are not allowed');\n\n//Gets the session list map of
+    the specified user\nlet map = Sessions.getSessions('admin');\n//Get all the corresponding
+    websocket sessions by user id\nlet list = Sessions.getWSSessions('admin', '$ide');",cid:"codeEditor1",full:true});
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  links: '["wb/js/monaco.js"]'
+tags: ''
+text: module
+title: ''

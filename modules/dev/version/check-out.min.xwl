@@ -1,0 +1,14 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Check out files
+  serverScript: Wb.checkDemo();function main(){let e=Wb.Query.getArraySql(Wb.getObject("ids"),"varchar");Wb.sql({sql:"select
+    file_path,file_content from wb_version where sid in ("+e.sql+")",params:e.params,blob:true,fn(e){new
+    Wb.File(true,e.file_path).stream=e.file_content}})}main();
+tags: ''
+text: module
+title: ''

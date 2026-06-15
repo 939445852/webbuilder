@@ -1,0 +1,15 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.apply(app,{add(e,a,i){app.number1.value=e;app.number2.value=a;app.callback=i;app.window1.show()}});Wb.make(app,{cname:"window",layout:"grid1",resetDialog:true,visible:true,title:"Perform
+    add",cid:"window1",closeAction:"destroy",events:{ok(e){app.callback(app.number1.value+app.number2.value,this)}},items:[{cname:"label",cid:"label1",text:"This
+    window from common-window.xwl"},{cname:"number",required:true,cid:"number1",text:"Value1"},{cname:"number",required:true,cid:"number2",text:"Value2"}]});Wb.make(app,{cname:"window",cid:"thisWinAutoDestroyedAfterWindow1Destroyed"});
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

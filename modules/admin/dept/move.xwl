@@ -1,0 +1,21 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Move departments
+  serverScript: |-
+    function main() {
+      let update = [], parent_id = Params.parentId || '0';
+
+      Wb.getObject('source').forEach(item => {
+        update.push({ $sid: item, parent_id });
+      });
+      Wb.sync({ tableName: 'wb_dept', update });
+    }
+    main();
+tags: ''
+text: module
+title: ''

@@ -1,0 +1,220 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: mainLabel
+      cls: w-title3
+      text: File upload & download
+    text: mainLabel
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: uploadTitle
+      title: Upload files
+    text: uploadTitle
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _icon: search-file
+      cls: Wb.FileInput
+      properties:
+        cid: singleFileInput
+        text: Please select a file
+      text: singleFileInput
+    - _icon: search-file
+      cls: Wb.FileInput
+      properties:
+        accept: image/*
+        browseHeight: 6em
+        browseMode: 'true'
+        cid: multiFileInput
+        multiple: 'true'
+        text: Please select multiple files
+      text: multiFileInput
+    - _icon: text
+      cls: Wb.Text
+      properties:
+        cid: text1
+        text: Other control
+      text: text1
+    - _icon: button
+      cls: Wb.Button
+      events:
+        click: |-
+          Wb.ajax({
+            url: xpath + '/actions&xaction=upload',
+            comps: app.uploadCt,
+            params: { foo: 'bar' },
+            // params: Wb.getValue(app.uploadCt), // same as comps property
+            success(resp) {
+              Wb.tipSucc('All files have been saved to "' + resp + '".');
+            }
+          });
+
+          //Please also refer to Wb.fetch the promise version of wb.ajax
+      properties:
+        cid: uploadButton
+        text: Upload all
+        type: primary
+      text: uploadButton
+    properties:
+      cid: uploadCt
+      frame: 'true'
+      labelUp: 'true'
+      layout: grid1
+    text: uploadCt
+  - _expanded: true
+    _icon: title
+    cls: Wb.Title
+    properties:
+      cid: downloadTitle
+      title: Download files
+    text: downloadTitle
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _icon: button
+      cls: Wb.Button
+      events:
+        click: |-
+          //Using Wb.download is the recommended method for downloading
+          Wb.download(xpath + '/actions&xaction=downloadWbJs', { foo: 'bar' });
+      properties:
+        cid: commonDownloadWbJsButton
+        text: Common download wb.js
+        type: primary
+      text: commonDownloadWbJsButton
+    - _icon: button
+      cls: Wb.Button
+      events:
+        click: |-
+          //Using Wb.ajax is usually not a recommended method for downloading, please use Wb.download instead
+          Wb.ajax({
+            url: xpath + '/actions&xaction=downloadWbJs',
+            download: true,
+            params: { foo: 'bar' },
+            onDownload(percent) {
+              Wb.progress(percent);
+            }
+          });
+      properties:
+        cid: ajaxDownloadWbJsButton
+        text: Ajax download wb.js
+        type: primary
+      text: ajaxDownloadWbJsButton
+    - _icon: button
+      cls: Wb.Button
+      events:
+        click: Wb.download(xpath + '/actions&xaction=downloadBlob');
+      properties:
+        cid: downloadBlobButton
+        text: Download blob
+        type: primary
+      text: downloadBlobButton
+    - _icon: button
+      cls: Wb.Button
+      events:
+        click: Wb.download(xpath + '/actions&xaction=downloadZip');
+      properties:
+        cid: downloadZipButton
+        text: Download zip
+        type: primary
+      text: downloadZipButton
+    - _icon: button
+      cls: Wb.Button
+      events:
+        click: |-
+          let base64Text = 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAJlJREFUOE/FkjsOgzAQBWfLEOUIqbgInCrQmQpuFXMmFNpFJiTCfCIMSHG9nn1vtMLBJwf/0wNeJWYP6JpjekBb8QSSEIgqxXmApgzb/kl6y7GeRFclykhDqkwBGmVvsSM3izxVas+BCHdVYsC6Hy5JW6FraTyJo43TBKsAEczlQfGzwhYX51zi/w9pSLCl8ndGBDuTGEQYhjv9pkQRnIOeTgAAAABJRU5ErkJggg==';
+          Wb.downloadBase64(base64Text, 'insert.png');
+          //Wb.downloadBlob(fileOrBlob, 'myFile.dat');
+      properties:
+        cid: downloadBase64BlobButton
+        text: Download base64/blob
+        type: primary
+      text: downloadBase64BlobButton
+    properties:
+      cid: downloadCt
+      frame: 'true'
+      layout: grid1
+    text: downloadCt
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: downloadAfterUploadingTitle
+      title: Download after uploading
+    text: downloadAfterUploadingTitle
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _icon: search-file
+      cls: Wb.FileInput
+      properties:
+        accept: image/*
+        browseHeight: 6em
+        browseMode: 'true'
+        cid: multiFileInput
+        multiple: 'true'
+        text: Please select multiple files
+      text: multiFileInput
+    - _icon: text
+      cls: Wb.Text
+      properties:
+        cid: text1
+        text: Other control
+      text: text1
+    - _icon: button
+      cls: Wb.Button
+      events:
+        click: |-
+          const uploading = 'Uploading now, please wait...';
+          const downloading = 'Downloading now, please wait...';
+
+          Wb.ajax({
+            url: xpath + '/actions&xaction=downloadAfterUpload',
+            comps: app.downloadAfterUploadingCt,
+            download: true,
+            params: { foo: 'bar' },
+            mask: uploading, //let the default mask is "uploading"
+            onUpload(percent) {
+              Wb.progress(percent, uploading);
+            },
+            onDownload(percent) {
+              Wb.progress(percent, downloading);
+            },
+            callback() {
+              Wb.unmask(downloading);
+            }
+          });
+      properties:
+        cid: downloadAfterUploadButton
+        text: Download after upload
+        type: primary
+      text: downloadAfterUploadButton
+    properties:
+      cid: downloadAfterUploadingCt
+      frame: 'true'
+      labelUp: 'true'
+      layout: grid1
+    text: downloadAfterUploadingCt
+  properties:
+    cid: viewport1
+    layout: grid1
+  text: viewport1
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

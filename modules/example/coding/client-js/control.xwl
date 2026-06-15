@@ -1,0 +1,88 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+items:
+- _expanded: true
+  _icon: edit
+  cls: Wb.CodeEditor
+  properties:
+    cid: codeEditor1
+    full: 'true'
+    readonly: 'true'
+    value: |-
+      //Access components and controls
+
+      //General properties and functions
+      let text = control.text; //Get label text of the control
+      control.text = 'text label'; //Text label
+      control.html = 'html label'; //HTML label, this property is invalid after setting text property
+      control.width = '10em'; //Set width
+      control.height = 80; //Set height
+      control.visible = false; //Hide control
+      control.hide(); //Same as above
+      control?.hide(); //Call hide with optional chaining
+      control.visible = true; //Show control
+      control.show(); //Same as above
+      control.appeared = false; //Hide control(not drawn), but still affects layout as normal.
+      control.setAppeared(false); //Same as above
+      control.disabled = true; //Disable control
+      control.setDisabled(true); //Same as above
+      control.icon = 'paste'; //Set icon
+      control.el.cls = 'cls1 cls2'; //Add cls1, cls2 class name to control's element
+      control.cls = 'cls1 cls2'; //Same as above
+      conrols.el.removeCls('cls1'); //Remove control's element class name
+      conrols.removeCls('cls1'); //Same as above
+      control.el.setStyle('color', 'red'); //Set control's element style
+      control.setStyle('color', 'red'); //Same as above
+      control.el.removeStyle('color'); //Remove control's element style
+      control.removeStyle('color'); //Same as above
+
+      //Add and delete controls
+      panel.insertBefore({ cname: 'text' }, text1); //Insert a new text box before text1
+      panel.insertAfter({ cname: 'text' }, text1); //Insert a new text box after text1
+      panel.insert(2, { cname: 'text' }); //Insert a new text box at the specific index
+      panel.add({ cname: 'button', text: 'My Button' }); //Add components at the last
+      panel.addHeader({ cname: 'text' }); //Add a text box as a sub-component in the panel header
+      panel.addFooter({ cname: 'text' }); //Add a text box as a sub-component in the panel footer
+      control.remove(); //Remove control (control is reusable)
+      panel.removeAll(); //Remove all child components in panel (components are reusable)
+      control.destroy(); //Destroy control (Really delete)
+      panel.destroyAll(); //Destroy all child components in panel (Really delete)
+
+      //Event and DOM listeners
+      panel.on('destroy', app.onDestroy); //Add component event
+      panel.un('destroy', app.onDestroy); //Remove component event
+      panel.mon('keydown', app.onKeyDown); //Add dom listeners to panel's element
+      panel.mun('keydown', app.onKeyDown); //Remove dom listeners from panel's element
+      panel.mon(DocEl, 'keydown', app.onKeyDown); //Add dom listeners to DocEl, the listener will be removed after panel is destroyed.
+      panel.mun(DocEl, 'keydown', app.onKeyDown); //Remove dom listeners from DocEl
+
+      //Traverse and find
+      control = app.myControl; //Down control by app
+      control = panel.find('nameText'); //Find direct control by cid
+      control = panel.find(item => item.visible && item.foo == 'bar'); //Find direct control by function
+      control = panel.down('myControl'); //Down control by cid
+      control = panel.down(item => item.visible && item.foo == 'bar'); //Down control by function
+      control = panel.children.myControl; //Down control by proxy "children"
+      panel = text.up('myPanel'); //Up control by cid
+      panel = text.up(item => item.visible && item.foo == 'bar'); //Up control by function
+      comps = panel.filter(fn); //Find all direct comps by function
+      comps = panel.downAll(fn); //Down all comps by function
+      comps = text.upAll(fn); //Up all comps by function
+      panel.each(item => console.log(item)); // Each direct child comps
+      panel.eachOwned(item => console.log(item)); // Each sub-comps
+      panel.eachWhole(item => console.log(item)); //Each direct child comps and sub-comps
+      panel.cascade(item => console.log(item)); //Cascade comps
+      panel.bubble(item => console.log(item)); //Bubble comps
+      control = comp.nextSibling; //Gets comp's next sibling
+      control = comp.previousSibling; //Gets comp's previous sibling
+    wrapBorder: '0'
+  text: codeEditor1
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

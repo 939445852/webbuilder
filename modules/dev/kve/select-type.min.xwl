@@ -1,0 +1,13 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Select key types
+  serverScript: function main(){let e="select * from wb_key_type";if(Params.searchType){Wb.setLike("searchType");e+="
+    where key_name like {?searchType?}"}e+=Wb.getOrderSql();Wb.sendDict(e,["wb_key_type","wb"])}main();
+tags: ''
+text: module
+title: ''

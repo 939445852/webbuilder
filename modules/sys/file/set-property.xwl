@@ -1,0 +1,15 @@
+_icon: module
+cls: Wb.Module
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Set file property in any path
+  serverScript: |-
+    let fs = Wb.load('./fs.mjs'), renameOnly = Wb.getBool('rename'), file;
+
+    file = fs.setFileProperty(Params.path, Params.filename, renameOnly ? false : Params.title,
+      Params.icon, Params.img, Params.tags, Params.url, Params.hideInMenu);
+    Wb.send({ lastModified: file.lastModified, path: file.path });
+text: module
+title: ''

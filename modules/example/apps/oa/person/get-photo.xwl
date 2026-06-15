@@ -1,0 +1,22 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  serverScript: |-
+    function main() {
+      let row = Wb.getRow({
+        sql: 'select photo from wb_staff where sid={?sid?}',
+        blob: true
+      });
+      if (row?.photo)
+        Wb.exportData(row.photo);
+      else
+        Wb.exportData(new Wb.File(true, 'wb/images/null.png').stream);
+    }
+    main();
+tags: ''
+text: module
+title: ''

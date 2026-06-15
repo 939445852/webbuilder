@@ -1,0 +1,28 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.apply(app,{onLoad(){let e=parentContainer;app.restorePanels();if(e?.app?.inHome){let
+    t=e.parent;app.viewport1.homeTab=t;app.onCardChange.call(t,e);t.on("cardchange",app.onCardChange)}},onCardChange(e){let
+    t=this.app.moduleTree,a=e==parentContainer;t.draggable=a?{acceptDrop(){let e=this.source[0].data,t=e.tags,a;if(t){t=Wb.parse(t);if(t.frame||t.newWin){Wb.tipWarn(Str.cannotOpenModule);return}}a=app.createPanel({moduleUrl:"m?xwl="+e.path,icon:e._icon,img:e._img,tags:t,strTitle:e.strTitle,title:e.text});a.intoView();a.highlight()}}:false;t.setEvents(a,"itemdrag",app.onItemDrag)},onItemDrag(e){let
+    t=e.source[0].data;e.allowDrop=t._leaf&&t.path!="my/home";e.mode="append"},createPanel(e){let
+    t,a,i,l=e.tags,r,o;i=e.moduleUrl;a={cname:"panel",layout:"fit",plainTitle:true,roundBorder:true,closable:true,maximizable:true,moduleUrl:i,tags:l};r=e.col||6;a.gridColValue=r;a.gridColumn="span
+    "+r;r=e.row||4;a.gridRowValue=r;a.gridRow="span "+r;if(e.icon)a.icon=e.icon;else
+    if(e.img)a.img=e.img;if(e.strTitle){a.strTitle=e.strTitle;a.title=Str[e.strTitle]}else{a.title=e.title}t=app.viewport1.add(a);a={container:t,updateTitle:false,success(e){let
+    a=t.firstItem,i;if(a instanceof Wb.Panel){a.border=false;i=a.tools?.filter((e=>e.icon!="close"))??[];if(a.title)t.title=a.title;if(a.icon)t.icon=a.icon;else
+    if(a.img)t.img=a.img}else{i=[]}i.push({icon:"menu",handler(){let e=this.up((e=>e
+    instanceof Wb.Panel));app.menuSetComp=e;app.colSlider.value=e.gridColValue??1;app.rowSlider.value=e.gridRowValue??1;app.mainMenu.showBy(this)}});t.tools=i;a?.titleBar$?.destroy();if(e?.noTitlebar){t.titleBar.hide();t.mon({mouseenter(){this.titleBar.show()},mouseleave(){this.titleBar.hide()}})}}};o=e.script;if(o)a.script=o;else
+    a.url=i;Wb.open(Wb.apply(a,l));return t},restorePanels(){let e=_$items$_;e.forEach((e=>{app.createPanel(e)}))}});Wb.make(app,{cname:"menu",layout:"grid1",padding:"1em",minWidth:"18em",defaults:{labelWidth:"5em"},cid:"mainMenu",gap:true,items:[{cname:"slider",minValue:1,text:Str.column,suffix:true,maxValue:12,cid:"colSlider",events:{change(e,t,a){app.menuSetComp.gridColValue=e;app.menuSetComp.gridColumn="span
+    "+e}}},{cname:"slider",minValue:1,text:Str.row,suffix:true,maxValue:12,cid:"rowSlider",events:{change(e,t,a){app.menuSetComp.gridRowValue=e;app.menuSetComp.gridRow="span
+    "+e}}}]});Wb.make(app,{cname:"viewport",droppable:"wb.home",itemsSortable:true,layout:"grid12",padding:".5em",background:"true",gap:".5em",bodyCls:"w-home-body",cid:"viewport1",events:{destroy(e){app.viewport1.homeTab?.un("cardchange",app.onCardChange)},beforesort(e,t,a,i){if(!e?.titleBar.el.contains(a.target))return
+    false}}});
+hideInMenu: 'false'
+icon: home
+img: ''
+properties:
+  cid: module
+  remark: My home page
+  serverScript: function loadPageData(){let t=Wb.getResource(["desktop","desktop"],[null,"system"]),e,o;t=t[0]??t[1];e=t?.portlets||[];e.forEach((t=>{try{o=t.moduleUrl;t.script=Wb.permitx(o)&&Wb.execute(o)}catch(e){t.script=e?.toString()}}));Wb.set({items:Wb.encode(e)})}loadPageData();
+tags: ''
+text: module
+title: '@home'

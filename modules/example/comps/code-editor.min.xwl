@@ -1,0 +1,28 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: 'Wb.make(app,{cname:"viewport",layout:"grid1",cid:"viewport1",items:[{cname:"label",cid:"mainLabel",cls:"w-title3",text:"CodeEditor"},{cname:"title",title:"JavaScript
+    editor",cid:"jsEditorTitle"},{cname:"codeEditor",value:"Cls[''Wb.Button''] = class
+    button extends Wb.mixin.Icon(Wb.Component) {\n  static configs = {\n    tabIndex:
+    Wb.isTouch ? undefined : 0,\n    rippleOnClick: true\n  };\n  /***/\n  init(configs)
+    {\n    let me = this;\n    super.init(configs);\n    me.on(''click'', me.onClickEvent);\n    me.mon({
+    [me.tapClick ? Event.tapDownName : ''click'']: me.onClick, keydown: me.onKeyDown
+    });\n  }\n}",cid:"jsEditor",height:"18em"},{cname:"title",title:"SQL editor",cid:"sqlEditorTitle"},{cname:"codeEditor",language:"sql",value:"select
+    a.field1, b.field2 from table1 a, table2 b where a.sid=b.sid\norder by a.field1",cid:"sqlEditor",height:"3em"},{cname:"title",title:"HTML
+    editor without border",cid:"htmlEditorTitle"},{cname:"codeEditor",language:"html",wrapBorder:false,value:''<!DOCTYPE
+    html>\n<head>\n<meta charset="UTF-8">\n<title>html</title>\n<link rel="icon" href="wb/images/app/favicon.ico">\n<link
+    rel="stylesheet" href="wb/css/iconfont.css">\n<link rel="stylesheet" href="wb/css/dark-wb.css">\n<script
+    src="wb/js/locale/wb-zh-cn.js"><\/script>\n<script src="wb/js/wb.js"><\/script>\n<script
+    src="wb/js/wb-client.js"><\/script>\n</head>\n<body>\n<script type="module">\nWb.onLoad(f
+    => {\n});\n<\/script>\n</body>\n</html>'',cid:"htmlEditor",height:"18em"},{cname:"label",cid:"otherLanguageLabel",text:"For
+    other languages, please set the language property."}]});'
+hideInMenu: 'false'
+icon: edit
+img: ''
+properties:
+  cid: module
+  links: '["wb/js/monaco.js"]'
+tags: ''
+text: module
+title: ''

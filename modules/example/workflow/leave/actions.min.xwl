@@ -1,0 +1,12 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'true'
+icon: ''
+img: ''
+properties:
+  cid: module
+  serverScript: let actions={selectLeave(){let e=Wb.getRow("select * from wb_leave
+    where flow_id={?flowId?}");e.flowTitle=new Wb.Workflow({flowId:Params.flowId}).title;Wb.send(e)}};actions[Params.xaction]();
+tags: ''
+text: module
+title: ''

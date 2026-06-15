@@ -1,0 +1,14 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Select version files
+  serverScript: function main(){let e,i=[];e="select sid, sdate, file_path, file_version,
+    version_remark, modify_date from wb_version";if(Params.searchVersion)i.push("file_version={?searchVersion?}");if(Params.searchFile){Wb.setLike("searchFile");i.push("file_path
+    like {?searchFile?}")}if(i.length)e+=" where "+i.join(" and ");e+=Wb.getOrderSql();Wb.sendDict(e,"wb,")}main();
+tags: ''
+text: module
+title: ''

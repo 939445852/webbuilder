@@ -1,0 +1,510 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: text
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: mainLabel
+      cls: w-title3
+      text: Input controls
+    text: mainLabel
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: textTitle
+      title: Text
+    text: textTitle
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _icon: text
+      cls: Wb.Text
+      properties:
+        cid: commonText
+        placeholder: placeholder
+        text: Common
+      text: commonText
+    - _icon: text
+      cls: Wb.Text
+      properties:
+        cid: passwordText
+        eyeButton: 'true'
+        icon: lock
+        password: 'true'
+        text: Password
+      text: passwordText
+    - _icon: text
+      cls: Wb.Text
+      properties:
+        cid: clearText
+        clearButton: 'true'
+        text: With Clear
+      text: clearText
+    - _icon: text
+      cls: Wb.Text
+      properties:
+        cid: hintText
+        hint: Please enter your name
+        text: Input Hint
+      text: hintText
+    - _expanded: false
+      _icon: text
+      cls: Wb.Text
+      properties:
+        cid: alignText
+        labelAlign: left
+        text: Left Align Text
+      text: alignText
+    - _expanded: true
+      _icon: text
+      cls: Wb.Text
+      properties:
+        cid: prefixSuffixText
+        prefix: $
+        suffix: '%'
+        text: Prefix Suffix
+      text: prefixSuffixText
+    - _expanded: false
+      _icon: text
+      cls: Wb.Text
+      properties:
+        cid: readonlyText
+        readonly: 'true'
+        text: Readonly
+      text: readonlyText
+    - _expanded: false
+      _icon: text
+      cls: Wb.Text
+      properties:
+        cid: disabledText
+        disabled: 'true'
+        text: Disabled
+      text: disabledText
+    - _icon: text
+      cls: Wb.Text
+      properties:
+        cid: emptyLabelText
+        placeholder: empty label
+        showEmptyLabel: 'true'
+      text: emptyLabelText
+    - _icon: text
+      cls: Wb.Text
+      properties:
+        cid: loadingText
+        icon: loading1
+        spin: 'true'
+        text: Loading
+      text: loadingText
+    - _expanded: true
+      _icon: text
+      cls: Wb.Text
+      properties:
+        cid: flatText
+        flat: 'true'
+        inactiveBorder: 'true'
+        text: Flat
+      text: flatText
+    - _icon: label1
+      cls: Wb.DisplayField
+      properties:
+        cid: displayField1
+        icon: info
+        showEmptyLabel: 'true'
+        value: Display value
+      text: displayField1
+    - _icon: label1
+      cls: Wb.DisplayField
+      properties:
+        cid: displayField2
+        icon: info
+        value: No label
+      text: displayField2
+    - _icon: text
+      cls: Wb.Text
+      properties:
+        cid: iconLabelText
+        labelAlign: left
+        labelIcon: book1
+        labelSeparator: 'false'
+        text: Icon label
+      text: iconLabelText
+    - _expanded: true
+      _icon: right1
+      cls: Wb.Fill
+      properties:
+        cid: fill1
+      text: fill1
+    - _expanded: true
+      _icon: text
+      cls: Wb.Text
+      properties:
+        cid: upLabelText
+        labelUp: 'true'
+        text: The label is above the input box
+      text: upLabelText
+    properties:
+      cid: textCt
+      frame: 'true'
+      layout: grid
+    text: textCt
+  - _expanded: true
+    _icon: title
+    cls: Wb.Title
+    properties:
+      cid: numberTitle
+      title: Number
+    text: numberTitle
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _icon: number-edit
+      cls: Wb.Number
+      properties:
+        cid: commonNumber
+        text: Common Number
+      text: commonNumber
+    - _expanded: true
+      _icon: number-edit
+      cls: Wb.Number
+      properties:
+        cid: upDownNumber
+        spinner: upDown
+        text: Up Down
+      text: upDownNumber
+    - _icon: number-edit
+      cls: Wb.Number
+      properties:
+        cid: leftRightNumber
+        spinner: leftRight
+        text: Left Right
+      text: leftRightNumber
+    - _icon: number-edit
+      cls: Wb.Number
+      properties:
+        cid: beforeAfterNumber
+        spinner: beforeAfter
+        text: Before After
+      text: beforeAfterNumber
+    - _icon: number-edit
+      cls: Wb.Number
+      properties:
+        cid: noSpinnerNumber
+        numberInput: true /* Show number keyboard in phone */
+        spinner: 'false'
+        text: No Spinner
+      text: noSpinnerNumber
+    - _icon: number-edit
+      cls: Wb.Number
+      properties:
+        cid: step5Number
+        step: '5'
+        text: Step 5
+      text: step5Number
+    - _expanded: true
+      _icon: number-edit
+      cls: Wb.Number
+      properties:
+        cid: dicimal3Number
+        decimalCount: '3'
+        text: Max 3 Dicimals
+      text: dicimal3Number
+    - _expanded: true
+      _icon: number-edit
+      cls: Wb.Number
+      properties:
+        autoFormat: 'true'
+        cid: autoFormatNumber
+        decimalCount: '2'
+        prefix: $
+        suffix: '%'
+        text: Auto Format
+        value: '1234.567'
+      text: autoFormatNumber
+    - _icon: number-edit
+      cls: Wb.Number
+      properties:
+        cid: constrainNumber
+        maxValue: '20'
+        minValue: '10'
+        text: 10 - 20
+      text: constrainNumber
+    properties:
+      cid: numberCt
+      frame: 'true'
+      layout: grid
+    text: numberCt
+  - _expanded: true
+    _icon: title
+    cls: Wb.Title
+    properties:
+      cid: textAreaTitle
+      title: Text Area
+    text: textAreaTitle
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _expanded: true
+      _icon: textarea
+      cls: Wb.TextArea
+      properties:
+        cid: commonTextArea
+        text: Common TextArea
+      text: commonTextArea
+    - _expanded: true
+      _icon: textarea
+      cls: Wb.TextArea
+      properties:
+        cid: noWrapTextArea
+        noWrap: 'true'
+        text: No Wrap
+        value: WebBuilder is a powerful rapid application development and runtime
+          platform
+      text: noWrapTextArea
+    - _expanded: true
+      _icon: textarea
+      cls: Wb.TextArea
+      properties:
+        cid: overflowTextArea
+        text: Now The Text Label Overflowed
+      text: overflowTextArea
+    - _icon: line
+      cls: Wb.Line
+      properties:
+        cid: line1
+      text: line1
+    - _expanded: true
+      _icon: textarea
+      cls: Wb.TextArea
+      properties:
+        autoResize: 'true'
+        cid: autoResizeTextArea
+        maxHeight: 10em
+        rows: '1'
+        text: Auto Resize
+        value: Auto resize to fit content height
+      text: autoResizeTextArea
+    properties:
+      cid: textAreaCt
+      frame: 'true'
+      layout: grid
+    text: textAreaCt
+  - _expanded: true
+    _icon: title
+    cls: Wb.Title
+    properties:
+      cid: fileInputTitle
+      title: File Input
+    text: fileInputTitle
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: fileInputLabel
+      text: You can drag and drop files from the operating system shell to the file
+        control.
+    text: fileInputLabel
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _icon: search-file
+      cls: Wb.FileInput
+      properties:
+        cid: commonFileInput
+        text: Common
+      text: commonFileInput
+    - _icon: search-file
+      cls: Wb.FileInput
+      properties:
+        cid: multipleFileInput
+        multiple: 'true'
+        text: Multiple
+      text: multipleFileInput
+    - _icon: search-file
+      cls: Wb.FileInput
+      properties:
+        browseMode: 'true'
+        cid: browseFileInput
+        multiple: 'true'
+        text: Browse file
+      text: browseFileInput
+    - _icon: search-file
+      cls: Wb.FileInput
+      properties:
+        cid: virtualFilesFileInput
+        multiple: 'true'
+        text: Virtual Files
+        value: '[{name: ''file1.xlsx'', size: 8958}, {name:'' file2.png'', size: 32842}]'
+      text: virtualFilesFileInput
+    properties:
+      cid: fileInputCt
+      frame: 'true'
+      layout: grid1
+    text: fileInputCt
+  - _expanded: true
+    _icon: title
+    cls: Wb.Title
+    properties:
+      cid: validationTitle
+      title: Validation value
+    text: validationTitle
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _icon: text
+      cls: Wb.Text
+      properties:
+        cid: requiredText1
+        required: 'true'
+        text: Required1
+      text: requiredText1
+    - _icon: text
+      cls: Wb.Text
+      properties:
+        cid: requiredText2
+        required: 'true'
+        sideErrorTip: 'true'
+        text: Required2
+      text: requiredText2
+    - _icon: text
+      cls: Wb.Text
+      properties:
+        cid: lengthText
+        maxLength: '9'
+        minLength: '3'
+        text: Limit Length
+      text: lengthText
+    - _expanded: true
+      _icon: text
+      cls: Wb.Text
+      properties:
+        cid: alphaNumText
+        text: Alpha num
+        valueType: alphaNum
+      text: alphaNumText
+    - _expanded: true
+      _icon: text
+      cls: Wb.Text
+      properties:
+        cid: emailText
+        text: Email
+        valueType: email
+      text: emailText
+    - _expanded: true
+      _icon: text
+      cls: Wb.Text
+      properties:
+        cid: urlText
+        text: URL
+        valueType: url
+      text: urlText
+    - _expanded: true
+      _icon: text
+      cls: Wb.Text
+      properties:
+        cid: regExpText
+        placeholder: enter 5 digits
+        regex: /\d{5}$/
+        regexText: Please enter at least 5 digits
+        text: Regular Exp
+      text: regExpText
+    - _expanded: true
+      _icon: text
+      cls: Wb.Text
+      properties:
+        cid: customValidateText
+        text: Custom Validation
+        validator: |-
+          if (value != 'good')
+            return 'Please enter "good"';
+      text: customValidateText
+    - _expanded: true
+      _icon: text
+      cls: Wb.Text
+      properties:
+        cid: remoteValidateText
+        placeholder: user name
+        text: Remote Validation
+        validator: |-
+          let editor = this;
+
+          Wb.ajax({
+            url: 'demo-source?xaction=checkUser',
+            params: { username: value },
+            mask: false,
+            callback(resp, xhr) {
+              editor.removeError();
+              if (resp == 'failed' || !xhr.ok)
+                editor.addError(Str.alreadyExists.format(value));
+            }
+          });
+      text: remoteValidateText
+    properties:
+      cid: validationCt
+      frame: 'true'
+      layout: grid
+    text: validationCt
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: sizeTitle
+      title: Input size
+    text: sizeTitle
+  - _expanded: true
+    _icon: label
+    cls: Wb.Label
+    properties:
+      cid: sizeLabel
+      text: Set the "fontSize" property to set input size
+    text: sizeLabel
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _icon: text
+      cls: Wb.Text
+      properties:
+        cid: text1
+        fontSize: .8em
+        text: text
+      text: text1
+    - _icon: number-edit
+      cls: Wb.Number
+      properties:
+        cid: number1
+        fontSize: 1.2em
+        text: number
+      text: number1
+    - _icon: combo
+      cls: Wb.Select
+      properties:
+        cid: select1
+        data: '[''item1'', ''item2'', ''item3'']'
+        fontSize: 1.4em
+        text: select
+      text: select1
+    properties:
+      cid: sizeCt
+      frame: 'true'
+      layout: grid1
+    text: sizeCt
+  properties:
+    cid: viewport1
+    layout: grid1
+  text: viewport1
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

@@ -1,0 +1,12 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Set current user data
+  serverScript: function main(){const s=Wb.UserUtil.protectedText;let e,a=Params.password,t="display_name,email,mobile_phone,use_lang";if(a!=s)t+=",password";Wb.set({$sid:Wb.userid,password:Wb.UserUtil.encryptPassword(a)});Wb.sync({tableName:"wb_user",update:Params,fields:t});e=request.getSession(false);e?.setAttribute("sys.dispname",Params.display_name);e?.setAttribute("sys.lang",Params.use_lang)}main();
+tags: ''
+text: module
+title: ''

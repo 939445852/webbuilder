@@ -1,0 +1,1001 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: container
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: mainLabel
+      cls: w-title3
+      text: Containers
+    text: mainLabel
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: containerTitle
+      title: Container
+    text: containerTitle
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _expanded: true
+      _icon: container
+      cls: Wb.Container
+      items:
+      - _icon: line
+        cls: Wb.Line
+        properties:
+          cid: descLine
+          title: Common Container
+        text: descLine
+      - _expanded: true
+        _icon: text
+        cls: Wb.Text
+        properties:
+          cid: text1
+          text: text
+        text: text1
+      - _icon: number-edit
+        cls: Wb.Number
+        properties:
+          cid: number1
+          labelSeparator: '-'
+          labelUp: 'true'
+          text: Custom Label Separator
+        text: number1
+      - _icon: calendar
+        cls: Wb.Date
+        properties:
+          cid: date1
+          labelSeparator: 'false'
+          labelUp: 'true'
+          text: No Label Separator
+        text: date1
+      properties:
+        cid: commonCt
+        frame: 'true'
+        layout: grid1
+      text: commonCt
+    - _expanded: true
+      _icon: container
+      cls: Wb.Container
+      items:
+      - _icon: line
+        cls: Wb.Line
+        properties:
+          cid: descLine
+          title: Custom Label Align
+        text: descLine
+      - _expanded: true
+        _icon: text
+        cls: Wb.Text
+        properties:
+          cid: defaultText
+          text: Default to parent
+        text: defaultText
+      - _expanded: true
+        _icon: text
+        cls: Wb.Text
+        properties:
+          cid: leftCommonText
+          labelAlign: left
+          labelUp: 'false'
+          text: Left Common
+        text: leftCommonText
+      - _expanded: true
+        _icon: text
+        cls: Wb.Text
+        properties:
+          cid: rightCommonText
+          labelAlign: right
+          labelUp: 'false'
+          text: Right Common
+        text: rightCommonText
+      - _expanded: true
+        _icon: text
+        cls: Wb.Text
+        properties:
+          cid: leftAboveText
+          labelAlign: left
+          labelUp: 'true'
+          text: Left Above
+        text: leftAboveText
+      - _expanded: true
+        _icon: text
+        cls: Wb.Text
+        properties:
+          cid: rightAboveText
+          labelAlign: right
+          labelUp: 'true'
+          text: Right Above
+        text: rightAboveText
+      properties:
+        cid: customLabelCt
+        frame: 'true'
+        labelAlign: center
+        labelUp: 'true'
+        layout: grid1
+      text: customLabelCt
+    properties:
+      cid: containerCt
+      frame: 'true'
+      layout: grid
+    text: containerCt
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: panelTitle
+      title: Panel
+    text: panelTitle
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _expanded: true
+      _icon: panel
+      cls: Wb.Panel
+      properties:
+        cid: commonPanel
+        html: Common Panel
+        layout: grid1
+      text: commonPanel
+    - _expanded: true
+      _icon: panel
+      cls: Wb.Panel
+      items:
+      - _icon: text
+        cls: Wb.Text
+        properties:
+          cid: text1
+          text: text
+        text: text1
+      - _icon: number-edit
+        cls: Wb.Number
+        properties:
+          cid: number1
+          text: number
+        text: number1
+      - _icon: calendar
+        cls: Wb.Date
+        properties:
+          cid: date1
+          text: date
+        text: date1
+      properties:
+        cid: titledPanel
+        closable: 'true'
+        collapsible: 'true'
+        layout: grid1
+        maximizable: 'true'
+        minimizable: 'true'
+        tagProperties: |-
+          ({
+            minimize() {
+              Wb.tip('Do minimize');
+            }
+          })
+        title: Titled Panel
+        width: 30em
+      text: titledPanel
+    - _expanded: true
+      _icon: panel
+      cls: Wb.Panel
+      items:
+      - _expanded: true
+        _icon: array
+        cls: Wb.Array
+        items:
+        - _expanded: true
+          _icon: toolbar
+          cls: Wb.Toolbar
+          items:
+          - _expanded: false
+            _icon: item
+            cls: Wb.Item
+            properties:
+              cid: addItem
+              icon: add1
+              text: Add
+            text: addItem
+          - _expanded: false
+            _icon: item
+            cls: Wb.Item
+            properties:
+              cid: delItem
+              icon: delete
+              text: Delete
+            text: delItem
+          properties:
+            cid: toolbar1
+          text: toolbar1
+        - _expanded: true
+          _icon: toolbar
+          cls: Wb.Toolbar
+          items:
+          - _expanded: true
+            _icon: label
+            cls: Wb.Label
+            properties:
+              cid: label1
+              text: 'Address:'
+            text: label1
+          - _icon: text
+            cls: Wb.Text
+            properties:
+              cid: text1
+              flex: '1'
+            text: text1
+          - _expanded: true
+            _icon: item
+            cls: Wb.Item
+            properties:
+              alignSelf: stretch
+              cid: playBtn
+              icon: play
+            text: playBtn
+          properties:
+            cid: toolbar2
+            fontSize: .8em
+          text: toolbar2
+        properties:
+          cid: tbar
+        text: tbar
+      - _expanded: true
+        _icon: text
+        cls: Wb.Text
+        properties:
+          cid: text1
+          text: text1
+        text: text1
+      - _icon: text
+        cls: Wb.Text
+        properties:
+          cid: text2
+          text: text2
+        text: text2
+      - _icon: text
+        cls: Wb.Text
+        properties:
+          cid: text3
+          text: text3
+        text: text3
+      - _icon: text
+        cls: Wb.Text
+        properties:
+          cid: text4
+          text: text4
+        text: text4
+      - _expanded: true
+        _icon: array
+        cls: Wb.Array
+        items:
+        - _expanded: true
+          _icon: button
+          cls: Wb.Button
+          properties:
+            cid: okBtn
+            text: '@Str.ok'
+            type: primary
+          text: okBtn
+        - _expanded: true
+          _icon: button
+          cls: Wb.Button
+          properties:
+            cid: cancelBtn
+            text: '@Str.cancel'
+          text: cancelBtn
+        properties:
+          cid: buttons
+        text: buttons
+      - _expanded: true
+        _icon: toolbar
+        cls: Wb.Toolbar
+        items:
+        - _expanded: true
+          _icon: item
+          cls: Wb.Item
+          items:
+          - _expanded: true
+            _icon: menu2
+            cls: Wb.Menu
+            items:
+            - _expanded: true
+              _icon: item
+              cls: Wb.Item
+              properties:
+                cid: item1
+                text: item1
+              text: item1
+            - _expanded: false
+              _icon: item
+              cls: Wb.Item
+              properties:
+                cid: item2
+                text: item2
+              text: item2
+            properties:
+              cid: menu
+              isProperty: 'true'
+            text: menu
+          properties:
+            cid: menuItem
+            icon: menu
+          text: menuItem
+        properties:
+          cid: bbar
+          isProperty: 'true'
+          justify: end
+        text: bbar
+      - _expanded: true
+        _icon: array
+        cls: Wb.Array
+        items:
+        - _expanded: true
+          _icon: item
+          cls: Wb.Item
+          properties:
+            cid: setItem
+            icon: gear
+            tip: Set
+          text: setItem
+        - _expanded: true
+          _icon: item
+          cls: Wb.Item
+          properties:
+            cid: printItem
+            icon: print
+            tip: Print
+          text: printItem
+        - _expanded: true
+          _icon: item
+          cls: Wb.Item
+          properties:
+            cid: pinItem
+            icon: pin
+            tip: Pin
+          text: pinItem
+        properties:
+          cid: tools
+        text: tools
+      - _expanded: true
+        _icon: menu2
+        cls: Wb.Menu
+        items:
+        - _expanded: true
+          _icon: item
+          cls: Wb.Item
+          properties:
+            cid: setItem
+            icon: gear
+            text: Set Menu
+          text: setItem
+        - _expanded: true
+          _icon: item
+          cls: Wb.Item
+          properties:
+            cid: printItem
+            icon: print
+            text: Print Menu
+          text: printItem
+        properties:
+          cid: menu
+          isProperty: 'true'
+        text: menu
+      properties:
+        buttonAlign: center
+        cid: miscPanel
+        collapsible: 'true'
+        defaults: '({ labelWidth: ''5em'' })'
+        frame: 'true'
+        height: 20em
+        icon: address-book
+        layout: grid1
+        maximizable: 'true'
+        minButtonWidth: 6em
+        title: Misc Panel
+      text: miscPanel
+    properties:
+      cid: panelCt
+      frame: 'true'
+      layout: form
+    text: panelCt
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: treeStyleTitle
+      title: Tree style panels
+    text: treeStyleTitle
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _expanded: true
+      _icon: panel
+      cls: Wb.Panel
+      items:
+      - _icon: text
+        cls: Wb.Text
+        properties:
+          cid: text1
+        text: text1
+      - _icon: text
+        cls: Wb.Text
+        properties:
+          cid: text2
+        text: text2
+      properties:
+        cid: panel1
+        collapsible: tree
+        layout: grid1
+        textSelectable: 'false'
+        title: Panel1
+      text: panel1
+    - _icon: panel
+      cls: Wb.Panel
+      properties:
+        cid: panel2
+        collapsed: 'true'
+        collapsible: tree
+        height: 5em
+        text: Panel2
+        textSelectable: 'false'
+        title: Panel2
+      text: panel2
+    - _expanded: true
+      _icon: panel
+      cls: Wb.Panel
+      properties:
+        cid: panel3
+        collapsible: tree
+        height: 8em
+        text: Panel3
+        textSelectable: 'false'
+        title: Panel3
+      text: panel3
+    properties:
+      cid: treeStyleCt
+      frame: 'true'
+      layout: column
+    text: treeStyleCt
+  - _expanded: true
+    _icon: title
+    cls: Wb.Title
+    properties:
+      cid: accordionStyleTitle
+      title: Accordion style panels
+    text: accordionStyleTitle
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _expanded: true
+      _icon: panel
+      cls: Wb.Panel
+      items:
+      - _icon: text
+        cls: Wb.Text
+        properties:
+          cid: text1
+        text: text1
+      - _icon: text
+        cls: Wb.Text
+        properties:
+          cid: text2
+        text: text2
+      properties:
+        cid: panel1
+        collapsible: accordion
+        flex: '1'
+        icon: gear
+        layout: grid1
+        textSelectable: 'false'
+        title: Panel1
+      text: panel1
+    - _icon: panel
+      cls: Wb.Panel
+      properties:
+        cid: panel2
+        collapsed: 'true'
+        collapsible: accordion
+        flex: '1'
+        icon: excel
+        text: Panel2
+        textSelectable: 'false'
+        title: Panel2
+      text: panel2
+    - _expanded: true
+      _icon: panel
+      cls: Wb.Panel
+      properties:
+        cid: panel3
+        collapsed: 'true'
+        collapsible: accordion
+        flex: '1'
+        icon: word
+        text: Panel3
+        textSelectable: 'false'
+        title: Panel3
+      text: panel3
+    properties:
+      cid: accordionStyleCt
+      frame: 'true'
+      height: 20em
+      layout: column
+    text: accordionStyleCt
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: plainTitlePanelBlocksTitle
+      title: Plain title panel blocks
+    text: plainTitlePanelBlocksTitle
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: plainTitlePanelBlocksLabel
+      text: A list of panels organized by blocks
+    text: plainTitlePanelBlocksLabel
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _expanded: true
+      _icon: panel
+      cls: Wb.Panel
+      items:
+      - _icon: text
+        cls: Wb.Text
+        properties:
+          cid: text1
+          text: Text
+        text: text1
+      - _icon: number-edit
+        cls: Wb.Number
+        properties:
+          cid: number1
+          text: Number
+        text: number1
+      properties:
+        cid: formPanel
+        icon: form
+        layout: grid1
+        plainTitle: 'true'
+        roundBorder: 'true'
+        title: Block 1 - Form panel1
+      text: formPanel
+    - _expanded: true
+      _icon: panel
+      cls: Wb.Panel
+      items:
+      - _icon: text
+        cls: Wb.Text
+        properties:
+          cid: text1
+          text: Text
+        text: text1
+      - _icon: number-edit
+        cls: Wb.Number
+        properties:
+          cid: number1
+          text: Number
+        text: number1
+      properties:
+        cid: formPanel2
+        icon: word
+        layout: grid1
+        plainTitle: 'true'
+        roundBorder: 'true'
+        title: Block 2 - Form panel2
+      text: formPanel2
+    - _expanded: true
+      _icon: panel
+      cls: Wb.Panel
+      items:
+      - _icon: text
+        cls: Wb.Text
+        properties:
+          cid: text1
+          text: Text
+        text: text1
+      - _icon: number-edit
+        cls: Wb.Number
+        properties:
+          cid: number1
+          text: Number
+        text: number1
+      properties:
+        cid: formPanel3
+        icon: excel
+        layout: grid1
+        plainTitle: 'true'
+        roundBorder: 'true'
+        title: Block 3 - Form panel3
+      text: formPanel3
+    properties:
+      background: 'true'
+      cid: plainTitlePanelBlocksCt
+      frame: 'true'
+      gap: 1em
+      layout: grid1
+      padding: 1em
+    text: plainTitlePanelBlocksCt
+  - _expanded: true
+    _icon: title
+    cls: Wb.Title
+    properties:
+      cid: fieldsetTitle
+      title: Fieldset
+    text: fieldsetTitle
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _expanded: true
+      _icon: fieldset
+      cls: Wb.Fieldset
+      items:
+      - _icon: text
+        cls: Wb.Text
+        properties:
+          cid: nameText
+          text: Name
+        text: nameText
+      - _icon: text
+        cls: Wb.Text
+        properties:
+          cid: addrText
+          text: Address
+        text: addrText
+      - _icon: calendar
+        cls: Wb.Date
+        properties:
+          cid: birthDate
+          text: Birth date
+        text: birthDate
+      properties:
+        cid: comonFieldset
+        layout: grid
+        title: Common Fieldset
+      text: comonFieldset
+    - _expanded: true
+      _icon: fieldset
+      cls: Wb.Fieldset
+      items:
+      - _icon: text
+        cls: Wb.Text
+        properties:
+          cid: nameText
+          text: Name
+        text: nameText
+      - _icon: text
+        cls: Wb.Text
+        properties:
+          cid: addrText
+          text: Address
+        text: addrText
+      - _icon: calendar
+        cls: Wb.Date
+        properties:
+          cid: birthDate
+          text: Birth date
+        text: birthDate
+      properties:
+        cid: collapsibleFieldset
+        collapsible: 'true'
+        icon: id-card
+        labelAlign: left
+        layout: grid
+        title: Collapsible Fieldset
+      text: collapsibleFieldset
+    properties:
+      cid: fieldsetCt
+      frame: 'true'
+      layout: form
+    text: fieldsetCt
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: tabTitle
+      title: Tab
+    text: tabTitle
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _icon: label
+      cls: Wb.Label
+      properties:
+        cid: commonLabel
+        text: Common Tab
+      text: commonLabel
+    - _expanded: true
+      _icon: tab
+      cls: Wb.Tab
+      items:
+      - _icon: card
+        cls: Wb.Card
+        properties:
+          cid: iconCard
+          icon: home
+          title: Icon Card
+        text: iconCard
+      - _icon: card
+        cls: Wb.Card
+        properties:
+          cid: imageIconCard
+          closable: 'null'
+          img: support
+          title: Image Icon
+        text: imageIconCard
+      - _icon: card
+        cls: Wb.Card
+        properties:
+          cid: loadingCard
+          icon: loading
+          spin: 'true'
+          title: Loading
+        text: loadingCard
+      - _icon: card
+        cls: Wb.Card
+        properties:
+          cid: disabledCard
+          disabled: 'true'
+          icon: calendar
+          title: Disabled
+        text: disabledCard
+      - _expanded: false
+        _icon: card
+        cls: Wb.Card
+        properties:
+          cid: noSortableCard
+          icon: 🌻
+          sortable: 'false'
+          title: No Sortable
+        text: noSortableCard
+      - _expanded: true
+        _icon: card
+        cls: Wb.Card
+        properties:
+          cid: overflowedCard
+          tabTip: This tab card is overflowed
+          title: Overflowed
+        text: overflowedCard
+      properties:
+        cid: commonTab
+        height: 10em
+        width: 48em
+      text: commonTab
+    - _expanded: true
+      _icon: label
+      cls: Wb.Label
+      properties:
+        cid: miscTabLabel
+        text: Miscellaneous Tab
+      text: miscTabLabel
+    - _expanded: true
+      _icon: tab
+      cls: Wb.Tab
+      items:
+      - _expanded: false
+        _icon: card
+        cls: Wb.Card
+        properties:
+          cid: card1
+          html: |-
+            Try resizing small<br>
+            Double click tab button
+          layout: center
+          title: Cliped Text
+        text: card1
+      - _expanded: false
+        _icon: card
+        cls: Wb.Card
+        properties:
+          cid: card2
+          title: Shrink Tab Button
+        text: card2
+      - _expanded: true
+        _icon: card
+        cls: Wb.Card
+        properties:
+          cid: card3
+          title: Card3
+        text: card3
+      - _expanded: true
+        _icon: card
+        cls: Wb.Card
+        properties:
+          cid: card4
+          title: Card4
+        text: card4
+      properties:
+        cid: miscTab
+        clipTabText: 'true'
+        dblclickFull: 'true'
+        frame: 'true'
+        height: 10em
+        resizable: 'true'
+        shrinkTabButton: 'true'
+        width: 30em
+      text: miscTab
+    - _expanded: true
+      _icon: label
+      cls: Wb.Label
+      properties:
+        cid: wrappedTabLabel
+        text: Wrapped Tab Buttons
+      text: wrappedTabLabel
+    - _expanded: true
+      _icon: tab
+      cls: Wb.Tab
+      items:
+      - _icon: card
+        cls: Wb.Card
+        properties:
+          cid: card1
+          title: Card1
+        text: card1
+      - _icon: card
+        cls: Wb.Card
+        properties:
+          cid: card2
+          title: Card2
+        text: card2
+      - _expanded: true
+        _icon: card
+        cls: Wb.Card
+        properties:
+          cid: card3
+          title: Card3
+        text: card3
+      - _expanded: false
+        _icon: card
+        cls: Wb.Card
+        properties:
+          cid: card4
+          title: Card4
+        text: card4
+      - _expanded: true
+        _icon: card
+        cls: Wb.Card
+        properties:
+          cid: card5
+          title: Card5
+        text: card5
+      properties:
+        cid: wrappedTab
+        frame: 'true'
+        height: 10em
+        resizable: 'true'
+        width: 20em
+        wrapTab: 'true'
+      text: wrappedTab
+    - _icon: label
+      cls: Wb.Label
+      properties:
+        cid: bottomLabel
+        text: Bottom Tab
+      text: bottomLabel
+    - _expanded: true
+      _icon: tab
+      cls: Wb.Tab
+      items:
+      - _expanded: false
+        _icon: card
+        cls: Wb.Card
+        properties:
+          cid: card1
+          title: Card1
+        text: card1
+      - _expanded: false
+        _icon: card
+        cls: Wb.Card
+        properties:
+          cid: card2
+          title: Card2
+        text: card2
+      - _expanded: true
+        _icon: card
+        cls: Wb.Card
+        properties:
+          cid: card3
+          title: Card3
+        text: card3
+      properties:
+        cid: bottomTab
+        height: 10em
+        tabPosition: bottom
+      text: bottomTab
+    - _icon: label
+      cls: Wb.Label
+      properties:
+        cid: leftLabel
+        text: Left Tab
+      text: leftLabel
+    - _expanded: true
+      _icon: tab
+      cls: Wb.Tab
+      items:
+      - _expanded: false
+        _icon: card
+        cls: Wb.Card
+        properties:
+          cid: card1
+          title: Card1
+        text: card1
+      - _expanded: false
+        _icon: card
+        cls: Wb.Card
+        properties:
+          cid: card2
+          title: Card2
+        text: card2
+      - _expanded: true
+        _icon: card
+        cls: Wb.Card
+        properties:
+          cid: card3
+          title: Card3
+        text: card3
+      properties:
+        cid: leftTab
+        height: 10em
+        tabPosition: left
+      text: leftTab
+    - _icon: label
+      cls: Wb.Label
+      properties:
+        cid: rightLabel
+        text: Right Tab
+      text: rightLabel
+    - _expanded: true
+      _icon: tab
+      cls: Wb.Tab
+      items:
+      - _expanded: false
+        _icon: card
+        cls: Wb.Card
+        properties:
+          cid: card1
+          title: Card1
+        text: card1
+      - _expanded: false
+        _icon: card
+        cls: Wb.Card
+        properties:
+          cid: card2
+          title: Card2
+        text: card2
+      - _expanded: true
+        _icon: card
+        cls: Wb.Card
+        properties:
+          cid: card3
+          title: Card3
+        text: card3
+      properties:
+        cid: rightTab
+        height: 10em
+        tabPosition: right
+      text: rightTab
+    properties:
+      cid: tabCt
+      frame: 'true'
+      layout: grid1
+    text: tabCt
+  properties:
+    cid: viewport1
+    layout: grid1
+  text: viewport1
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

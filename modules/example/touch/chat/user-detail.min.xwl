@@ -1,0 +1,21 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: 'Wb.make(app,{cname:"dialog",autoScroll:true,cid:"main",tools:[{icon:"menu",plainIcon:true,cid:"menuItem",menu:{cname:"menu",items:[{icon:"add",cid:"addItem",text:Str.add},{icon:"edit",cid:"editItem",text:Str.edit},{cname:"divider",cid:"divider1"},{icon:"delete",cid:"delItem",text:Str.del}]}}],events:{hidden(e){this.destroy()}},items:[{cname:"component",padding:"1em",tpl:''<div
+    class="w-row w-gap1">\n  <div class="w-icon icon-user2 w-size3 w-aligns-center"></div>\n  <div
+    class="w-column w-gap">\n    <div class="w-row w-gap">\n      <div class="w-title4">{display_name}</div>\n      <div
+    class="w-icon icon-user3 w-aligns-center"></div>\n    </div>\n    <div>User name:
+    {user_name}</div>\n    <div>User id: {sid}</div>\n    <div>E-mail: {email}</div>\n  </div>\n</div>'',cid:"summaryComp"},{cname:"line",margin:"top",cid:"line1"},{cname:"option",icon:"message",text:"Send
+    message",buttonStyle:true,cid:"sendMsgOption",events:{click(e,i){let t=app.chatApp,n=t.openUserData;app.main.close(true);t.openChat({userid:n.sid,display_name:n.display_name})}}},{cname:"gap",cid:"gap1"},{cname:"option",border:"bottom",cid:"noteOption",text:"Set
+    notes and labels",events:{click(e,i){Wb.tip(this.text)}}},{cname:"option",cid:"permOption",text:"Friend
+    permissions",events:{click(e,i){Wb.tip(this.text)}}},{cname:"gap",cid:"gap2"},{cname:"option",border:"bottom",text:"Moments",cid:"momentOption",height:"5em",events:{click(e,i){Wb.tip(this.text)}}},{cname:"option",cid:"moreOption",text:"More
+    information",events:{click(e,i){Wb.tip(this.text)}}},{cname:"gap",flex:1,cid:"gap3"}]});'
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

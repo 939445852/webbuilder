@@ -1,0 +1,18 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  loginRequired: 'false'
+  remark: Session service without login
+  serverScript: if(!Params.xaction)return;let actions={captcha(){const e=Java.type("com.wb.tool.CaptchaGenerator");const
+    t=Java.type("javax.imageio.ImageIO");const s=4;const o=Math.min(parseInt(Params.fontSize)||20,80);let
+    n,a,i,r;n=new e(Math.round(o*1.1*s*1.2),Math.round(o*1.5),s,9);a=n.getImage();i=n.getCode();r=request.getSession();r.setAttribute("sys.verifyCode",i);response.setContentType("image/jpeg");response.setHeader("Pragma","no-cache");response.setHeader("Cache-Control","no-cache");response.setDateHeader("Expires",0);t.write(a,"png",response.getOutputStream())},monWebsocket(){if(Wb.getConfig("sys.session.autoLogout")&&WebUtil.isLogined(httpSession)){const
+    e="sys.logoutTimer";if(event=="open"){httpSession.getAttribute(e)?.cancel(false);httpSession.removeAttribute(e)}else
+    if(event=="close"&&!httpSession.getAttribute(e)){let t,s;s=Sessions.getWSMap(httpSession);if(s==null||s.size()<2){t=Wb.setTimeout((e=>{let
+    t=params.session;t.removeAttribute("sys.logoutTimer");t.invalidate()}),1e4,{session:httpSession});httpSession.setAttribute(e,t)}}}}};actions[Params.xaction]();
+tags: ''
+text: module
+title: ''

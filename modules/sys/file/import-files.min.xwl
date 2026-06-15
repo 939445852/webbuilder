@@ -1,0 +1,14 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Import files in any path
+  serverScript: Wb.checkDemo();function main(){let e=Wb.load("./fs.mjs"),a,s=Wb.getParams("files"),t,i=new
+    Wb.File(Params.path),l=Wb.getBool("unzip"),r,f,m=[];t=Params.charset?SysUtil.getCharset(Params.charset):SysUtil.filenameCharset;s.forEach((e=>{f=e.name;if(l&&Wb.getFileExt(f).toLowerCase()=="zip"){r=ZipUtil.unzip(e.stream,i.file,t);m=m.concat(r);m.forEach((e=>{new
+    Wb.File(i.file,e).cascadeSelf((e=>e.clearBuffer()))}))}else{m.push(f);a=new Wb.File(i,f);a.stream=e.stream;a.clearBuffer()}}));s=e.listFiles(i,Params.mode);Wb.send(s.filter((e=>m.includes(e.text))))}main();
+tags: ''
+text: module
+title: ''

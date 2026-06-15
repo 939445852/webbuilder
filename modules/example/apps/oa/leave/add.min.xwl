@@ -1,0 +1,11 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  serverScript: function main(){let e,a;e=new Wb.Workflow({file:"example/leave.flw",title:Params.title});e.start();a={sid:Wb.getId(),flow_id:e.flowId,user_id:Wb.userid};Wb.set(a);Wb.sync({tableName:"wb_leave",insert:Params});Wb.send(a)}main();
+tags: ''
+text: module
+title: ''

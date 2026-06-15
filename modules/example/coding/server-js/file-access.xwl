@@ -1,0 +1,92 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+items:
+- _expanded: true
+  _icon: edit
+  cls: Wb.CodeEditor
+  properties:
+    cid: codeEditor1
+    full: 'true'
+    readonly: 'true'
+    value: |-
+      //Use java.io.File to acess files
+      let file = new File(Base.path, 'wb/js/wb.js'); //File = java.io.File
+      let text = FileUtils.readFileToString(file, Wb.utf8); //Use org.apache.commons.io.FileUtils.readFileToString
+      Wb.send(text); //Send text to the client
+
+      //Use Wb.File to access files
+      file = new Wb.File(true, 'wb/js/wb.js'); //Create file object
+      text = file.text; //Re-read the file text contents
+      Wb.send(text); //Send text to the client
+      fileHandle = file.file; //file's file property is java.io.File
+
+      //Read JSON objects or arrays in a file
+      Wb.log(new Wb.File(true, 'wb/system/config.json').object);
+
+      //Read and write files
+      file = new Wb.File(true, 'test.txt');
+      file.text = 'abc'; //Save "abc" to a file immediately
+      file.object = { foo: 'bar', abc: [1, 2, 3] }; //Save the JSON object or array to a file immediately
+      Wb.log(file.object); //Re-read the JSON object in the file
+      file.bytes = [1, 2, 3]; //Save bytes to a file immediately
+      Wb.log(Wb.encode(file.bytes)); //Re-read the byte array in the file
+      bs = file.byteStream; //Re-read the ByteArrayInputStream in the file
+      file.stream = inputStream; //Save the inputStream to a file immediately
+      inputStream = file.stream; //Re-read the buffered FileInputStream in the file
+      base64 = file.base64; ///Re-read the content represented by base64 in the file
+      file.base64 = base64; //Save the content represented by base64 to a file immediately
+
+      //File name and path access
+      name = file.name; //Get file name
+      file.name = name; //Set file name
+      extension = file.extension; //Get file name extension
+      file.extension = extension; //Set file name extension
+      normalName = file.normalName; //Get a file name without an extension
+      path = file.path; //Get file path
+      relPath = file.relPath; //Get file relative path under the application directory
+
+      //Get file iist
+      Wb.File.listRoots(); //List root files
+      files = file.listFiles(sortType, desc); //List files of folder
+
+      //Traverse
+      file.each(f => Wb.log(f.name)); //Traverse the current directory
+      file.cascade(f => Wb.log(f)); //Iterate through all subfiles and subdirectories
+      file.cascadeSelf(f => { //Iterate include file itself
+        Wb.log(f);
+        if (f.name == 'myfile1.txt')
+          return false; //Break traversal
+        if (f.name == 'myfile2.txt')
+          return null; //The remaining files in the current directory will no longer be traversed
+      });
+      file.bubble(f => Wb.log(f)); //Traverse the current file/directory and all parent directories
+      file.bubbleParent(f => Wb.log(f)); //Traverse without current file/directory
+
+      //File lock, only synchronous multithreaded access, and does not lock the file itself
+      file.lock(); //Thread lock
+      doSomething();
+      file.unlock(); //Unlock the thread immediately. The block will auto unlock when execution-context finished.
+
+      //Others
+      file.createFile(); //Create a file
+      file.createFolder(); //Create a file
+      file.remove(); //Remove a file or folder
+      exists = file.exists; //Determines whether the file exists
+      lastModified = file.lastModified; //Last modified date as a numeric value
+      lastModifiedDate = file.lastModifiedDate; //Last modified date
+      isEqual = file1.equals(file1); //Determines whether the paths are the same
+      isFile = file.isFile; //Determines whether it is a file
+      isFolder = file.isFolder; //Determines whether it is a folder
+      length = file.length; //File size
+      parent = file.parent; //File parent directory
+    wrapBorder: '0'
+  text: codeEditor1
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

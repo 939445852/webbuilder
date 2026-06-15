@@ -1,0 +1,271 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: calendar
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: mainLabel
+      cls: w-title3
+      text: Date and Time
+    text: mainLabel
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: dateTitle
+      title: Date
+    text: dateTitle
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _icon: calendar
+      cls: Wb.Date
+      properties:
+        cid: commonDate
+        text: Common
+      text: commonDate
+    - _expanded: true
+      _icon: calendar
+      cls: Wb.Date
+      properties:
+        cid: constraintDate
+        maxValue: '@new Date().addDay(7)'
+        minValue: '@new Date().addDay(-7)'
+        text: Constraint Value
+      text: constraintDate
+    - _expanded: true
+      _icon: model
+      cls: Wb.ControlCt
+      items:
+      - _expanded: true
+        _icon: calendar
+        cls: Wb.Date
+        properties:
+          cid: fromDate
+        text: fromDate
+      - _icon: label
+        cls: Wb.Label
+        properties:
+          cid: toLabel
+          text: to
+        text: toLabel
+      - _expanded: false
+        _icon: calendar
+        cls: Wb.Date
+        properties:
+          beginDate: fromDate
+          cid: toDate
+          rangeOffset: '3'
+        text: toDate
+      properties:
+        cid: dateRangeControlCt
+        gap: 1em
+        layout: row
+        text: Date Range
+      text: dateRangeControlCt
+    properties:
+      cid: dateCt
+      frame: 'true'
+      layout: form
+    text: dateCt
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: timeTitle
+      title: Time
+    text: timeTitle
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _icon: time
+      cls: Wb.Time
+      properties:
+        cid: commonTime
+        text: Common
+      text: commonTime
+    - _icon: time
+      cls: Wb.Time
+      properties:
+        cid: localFormatTime
+        clearButton: 'true'
+        localFormat: timeText12
+        text: Local Format
+        width: 22em
+      text: localFormatTime
+    properties:
+      cid: timeCt
+      frame: 'true'
+      layout: form
+    text: timeCt
+  - _expanded: true
+    _icon: title
+    cls: Wb.Title
+    properties:
+      cid: dateTimeTitle
+      title: Datetime
+    text: dateTimeTitle
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _icon: dt-picker
+      cls: Wb.Datetime
+      properties:
+        cid: commonDateTime
+        text: Common
+      text: commonDateTime
+    properties:
+      cid: datetimeCt
+      frame: 'true'
+      layout: form
+    text: datetimeCt
+  - _expanded: true
+    _icon: title
+    cls: Wb.Title
+    properties:
+      cid: othersTitle
+      title: Others
+    text: othersTitle
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _icon: month
+      cls: Wb.YearMonth
+      properties:
+        cid: yearMonth1
+        text: Year Month
+      text: yearMonth1
+    properties:
+      cid: othersCt
+      frame: 'true'
+      layout: form
+    text: othersCt
+  - _expanded: true
+    _icon: title
+    cls: Wb.Title
+    properties:
+      cid: promptTitle
+      title: Display date/time prompt window through methods
+    text: promptTitle
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: tipLabel
+      text: There are different dialog representations on the desktop and touch mode.
+    text: tipLabel
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _icon: button
+      cls: Wb.Button
+      events:
+        click: |-
+          // Auto select drawer or dialog base on touch or desktop
+          Wb.promptDate(date => Wb.tip(date.dateText), new Date(), 'Select Date');
+      properties:
+        cid: dateAutoBtn
+        text: Prompt Date auto
+      text: dateAutoBtn
+    - _icon: button
+      cls: Wb.Button
+      events:
+        click: Wb.promptDate(date => Wb.tip(date.dateText), new Date(), 'Select Date',
+          true);
+      properties:
+        cid: dateDrawerBtn
+        text: Prompt Date Drawer
+      text: dateDrawerBtn
+    - _icon: button
+      cls: Wb.Button
+      events:
+        click: Wb.promptDate(date => Wb.tip(date.dateText), new Date(), 'Select Date',
+          false);
+      properties:
+        cid: dateDialogBtn
+        text: Prompt Date Dialog
+      text: dateDialogBtn
+    - _icon: button
+      cls: Wb.Button
+      events:
+        click: Wb.promptTime(date => Wb.tip(date.timeText), null, null, true);
+      properties:
+        cid: timeDrawerBtn
+        text: Prompt Time Drawer
+      text: timeDrawerBtn
+    - _icon: button
+      cls: Wb.Button
+      events:
+        click: Wb.promptTime(date => Wb.tip(date.timeText), null, null, false);
+      properties:
+        cid: timeDialogBtn
+        text: Prompt Time Dialog
+      text: timeDialogBtn
+    - _icon: button
+      cls: Wb.Button
+      events:
+        click: Wb.promptDateTime(date => Wb.tip(date.dateTimeText), null, null, true);
+      properties:
+        cid: dateTimeDrawerBtn
+        text: Prompt Datetime Drawer
+      text: dateTimeDrawerBtn
+    - _icon: button
+      cls: Wb.Button
+      events:
+        click: Wb.promptDateTime(date => Wb.tip(date.dateTimeText), null, null, false);
+      properties:
+        cid: dateTimeDialogBtn
+        text: Prompt Datetime Dialog
+      text: dateTimeDialogBtn
+    - _icon: button
+      cls: Wb.Button
+      events:
+        click: Wb.promptMonth(date => Wb.tip(date.format('y-M')), null, null, true);
+      properties:
+        cid: monthDrawerBtn
+        text: Prompt Month Drawer
+      text: monthDrawerBtn
+    - _icon: button
+      cls: Wb.Button
+      events:
+        click: Wb.promptMonth(date => Wb.tip(date.format('y-M')), null, null, false);
+      properties:
+        cid: monthDialogBtn
+        text: Prompt Month Dialog
+      text: monthDialogBtn
+    - _icon: button
+      cls: Wb.Button
+      events:
+        click: |-
+          Wb.promptDate(date => {
+            Wb.tip('Close prevented');
+            return false;
+          });
+      properties:
+        cid: preventCloseBtn
+        text: Prevent Close
+      text: preventCloseBtn
+    properties:
+      cid: promptCt
+      frame: 'true'
+      layout: form
+    text: promptCt
+  properties:
+    cid: viewport1
+    layout: grid1
+  text: viewport1
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

@@ -1,0 +1,16 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.define(app,{get$src(){return app.imageEl.src},set$src(a){app.imageEl.src=a}});Wb.define(app,{path:_$path$_,notLoad:"_$notLoad",preview(a){let
+    e=app.path;Wb.ajax({url:"m?xwl=sys/file/open",params:{path:e},success(a){app.imageEl.src="data:image/"+Wb.getFileExt(e)+";base64,"+a}})},onLoad(){if(!app.notLoad)app.preview();if(!Globals.WbMainTab)document.title=Wb.getFilename(app.path)}});Wb.make(app,{cname:"viewport",border:false,autoScroll:true,bodyCls:"w-prev-ct",cid:"viewport1",events:{ready(a,e){app.imageEl=this.bodyEl.addEl("w-margin-center","img")}}});
+hideInMenu: 'false'
+icon: image
+img: ''
+properties:
+  cid: module
+  remark: Image viewer shell
+  serverScript: Wb.set({path:Wb.encode(Params.path)});
+tags: ''
+text: module
+title: ''

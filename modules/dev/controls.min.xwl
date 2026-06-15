@@ -1,0 +1,21 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.apply(app,{addFolder(){let e=app.controlTree,t=e.selection??e.lastItem;Wb.prompt(Str.addFolder,{text:Str.name,cid:"name",required:true},((e,a)=>{let
+    d=e.name;if(d=="Ungrouped"){Wb.tipWarn(Str.nameCannotBe.format(d));return}t.parent.insertDataAfter({text:d,items:[]},t).select();app.modified();a.close()}))},remove(){app.controlTree.delRecords();app.modified()},edit(){let
+    e=app.controlTree.selection,t=e.text;Wb.prompt(Str.edit+" - "+t,{text:Str.name,cid:"name",required:true,value:t},((t,a)=>{e.proxy.text=t.name;app.modified();a.close()}))},modified(){app.saveBtn.disabled=false},save(){let
+    e=app.controlTree.data;Wb.cascade(e,(e=>{e.sort=undefined;if(e.cls){e.items=undefined;e._leaf=true}}));Wb.ajax({url:xpath+"/save",data:e,success(){app.saveBtn.disabled=true}})},loadControls(){let
+    e=app.controlTree,t={},a=[],d,r;e.data=WbControlsGroup;e.cascade((e=>{d=e.data;t[d.cls]=true}));Wb.each(WbDocsData,((e,d)=>{r=d.cls;if(d.icon&&!t[r]&&r!="Wb.Module"){a.push({_icon:d.icon,text:d.cname,cls:e,_leaf:true})}}));e.downBy((e=>e.text=="Ungrouped")).addData(a)}});Wb.make(app,{cname:"viewport",layout:"fit",cid:"viewport1",tbar:{cname:"toolbar",items:[{icon:"folder1",handler:app.addFolder,text:Str.addFolder,keys:"Ctrl+E",cid:"addFolderBtn"},{icon:"edit",handler:app.edit,disabled:true,text:Str.edit,keys:"Ctrl+J",cid:"editBtn"},{icon:"delete",handler:app.remove,disabled:true,text:Str.del,keys:"Ctrl+D",cid:"removeBtn"},{cname:"divider",cid:"divider1"},{icon:"save",handler:app.save,disabled:true,text:Str.save,keys:"Ctrl+S",cid:"saveBtn"}]},items:[{cname:"tree",droppable:"wb.controls",keyWalking:true,draggable:true,cid:"controlTree",multiSelect:true,events:{itemdrop(e,t,a){app.modified()},selectionchange(e){let
+    t=this.selections,a=t[0];app.editBtn.disabled=t.length!=1||a.leaf||a.text=="Ungrouped";app.removeBtn.disabled=!t.length}}}]});app.loadControls();Wb.onUnload(parentContainer,(()=>{if(!app.saveBtn.disabled)return
+    false}));
+hideInMenu: 'false'
+icon: container
+img: ''
+properties:
+  cid: module
+  links: '["wb/docs/data.js","wb/docs/groups.js"]'
+  remark: Controls management tool
+tags: ''
+text: module
+title: '@controlsMng'

@@ -1,0 +1,24 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Export accessible data
+  serverScript: function doExport(e){let t,r,a,s,i,n=Wb.parseBool(e.tree),l=Params.itemsName,o=e.itemsPath;t=new
+    JSONArray(e.columns);r=e.data;if(r){r=new JSONArray(r);r=n?flattenItems(r,l):new
+    JSONArray(r)}else{let t,a,s=Wb.parseBool(e.allPages),i=e.localUrl,f=e.pageIndexName,u=Wb.decode(e.params??null),m=Wb.getConfig("sys.office.exportMaxRows"),p,d,b,c,W=e.sortValue;if(s){p=0;d=m;b=m;c=0}else{p=parseInt(e.fromValue);d=Math.min(parseInt(e.toValue),m);b=Math.min(parseInt(e.pageSize),m);c=parseInt(e.pageIndex)}u[e.fromName]=p;u[e.toName]=d;u[e.pageSizeName]=b;if(f)u[f]=c;if(W)u[e.sortName]=W;if(i){i=Xwl.getXwlPath(i);if(i){Wb.permitx(i);try{if(s)Context.maxRows=m;let
+    t=Wb.apply({},Wb.decode(e.urlParams??null),u);Wb.each(t,((e,r)=>{if(r===null)t[e]=null;else
+    if(!Wb.isString(r))t[e]=Wb.encode(r)}));r=Wb.execute(i,t)}finally{if(s)Context.maxRows=undefined}}}if(!r){r=Wb.submit({url:e.url,request:request,text:true,silent:true,all:true,params:u});if(r.code!=200){if(r.code==401){response.setStatus(401);Wb.send(r.result);return}else{Wb.raise(r.result)}}r=r.result}t=r.indexOf("{");a=r.indexOf("[");if(a!=-1&&(a<t||t==-1)){r=n?flattenItems(r,l):new
+    JSONArray(r)}else{r=n?flattenItems(r,l,o):JsonUtil.findObject(new JSONObject(r),o)}}a=e.format??"xlsx";Wb.setContentType((e.filename||"data")+"."+a,true);s=Wb.getConfig("sys.office.gridBorderLine");if(s=="auto")s=e.gridLine;if(e.summary)r.put(new
+    JSONObject(e.summary));i=response.getOutputStream();a=a.toLowerCase();if(a.startsWith("xls"))Java.type("com.wb.office.SheetWriter").createExcel(i,t,r,Wb.getInt("freeze")??0,e.title,s);else
+    exportCSV(i,t,r);response.flushBuffer()}function flattenItems(e,t,r){e=Wb.decode(e);if(r)e=Wb.getNS(r,e);return
+    new JSONArray(Java.to(Wb.flatItems(e,true,t)))}function exportCSV(e,t,r){const
+    a=StringUtil.encodeCSV;let s,i,n,l,o,f,u=[],m=[],p;p=new java.io.BufferedWriter(new
+    java.io.OutputStreamWriter(e,Wb.getConfig("sys.file.csvCharset")||Base.osCharset));t=Wb.toJs(t);Wb.cascade(t,(e=>{if(!e.items){if(f)p.write(",");else
+    f=true;p.write(a(e.text));u.push(e.fieldName+(e.keyValue?"$":""));m.push(e.fieldType==0)}}));i=r.length();for(s=0;s<i;s++){p.write("\n");n=r.opt(s);u.forEach(((e,t)=>{if(t>0)p.write(",");l=n.optString(e);if(l&&m[t]){o=l.lastIndexOf(".");if(o!=-1)l=l.substr(0,o)}p.write(a(l))}))}p.close()}doExport(Params);
+tags: ''
+text: module
+title: ''

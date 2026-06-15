@@ -1,0 +1,23 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: |-
+    Wb.apply(app, {
+      // Called after the module is loaded, regardless of whether it's a singleton.
+      onLoad() {
+        Wb.tip('Module is loaded')
+      },
+      // Called after the module is destroyed.
+      onDestroy() {
+        Wb.tip('Module is destroyed')
+      }
+    });
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

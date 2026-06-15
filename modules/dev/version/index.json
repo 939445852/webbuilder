@@ -1,0 +1,13 @@
+{
+  "title": "@versionMng",
+  "icon": "",
+  "img": "",
+  "hideInMenu": "true",
+  "items": [
+    "select.xwl",
+    "del.xwl",
+    "check-out.xwl",
+    "rollback.xwl",
+    "select-version.xwl"
+  ]
+}

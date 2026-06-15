@@ -1,0 +1,57 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.make(app,{cname:"viewport",layout:"grid1",cid:"viewport1",items:[{cname:"label",cid:"mainLabel",cls:"w-title3",text:"Check,
+    radio, toggle and slider"},{cname:"title",title:"Check",cid:"checkTitle"},{cname:"container",layout:"grid1",cid:"checkCt",frame:true,items:[{cname:"check",cid:"commonCheck",text:"Common
+    check",events:{change(e,t,a){Wb.tip(this.cid+" value is "+e)}}},{cname:"check",label:"Label
+    check",text:"With label",value:true,cid:"labelCheck"},{cname:"check",cid:"onlyLabelCheck",label:"Only
+    label check"},{cname:"check",showEmptyLabel:true,cid:"onlyLabelEmptyTextCheck",label:"Only
+    label check with empty text"},{cname:"controlCt",showEmptyLabel:true,cid:"intValueCt",gap:"1em",items:[{cname:"check",returnType:"int",cid:"intValueCheck",label:"return
+    int value"},{cname:"button",cid:"getValueBtn",text:"Get value",events:{click(e,t){Wb.tip("The
+    value is "+this.previousSibling.value)}}}]}]},{cname:"title",title:"CheckGroup",cid:"checkGroupTitle"},{cname:"container",layout:"grid1",cid:"checkGroupCt",frame:true,items:[{cname:"label",cid:"commonCheckGroupLabel",text:"Common
+    checkGroup"},{cname:"container",layout:"row",cid:"commonCheckCt",gap:"1em",items:[{cname:"checkGroup",cid:"commonCheckGroup",items:[{cname:"check",cid:"check1",label:"item
+    1"},{cname:"check",value:true,cid:"check2",label:"item 2"},{cname:"check",value:true,cid:"check3",label:"item
+    3"}]},{cname:"button",cid:"getValueBtn",text:"Get value",events:{click(e,t){Wb.tip(Wb.encode(app.commonCheckGroup.value))}}},{cname:"button",cid:"setValueBtn",text:"Set
+    value",events:{click(e,t){app.commonCheckGroup.setValue({check1:true,check3:true})}}}]},{cname:"label",cid:"allCheckGroupLabel",text:"Return
+    all and return array value checkGroup"},{cname:"container",layout:"row",cid:"allCheckCt",gap:"1em",items:[{cname:"checkGroup",returnAll:true,cid:"allCheckGroup",returnArray:true,items:[{cname:"check",cid:"check1",label:"item
+    1"},{cname:"check",value:true,cid:"check2",label:"item 2"},{cname:"check",value:true,cid:"check3",label:"item
+    3"}]},{cname:"button",cid:"getValueBtn",text:"Get value",events:{click(e,t){Wb.tip(Wb.encode(app.allCheckGroup.value))}}},{cname:"button",cid:"setValueObjectBtn",text:"Set
+    value by object",events:{click(e,t){app.allCheckGroup.setValue({check1:true,check3:"true"})}}},{cname:"button",cid:"setValueArrayBtn",text:"Set
+    value by array",events:{click(e,t){app.allCheckGroup.setValue([false,1,"true"])}}},{cname:"button",cid:"setValueCidsBtn",text:"Set
+    value by cids",events:{click(e,t){app.allCheckGroup.setValue(["check1","check3"])}}}]}]},{cname:"title",title:"Radio",cid:"radioTitle"},{cname:"container",layout:"form",cid:"radioCt",frame:true,items:[{cname:"radio",cid:"radio1",group:"group1",label:"item
+    1"},{cname:"radio",cid:"radio2",group:"group1",label:"item 2"},{cname:"divider",cid:"divider1"},{cname:"radio",cid:"radio3",group:"group2",label:"item
+    3"},{cname:"radio",label:"item 4",value:true,cid:"radio4",group:"group2"},{cname:"radio",cid:"radio5",group:"group2",label:"item
+    5"}]},{cname:"title",title:"RadioGroup",cid:"radioGroupTitle"},{cname:"container",layout:"grid1",cid:"radioGroupCt",frame:true,items:[{cname:"label",cid:"commonRadioGroupLabel",text:"Common
+    radioGroup"},{cname:"container",layout:"row",cid:"commonRadioCt",gap:"1em",items:[{cname:"radioGroup",cid:"commonRadioGroup",items:[{cname:"radio",cid:"radio1",label:"item
+    1"},{cname:"radio",cid:"radio2",label:"item 2"},{cname:"radio",cid:"radio3",label:"item
+    3"}]},{cname:"button",cid:"getValueBtn",text:"Get value",events:{click(e,t){Wb.tip(app.commonRadioGroup.value)}}},{cname:"button",cid:"setValueBtn",text:"Set
+    value",events:{click(e,t){app.commonRadioGroup.setValue(2)}}}]},{cname:"label",cid:"returnCidRadioGroupLabel",text:"Return
+    cid as value radioGroup"},{cname:"container",layout:"row",cid:"returnNameRadioCt",gap:"1em",items:[{cname:"radioGroup",returnName:true,cid:"returnNameRadioGroup",items:[{cname:"radio",value:true,cid:"radio1",label:"item
+    1"},{cname:"radio",cid:"radio2",label:"item 2"},{cname:"radio",cid:"radio3",label:"item
+    3"}]},{cname:"button",cid:"getValueBtn",text:"Get value",events:{click(e,t){Wb.tip(app.returnNameRadioGroup.value)}}},{cname:"button",cid:"setValueByIndexBtn",text:"Set
+    value by index",events:{click(e,t){app.returnNameRadioGroup.setValue(2)}}},{cname:"button",cid:"setValueByCidBtn",text:"Set
+    value by cid",events:{click(e,t){app.returnNameRadioGroup.setValue("radio2")}}}]}]},{cname:"title",title:"Toggle",cid:"toggleTitle"},{cname:"container",layout:"grid1",cid:"toggleCt",frame:true,items:[{cname:"toggle",cid:"commonToggle",text:"Common
+    toggle",events:{change(e,t,a){Wb.tip(this.cid+" is "+e)}}},{cname:"toggle",text:"Prefix
+    suffix",suffix:"Suffix text",prefix:"Prefix text",cid:"prefixSuffixToggle"},{cname:"toggle",clickToggle:false,cid:"dragToToggle",text:"Drag
+    to toggle"},{cname:"toggle",toggleAlign:"end",cid:"alignRightToggle",text:"Align
+    right toggle"},{cname:"toggle",vertical:true,cid:"verticalToggle",text:"Vertical
+    toggle"},{cname:"controlCt",cid:"returnIntCt",gap:"1em",text:"Return int value",items:[{cname:"toggle",returnType:"int",cid:"returnIntToggle"},{cname:"button",cid:"getValue",text:"Get
+    value",events:{click(e,t){Wb.tip(this.cid+" value is "+this.previousSibling.value)}}}]}]},{cname:"title",title:"Slider",cid:"sliderTitle"},{cname:"container",layout:"grid1",cid:"sliderCt",frame:true,items:[{cname:"slider",value:30,cid:"commonSlider",text:"Common
+    slider",events:{enddrag(e,t){Wb.tip("End drag at "+e)},startdrag(e,t){Wb.tip("Start
+    drag at "+e)}}},{cname:"slider",text:"Multi slider",suffix:"Suffix",value:[10,50,80],prefix:"Prefix",cid:"multiSlider",events:{enddrag(e,t){Wb.tip("The
+    values are "+Wb.encode(e))}}},{cname:"controlCt",layout:"row",text:"Vertical slider",align:"stretch",cid:"verticalSliderCt",gap:"2em",height:"10em",items:[{cname:"slider",labelUp:true,labelAlign:"center",labelSeparator:false,vertical:true,text:"Text",value:20,cid:"verticalSlider"},{cname:"slider",vertical:true,labelUp:true,suffix:"Suffix",value:[30,70],prefix:"Prefix",cid:"verticalMulSlider",events:{enddrag(e,t){Wb.tip("The
+    values are "+Wb.encode(e))}}}]},{cname:"slider",justifySelf:"start",vertical:true,text:"Justify
+    left",value:20,cid:"justifyLeftVerticalSlider",height:"6em"},{cname:"slider",text:"Volume",suffix:true,suffixWidth:"3em",value:50,maxValue:100,cid:"volumeSlider",events:{change(e,t,a){Wb.toast("Volumn
+    is "+e)}}},{cname:"slider",minValue:100,maxValue:500,prefix:"100",tipRender(e){return"Custom
+    render "+e},step:10,text:"Misc slider",suffix:500,value:200,cid:"miscSlider"},{cname:"areaSlider",width:"30em",text:"Area
+    slider",value:[20,30],maxValue:[300,200],cid:"areaSlider1",height:"10em",events:{enddrag(e,t){Wb.toast("The
+    value is "+Wb.encode(e))}}}]}]});
+hideInMenu: 'false'
+icon: check6
+img: ''
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

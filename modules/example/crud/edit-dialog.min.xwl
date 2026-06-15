@@ -1,0 +1,28 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.make(app,{cname:"window",layout:"grid2",resetDialog:true,autoGrid:true,cid:"editWin",items:[{cname:"title",title:"General
+    Information",cid:"generalTitle"},{cname:"text",text:"Code",maxLength:5,required:true,cid:"code"},{cname:"fileInput",browseMode:true,browseHeight:"8em",text:"Photo",gridRow:"span
+    3",accept:".png",cid:"photo"},{cname:"text",required:true,cid:"full_name",text:"Full
+    name"},{cname:"select",bindField:"user_id",forceSelect:true,text:"Username",valueField:"sid",required:true,url:xpath+"/../actions&xaction=selectUsers",cid:"user_name",textField:"user_name"},{cname:"select",clearButton:true,gridColumn:"span
+    2",valueMap:{sid:"dept_id",dept_name:"dept_name",dept_code:"dept_code"},treePicker:true,text:"Dept
+    name",required:true,url:"m?xwl=sys/dialog/dept-selector/select",cid:"dept_name",subtextField:"dept_code",textField:"dept_name"},{cname:"date",cid:"birth_date",text:"Birth
+    date"},{cname:"select",keyName:"gender",cid:"gender",text:"Gender"},{cname:"number",minValue:0,text:"Height",decimalCount:0,maxValue:999,cid:"height"},{cname:"text",cid:"email",text:"Email",valueType:"email"},{cname:"number",decimalCount:2,cid:"salary",text:"Salary"},{cname:"title",title:"Personal
+    Resume",cid:"cvTitle"},{cname:"textArea",gridColumn:"span 2",cid:"cv",height:"8em"}]});Wb.make(app,{cname:"viewport",autoContextMenu:true,layout:"fit",cid:"viewport1",tbar:{cname:"toolbar",items:[{icon:"add",text:Str.add,keys:"Ctrl+E",cid:"addBtn",events:{click(e,t){let
+    a=app.editWin;a.icon="add";a.title=Str.add;a.focusControl=null;a.okHandler=(e,t)=>{Wb.ajax({url:xpath+"/../actions&xaction=add",params:t,json:true,success(a){app.grid1.appendRecord(Wb.apply(t,a));e.hide()},failure(e){Wb.checkExists(e,"wb_staff_code",app.editWin.down("code"))}})};a.show();a.scrollEl.scrollTop=a.scrollEl.scrollLeft=0}}},{icon:"edit",text:Str.edit,keys:"Ctrl+J",cid:"editBtn",events:{click(e,t){let
+    a=app.editWin,i=app.grid1.selection,d;if(!i){Wb.tipSelect();return}d=i.data;a.icon="edit";a.title=Str.edit+"
+    - "+d.code;a.focusControl=true;Wb.setValue(a,d);a.down("photo").preview(xpath+"/../actions&xaction=getPhoto&sid="+d.sid+"&"+Wb.getId());a.okHandler=(e,t)=>{Wb.ajax({url:xpath+"/../actions&xaction=edit",params:i.getDiffer(t),json:true,success(a){i.update(Wb.apply(t,a));e.hide()},failure(e){Wb.checkExists(e,"wb_staff_code",app.editWin.down("code"))}})};a.show()}}},{icon:"delete",text:Str.del,keys:"Ctrl+D",cid:"delBtn",events:{click(e,t){let
+    a=app.grid1,i=a.selections;if(!i.length){Wb.tipSelect();return}Wb.confirm(Wb.getActionHint(i,"code"),(e=>{Wb.ajax({url:xpath+"/../actions&xaction=del",params:{del:a.originData},success(){a.delRecords()}})}))}}},{cname:"divider",cid:"divider1"},{cname:"text",minWidth:"5em",clearButton:true,placeholder:Str.search,flex:1,cid:"search",maxWidth:"20em",events:{change(e,t,a){app.grid1.delayLoad({comps:app.search})}}}]},items:[{cname:"grid",columnsSortable:true,sorters:"code",url:xpath+"/../actions&xaction=select",cid:"grid1",multiSelect:true,stateData:"_$004V7KE4QVEXL$_",stateId:"wb.crud-dialog",columns:[{cname:"column",cid:"rowNumCol",rowNum:true},{cname:"column",width:"5em",fieldName:"code",text:"Code",cid:"codeCol"},{cname:"column",width:"13em",fieldName:"full_name",text:"Full
+    name",cid:"fullNameCol"},{cname:"column",cid:"usernameCol",fieldName:"user_name",text:"Username"},{cname:"column",fieldName:"dept_name",text:"Department",render(e,t,a,i){Wb.Column.addSubText(i,e,t.dept_code)},cid:"deptCol"},{cname:"column",cid:"birthDateCol",fieldName:"birth_date",text:"Birth
+    date"},{cname:"column",width:"6em",fieldName:"gender",text:"Gender",keyValue:true,cid:"genderCol"},{cname:"column",width:"6em",fieldName:"height",text:"Height",cid:"heightCol"},{cname:"column",width:"18em",fieldName:"email",text:"Email",cid:"emailCol"},{cname:"column",width:"9em",fieldName:"salary",text:"Salary",type:"usd",cid:"salaryCol"},{cname:"column",width:"15em",fieldName:"cv",sortable:false,text:"CV",cid:"cvCol"},{cname:"column",width:"15em",fieldName:"photo",sortable:false,text:"Photo",render(e,t,a,i){if(e)Wb.Column.createDownload(i,a.fieldName,t.full_name+".png")},cid:"photoCol"}],events:{itemdblclick(e,t,a){app.editBtn.fireEvent("click")}}}]});
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+stateMap:
+  wb.crud-dialog: 004V7KE4QVEXL
+tags: ''
+text: module
+title: ''

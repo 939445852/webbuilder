@@ -1,0 +1,15 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  serverScript: let actions={loadJs(){let e;Wb.load("./util.js");e=My.Util.add(Wb.getInt("value1"),Wb.getInt("value2"));Wb.send(e)},loadMjs(){let
+    e,t=Wb.load("./util.mjs");e=t.add(Wb.getInt("value1"),Wb.getInt("value2"));Wb.send(e)},importMjs(){import("wb/modules/example/load/server-load-module/util.mjs").then((e=>{let
+    t=e.default.add(Wb.getInt("value1"),Wb.getInt("value2"));Wb.send(t)})).catch((e=>{Wb.error(e?.toString())}))},runXwl(){let
+    e;Wb.run("./util.xwl");e=app.add(Wb.getInt("value1"),Wb.getInt("value2"));Wb.send(e)},invokeXwl(){let
+    e=Wb.execute("./query");Wb.send(e)}};actions[Params.xaction]();
+tags: ''
+text: module
+title: ''

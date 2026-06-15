@@ -1,0 +1,14 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Delete roles
+  serverScript: function main(){const e=Wb.load("./util.mjs");let r=Wb.getObject("del"),l,s=Perm.buffer,o=[];r.forEach((r=>(l=r.$role_name)&&e.isReservedRole(l)&&Wb.raise(Str.cannotDelete.format(l))));Wb.sync({tableName:"wb_role",del:r});Wb.sql({sql:"delete
+    from wb_user_role where role_id={?$sid?}",params:r});Wb.sql({sql:"delete from
+    wb_perm where role_id={?$sid?}",params:r});s.forEach((e=>{if(r.some((r=>e.endsWith("|"+r.$sid))))o.push(e)}));o.forEach((e=>s.remove(e)))}main();
+tags: ''
+text: module
+title: ''

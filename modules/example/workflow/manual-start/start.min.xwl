@@ -1,0 +1,13 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  serverScript: function main(){let e,a=new Date;e=new Wb.Workflow({file:"example/leave.flw",title:"My
+    leave application"});e.start();Wb.sync({tableName:"wb_leave",insert:{sid:Wb.getId(),begin_date:a.addDay(2),end_date:a.addDay(5),flow_id:e.flowId,user_id:Wb.userid,leave_days:8,leave_reason:"Go
+    on vacation"}})}main();
+tags: ''
+text: module
+title: ''

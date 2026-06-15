@@ -1,0 +1,111 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: 'Wb.apply(app,{viewData:[{icon:"user",text:"User Management"},{icon:"support",text:"Support
+    Service"},{icon:"list",text:"Consumption List"},{icon:"preview",text:"Disabled
+    Item",_disabled:true,_tip:"This item is disabled"},{icon:"gear",text:"System Settings"},{icon:"truck",text:"The
+    text content of this item is too long and maybe overflowed"},{icon:"database",text:"Database
+    Management"},{icon:"flow1",text:"WorkFlow Design"}]});Wb.make(app,{cname:"viewport",layout:"grid1",cid:"viewport1",items:[{cname:"label",cid:"mainLabel",cls:"w-title3",text:"View"},{cname:"title",title:"Common
+    view",cid:"commonViewTitle"},{cname:"label",cid:"commonItemTplViewLabel",text:"Define
+    the content of ViewItem by defining itemTpl."},{cname:"view",layout:"column",data:app.viewData,cid:"commonItemTplView",height:"15em",itemTpl:''<div
+    class="w-row w-align-center w-gapd5 w-padding">\n  <div class="w-icon icon-{icon}"></div>\n  <div
+    class="w-name">{text}</div>\n</div>''},{cname:"label",cid:"commonItemTplFnViewLabel",text:"Define
+    the content of ViewItem by defining itemTplFn."},{cname:"view",layout:"column",data:app.viewData,itemTplFn(e,t){return`<div
+    class="w-row w-align-center w-gapd5 w-padding">\n  <div class="w-icon icon-${Wb.toHTML(e.icon)}"></div>\n  <div
+    class="w-name">${Wb.toHTML(e.text)}</div>\n</div>`},cid:"commonItemTplFnView",frame:true,height:"15em"},{cname:"title",title:"Customized
+    item itself",cid:"customItemViewTitle"},{cname:"label",cid:"customItemViewLabel",text:''Define
+    ViewItem itself by identifying the "w-item" class in itemTpl.''},{cname:"label",cid:"fixed4ColumnsLabel",text:"Fixed
+    4 columns"},{cname:"view",data:app.viewData,bodyCls:"w-grid4 w-padding w-gapd5",resizable:true,cid:"fixed4ColumnsView",frame:true,itemTpl:''<div
+    class="w-item w-column w-align-center w-padding w-gapd5">\n  <div class="w-size2
+    w-icon icon-{icon}"></div>\n  <div class="w-label w-ta-center">{text}</div>\n</div>''},{cname:"label",cid:"autoWrapItemsLabel",text:"Auto
+    wrap items with fixed item width"},{cname:"view",data:app.viewData,bodyCls:"w-form
+    w-padding w-gapd5",resizable:true,cid:"autoWrapView",frame:true,itemTpl:''<div
+    class="w-item w-column w-align-center w-padding w-gapd5" style="width:10em">\n  <div
+    class="w-size2 w-icon icon-{icon}"></div>\n  <div class="w-name w-ta-center w-aligns-stretch">{text}</div>\n</div>''},{cname:"label",cid:"noWrapItemsLabel",text:"No
+    wrap items with fixed item width and stick selection"},{cname:"view",data:app.viewData,stickSelect:true,resizable:true,bodyCls:"w-row
+    w-padding w-gapd5 w-visible-all",cid:"noWrapView",frame:true,itemTpl:''<div class="w-item
+    w-column w-align-center w-padding w-gapd5 w-no-shrink w-rel" style="width:10em">\n  <div
+    class="w-size2 w-icon icon-{icon}"></div>\n  <div class="w-name w-ta-center w-aligns-stretch">{text}</div>\n  <div
+    class="w-sized8 w-icon icon-ellipsis w-btn w-btn-tool w-abs" cid="menu-btn" style="right:0;top:0;"></div>\n</div>'',multiSelect:true,events:{click(e,t){let
+    i=this,a=e.target;if(a.closest("[cid=menu-btn]")){let e;e=app.viewContextMenu??=new
+    Wb.Menu({items:[{text:"Item 1",icon:"grid",handler(){Wb.tip("Click at "+app.currentWrapViewData.text)}},{text:"Item
+    2",icon:"earth"}]});app.currentWrapViewData=a.getClosestComp().data;e.showBy(a)}}}},{cname:"title",title:"Various
+    template syntax",cid:"variousTemplateSyntaxTitle"},{cname:"label",cid:"useItemTplLabel",text:"Use
+    itemTpl"},{cname:"view",layout:"column",data:[{num:1,money:581234.56,date:new
+    Date,array:["item1","item2","item3"]},{num:2,money:324549.7,date:new Date,array:["item4","item5","item6"]},{num:3,money:53543.28,date:new
+    Date,array:["item7","item8","item9"]}],resizable:true,cid:"variousItemTplSyntaxView",frame:true,itemTpl:''\x3c!--
+    Tip: For complex templates, it is recommended to use itemTplFn to define custom
+    function --\x3e\n<div class="w-item w-border" style="display:grid;grid-template-columns:2em
+    8em 16em 1fr;padding:1em;gap:.5em">\n  <div>{num}</div>\n  <div>{[data.money.usd]}</div>\n  <div>{[data.date.dateTimeText12]}</div>\n  <div>{for
+    data.array}{if index > 0}<span>, </span>{/if}<span>{[index + 1]}: </span><span>{[value]}</span>{/for}</div>\n</div>''},{cname:"label",cid:"useItemTplFnLabel",text:"Use
+    itemTplFn with fixed header"},{cname:"view",layout:"column",data:[{num:1,money:581234.56,date:new
+    Date,array:["item1","item2","item3"]},{num:2,money:324549.7,date:new Date,array:["item4","item5","item6"]},{num:3,money:53543.28,date:new
+    Date,array:["item7","item8","item9"]}],resizable:true,itemTplFn(e,t){let i="";e.array.forEach(((e,t)=>{if(t>0)i+="<span>,
+    </span>";i+="<span>"+(t+1)+": </span><span>"+Wb.toHTML(e)+"</span>"}));return`<div
+    class="w-item w-border" style="display:grid;grid-template-columns:2em 8em 16em
+    1fr;padding:1em;gap:.5em">\n  <div>${Wb.toHTML(e.num)}</div>\n  <div>${Wb.toHTML(e.money.usd)}</div>\n  <div>${Wb.toHTML(e.date.dateTimeText12)}</div>\n  <div>${i}</div>\n</div>`},html:''<div
+    class="w-fixed-bgcolor" style="display:grid;grid-template-columns:2em 8em 16em
+    1fr;padding:1em;gap:.5em">\n  <div></div>\n  <div>Money</div>\n  <div>Date</div>\n  <div>Content</div>\n</div>\n<div
+    class="w-items w-flex">\n</div>'',cid:"useItemTplFnView",frame:true,height:"12em"},{cname:"title",title:"Name
+    list with remote data",cid:"nameListTitle"},{cname:"label",cid:"nameListLabel",text:"A
+    common way to display a list of names with remote data and remote pagination."},{cname:"view",resizable:true,pagingBar:true,pageSize:10,url:"demo-source?xaction=staffDict",cid:"nameListView",frame:true,height:"20em",itemTpl:''<div
+    class="w-item w-border w-row w-padding w-align-center w-gapd5">\n  <div class="w-icon
+    icon-user2 w-size2 w-pointer" cid="xicon"></div>\n  <div class="w-column w-gapd2">\n    <div
+    class="w-name">{full_name}</div>\n    <div class="w-name w-sub-color w-sized8">{code}</div>\n  </div>\n  <div
+    class="w-flex"></div>\n  <div class="w-column w-sized8 w-gapd2">\n    <div class="w-name">{[new
+    Date().format(\''HH:mm\'')]}</div>\n    <div class="w-icon icon-flag4 w-sub-color
+    w-aligns-end"></div>\n  </div>\n</div>'',events:{itemclick(e,t,i){if(t.target.closest("[cid=xicon]")){Wb.tip("Click
+    icon at: "+e.data.full_name)}}}},{cname:"title",title:"Tag style list",cid:"tagListTitle"},{cname:"label",cid:"tagListLabel",text:"Display
+    a list of tags with customized css and closed button."},{cname:"view",resizable:true,captureClass:".w-close-btn",cls:"d-tag",bodyCls:"w-form
+    w-padding w-gapd5",url:"demo-source?xaction=staffDict",cid:"tagListView",frame:true,height:"15em",itemTpl:''<div
+    class="w-item w-row w-padding w-align-center w-gapd5">\n  <div class="w-icon icon-tag"></div>\n  <div
+    class="w-name">{full_name}</div>\n  <div class="w-btn w-close-btn w-btn-light">\n    <div
+    class="w-icon icon-close"></div>\n  </div>\n</div>'',multiSelect:true,rectSelect:true,events:{captureclick(e,t,i){if(t.target.closest(".w-close-btn"))e.destroy()}}},{cname:"title",title:"Pagination
+    display",cid:"pagingTitle"},{cname:"label",cid:"remoteDataPagingLabel",text:"Remote
+    data pagination"},{cname:"view",resizable:true,pagingBar:"pageNums",pageSize:10,url:"demo-source?xaction=staffDict",cid:"remotePagingView",frame:true,height:"20em",itemTpl:''<div
+    class="w-padding">{code} - {full_name}</div>''},{cname:"label",cid:"cachedPagingLabel",text:"Caching
+    remote data and paging locally."},{cname:"view",resizable:true,cached:true,pagingBar:"pageNums",pageSize:10,url:"demo-source?xaction=staffDict",cid:"cachedPagingView",frame:true,height:"20em",itemTpl:''<div
+    class="w-padding">{code} - {full_name}</div>''},{cname:"label",cid:"localDataPagingLabel",text:"Local
+    data pagination"},{cname:"view",layout:"column",resizable:true,localData:[{text:"item1"},{text:"item2"},{text:"item3"},{text:"item4"},{text:"item5"},{text:"item6"},{text:"item7"},{text:"item8"},{text:"item9"},{text:"item10"},{text:"item11"},{text:"item12"},{text:"item13"},{text:"item14"},{text:"item15"},{text:"item16"},{text:"item17"},{text:"item18"},{text:"item19"}],pagingBar:true,pageSize:10,cid:"localDataPagingView",frame:true,height:"15em",itemTpl:''<div
+    class="w-padding">{text}</div>''},{cname:"label",cid:"bottomNextPageLabel",text:"Auto
+    load next page when scroll to the bottom"},{cname:"view",resizable:true,pageSize:10,autoPaging:true,url:"demo-source?xaction=staffDict",cid:"bottomNextPageView",frame:true,height:"20em",itemTpl:''<div
+    class="w-item w-padding1">{code} - {full_name}</div>''},{cname:"label",cid:"topNextPageLabel",text:"Auto
+    load next page when scroll to the top"},{cname:"view",autoToBottom:true,resizable:true,pageSize:10,autoPaging:false,reverseData:true,url:"demo-source?xaction=staffDictDesc",cid:"topNextPageView",frame:true,height:"20em",itemTpl:''<div
+    class="w-item w-padding1">{code} - {full_name}</div>''},{cname:"title",title:"Miscillaneous
+    view",cid:"miscViewTitle"},{cname:"view",padding:"2em",data:app.viewData,resizable:true,bodyCls:"w-grid4",droppable:"demo.miscView",layout:"grid4",keyWalking:true,draggable:true,gap:"2em",reserveScrollbar:true,cid:"miscView",frame:true,itemTpl:''<div
+    class="w-item w-column w-align-center w-padding w-gapd5">\n  <div class="w-size2
+    w-icon icon-{icon}"></div>\n  <div class="w-label w-ta-center">{text}</div>\n</div>'',multiSelect:true,rectSelect:true,tbar:{cname:"toolbar",gap:".5em",items:[{cid:"selectItem",text:"Select",events:{click(e,t){let
+    i=app.miscView;i.selection=[i.items[0],i.items[1]]}}},{cid:"deselectItem",text:"Deselect",events:{click(e,t){app.miscView.deselectAll()}}},{cid:"addItem",text:"Add",events:{click(e,t){let
+    i=app.miscView.addData({text:"New Item",icon:"earth"});i.selected=true;i.highlight()}}},{cid:"insertItem",text:"Insert",events:{click(e,t){let
+    i=app.miscView.insertData(1,{text:"Insert Item",icon:"record"});i.selected=true;i.highlight()}}},{cid:"deleteItem",text:"Delete",events:{click(e,t){app.miscView.firstItem?.destroy()}}},{cid:"deleteSelectionsItem",text:"Delete
+    selections",events:{click(e,t){let i=app.miscView;if(!i.selections.length){Wb.tipSelect();return}i.destroySelections()}}},{cid:"updateItem",text:"Update",events:{click(e,t){let
+    i=app.miscView.items[0];if(i){i.set("text","Updated");i.set("icon","flower");i.focus();i.highlight()}}}}]},events:{itemdrop(e,t,i){Wb.tip("Drop
+    items: "+e.dropItems.length+"\nDest: "+e.dest.data.text+"\nMode: "+e.mode)}}},{cname:"component",textSelectable:false,html:"<div>Feature
+    List:</div>\n<ul>\n  <li>Drag to draw a rectangle to select items.</li>\n  <li>Press
+    key to enter name in the view can navigate to the specified item.</li>\n  <li>Maintain
+    scrollbar position after reloading data.</li>\n  <li>Intelligent navigate to specified
+    item based on arrow key direction.</li>\n  <li>Drag-and-Drop support.</li>\n</ul>",cid:"miscDescComp"},{cname:"title",title:"List
+    view",cid:"listViewTitle"},{cname:"label",cid:"listViewLabel",text:"List items
+    in the specified pattern"},{cname:"listView",defaultFields:{_icon:{value:"user2"},badge:{value:8},iconvalue:{value:"bell-off"},datevalue:{value:new
+    Date}},resizable:true,url:"demo-source?xaction=staffDict",cid:"listView",height:"20em",subtextField:"code",textField:"full_name",tbar:{cname:"toolbar",gap:true,events:{buttonclick(e,t,i){app.listView.viewType=e.cid}},items:[{active:true,groupName:"viewType",text:"Small
+    List",cid:"smallList"},{active:true,groupName:"viewType",text:"List",cid:"list"},{groupName:"viewType",cid:"smallIcon",text:"Small
+    Icon"},{groupName:"viewType",cid:"mediumIcon",text:"Medium Icon"},{groupName:"viewType",cid:"bigIcon",text:"Big
+    Icon"}]}},{cname:"title",title:"Icon view",cid:"iconViewTitle"},{cname:"label",cid:"iconViewLabel",text:''Display
+    items with a big icon and text label, set layout to "grid4" to display 4 fixed
+    columns, set "padding" and "gap" to adjust space.''},{cname:"iconView",defaultFields:{badge:{value:99}},layout:"grid4",padding:".5em",data:app.viewData,resizable:true,gap:"1em",iconField:"icon",selectColor:"active",cid:"iconView",events:{itemclick(e,t,i){Wb.tip(e.data.text+"
+    clicked")}}},{cname:"title",title:"Check view",cid:"checkViewTitle"},{cname:"label",cid:"checkViewLabel1",text:"Display
+    items for single or multiple check"},{cname:"checkView",data:[{text:"Chrome",value:1,_icon:"chrome"},{text:"Edge",value:2,_icon:"edge",_selected:true},{text:"Firefox",value:3,_icon:"firefox"},{text:"Safari",value:4,_icon:"safari"},{text:"Image
+    icon",value:5,_img:"wb/images/chart.png"}],cid:"checkView1",maxWidth:"15em",multiSelect:true,tbar:{cname:"toolbar",gap:".5em",items:[{cid:"setValueItem",text:"Set
+    Value",events:{click(e,t){app.checkView1.value=[2,3]}}},{cid:"getValueItem",text:"Get
+    Value",events:{click(e,t){Wb.tip("The value is: "+Wb.encode(app.checkView1.value))}}}]}}]});'
+hideInMenu: 'false'
+icon: list-view
+img: ''
+properties:
+  cid: module
+  description: demo-source=example/common/demo-source.xwl
+  links: '["wb/css/demo.css"]'
+tags: ''
+text: module
+title: ''

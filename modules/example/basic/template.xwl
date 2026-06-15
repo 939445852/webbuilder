@@ -1,0 +1,117 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: mainLabel
+      cls: w-title3
+      text: Use Template
+    text: mainLabel
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: tplTitle
+      title: HTML template
+    text: tplTitle
+  - _icon: component
+    cls: Wb.Component
+    properties:
+      cid: tplComp
+      cls: w-fit
+      frame: 'true'
+      textSelectable: 'false'
+      tpl: |-
+        <div class='w-row w-gap w-lh w-justify-between w-padding'>
+          <div class='w-frame w-padding'>
+            <span class='w-active-color w-bold w-size1d2'>{p1}</span>
+            <br><span>Growth</span>
+          </div>
+          <div class='w-frame w-padding'>
+            <span class='w-active-color w-bold w-size1d2'>{[data.p2.usd]}</span>
+            <br><span>Income</span>
+          </div>
+          <div class='w-frame w-padding'>
+            <span class='w-active-color w-bold w-size1d2'>{p3}</span>
+            <br><span>Market</span>
+          </div>
+          <div class='w-frame w-padding'>
+            <span class='w-active-color w-bold w-size1d2'>{[data.p4.timeText12]}</span>
+            <br><span>Datetime</span>
+          </div>
+          <div class='w-frame w-padding'>
+            <span class='w-active-color w-bold w-size1d2'>{[data.p5.intText]}</span>
+            <br><span>Total</span>
+          </div>
+        </div>
+      tplData: '({ p1: ''68.5%'', p2: 325892, p3: ''Geejing'', p4: new Date(), p5:
+        83236 })'
+    text: tplComp
+  - _icon: button
+    cls: Wb.Button
+    events:
+      click: 'app.tplComp.update({ p1: ''56.82%'', p2: 839213, p4: new Date() });'
+    properties:
+      cid: updateTplBtn
+      text: Update template data
+      type: primary
+    text: updateTplBtn
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: useViewTplTitle
+      title: Use view template
+    text: useViewTplTitle
+  - _icon: list-view
+    cls: Wb.View
+    properties:
+      cid: tplView
+      data: |-
+        [
+          { name: 'Growth', value: '68.5%' },
+          { name: 'Income', value: (325892).usd },
+          { name: 'Market', value: 'Geejing' },
+          { name: 'Datetime', value: new Date().timeText12 },
+          { name: 'Total', value: (83236).intText }
+        ]
+      html: |-
+        <div class='w-items w-row w-gap w-lh w-justify-between w-padding'>
+        </div>
+      itemTpl: |-
+        <div class='w-frame w-padding'>
+          <span class='w-active-color w-bold w-size1d2'>{value}</span>
+          <br><span>{name}</span>
+        </div>
+      selectColor: none
+    text: tplView
+  - _icon: button
+    cls: Wb.Button
+    events:
+      click: |-
+        app.tplView.data = [
+          { name: 'Growth', value: '32.5%' },
+          { name: 'Income', value: (48372).usd },
+          { name: 'Datetime', value: new Date().timeText12 }
+        ]
+    properties:
+      cid: updateViewBtn
+      text: Update view data
+      type: primary
+    text: updateViewBtn
+  properties:
+    cid: viewport1
+    layout: grid1
+  text: viewport1
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

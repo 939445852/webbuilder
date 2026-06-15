@@ -1,0 +1,64 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.define(app,{params:_$params$_,getFileUrl:"m?xwl=sys/file/get",set$rawPath(e){app.rawPath$=e;e??="";app.basePath=e.includes("|")?e.replace("|",app.params.appPath):e;app.rootPath=Wb.getParentDirectory(app.basePath)},get$rawPath(){return
+    app.rawPath$},basePath:"",rootPath:"",backList:[],forwardList:[],get$currentPath(){return
+    app.selNode.getPath(null,"|")},get$filePath(){return app.selNode.data.path},get$selNode(){return
+    app.fileTree.selection},goto(e,t){app.fileTree.selectPath(app.toTreePath(e),t,null,"|")},toTreePath(e){if(e.endsWith("/"))e=e.slice(0,-1);e=e.split("/");if(!app.rootPath&&!e[0].endsWith("/"))e[0]+="/";return
+    e.join("|")},selectNode(e){let t=e.data.path;app.fileGrid.load({params:{path:t}});app.upItem.disabled=!e.parent?.isNode;if(t.occur("/")>1&&t.endsWith("/"))t=t.slice(0,-1);app.pathSelect.value=app.getRelPath(t)},addFile(e){Wb.prompt({title:e?Str.addFolder:Str.addFile,icon:e?"folder1":"file"},{text:Str.name,required:true,cid:"filename"},(function(t,a){Wb.ajax({url:"m?xwl=sys/file/add",json:true,params:{path:app.filePath,filename:t.filename,isFolder:e},success(i){let
+    l=Wb.apply({text:t.filename,size:e?null:0,_leaf:!e},i);if(!l._leaf)l.path+="/";app.fileGrid.addData(l).select();if(e&&app.selNode?.loaded){l.items=[];app.selNode.addData(l)}a.close()}})}))},importFiles(e){let
+    t=app.selNode,a=app.params,i,l;i=[{text:Str.file,cid:"files",multiple:true,required:true,cname:"fileInput",browseMode:true,flex:1,minHeight:"5em"}];i.push({cid:"charset",cname:"select",text:Str.charset,value:a.sysFilenameCharset,data:["UTF-8",a.charset,a.osCharset,a.fileCharset,a.filenameCharset].filter((e=>e)).unique()});l=Wb.prompt({title:(e?Str.importUnzip:Str.import)+"
+    - "+t.text,autoGrid:"up",layout:"form1",icon:"import"},i,((t,a)=>{app.doImport(a,e,(e=>a.close()),t.charset)}),"wb.file.import");l.down("charset").visible=e},exportFiles(e){let
+    t=app.fileGrid.selectionsData;if(t.length)Wb.download("m?xwl=sys/file/export-files",{files:t.pluck("path"),zip:e},"POST");else
+    Wb.tipSelect()},doImport(e,t,a,i){let l=app.selNode;Wb.ajax({url:"m?xwl=sys/file/import-files&mode=list",comps:e,uploadProgress:true,json:true,params:{path:l.data.path,unzip:t,charset:i},success(e){let
+    t,i=app.fileGrid,p=[];t=e.filter((e=>!i.some((t=>t.data.text==e.text))));t.forEach((e=>p.push(Wb.applyWithout({},e,"items"))));i.addData(p);i.selection=i.filter((t=>e.some((e=>e.text==t.data.text))));if(l.loaded){t=e.filter((e=>!e._leaf&&!l.some((t=>t.text==e.text))));l.addData(t)}a?.()}})},copy(e,t){if(!document.activeElement.isInput){let
+    a=app.fileGrid.selectionsData;if(a.length){app.clipboard=a.pluck("path");app.isCut=t}else
+    Wb.tipSelect();e.stopEvent()}},getRelPath(e){let t=app.rootPath,a=t.length;if(a){if(t.includes("|"))a=a+app.params.appPath.length;e=e.substr(a);if(e.startsWith("/"))e=e.substr(1);return
+    e}else{return e}},onGridDblClick(e){let t=e.path,a=Wb.getFilename(t),i=t;Wb.open({url:Wb.isImageFile(t)?"image-viewer":"text-editor",title:a,tip:i,params:{path:t}})}});Wb.make(app,{cname:"viewport",layout:"row",cid:"viewport1",tbar:[{cname:"toolbar",isProperty:true,cid:"bar1",items:[{keys:"Ctrl+J",visible:_$004V7KE4QVEWZ$_,bindModule:"sys/file/add.xwl",icon:"file",text:Str.addFile,cid:"addFileBtn",events:{click(e,t){app.addFile()}}},{keys:"Ctrl+Shift+J",visible:_$004V7KE4QVEWZ$_,bindModule:"sys/file/add.xwl",icon:"folder1",text:Str.addFolder,cid:"addFolderBtn",events:{click(e,t){app.addFile(true)}}},{stopEvent:false,keys:"F2",visible:_$004V7KE4QVEX0$_,bindModule:"sys/file/set-property.xwl",icon:"edit",text:Str.rename,cid:"renameBtn",events:{click(e,t){if(document.activeElement.isInput)return;let
+    a=app.fileGrid,i=a.selection,l,p,r=app.selNode;if(!i){Wb.tipSelect();return}l=i.data.text;a.startEdit(i,"text",((e,t)=>{if(t.text!=e){p=t.data.path;app.isRenaming=true;Wb.ajax({url:"m?xwl=sys/file/set-property",json:true,params:{rename:true,path:p,filename:e},callback(a,i){if(i.ok){let
+    update=t=>{t.set({text:e,path:a.path+(t.data._leaf?"":"/"),lastModified:new Date(a.lastModified).textValue})};update(t);if(!t.data._leaf){t=r.findItem("text",l);if(t){let
+    e,a;a=t.data.path.length;update(t);e=t.data.path;t.cascade((t=>{t.data.path=e+t.data.path.substr(a)}))}}}if(app.pendSelNode){app.selectNode(app.pendSelNode);app.pendSelNode=null}app.isRenaming=false}})}return
+    false}));Wb.Editor.activeEditor.select(0,l.lastIndexOf("."))}}},{cname:"divider",cid:"divider1"},{stopEvent:false,keys:"Ctrl+X",visible:_$004V7KE4QVEX1$_,bindModule:"sys/file/paste-files.xwl",icon:"cut",text:Str.cut,cid:"cutBtn",events:{click(e,t){app.copy(e,true)}}},{stopEvent:false,keys:"Ctrl+C",visible:_$004V7KE4QVEX1$_,bindModule:"sys/file/paste-files.xwl",icon:"copy",text:Str.copy,cid:"copyBtn",events:{click(e,t){app.copy(e)}}},{stopEvent:false,keys:"Ctrl+V",visible:_$004V7KE4QVEX1$_,bindModule:"sys/file/paste-files.xwl",icon:"paste",text:Str.paste,cid:"pasteBtn",events:{click(e,t){function
+    paste(){let e=app.clipboard;if(document.activeElement.isInput||!e?.length)return;let
+    t=app.filePath,a=app.isCut,i,l;if(a){let a=e[0];l=Wb.getParentDirectory(a);if(l==t){app.clipboard=null;return}}i=e.find((e=>e.endsWith("/")&&t.startsWith(e)));if(i){Wb.warn(Str.cannotPaste.format(i));return}if(a)app.clipboard=null;Wb.ajax({url:"m?xwl=sys/file/paste-files&mode=list",json:true,params:{source:e,isCut:a,dest:t},success(t){let
+    i,p=app.fileGrid,r=t.files;app.selNode.addData(r.filter((e=>!e._leaf)));r.forEach((e=>delete
+    e.data));i=p.addData(r);p.selection=i;if(a){let a=app.fileTree.findPath(app.toTreePath(app.getRelPath(l)),null,"|");if(a){if(a.loaded){a.each((t=>{if(e.includes(t.data.path))t.destroy()}),true,true)}else{if(!t.hasFolder)a.removeExpander()}}}}})}paste()}}},{keys:"Shift+Delete",visible:_$004V7KE4QVEX2$_,bindModule:"sys/file/remove.xwl",icon:"delete",text:Str.del,cid:"delBtn",events:{click(e,t){let
+    a=app.fileGrid,i=a.selectionsData;if(i.length){Wb.confirm(Wb.getActionHint(i,"text"),(e=>{i=i.pluck("path");Wb.ajax({url:"m?xwl=sys/file/remove",params:{files:i},success(){let
+    e=app.selNode;a.delRecords();if(e.loaded){e.each((e=>{if(i.includes(e.data.path))e.destroy()}),true,true)}else
+    if(!a.some((e=>!e.data._leaf))){e.removeExpander()}}})}))}else{Wb.tipSelect()}}}},{cname:"divider",cid:"divider2"},{cname:"splitButton",visible:_$004V7KE4QVEX3$_,bindModule:"sys/file/export-files.xwl",icon:"export",text:Str.export,cid:"exportBtn",menu:{cname:"menu",items:[{text:Str.exportZip,cid:"exportZip",events:{click(e,t){app.exportFiles(true)}}}]},events:{click(e,t){app.exportFiles()}}},{cname:"splitButton",visible:_$004V7KE4QVEX4$_,bindModule:"sys/file/import-files.xwl",icon:"import",text:Str.import,cid:"importBtn",menu:{cname:"menu",items:[{text:Str.importUnzip,cid:"importUnzip",events:{click(e,t){app.importFiles(true)}}}]},events:{click(e,t){app.importFiles()}}},{cname:"divider",cid:"divider3"},{icon:"refresh",text:Str.refresh,cid:"refreshBtn",events:{click(e,t){app.fileTree.loadSelect()}}}]},{cname:"toolbar",isProperty:true,cid:"bar2",items:[{icon:"left4",disabled:true,text:Str.back,cid:"backBtn",events:{click(e,t){let
+    a=app.backList,i=a.pop();app.forwardList.push(app.currentPath);app.stopHistory=true;app.fileTree.selectPath(i,null,null,"|");app.stopHistory=false;app.backBtn.disabled=!a.length;app.forwardBtn.disabled=false}}},{icon:"right4",disabled:true,text:Str.forward,cid:"forwardBtn",events:{click(e,t){let
+    a=app.forwardList,i=a.pop();app.backList.push(app.currentPath);app.stopHistory=true;app.fileTree.selectPath(i,null,null,"|");app.stopHistory=false;app.forwardBtn.disabled=!a.length;app.backBtn.disabled=false}}},{cname:"divider",cid:"divider1"},{icon:"up4",disabled:true,text:Str.up,cid:"upItem",events:{click(e,t){app.fileTree.selection=app.selNode.parent}}},{cname:"divider",cid:"divider2"},{cname:"select",data:app.params.pathList,flex:1,selectMode:false,minWidth:"10em",cid:"pathSelect",triggers:{icon:"right4",tip:Str.goto,events:{click(e,t){let
+    a=this.parent,i=a.value,l,p=a.data;l=i.replaceAll("\\","/");app.goto(l,(e=>{if(e){if(!p.some((e=>e.text==l)))p.insert(0,{text:l})}else{Wb.tipWarn(Str.notFound.format(i))}}))}}},events:{select(e,t,a,i){app.goto(e.text)},keydown(e,t){if(e.isGoKey){app.pathSelect.triggers.fireEvent("click");app.pathSelect.collapse();e.stopEvent()}}}}]}],events:{ready(e,t){let
+    a=this.el;app.fileGrid.contextMenu=Wb.createMenu(app.viewport1.tbar[0].items);app.fileInput=new
+    Wb.FileInput({cid:"files",multiple:true,visible:false,renderEl:BodyEl});a.ondragover=Event.pdHandler;a.ondrop=e=>{let
+    t=app.fileInput;e.stopEvent();t.clear();t.addFile(e.dataTransfer.files);app.doImport(t)}}},items:[{cname:"tree",autoSelect:true,keyWalking:true,width:"18em",autoLoad:!Wb.parseBool("_$dialog$_"),url:app.getFileUrl+"&type=tree",cid:"fileTree",events:{selectionchange(e){if(app.isRenaming){app.pendSelNode=app.selNode;return
+    false}app.selectNode(app.selNode)},beforeload(e,t,a){let i=app.basePath;if(!e.node&&i){let
+    e=app.rootPath;t.path=e;t.filterName=Wb.getFilename(app.basePath)||app.basePath}},beforeselect(e,t){let
+    a=this.selection;if(a&&!app.stopHistory){let e=a.getPath(null,"|"),t=app.backList;if(t.lastItem!=e)t.push(e);app.backBtn.disabled=false}}}},{cname:"splitter",cid:"splitter1"},{cname:"grid",columnsSortable:true,stateData:"_$004V7KE4QVEX5$_",stateId:"wb.file",autoLoad:false,pageSize:-1,gridLine:false,url:app.getFileUrl+"&type=file",stripeRows:false,keyWalking:true,flex:1,sorters:"text",fields:{lastModified:{type:"date"},_icon:{convert(e,t){return
+    t._leaf?Wb.getFileIcon(t.text):"folder1"}}},showIcon:true,cid:"fileGrid",multiSelect:true,rectSelect:true,columns:[{cname:"column",rowNum:true,cid:"rowNumCol"},{cname:"column",fieldName:"text",width:"18em",text:Str.name,cid:"nameCol",editor:{cname:"text",valueType:"filename",required:true}},{cname:"column",fieldName:"lastModified",width:"12em",text:Str.modifiedDate,cid:"dateCol"},{cname:"column",fieldName:"type",width:"8em",text:Str.type,render(e,t,a,i){return
+    t._leaf?Wb.getFileExt(t.text):Str.folder},cid:"typeCol"},{cname:"column",fieldName:"size",width:"8em",text:Str.size,type:"fileSize",cid:"sizeCol"}],pagingBar:{cname:"pagingBar",totalOnly:true,events:{ready(e,t){app.fileLabel=this.insert(2,["->",{cname:"label"},"|"])[1]}}},events:{selectionchange(e){let
+    t=this.selections,a,i=t.length;if(i){a=Str.nItems.format(i);if(t.some((e=>e.data._leaf))){let
+    e=0;t.forEach((t=>{if(t.data._leaf)e+=t.data.size}));a+=", "+Str.size+Str.labelSeparator+e.fileSize+"
+    ("+e.intText+")"}}else{a=""}app.fileLabel.text=a},beforeload(e,t,a){function setSorterParams(){let
+    e=app.fileGrid.sorters,a={text:"name",type:"type",size:"size",lastModified:"date"};if(Wb.isString(e))e={name:e,desc:false};t.sort=a[e.name];t.desc=e.desc;t.filterExt=app.extNames}setSorterParams()},itemdblclick(e,t,a){let
+    i=e.data;if(i._leaf){app.onGridDblClick(i)}else{app.selNode.selectChild(i.text)}}}}]});
+hideInMenu: 'false'
+icon: ''
+img: ''
+moduleMap:
+  sys/file/add.xwl: 004V7KE4QVEWZ
+  sys/file/export-files.xwl: 004V7KE4QVEX3
+  sys/file/import-files.xwl: 004V7KE4QVEX4
+  sys/file/paste-files.xwl: 004V7KE4QVEX1
+  sys/file/remove.xwl: 004V7KE4QVEX2
+  sys/file/set-property.xwl: 004V7KE4QVEX0
+properties:
+  cid: module
+  remark: File browser shell
+  serverScript: Wb.checkDemo();function init(){let e=Base.realPath,t=System.getProperties(),a,s=FileUtil.getPath;a=[];a.pushIf(e?s(e):null,Base.pathText,s(t.getProperty("java.home")),s(t.getProperty("user.home")),s(t.getProperty("user.dir")),s(t.getProperty("java.io.tmpdir")));a=a.unique();a.forEach(((e,t)=>e?.endsWith("/")&&(a[t]=e.slice(0,-1))));Params.params=Wb.encode({pathList:a,appPath:Base.pathText,osCharset:Base.osCharset?.toUpperCase(),charset:System.getProperty("file.encoding")?.toUpperCase(),fileCharset:Wb.getConfig("sys.file.charset")?.toUpperCase(),filenameCharset:Wb.getConfig("sys.locale.filenameCharset")?.toUpperCase(),sysFilenameCharset:SysUtil.filenameCharset?.name()?.toUpperCase()})}init();
+stateMap:
+  wb.file: 004V7KE4QVEX5
+tags: ''
+text: module
+title: ''

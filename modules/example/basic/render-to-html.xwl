@@ -1,0 +1,137 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+items:
+- _expanded: true
+  _icon: array
+  cls: Wb.Array
+  items:
+  - _icon: text
+    cls: Wb.Text
+    properties:
+      cid: text1
+      instanced: 'false'
+    text: text1
+  - _icon: calendar
+    cls: Wb.Date
+    properties:
+      cid: date1
+      instanced: 'false'
+    text: date1
+  - _icon: button
+    cls: Wb.Button
+    events:
+      click: app.renderComp.make();
+    properties:
+      cid: makeBtn
+      instanced: 'false'
+      text: Make
+    text: makeBtn
+  properties:
+    cid: bindComps
+  text: bindComps
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: title1
+      title: Create comps in HTML
+    text: title1
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: descLabel
+      text: This example demonstrates how to create comps in HTML.
+    text: descLabel
+  - _icon: component
+    cls: Wb.Component
+    properties:
+      autoMake: 'true'
+      cid: renderComp
+      html: |-
+        <table class="w-table w-frame">
+          <tr>
+            <td>text1</td>
+            <td>
+              <div obj='text1'>
+            </td>
+          </tr>
+          <tr>
+            <td>number1</td>
+            <td>
+              <div obj='{cname: "number", cid: "number1"}'></div>
+            </td>
+          </tr>
+          <tr>
+            <td>date1</td>
+            <td>
+              <div obj='date1'></div>
+            </td>
+          </tr>
+          <tr>
+            <td>Manual make</td>
+            <td>
+              <div obj='makeBtn'></div>
+            </td>
+          </tr>
+          <tr>
+            <td>Set Value</td>
+            <td>
+              <div
+                obj="{ cname: 'button', text: 'Set', handler(){Wb.setValue(this.app.renderComp, { text1: 'foo', number1: 123, date1: new Date() }); }}">
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>Get Value</td>
+            <td>
+              <div obj="{ cname: 'button', text: 'Get', handler(){Wb.tip(Wb.encode(Wb.getValue(this.app.renderComp))); }}">
+              </div>
+            </td>
+          </tr>
+        </table>
+    text: renderComp
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: title2
+      title: Create comp to the specified element
+    text: title2
+  - _icon: component
+    cls: Wb.Component
+    properties:
+      cid: htmlComp
+      html: |-
+        <div class="w-row-center w-gap w-margin-bottom">
+          <div class="w-icon icon-info1"></div>
+          <div>Please click "Create Date Comp" button to create a new Date component below.</div>
+        </div>
+        <div class="my-date w-justifys-start" style="width:15em"></div>
+    text: htmlComp
+  - _icon: button
+    cls: Wb.Button
+    events:
+      click: |-
+        app.myDate = new Wb.Date({ owner: app.viewport1, text: 'Date', el: app.viewport1.el.query('.my-date') });
+        this.destroy(); // destroy this button
+    properties:
+      cid: button1
+      justifySelf: start
+      text: Create Date Comp
+    text: button1
+  properties:
+    autoScroll: 'true'
+    cid: viewport1
+    layout: grid1
+  text: viewport1
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

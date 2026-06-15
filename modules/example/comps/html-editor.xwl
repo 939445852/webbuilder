@@ -1,0 +1,32 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: file-html
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _icon: file-html
+    cls: Wb.HtmlEditor
+    properties:
+      cid: htmlEditor1
+      value: |-
+        <p>
+          <strong class="ql-font-Arial ql-size-p16" style="color: fuchsia;">Rich</strong>
+          <u class="ql-font-Impact ql-size-p28" style="color: lime;">Text</u>
+          <em class="ql-size-p36 ql-font-Times-New-Roman" style="color: blue;">Editor</em>
+        </p>
+      wrapBorder: 'false'
+    text: htmlEditor1
+  properties:
+    cid: viewport1
+    layout: fit
+  text: viewport1
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

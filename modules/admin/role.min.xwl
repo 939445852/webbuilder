@@ -1,0 +1,21 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.apply(app,{onFailure(e){let t={wb_role_pk:"role_id_disp",wb_role_role_name:"role_name"};Wb.each(t,((t,a)=>{if(Wb.checkExists(e,t,app.grid1.dictWin.down(a)))return
+    false}))},winConfigs:{width:"45em"},loadBoxData(e){if(!e.visible)return;let t=app.selectedData,a,l,i;e.disabled=!t||e==app.moduleBox&&t?.sid=="admin";a=e.sourceGrid;l=e.destGrid;a.subTitle=l.subTitle=t?t.role_name:Str.notSelected;if(t){i={params:{role_id:t.sid}};a.load(i);l.load(i)}else{a.destroyAll();l.destroyAll()}}});Wb.make(app,{cname:"viewport",autoContextMenu:true,layout:"column",cid:"viewport1",tbar:{cname:"toolbar",items:[{icon:"add",text:Str.add,keys:"Ctrl+E",cid:"addBtn",events:{click(e,t){let
+    a=app.grid1.dictAdd({url:xpath+"/add",failure:app.onFailure},Str.role,null,null,app.winConfigs);a.down("role_id_disp").readonly=false}}},{icon:"edit",text:Str.edit,keys:"Ctrl+J",cid:"editBtn",events:{click(e,t){let
+    a=app.grid1.dictEdit({url:xpath+"/edit",failure:app.onFailure},"role_name",null,null,app.winConfigs);a.down("role_id_disp").readonly=true}}},{icon:"delete",text:Str.del,keys:"Ctrl+D",cid:"delBtn",events:{click(e,t){app.grid1.removeRecords(xpath+"/del","role_name")}}},{cname:"divider",cid:"divider"},{icon:"user2",active:false,text:Str.user,activeBgColor:false,cid:"userBoxBtn",events:{toggle(e,t){app.userSplitter.visible=app.userBox.visible=e;app.loadBoxData(app.userBox)}}},{cname:"divider",cid:"divider1"},{icon:"module",active:false,text:Str.module,activeBgColor:false,cid:"moduleBoxBtn",events:{toggle(e,t){app.moduleSplitter.visible=app.moduleBox.visible=e;app.loadBoxData(app.moduleBox)}}},{cname:"divider",cid:"divider2"},{cname:"text",minWidth:"5em",clearButton:true,placeholder:Str.search,flex:1,cid:"search",maxWidth:"20em",events:{change(e,t,a){app.grid1.delayLoad({comps:app.search})}}}]},items:[{cname:"grid",columnsSortable:true,keyFields:"sid,role_name",flex:1,stateData:"_$004V7KE4QVEXB$_",stateId:"wb.role",sorters:"role_name",url:xpath+"/select",cid:"grid1",multiSelect:true,events:{itemdblclick(e,t,a){app.editBtn.fireEvent("click")},selectionchange(e){app.selectedData=app.grid1.selectionData;app.loadBoxData(app.userBox);app.loadBoxData(app.moduleBox)}}},{cname:"splitter",cid:"userSplitter",visible:false},{cname:"dualBox",sourceUrl:xpath+"/get-users-by-role&inRole=0",visible:false,searchBar:true,autoLoad:false,destUrl:xpath+"/get-users-by-role&inRole=1",cid:"userBox",height:"18em",subtextField:"user_name",textField:"display_name",sourceGridConfigs:{cname:"grid",title:Str.availableUsers},destGridConfigs:{cname:"grid",title:Str.selectedUsers},columnsx:[{cname:"column",cid:"rowNumCol",rowNum:true},{cname:"column",width:-1,cid:"userNameCol",fieldName:"user_name"}],events:{beforemove(e,t,a){Wb.ajax({url:xpath+"/set-user-roles",data:{items:e,include:t,role_id:app.selectedData.sid},success:e=>{this.acceptMove()}});return
+    false}}},{cname:"splitter",cid:"moduleSplitter",visible:false},{cname:"dualBox",sourceUrl:xpath+"/get-modules-by-role&inRole=0",visible:false,searchBar:true,autoLoad:false,destUrl:xpath+"/get-modules-by-role&inRole=1",cid:"moduleBox",height:"18em",sourceGridConfigs:{cname:"grid",title:Str.availableModules,showIcon:true},destGridConfigs:{cname:"grid",title:Str.selectedModules,showIcon:true},events:{beforemove(e,t,a){Wb.ajax({url:xpath+"/set-module-roles",data:{items:e,include:t,role_id:app.selectedData.sid},success:e=>{this.acceptMove()}});return
+    false}}}]});
+hideInMenu: 'false'
+icon: role
+img: ''
+properties:
+  cid: module
+  remark: Add role
+stateMap:
+  wb.role: 004V7KE4QVEXB
+tags: ''
+text: module
+title: '@roleConfig'

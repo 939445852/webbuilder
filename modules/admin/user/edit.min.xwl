@@ -1,0 +1,15 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Edit user
+  serverScript: function main(){const s=Wb.UserUtil;const e=s.protectedText;let a=Params.password,r=Params.$user_name,t=Params.user_name;if(t&&s.reservedName.includes(r))Wb.raise(Str.cannotModify.format(r));if(t&&s.reservedName.includes(t))Wb.raise(Str.cannotModify.format(t));if(a)Wb.set("password",s.encryptPassword(a));Wb.sync({tableName:"wb_user",update:Params});updateRoles(Params.$sid);Wb.send({password:e,confirm_password:e})}function
+    updateRoles(s){let e=Wb.getObject("roleBox"),a=[],r=Params.$sid;Wb.sql({sql:"delete
+    from wb_user_role where user_id={?user_id?}",params:{user_id:s}});e.forEach((e=>a.push({sid:Wb.getId(),user_id:s,role_id:e})));Wb.sync({tableName:"wb_user_role",insert:a});if(Params.user_name||Params.status=="0"){Sessions.invalidate(r)}else{let
+    s=Sessions.getSessions(r);if(s){if(Config.getBool("sys.session.addDefaultRole"))e.push("default");e=e.stringArray;s.forEach((s=>s.setAttribute("sys.roles",e)))}}}main();
+tags: ''
+text: module
+title: ''

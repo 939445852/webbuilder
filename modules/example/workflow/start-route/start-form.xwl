@@ -1,0 +1,34 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+items:
+- _expanded: true
+  _icon: window
+  cls: Wb.Window
+  items:
+  - _icon: number-edit
+    cls: Wb.Number
+    properties:
+      cid: startValue
+      decimalCount: '0'
+      maxLength: '5'
+      minValue: '0'
+      required: 'true'
+      text: Value
+    text: startValue
+  properties:
+    autoScroll: 'true'
+    cid: main
+    icon: flow1
+    layout: grid1
+    title: Starting with fork
+    visible: 'true'
+  text: main
+properties:
+  cid: module
+tags: '{container: false}'
+text: module
+title: ''

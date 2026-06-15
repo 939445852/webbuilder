@@ -1,0 +1,27 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.make(app,{cname:"viewport",layout:"grid1",cid:"viewport1",items:[{cname:"label",cid:"mainLabel",cls:"w-title3",text:"Drag
+    and Drop"},{cname:"title",title:"Items sortable",cid:"sortableTitle"},{cname:"container",layout:"grid1",cid:"sortableCt",frame:true,items:[{cname:"label",cid:"sortableLabel",text:"Please
+    drag a button to adjust it's position"},{cname:"container",itemsSortable:true,layout:"form",cid:"itemsSortableCt",items:[{cname:"button",cid:"button1",text:"Button1"},{cname:"button",cid:"button2",text:"Button2"},{cname:"button",cid:"button3",text:"Button3"},{cname:"button",cid:"button4",text:"Button4"},{cname:"button",cid:"button5",text:"Button5"},{cname:"button",cid:"button6",text:"Button6"},{cname:"button",cid:"button7",text:"Button7"},{cname:"button",cid:"button8",text:"Button8"},{cname:"button",cid:"button9",text:"Button9"}]}]},{cname:"title",title:"Grid
+    row drag and drop",cid:"gridRowDragDropTitle"},{cname:"grid",droppable:true,draggable:true,url:"demo-source?xaction=staffAllDict",cid:"commonRemoteGrid",height:"15em"},{cname:"title",title:"Dual
+    drag and drop",cid:"dualDragDropTitle"},{cname:"container",layout:"row",cid:"dualDragDropCt",gap:true,height:"15em",items:[{cname:"grid",droppable:"dualGroup",draggable:true,flex:1,title:"Source
+    Grid",url:"demo-source?xaction=staffAllDict",cid:"grid1",multiSelect:true,columns:[{cname:"column",cid:"column1",rowNum:true},{cname:"column",width:"6em",fieldName:"code",text:"code",cid:"column2"},{cname:"column",width:-1,fieldName:"full_name",text:"Full
+    name",cid:"column3"}]},{cname:"grid",droppable:"dualGroup",draggable:true,title:"Drag
+    source to here",flex:1,cid:"grid2",multiSelect:true,columns:[{cname:"column",cid:"column1",rowNum:true},{cname:"column",width:"6em",fieldName:"code",text:"code",cid:"column2"},{cname:"column",width:-1,fieldName:"full_name",text:"Full
+    name",cid:"column3"}]}]},{cname:"title",title:"Drag grid to panel",cid:"dragGridToPanelTitle"},{cname:"container",layout:"row",cid:"dragGridToPanelCt",gap:true,height:"15em",items:[{cname:"grid",dropGroup:"panelGroup",draggable:true,flex:1,title:"Source
+    Grid",url:"demo-source?xaction=staffAllDict",cid:"grid1",multiSelect:true,columns:[{cname:"column",cid:"column1",rowNum:true},{cname:"column",width:"6em",fieldName:"code",text:"code",cid:"column2"},{cname:"column",width:-1,fieldName:"full_name",text:"Full
+    name",cid:"column3"}],events:{itemdrop(e,t,a){let o=[];e.source.forEach((e=>{o.push({cname:"text",text:e.data.full_name})}));o=app.dropPanel.add(o);o[0].intoView();o.each((e=>e.highlight()));Wb.destroy(e.source)},itemdrag(e,t,a){e.allowDrop=e.source.every((e=>parseInt(e.data.code)%2));e.mode="append";e.autoDrop=false}}},{cname:"panel",droppable:"panelGroup",layout:"grid1",title:"Drag
+    odd code rows to here",flex:1,cid:"dropPanel"}]},{cname:"title",title:"Asynchronous
+    drag and drop",cid:"asyncDragDropTitle"},{cname:"grid",droppable:"asyncGroup",draggable:{autoDrop:false},url:"demo-source?xaction=staffAllDict",cid:"asyncDragDropGrid",height:"15em",columns:[{cname:"column",cid:"column1",rowNum:true},{cname:"column",width:"6em",fieldName:"code",text:"code",cid:"column2"},{cname:"column",width:-1,fieldName:"full_name",text:"Full
+    name",cid:"column3"}],events:{itemdrop(e,t,a){Wb.ajax({url:"demo-source?xaction=staffDict",params:{code:e.source[0].data.code},success(t){if(t.length)e.acceptDrop();else
+    Wb.tipWarn("Only allow dragging odd code row.")}})}}}]});
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

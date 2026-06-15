@@ -1,0 +1,63 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.make(app,{cname:"viewport",layout:"grid1",cid:"viewport1",items:[{cname:"label",cid:"mainLabel",cls:"w-title3",text:"Tree"},{cname:"title",title:"Common
+    remote tree",cid:"commonRemoteTreeTitle"},{cname:"tree",url:"demo-source?xaction=listAreaTree",cid:"commonRemoteTree",height:"15em"},{cname:"title",title:"Miscillaneous
+    tree",cid:"miscTreeTitle"},{cname:"tree",defaultFields:{_icon:{value:"geejing"},_checked:{convert(e,t){if(e===true)return
+    true;else return t.text=="Mexico"?null:false}}},columnsSortable:true,linkedCheck:true,resizable:true,localData:[{text:"Asia",_icon:"flag1",_checked:true,myCheck:1,remark:"Asia
+    is the largest continent in the world",area:44579e3,percentage:.3,items:[{text:"China",_leaf:true,_checked:true,myCheck:0},{text:"Japan",_leaf:true,_checked:true,myCheck:1},{text:"Korea",_leaf:true,_checked:true,myCheck:0}]},{text:"Europe",_icon:"flag1",myCheck:1,remark:"Europe
+    is between Asia and Africa",area:9938e3,percentage:.067,items:[{text:"France",_leaf:true},{text:"Germany",_leaf:true},{text:"UK",_leaf:true}]},{text:"North
+    America",_icon:"flag1",_selected:true,_expanded:true,remark:"North America is
+    the third largest of the world's continents",area:24256e3,percentage:.165,items:[{text:"Canada",_leaf:true},{text:"Mexico",_leaf:true},{text:"USA",_leaf:true}]},{text:"South
+    America",_icon:"flag1",_disabled:true,remark:"Sorth America is the fourth largest
+    of the world's continents",area:17819e3,percentage:.12,items:[{text:"Argentina",_leaf:true},{text:"Brazil",_leaf:true}]}],stateData:"_$004V7KE4QVEXJ$_",stateId:"wb.miscTree",pagingBar:true,gridLine:true,sorters:"text",cid:"miscTree",frame:true,height:"20em",columns:[{cname:"column",fieldName:"text",freeze:true,width:"18em",text:"Area",expander:true,render(e,t,a,r){let
+    n,i=t.percentage>.15?"Large area":null;if(i){r.cls="w-text-wrap";r.removeCls("w-text");r.addEl("w-text").textContent=e;r.addEl("w-sub-text").textContent=i}else
+    return e},cid:"textCol"},{cname:"column",cid:"landAreasCol",text:"Land Areas",items:[{cname:"column",fieldName:"percentage",text:"Percentage",type:"percent",cid:"percentageCol",titleAlign:"right"},{cname:"column",fieldName:"area",text:"Area(Sq.
+    Km)",render(e,t,a,r){if(e<1e7){r.parentNode.cls="w-succ-bgcolor-row";r.cls="w-error-color";e="*
+    "+e.intText}else{e=e?.intText}let n=r.addEl("w-row w-align-center");r.removeCls("w-text");n.addEl("w-margin-l
+    w-icon icon-thumb");n.addEl("w-text").textContent=e},cid:"areaCol",titleAlign:"right"}]},{cname:"column",width:-1,fieldName:"remark",text:"Remark",cid:"remarkCol"},{cname:"column",checkBox:"int",fieldName:"myCheck",checkRefresh:true,cid:"checkCol1",menuText:"Check"},{cname:"column",checkBox:"roTrue",cid:"checkCol2",fieldName:"myCheck"},{cname:"column",checkBox:"roAll",cid:"checkCol3",fieldName:"myCheck"},{cname:"column",width:"5em",text:"Toggle",render(e,t,a,r){let
+    n=this;e=n.data.myCheck;n.addFooter({cname:"toggle",returnType:"int",value:e,toggleAlign:"center",clickToggle:true,events:{change(e){n.set("myCheck",e)}}},r)},cid:"toggleCol"},{cname:"column",width:"8em",text:"Link",render(e,t,a,r){let
+    n=r.addTag("a");r.cls="w-ta-center";n.textContent="Download";n.onclick=e=>Wb.tip("Download
+    data of "+t.text)},cid:"linkCol"},{cname:"column",width:"8em",cid:"actionsCol",text:"Actions",buttons:[{icon:"gear",tip:"Set",cid:"setItem",events:{click(e,t){Wb.tip("Set
+    "+this.data.text)}}},{icon:"share2",tip:"Add",cid:"shareItem",events:{click(e,t){Wb.tip("Share
+    "+this.data.text)}}}]}],events:{itemdblclick(e,t,a){Wb.tip(e.data.text+" row double
+    clicked")}}},{cname:"component",textSelectable:false,html:"<div>Feature List:</div>\n<ul>\n  <li>Columns
+    sortable, resizable, draggable and freezable.</li>\n  <li>Arbitrary multi-Level
+    Headers.</li>\n  <li>Customize cell rendering.</li>\n  <li>Rows and columns highlighing.</li>\n  <li>Local
+    data pagination.</li>\n  <li>Bind buttons or any controls to cells.</li>\n  <li>Multiple
+    styles of check columns.</li>\n  <li>Customize columns and persistence to the
+    database.</li>\n</ul>",cid:"miscDescComp"},{cname:"title",title:"Grouping tree",cid:"groupingTreeTitle"},{cname:"tree",columnsSortable:true,resizable:true,localData:[{name:"Alice",department:"Engineering",jobTitle:"Software
+    Engineer",country:"USA",_leaf:true},{name:"Bob",department:"Marketing",jobTitle:"Marketing
+    Manager",country:"UK",_leaf:true},{name:"Charlie",department:"Engineering",jobTitle:"Junior
+    Software Engineer",country:"USA",_leaf:true},{name:"David",department:"Sales",jobTitle:"Sales
+    Representative",country:"China",_leaf:true},{name:"Eve",department:"Marketing",jobTitle:"Content
+    Marketer",country:"UK",_leaf:true},{name:"Frank",department:"Engineering",jobTitle:"Software
+    Engineer",country:"USA",_leaf:true},{name:"Grace",department:"Sales",jobTitle:"Sales
+    Manager",country:"China",_leaf:true},{name:"Heidi",department:"Engineering",jobTitle:"Junior
+    Software Engineer",country:"USA",_leaf:true},{name:"Ivan",department:"Marketing",jobTitle:"Social
+    Media Marketer",country:"UK",_leaf:true},{name:"Judy",department:"Sales",jobTitle:"Sales
+    Representative",country:"China",_leaf:true},{name:"Kevin",department:"Engineering",jobTitle:"Software
+    Engineer",country:"USA",_leaf:true},{name:"Luna",department:"Marketing",jobTitle:"Marketing
+    Coordinator",country:"UK",_leaf:true},{name:"Mike",department:"Engineering",jobTitle:"Junior
+    Software Engineer",country:"USA",_leaf:true},{name:"Nora",department:"Sales",jobTitle:"Sales
+    Manager",country:"China",_leaf:true},{name:"Oscar",department:"Engineering",jobTitle:"Intern",country:"USA",_leaf:true}],gridLine:true,sorters:"department",grouping:true,cid:"groupingTree",frame:true,height:"20em",columns:[{cname:"column",width:"18em",fieldName:"name",sortable:false,text:"Name",expander:true,cid:"nameCol"},{cname:"column",width:"18em",fieldName:"department",text:"Department",cid:"departmentCol"},{cname:"column",width:"18em",fieldName:"jobTitle",text:"Job
+    Title",cid:"jobTitleCol"},{cname:"column",width:-1,fieldName:"country",text:"Country",cid:"countryCol"}]},{cname:"title",title:"Editable
+    tree",cid:"editableTreeTitle"},{cname:"tree",columnsSortable:true,editable:true,pagingBar:true,sorters:"area_name",url:"demo-source?xaction=listAreaTree",cid:"editableTree",frame:true,height:"15em",multiSelect:true,tbar:{cname:"toolbar",items:[{icon:"add",text:Str.add,keys:"Ctrl+E",cid:"addBtn",events:{click(e,t){app.editableTree.addRecord({area_name:"New
+    item",_checked:false})}}},{icon:"edit",text:Str.edit,keys:"Ctrl+J",cid:"editBtn",events:{click(e,t){let
+    a=app.editableTree.firstItem;if(a){a.set({sid:"code",area_name:"new name"});app.editableTree.startEdit(a,"area_name");a.highlight()}}}},{icon:"delete",text:Str.del,keys:"Ctrl+D",cid:"delBtn",events:{click(e,t){app.editableTree.delRecords()}}},{cname:"divider",cid:"divider1"},{icon:"insert",cid:"addChild",text:"Add
+    Child",events:{click(e,t){let a=this.upBy((e=>e instanceof Wb.Tree));let r=a.items[0],n;r.expand((e=>{n=r.addData({area_name:"new
+    node",_leaf:true,_icon:"earth",_checked:true});n.select()}))}}},{cname:"divider",cid:"divider2"},{icon:"save",text:Str.save,keys:"Ctrl+S",cid:"saveBtn",events:{click(e,t){app.editableTree.sync({url:xpath,success(){Wb.tipDone()}})}}}]},columns:[{cname:"column",width:-1,fieldName:"area_name",text:"Area
+    name",expander:true,cid:"areaNameCol",editor:{cname:"text",required:true}},{cname:"column",width:"15em",fieldName:"sid",text:"Id",cid:"sidCol",editor:{cname:"text",required:true}},{cname:"column",width:"15em",fieldName:"parent_id",text:"Parent
+    id",cid:"parentIdCol",editor:{cname:"select",forceSelect:true,required:true,url:"demo-source?xaction=areaSearch",textField:"sid"}}]}]});
+hideInMenu: 'false'
+icon: tree-view
+img: ''
+properties:
+  cid: module
+  description: demo-source=example/common/demo-source.xwl
+stateMap:
+  wb.miscTree: 004V7KE4QVEXJ
+tags: ''
+text: module
+title: ''

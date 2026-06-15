@@ -1,0 +1,18 @@
+{
+  "title": "@example",
+  "icon": "example",
+  "img": "",
+  "hideInMenu": "false",
+  "items": [
+    "comps",
+    "basic",
+    "load",
+    "coding",
+    "crud",
+    "tools",
+    "apps",
+    "touch",
+    "workflow",
+    "common"
+  ]
+}

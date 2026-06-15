@@ -1,0 +1,230 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: chart-bar
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: mainLabel
+      cls: w-title3
+      text: Chart
+    text: mainLabel
+  - _expanded: true
+    _icon: title
+    cls: Wb.Title
+    properties:
+      cid: commonTitle
+      title: Common chart
+    text: commonTitle
+  - _icon: chart-bar
+    cls: Wb.Chart
+    properties:
+      cid: commonChart
+      height: 20em
+      option: |-
+        ({
+          title: {
+            text: 'ECharts Getting Started Example'
+          },
+          tooltip: {},
+          xAxis: {
+            data: ['shirt', 'cardigan', 'chiffon', 'pants', 'heels', 'socks']
+          },
+          yAxis: {},
+          series: [
+            {
+              name: 'sales',
+              type: 'bar',
+              data: [5, 20, 36, 10, 10, 20]
+            }
+          ]
+        })
+    text: commonChart
+  - _expanded: true
+    _icon: title
+    cls: Wb.Title
+    properties:
+      cid: manualSetOptionTitle
+      title: Manual setOption
+    text: manualSetOptionTitle
+  - _icon: chart-bar
+    cls: Wb.Chart
+    events:
+      ready: |-
+        // For more parameters please use [this.setOption] method
+        this.option = {
+          title: {
+            text: 'Stacked Area Chart'
+          },
+          tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+              type: 'cross',
+              label: {
+                backgroundColor: '#6a7985'
+              }
+            }
+          },
+          legend: {
+            data: ['Email', 'Union Ads', 'Video Ads', 'Direct', 'Search Engine']
+          },
+          toolbox: {
+            feature: {
+              saveAsImage: {}
+            }
+          },
+          grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+          },
+          xAxis: [
+            {
+              type: 'category',
+              boundaryGap: false,
+              data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+            }
+          ],
+          yAxis: [
+            {
+              type: 'value'
+            }
+          ],
+          series: [
+            {
+              name: 'Email',
+              type: 'line',
+              stack: 'Total',
+              areaStyle: {},
+              emphasis: {
+                focus: 'series'
+              },
+              data: [120, 132, 101, 134, 90, 230, 210]
+            },
+            {
+              name: 'Union Ads',
+              type: 'line',
+              stack: 'Total',
+              areaStyle: {},
+              emphasis: {
+                focus: 'series'
+              },
+              data: [220, 182, 191, 234, 290, 330, 310]
+            },
+            {
+              name: 'Video Ads',
+              type: 'line',
+              stack: 'Total',
+              areaStyle: {},
+              emphasis: {
+                focus: 'series'
+              },
+              data: [150, 232, 201, 154, 190, 330, 410]
+            },
+            {
+              name: 'Direct',
+              type: 'line',
+              stack: 'Total',
+              areaStyle: {},
+              emphasis: {
+                focus: 'series'
+              },
+              data: [320, 332, 301, 334, 390, 330, 320]
+            },
+            {
+              name: 'Search Engine',
+              type: 'line',
+              stack: 'Total',
+              label: {
+                show: true,
+                position: 'top'
+              },
+              areaStyle: {},
+              emphasis: {
+                focus: 'series'
+              },
+              data: [820, 932, 901, 934, 1290, 1330, 1320]
+            }
+          ]
+        };
+    properties:
+      cid: manualSetOptionChart
+      height: 20em
+    text: manualSetOptionChart
+  - _expanded: true
+    _icon: title
+    cls: Wb.Title
+    properties:
+      cid: remoteTitle
+      title: Load remote data
+    text: remoteTitle
+  - _icon: chart-bar
+    cls: Wb.Chart
+    events:
+      ready: |-
+        //You can set url property to autoload chart
+        this.load({ url: xpath + '/get-chart-data', mask: { target: this } });
+    properties:
+      cid: remoteChart
+      height: 20em
+    text: remoteChart
+  - _icon: button
+    cls: Wb.Button
+    events:
+      click: |-
+        app.remoteChart.clear();
+        app.remoteChart.load({ params: { foo: 'bar' } });
+        // app.remoteChart.reload();
+    properties:
+      cid: manualLoadBtn
+      text: Manual load data
+    text: manualLoadBtn
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: serverRenderTitle
+      title: Server rendering chart
+    text: serverRenderTitle
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: serverRenderLabel
+      text: WebBuilder can directly load echarts library in the serverside to create
+        charts, which will bring great convenience. For example, we can use this feature
+        to create charts in the serverside and send them via email.
+    text: serverRenderLabel
+  - _icon: panel
+    cls: Wb.Panel
+    events:
+      ready: |-
+        let me = this;
+        Wb.ajax({
+          url: xpath + '/create-chart',
+          mask: { target: me },
+          success(resp) {
+            me.html = resp;
+          }
+        });
+    properties:
+      cid: serverRenderPanel
+      html: _$chartSvg$_
+      layout: center
+      minHeight: 8em
+    text: serverRenderPanel
+  properties:
+    cid: viewport1
+    layout: grid1
+  text: viewport1
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

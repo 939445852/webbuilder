@@ -1,0 +1,11 @@
+{
+  "title": "@onlineUsers",
+  "icon": "",
+  "img": "",
+  "hideInMenu": "true",
+  "items": [
+    "select-users.xwl",
+    "select-sessions.xwl",
+    "remove-sessions.xwl"
+  ]
+}

@@ -1,0 +1,24 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Edit database source
+  serverScript: function main(){let e=new Wb.File(true,"wb/system/db/source.json"),t=e.object,a,o=Params.name;function
+    setBoolMembers(e,t){const a={cacheState:true,autoCommitOnReturn:true,rollbackOnReturn:true,testOnBorrow:true,logExpiredConnections:true,lifo:true};Wb.each(a,((e,a)=>{t[e]??=a}))}function
+    checkName(e){if(t[e])Wb.raise(Str.alreadyExists.format(e))}function operateDataSource(e){Wb.checkDemo();const
+    t=Java.type("org.apache.commons.dbcp2.BasicDataSource").class;const a=Java.type("org.apache.commons.pool2.impl.DefaultPooledObjectInfo").class;let
+    r,c,s,n,i,l,u,d=Params.id,b=[];r=DataSource.getSource(o);c=t.getDeclaredField("connectionPool");c.setAccessible(true);s=a.getDeclaredField("pooledObject");s.setAccessible(true);n=c.get(r);if(n==null){r.getConnection().close();n=c.get(r)}if(e=="clear"){n.clear();return}n.listAllObjects().forEach((t=>{i=s.get(t);l=i.getObject();u=l.hashCode();if(e=="close"&&u==d){l.close();return}if(e=="get"){b.push({id:u,borrowedCount:i.getBorrowedCount(),createTime:new
+    Date(i.getCreateTime()),lastBorrowTime:new Date(i.getLastBorrowTime()),lastReturnTime:new
+    Date(i.getLastReturnTime()),lastUsedTime:new Date(i.getLastUsedTime()),isClosed:l.isClosed()})}}));if(e=="get"){b.mixSort("id");return{pool:{maxTotal:r.getMaxTotal().intText,numActive:r.getNumActive().intText,numIdle:r.getNumIdle().intText,createdCount:n.getCreatedCount().intText,destroyedCount:n.getDestroyedCount().intText,borrowedCount:n.getBorrowedCount().intText,numWaiters:n.getNumWaiters().intText},items:b}}}function
+    service(){switch(Params.type){case"list":Wb.send(Wb.load("wb/ss/dbe.mjs").getDbNames(true));break;case"get":a=t[o];a.text=o;setBoolMembers(o,a);a.password&&=Wb.UserUtil.protectedText;Wb.send(a);break;case"add":checkName(o);a={driverClassName:"driverClassName",url:"url"};t[o]=a;e.text=Wb.encodePretty(t);DataSource.setSource(o,Wb.toJava(a));break;case"delete":if(o==Wb.getConfig("sys.db.defaultSource"))Wb.raise(Str.cannotDelete.format(o));delete
+    t[o];e.text=Wb.encodePretty(t);DataSource.removeSource(o);break;case"copy":let
+    r=Params.newName,c;checkName(r);c=t[r]=t[o];e.text=Wb.encodePretty(t);DataSource.setSource(r,Wb.toJava(c));break;case"save":let
+    s=Params.oldName,n=s!=o,i,l;if(n)checkName(o);a=Wb.decode(Params.data);delete
+    a.text;i=a.password;if(i){l=t[o]?.password;if(i==Wb.UserUtil.protectedText)i=l;else
+    i=i?"$$:"+Encrypter.encrypt(i,Config.key):"";a.password=i}t[o]=a;if(n)delete t[s];e.text=Wb.encodePretty(t);DataSource.setSource(o,Wb.toJava(a));if(n){DataSource.removeSource(s);if(s==Config.defaultSource)Wb.setConfig("sys.db.defaultSource",o)}if(o==Config.defaultSource){DataSource.defaultDataSource=DataSource.getSource(o)}break;case"test":Wb.getConn(o).close();break;case"property":Wb.send(operateDataSource("get"));break;case"clear":operateDataSource("clear");break;case"close":operateDataSource("close");break;case"abort":operateDataSource("abort");break}}e.lock();try{service()}finally{e.unlock()}}main();
+tags: ''
+text: module
+title: ''

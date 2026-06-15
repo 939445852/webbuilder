@@ -1,0 +1,11 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  serverScript: function main(){let e=Wb.getObject("del");Wb.sync({tableName:"wb_staff",del:e})}main();
+tags: ''
+text: module
+title: ''

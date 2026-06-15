@@ -1,0 +1,164 @@
+{
+  "db2": {
+    "varchar": "varchar",
+    "nvarchar": "nvarchar",
+    "numeric": "numeric",
+    "datetime": "timestamp",
+    "clob": "clob",
+    "nclob": "clob",
+    "blob": "blob"
+  },
+  "derby": {
+    "varchar": "varchar",
+    "nvarchar": "varchar",
+    "numeric": "numeric",
+    "datetime": "timestamp",
+    "clob": "clob",
+    "nclob": "clob",
+    "blob": "blob"
+  },
+  "dameng": {
+    "varchar": "varchar",
+    "nvarchar": "varchar",
+    "numeric": "numeric",
+    "datetime": "timestamp",
+    "clob": "clob",
+    "nclob": "clob",
+    "blob": "blob"
+  },
+  "firebird": {
+    "varchar": "varchar",
+    "nvarchar": "varchar",
+    "numeric": "numeric",
+    "datetime": "timestamp",
+    "clob": "blob sub_type text",
+    "nclob": "blob sub_type text",
+    "blob": "blob"
+  },
+  "h2": {
+    "varchar": "varchar",
+    "nvarchar": "nvarchar",
+    "numeric": "numeric",
+    "datetime": "timestamp",
+    "clob": "clob",
+    "nclob": "nclob",
+    "blob": "blob"
+  },
+  "hsqldb": {
+    "varchar": "varchar",
+    "nvarchar": "varchar",
+    "numeric": "numeric",
+    "datetime": "timestamp",
+    "clob": "clob",
+    "nclob": "clob",
+    "blob": "blob"
+  },
+  "informix": {
+    "varchar": "varchar",
+    "nvarchar": "nvarchar",
+    "numeric": "numeric",
+    "datetime": "datetime",
+    "clob": "clob",
+    "nclob": "clob",
+    "blob": "blob"
+  },
+  "kingbase": {
+    "varchar": "varchar",
+    "nvarchar": "varchar",
+    "numeric": "numeric",
+    "datetime": "timestamp",
+    "clob": "clob",
+    "nclob": "clob",
+    "blob": "blob"
+  },
+  "mariadb": {
+    "varchar": "varchar",
+    "nvarchar": "varchar",
+    "numeric": "numeric",
+    "datetime": "timestamp",
+    "clob": "longtext",
+    "nclob": "longtext",
+    "blob": "blob"
+  },
+  "mysql": {
+    "varchar": "varchar",
+    "nvarchar": "varchar",
+    "numeric": "numeric",
+    "datetime": "datetime",
+    "clob": "longtext",
+    "nclob": "longtext",
+    "blob": "longblob"
+  },
+  "oracle": {
+    "varchar": "varchar2",
+    "nvarchar": "nvarchar2",
+    "numeric": "numeric",
+    "datetime": "timestamp",
+    "clob": "clob",
+    "nclob": "nclob",
+    "blob": "blob"
+  },
+  "pointbase": {
+    "varchar": "varchar",
+    "nvarchar": "varchar",
+    "numeric": "numeric",
+    "datetime": "timestamp",
+    "clob": "clob",
+    "nclob": "clob",
+    "blob": "blob"
+  },
+  "postgresql": {
+    "varchar": "varchar",
+    "nvarchar": "varchar",
+    "numeric": "numeric",
+    "datetime": "timestamp",
+    "clob": "text",
+    "nclob": "text",
+    "blob": "bytea"
+  },
+  "sap": {
+    "varchar": "varchar",
+    "nvarchar": "nvarchar",
+    "numeric": "numeric",
+    "datetime": "timestamp",
+    "clob": "clob",
+    "nclob": "nclob",
+    "blob": "blob"
+  },
+  "sqlite": {
+    "varchar": "varchar",
+    "nvarchar": "nvarchar",
+    "numeric": "numeric",
+    "datetime": "datetime",
+    "clob": "clob",
+    "nclob": "clob",
+    "blob": "blob"
+  },
+  "sql server": {
+    "varchar": "varchar",
+    "nvarchar": "nvarchar",
+    "numeric": "numeric",
+    "datetime": "datetime",
+    "clob": "varchar(max)",
+    "nclob": "nvarchar(max)",
+    "blob": "varbinary(max)"
+  },
+  "sybase": {
+    "varchar": "varchar",
+    "nvarchar": "nvarchar",
+    "numeric": "numeric",
+    "datetime": "datetime",
+    "clob": "text",
+    "nclob": "text",
+    "blob": "image"
+  },
+  "teradata": {
+    "varchar": "varchar",
+    "nvarchar": "varchar",
+    "numeric": "numeric",
+    "datetime": "timestamp",
+    "clob": "clob",
+    "nclob": "clob",
+    "blob": "blob"
+  }
+}

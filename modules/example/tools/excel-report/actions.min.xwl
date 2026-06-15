@@ -1,0 +1,14 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  serverScript: let actions={reload(){let e;e=Wb.getExcelHtml("report.xlsx",this.getData(),this.getRowConfigs());Wb.send(e)},export(){Wb.getExcelFile("my-report.xlsx","report.xlsx",this.getData(),this.getRowConfigs())},getData(){return{name:"Geejing",date:(new
+    Date).dateText,by:"Janice Galvin",reviewer:"Rachel Valdez",director:"Annette Hill",email:"contact@geejing.com",rows:Wb.getAllRows("select
+    * from wb_report_demo1 order by row_num")}},getRowConfigs(){return{name:"rows",x:0,y:5,mergeRows:"f1",mergeCols:"f1,
+    f2"}}};actions[Params.xaction]();
+tags: ''
+text: module
+title: ''

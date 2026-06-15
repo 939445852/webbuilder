@@ -1,0 +1,211 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: |-
+    Wb.apply(app, {
+      /** @property {Number} - Default console size. */
+      consoleSize: 100,
+      /** @property {Number} - Current console total size. */
+      totalSize: 0,
+      /** @property {Boolean} - Whether allow to auto scroll to bottom. */
+      allowScroll: false,
+      /** @property {Boolean} - Parent card visible. */
+      cardVisible: true,
+      /**
+       * Scroll to bottom.
+       * @param {Boolean} [force] Force to bottom.
+       */
+      toBottom(force) {
+        if (force || app.allowScroll && app.toBottomItem.active) {
+          let el = app.viewer1.el;
+          el.scrollTop = el.scrollHeight;
+          app.allowScroll = false;
+        }
+      },
+      /**
+       * Add data to the console.
+       * @param {String} [message] Console message.
+       * @return {type} comments
+       */
+      addData(message) {
+        let viewer = app.viewer1, el = viewer.el, maxLen = app.consoleSize * 1024, span;
+
+        span = el.addTag('span');
+        span.textContent = message;
+        // Prevent too many dom fragments
+        span.xSize = Math.max(message.length, 100);
+        app.totalSize += span.xSize;
+        if (app.totalSize > maxLen) {
+          let children = el.children, i, j = children.length;
+          for (i = 0; i < j; i++) {
+            span = children[i];
+            app.totalSize -= span.xSize;
+            span.remove();
+            i--;
+            j--;
+            if (app.totalSize < maxLen)
+              break;
+          }
+        }
+        app.allowScroll = true;
+        if (app.cardVisible) {
+          app.toBottom();
+        }
+      }
+    });
+hideInMenu: 'false'
+icon: console
+img: ''
+items:
+- _expanded: true
+  _icon: plug
+  cls: Wb.Socket
+  events:
+    message: |-
+      if (!app.pauseItem.active)
+        app.addData(e.data);
+  properties:
+    cid: socket1
+    name: $console
+    xwl: admin/console/socket.xwl
+  text: socket1
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  events:
+    ready: |-
+      parentContainer?.on('show', f => {
+        app.cardVisible = true;
+        app.toBottom();
+      });
+      parentContainer?.on('hide', f => {
+        app.cardVisible = false;
+      });
+  items:
+  - _expanded: true
+    _icon: toolbar
+    cls: Wb.Toolbar
+    items:
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        toggle: |-
+          let item = this;
+
+          item.icon = active ? 'resume' : 'pause';
+          item.text = active ? Str.resume : Str.pause;
+      properties:
+        activeBgColor: 'false'
+        cid: pauseItem
+        enableToggle: 'true'
+        icon: pause
+        text: '@Str.pause'
+      text: pauseItem
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: |-
+          app.viewer1.el.clearChildren();
+          app.totalSize = 0;
+      properties:
+        cid: clearItem
+        icon: recycle
+        text: '@Str.clear'
+      text: clearItem
+    - _icon: divider
+      cls: Wb.Divider
+      properties:
+        cid: divider1
+      text: divider1
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      items:
+      - _expanded: true
+        _icon: menu2
+        cls: Wb.Menu
+        items:
+        - _expanded: true
+          _icon: container
+          cls: Wb.Container
+          items:
+          - _expanded: true
+            _icon: slidebar
+            cls: Wb.Slider
+            events:
+              change: app.consoleSize = value;
+            properties:
+              cid: sizeSlider
+              flex: '1'
+              focusable: 'false'
+              maxValue: '10000'
+              minValue: '100'
+              step: '100'
+              tabIndex: 'null'
+              value: '@app.consoleSize'
+            text: sizeSlider
+          - _icon: label
+            cls: Wb.Label
+            properties:
+              cid: kbLabel
+              text: KB
+            text: kbLabel
+          properties:
+            cid: container1
+            gap: .5em
+            layout: row
+            width: 15em
+          text: container1
+        properties:
+          cid: menu
+          isProperty: 'true'
+        text: menu
+      properties:
+        cid: sizeItem
+        icon: property
+        text: '@Str.size'
+      text: sizeItem
+    - _icon: right1
+      cls: Wb.Fill
+      properties:
+        cid: fill1
+      text: fill1
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        toggle: |-
+          if (active)
+            app.toBottom(true);
+      properties:
+        active: 'true'
+        activeBgColor: 'false'
+        cid: toBottomItem
+        icon: bottom
+        tip: Auto scroll to bottom
+      text: toBottomItem
+    properties:
+      cid: tbar
+      isProperty: 'true'
+    text: tbar
+  - _icon: desktop
+    cls: Wb.Viewer
+    properties:
+      cid: viewer1
+      cls: w-pre
+      style: line-height:1.8
+    text: viewer1
+  properties:
+    autoScroll: 'true'
+    cid: viewport1
+    layout: fit
+  text: viewport1
+properties:
+  cid: module
+  remark: System console
+tags: ''
+text: module
+title: '@console'

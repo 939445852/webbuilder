@@ -1,0 +1,26 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Get users by role
+  serverScript: |-
+    let sql;
+
+    if (Wb.getBool('inRole')) {
+      sql = `select sid,user_name,display_name from wb_user where sid in
+             (select user_id from wb_user_role where role_id={?role_id?})`;
+    } else {
+      sql = `select sid,user_name,display_name from wb_user where sid not in
+             (select user_id from wb_user_role where role_id={?role_id?})`;
+    }
+    if (Params.search) {
+      Wb.setLike('search');
+      sql += ' and (user_name like {?search?} or display_name like {?search?})';
+    }
+    Wb.sendRows(sql);
+tags: ''
+text: module
+title: ''

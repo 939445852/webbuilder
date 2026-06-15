@@ -1,0 +1,167 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: mainLabel
+      cls: w-title3
+      text: Server load module, js and mjs
+    text: mainLabel
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: runModuleTitle
+      title: Run module
+    text: runModuleTitle
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: runModuleLabel
+      text: Run the module at serverside and call function of the module.
+    text: runModuleLabel
+  - _icon: button
+    cls: Wb.Button
+    events:
+      click: |-
+        Wb.ajax({
+          url: xpath + '/execute&xaction=runXwl',
+          params: { value1: 12, value2: 34 },
+          success(resp) {
+            Wb.tip('The result is ' + resp);
+          }
+        });
+    properties:
+      cid: runModuleBtn
+      text: Run module
+      type: primary
+    text: runModuleBtn
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: invokeModuleTitle
+      title: Invoke module
+    text: invokeModuleTitle
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: InvokeModuleLabel
+      text: Call the module and obtain the HTML or script returned by the module.
+    text: InvokeModuleLabel
+  - _icon: button
+    cls: Wb.Button
+    events:
+      click: |-
+        Wb.ajax({
+          url: xpath + '/execute&xaction=invokeXwl',
+          success(resp) {
+            app.invokeModuleViewer.text = resp;
+            console.table(Wb.decode(resp));
+          }
+        });
+    properties:
+      cid: invokeModuleBtn
+      text: Invoke module
+      type: primary
+    text: invokeModuleBtn
+  - _icon: desktop
+    cls: Wb.Viewer
+    properties:
+      cid: invokeModuleViewer
+      height: 10em
+    text: invokeModuleViewer
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: loadJSTitle
+      title: Load Javascript
+    text: loadJSTitle
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: loadJSLabel
+      text: Load Javascript library at serverside.
+    text: loadJSLabel
+  - _icon: button
+    cls: Wb.Button
+    events:
+      click: |-
+        Wb.ajax({
+          url: xpath + '/execute&xaction=loadJs',
+          params: { value1: 12, value2: 34 },
+          success(resp) {
+            Wb.tip('The result is ' + resp);
+          }
+        });
+    properties:
+      cid: loadJSBtn
+      text: Load js
+      type: primary
+    text: loadJSBtn
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: loadMJSTitle
+      title: Load mjs
+    text: loadMJSTitle
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: loadMJSLabel
+      text: Load Javascript module at serverside by Wb.load(recommended).
+    text: loadMJSLabel
+  - _icon: button
+    cls: Wb.Button
+    events:
+      click: |-
+        Wb.ajax({
+          url: xpath + '/execute&xaction=loadMjs',
+          params: { value1: 12, value2: 34 },
+          success(resp) {
+            Wb.tip('The result is ' + resp);
+          }
+        });
+    properties:
+      cid: loadMJSBtn
+      text: Load mjs
+      type: primary
+    text: loadMJSBtn
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: importMJSLabel
+      text: Import Javascript module at serverside by import(not recommended).
+    text: importMJSLabel
+  - _icon: button
+    cls: Wb.Button
+    events:
+      click: |-
+        Wb.ajax({
+          url: xpath + '/execute&xaction=importMjs',
+          params: { value1: 12, value2: 34 },
+          success(resp) {
+            Wb.tip('The result is ' + resp);
+          }
+        });
+    properties:
+      cid: importMJSBtn
+      text: Import mjs
+      type: primary
+    text: importMJSBtn
+  properties:
+    cid: viewport1
+    layout: grid1
+  text: viewport1
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

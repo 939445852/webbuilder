@@ -1,0 +1,19 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Add key type
+  serverScript: |-
+    function main() {
+      let rec = { sid: Wb.getId() };
+
+      Wb.set(rec);
+      Wb.sync({ tableName: 'wb_key_type', insert: Params, send: rec });
+    }
+    main();
+tags: ''
+text: module
+title: ''

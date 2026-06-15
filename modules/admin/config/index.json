@@ -1,0 +1,13 @@
+{
+  "title": "@systemConfig",
+  "icon": "",
+  "img": "",
+  "hideInMenu": "true",
+  "items": [
+    "select-tree.xwl",
+    "select-list.xwl",
+    "add.xwl",
+    "edit.xwl",
+    "del.xwl"
+  ]
+}

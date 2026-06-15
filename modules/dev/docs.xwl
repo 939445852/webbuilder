@@ -1,0 +1,13 @@
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.docs.App.initDocs(app);
+hideInMenu: 'false'
+icon: book1
+img: ''
+properties:
+  cid: module
+  links: '[''wb/docs/wb-docs.css'', ''wb/docs/data.js'', ''wb/js/monaco.js'', ''wb/docs/wb-docs.js'']'
+  remark: Documents reader
+text: module
+title: '@docs'

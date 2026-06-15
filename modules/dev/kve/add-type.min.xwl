@@ -1,0 +1,12 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Add key type
+  serverScript: function main(){let e={sid:Wb.getId()};Wb.set(e);Wb.sync({tableName:"wb_key_type",insert:Params,send:e})}main();
+tags: ''
+text: module
+title: ''

@@ -1,0 +1,21 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Edit role
+  serverScript: |-
+    function main() {
+      const Util = Wb.load('./util.mjs');
+      let oldRoleName = Params.$role_name;
+      if (Params.role_name && Util.isReservedRole(oldRoleName))
+        Wb.raise(Str.cannotModify.format(Params.role_name));
+      Params.sid = undefined;
+      Wb.sync({ tableName: 'wb_role', update: Params });
+    }
+    main();
+tags: ''
+text: module
+title: ''

@@ -1,0 +1,20 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Select config folder items
+  serverScript: |-
+    function main() {
+      let items = [], buffer = Config.getBuffer();
+      buffer.forEach(k => items.push(k.beforeItem('.')));
+      items = Wb.Builder.getTree(items, '.');
+      items.find(item => item.text == 'sys')._expanded = true;
+      Wb.send(items);
+    }
+    main();
+tags: ''
+text: module
+title: ''

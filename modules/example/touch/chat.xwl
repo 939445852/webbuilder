@@ -1,0 +1,680 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: |-
+    Wb.define(app, {
+      /** @property {Array} - Cached url resource list. @priv */
+      cachedUrls: [],
+      /** @property {Object} chatData The user data of current chat dialog. @priv */
+      /**
+       * View chat details of the specific user. @priv
+       * @param {Object} data The user data.
+       * @param {String} .userid The user id.
+       * @param {String} .display_name The user display name.
+       * @param {Function} [callback] A function to be called when the chat window is displayed.
+       */
+      openChat(data, callback) {
+        let userid = data.userid;
+        Wb.ajax({
+          url: xpath + '/actions&xaction=getChatDetail',
+          params: { userid },
+          json: true,
+          success(resp) {
+            let detailComp = app.detailComp, dialog = app.chatDetailDialog;
+            detailComp.el.textContent = '';
+            app.cachedUrls.forEach(item => URL.revokeObjectURL(item));
+            app.lastChatDate = null;
+            resp.each(item => {
+              app.addMessage(item, false, true);
+            }, true, true);
+            dialog.title = data.display_name;
+            dialog.setVisible(true, f => callback?.call(dialog));
+            app.chatData = data;
+            detailComp.dialogScrollTop ??= {};
+            detailComp.el.scrollTop = detailComp?.dialogScrollTop[userid] ?? detailComp.el.scrollHeight;
+            dialog.on('close', f => detailComp.dialogScrollTop[userid] = detailComp.el.scrollTop, true, { once: true });
+            app.chatsView.findItem('userid', userid)?.set('badge', null);
+          }
+        });
+      },
+      /**
+       * Create chat message in chat dialog. @priv
+       * @param {Object} data Chat data.
+       * @param {Boolean} [loadingIcon] Whether to create a loading icon.
+       * @param {Boolean} [keepScrollPos] Whether to keep scroll position.
+       * @return {Object} {loadingEl, textEl} object.
+       */
+      addMessage(data, loadingIcon, keepScrollPos) {
+        let detailComp = app.detailComp, el = detailComp.el, date, wrap, textEl, loadingEl;
+
+        date = data.send_date.dateValue;
+        //if span > 10 min
+        if (!app.lastChatDate || date.elapse(app.lastChatDate) > 600000)
+          el.addEl('w-title5 w-ta-center').textContent = date.prettyText;
+        wrap = el.addEl('w-row w-align-center w-gap w-margin-tb1');
+        if (data.direction == 1) {
+          wrap.addEl('w-icon icon-user2 w-size2');
+          // you can merge all classes to one class
+          app.createContent(textEl = wrap.addEl(), data);
+        } else {
+          wrap.cls = 'w-justify-end';
+          if (loadingIcon)
+            loadingEl = wrap.addEl('w-icon w-spin icon-loading w-hidden');
+          app.createContent(textEl = wrap.addEl(), data);
+          wrap.addEl('w-icon icon-user3 w-size2');
+        }
+        app.lastChatDate = date;
+        if (!keepScrollPos)
+          detailComp.scrollToBottom();
+        return { loadingEl, textEl };
+      },
+      /**
+       * Create message content. @priv
+       * @param {Element} el The message element.
+       * @param {Object} data The data to render.
+       */
+      createContent(el, data) {
+        let text = data.text_content, size = data.bin_len, sid = data.sid;
+        if (size != null) {
+          if (Wb.isImageFile(text)) {
+            let img = el.addEl('w-pointer', 'img'), url;
+
+            if (data.file) {
+              url = URL.createObjectURL(data.file);
+              app.cachedUrls.push(url);
+            } else {
+              url = xpath + '/actions&xaction=download&id=' + sid;
+            }
+            img.draggable = false;
+            img.src = url;
+            img.height = 80;
+          } else {
+            let wrap = el.addEl('w-column');
+            el.cls = 'w-btn w-row w-align-center w-gap2 wx-file';
+            wrap.addEl('w-label').textContent = text;
+            wrap.addEl('w-title5').textContent = size.fileSize;
+            el.addEl('w-size2 w-icon icon-' + Wb.getFileIcon(text));
+            if (sid)
+              el.recordSid = sid;
+            el.maxWidth = '70%';
+          }
+        } else {
+          el.cls = data.direction == 1 ? 'w-msg1' : 'w-msg2';
+          el.textContent = text;
+        }
+      },
+      /** @property {Object} openUserData The user data of current user dialog. @priv */
+      /**
+       * View user details of the specific user. @priv
+       * @param {Object} data The user data to open.
+       */
+      openUser(data) {
+        // if use single mode, user-detail main dialog must not be destroyed.
+        Wb.run({
+          url: xpath + '/user-detail', /* single: true, */ success(scope) {
+            let dialog = scope.main;
+            scope.chatApp = app;
+            scope.summaryComp.update(data)
+            app.openUserData = data;
+            dialog.show();
+            dialog.el.scrollTop = 0;
+          }
+        });
+      },
+      /**
+       * Send text message. @priv
+       */
+      sendText() {
+        let textArea = app.textArea1, value = textArea.value;
+        if (value.length) {
+          app.doSend({ text_content: value });
+          textArea.clear();
+        } else {
+          Wb.tipWarn('Please input text');
+          textArea.focus();
+        }
+      },
+      /**
+       * Send file. @priv
+       */
+      sendFile() {
+        Wb.selectFile(file => {
+          app.doSend({ text_content: file.name, file, bin_len: file.size });
+        });
+      },
+      /**
+       * Send any data. @priv
+       * @param {Object} [configs] Configs data.
+       */
+      doSend(configs) {
+        let data = app.chatData, loadingIcon, elMap, userid = data.userid;
+
+        elMap = app.addMessage(Wb.apply({
+          send_date: new Date().textValue,
+          direction: 2
+        }, configs), true);
+        loadingIcon = elMap.loadingEl;
+        loadingIcon.removeCls.delay(loadingIcon, Wb.configs.maskDelay, 'w-hidden');
+        Wb.ajax({
+          url: xpath + '/actions&xaction=sendMessage',
+          params: { userid, text: configs.text_content, file: configs.file },
+          mask: false,
+          json: true,
+          callback(resp, xhr) {
+            loadingIcon.removeCls.cancelDelay();
+            if (xhr.ok)
+              loadingIcon.remove();
+            else
+              loadingIcon.className = 'w-icon icon-error';
+            elMap.textEl.recordSid = resp.sid;
+            app.updateChatView({
+              display_name: data.display_name,
+              userid,
+              send_date: resp.send_date,
+              text_content: resp.text_content
+            });
+          }
+        });
+      },
+      /**
+       * Update chat view list when sending or receiving messages
+       * @param {Object} [data] Chat view item data.
+       * @param {Boolean} [incBadge] Increment badge count.
+       */
+      updateChatView(data, incBadge) {
+        let chatItem, chatsView = app.chatsView;
+
+        chatItem = chatsView.findItem('userid', data.userid) ?? new Wb.ViewItem();
+        chatsView.insert(0, chatItem);
+        if (incBadge)
+          data.badge = Math.min(99, (chatItem.data.badge || 0) + 1);
+        chatItem.update(data);
+      },
+      /**
+       * Receive message from websocket. @priv
+       */
+      receiveMessage(e) {
+        let data = Wb.decode(e.data);
+
+        // add to chat detail dialog
+        if (data.from_user == app.chatData?.userid) {
+          data.direction = 1;
+          app.addMessage(data);
+        } else {
+          app.updateChatView({
+            display_name: data.display_name,
+            userid: data.from_user,
+            send_date: data.send_date,
+            text_content: data.text_content
+          }, true);
+        }
+      }
+    });
+hideInMenu: 'false'
+icon: ''
+img: ''
+items:
+- _icon: plug
+  cls: Wb.Socket
+  events:
+    close: |-
+      if (!Wb.unloading && !Globals.WbMainTab)
+        Wb.login();
+    message: app.receiveMessage(e);
+  properties:
+    cid: socket
+    name: wb.chat
+  text: socket
+- _expanded: true
+  _icon: array
+  cls: Wb.Array
+  items:
+  - _expanded: true
+    _icon: dialog
+    cls: Wb.Dialog
+    events:
+      close: app.chatData = null;
+    items:
+    - _icon: component
+      cls: Wb.Component
+      events:
+        click: |-
+          let fileBtn = e.target.closest('.wx-file');
+          if (fileBtn) {
+            let sid = fileBtn.recordSid;
+            if (sid) {
+              Wb.download(xpath + '/actions&xaction=download&id=' + sid);
+            } else {
+              Wb.tip('The file is being sent, please wait...');
+            }
+          }
+        ready: this.onClickPreview();
+      properties:
+        border: 'true'
+        cid: detailComp
+        cls: w-scroll-y w-padding-lr1
+        flex: '1'
+      text: detailComp
+    - _icon: splitter
+      cls: Wb.Splitter
+      properties:
+        cid: splitter1
+        visible: '@Wb.isDesktop'
+      text: splitter1
+    - _expanded: true
+      _icon: panel
+      cls: Wb.Panel
+      items:
+      - _expanded: true
+        _icon: toolbar
+        cls: Wb.Toolbar
+        items:
+        - _expanded: true
+          _icon: item
+          cls: Wb.Item
+          properties:
+            cid: fileItem
+            handler: app.sendFile
+            icon: folder-open
+            tip: Send file
+          text: fileItem
+        properties:
+          background: 'true'
+          border: 'false'
+          cid: tbar
+          isProperty: 'true'
+          plainIcon: 'true'
+          visible: '@Wb.isDesktop'
+        text: tbar
+      - _expanded: true
+        _icon: textarea
+        cls: Wb.TextArea
+        events:
+          keydown: |-
+            if (e.isGoKey) {
+              if (e.ctrlMeta)
+                this.replaceSelection('\n');
+              else
+                app.sendText();
+              e.stopEvent();
+            }
+        properties:
+          autoResize: '@Wb.isTouch'
+          cid: textArea1
+          flex: '1'
+          inactiveBorder: 'true'
+          maxHeight: '@Wb.isTouch?''10em'':undefined'
+          minHeight: '@Wb.isTouch?undefined:''8em'''
+          padding: 'true'
+          rows: '1'
+        text: textArea1
+      - _expanded: true
+        _icon: toolbar
+        cls: Wb.Toolbar
+        items:
+        - _expanded: true
+          _icon: item
+          cls: Wb.Item
+          properties:
+            cid: fileItem
+            handler: app.sendFile
+            icon: folder-open
+            tip: Send file
+          text: fileItem
+        - _expanded: true
+          _icon: item
+          cls: Wb.Item
+          properties:
+            cid: sendItem
+            handler: app.sendText
+            padding: 0 .4em
+            text: Send
+            type: primary
+          text: sendItem
+        properties:
+          alignSelf: center
+          cid: touchBar
+          plainIcon: 'true'
+          visible: '@Wb.isTouch'
+        text: touchBar
+      properties:
+        border: 'false'
+        cid: panel1
+        layout: row
+        padding: '@Wb.isTouch'
+      text: panel1
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        alignSelf: end
+        cid: sendBtn
+        cname: simpleButton
+        handler: app.sendText
+        margin: 'true'
+        text: Send
+        type: primary
+        visible: '@Wb.isDesktop'
+      text: sendBtn
+    - _expanded: true
+      _icon: array
+      cls: Wb.Array
+      items:
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        properties:
+          cid: chatInfoItem
+          icon: ellipsis
+        text: chatInfoItem
+      properties:
+        cid: tools
+      text: tools
+    properties:
+      background: 'true'
+      cid: chatDetailDialog
+      focusControl: 'false'
+      layout: column
+    text: chatDetailDialog
+  properties:
+    cid: templates
+  text: templates
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _expanded: true
+    _icon: tab
+    cls: Wb.Tab
+    events:
+      cardchange: |-
+        if (newCard)
+          this.title = newCard.title;
+      ready: this.title = this.firstItem.title;
+    items:
+    - _expanded: true
+      _icon: card
+      cls: Wb.Card
+      items:
+      - _icon: list1
+        cls: Wb.ListView
+        events:
+          itemclick: app.openChat(item.data);
+        properties:
+          border: 'false'
+          cid: chatsView
+          cursorPointer: 'true'
+          datevalueField: send_date
+          defaultFields: |-
+            ({
+              _icon: { value: 'user2' },
+              iconvalue: { value: 'bell-off' }
+            })
+          selectColor: active
+          subtextField: text_content
+          textField: display_name
+          url: '@xpath + ''/actions&xaction=getChats'''
+        text: chatsView
+      properties:
+        cid: chatsCard
+        closable: 'null'
+        icon: message
+        layout: fit
+        title: Chats
+      text: chatsCard
+    - _expanded: true
+      _icon: card
+      cls: Wb.Card
+      items:
+      - _icon: list1
+        cls: Wb.ListView
+        events:
+          itemclick: app.openUser(item.data);
+        properties:
+          border: 'false'
+          cid: contactsView
+          cursorPointer: 'true'
+          defaultFields: |-
+            ({
+              _icon: { value: 'user2' }
+            })
+          selectColor: active
+          textField: display_name
+          url: '@xpath + ''/actions&xaction=getContacts'''
+        text: contactsView
+      properties:
+        cid: contactsCard
+        closable: 'null'
+        icon: address-book
+        layout: fit
+        title: Contacts
+      text: contactsCard
+    - _expanded: true
+      _icon: card
+      cls: Wb.Card
+      items:
+      - _icon: list-view
+        cls: Wb.View
+        events:
+          itemclick: Wb.tip(item.data.title + ' clicked');
+        properties:
+          background: 'true'
+          border: 'false'
+          cid: discoverView
+          cls: w-disp-grid
+          data: |-
+            [
+              { icon: 'moment', title: 'Moment' },
+              { gap: true, _disabled: true },
+              { icon: 'video', title: 'Video' },
+              { icon: 'broadcast', title: 'Live' },
+              { gap: true, _disabled: true },
+              { icon: 'scan', title: 'Scan' },
+              { icon: 'command', title: 'Shake ' },
+              { gap: true, _disabled: true },
+              { icon: 'search-file', title: 'Search ' },
+              { gap: true, _disabled: true },
+              { icon: 'cart', title: 'Shopping ' },
+              { icon: 'game', title: 'Game ' },
+              { gap: true, _disabled: true },
+              { icon: 'data-provider', title: 'Programs ' }
+            ]
+          itemTpl: |-
+            {if data.gap}
+            <div class="w-item w-fixed-bgcolor-x" style="height:.6em"></div>
+            {else}
+            <div class="w-item w-border w-row w-padding1 w-align-center w-gapd5 w-main-bgcolor w-pointer">
+              <div class="w-icon icon-{icon} w-size1d5"></div>
+              <div class="w-name">{title}</div>
+              <div class="w-flex"></div>
+              <div class="w-icon icon-right2 w-sub-color"></div>
+            </div>
+            {/if}
+        text: discoverView
+      properties:
+        cid: discoverCard
+        closable: 'null'
+        icon: discovery
+        layout: fit
+        title: Discover
+      text: discoverCard
+    - _expanded: true
+      _icon: card
+      cls: Wb.Card
+      events:
+        click: |-
+          let item = e.target.getClosestComp(Wb.ViewItem);
+          if (item)
+            Wb.tip(item.data.text + ' clicked');
+      items:
+      - _expanded: true
+        _icon: container
+        cls: Wb.Container
+        items:
+        - _icon: component
+          cls: Wb.Component
+          events:
+            click: |-
+              let el = e.target.closest('[xid]');
+              if (el)
+                Wb.tip(el.getAttribute('xid') + ' clicked');
+          properties:
+            cid: bannerComp
+            html: |-
+              <div class="w-row w-justify-around w-padding2" style="background:#4caf50">
+                <div class="w-column w-padding w-gap w-align-center w-pointer w-unselect" xid="payment">
+                  <div class="w-icon icon-check9 w-size2" style="color:#fff;"></div>
+                  <div style="color: #fff;">Payment</div>
+                </div>
+                <div class="w-column w-padding w-gap w-align-center w-pointer w-unselect" xid="wallet">
+                  <div class="w-icon icon-card w-size2" style="color:#fff;"></div>
+                  <div style="color: #fff;">Wallet</div>
+                </div>
+              </div>
+          text: bannerComp
+        - _expanded: true
+          _icon: panel
+          cls: Wb.Panel
+          items:
+          - _expanded: true
+            _icon: list-view
+            cls: Wb.View
+            properties:
+              bodyCls: w-grid4
+              border: 'false'
+              cid: financialView
+              clickSelect: 'false'
+              data: |-
+                [
+                  { icon: 'card', text: 'Credit Card' },
+                  { icon: 'money', text: 'Loan' },
+                  { icon: 'command', text: 'Wealth' },
+                  { icon: 'component', text: 'Insurance' }
+                ]
+              gap: 1em
+              itemTpl: |-
+                <div class="w-item w-column w-align-center w-padding w-gapd5 w-pointer">
+                  <div class="w-size2 w-icon icon-{icon}"></div>
+                  <div class="w-label w-ta-center">{text}</div>
+                </div>
+              layout: grid4
+              padding: 2em
+            text: financialView
+          properties:
+            cid: financialPanel
+            icon: money
+            layout: grid1
+            padding: 'false'
+            plainTitle: 'true'
+            roundBorder: 'true'
+            title: Financial Planning
+          text: financialPanel
+        - _expanded: true
+          _icon: panel
+          cls: Wb.Panel
+          items:
+          - _expanded: true
+            _icon: list-view
+            cls: Wb.View
+            properties:
+              bodyCls: w-grid4
+              border: 'false'
+              cid: lifeView
+              clickSelect: 'false'
+              data: |-
+                [
+                  { icon: 'mobile', text: 'Recharge' },
+                  { icon: 'module', text: 'Pay' },
+                  { icon: 'qq', text: 'QQ Coin' },
+                  { icon: 'building', text: 'City Service' },
+                  { icon: 'heart1', text: 'Public Welfare' },
+                  { icon: 'disc', text: 'Health' }
+                ]
+              gap: 1em
+              itemTpl: |-
+                <div class="w-item w-column w-align-center w-padding w-gapd5 w-pointer">
+                  <div class="w-size2 w-icon icon-{icon}"></div>
+                  <div class="w-label w-ta-center">{text}</div>
+                </div>
+              layout: grid4
+              padding: 2em
+            text: lifeView
+          properties:
+            cid: lifePanel
+            icon: handshake
+            layout: grid1
+            padding: 'false'
+            plainTitle: 'true'
+            roundBorder: 'true'
+            title: Life Services
+          text: lifePanel
+        - _expanded: true
+          _icon: panel
+          cls: Wb.Panel
+          items:
+          - _expanded: true
+            _icon: list-view
+            cls: Wb.View
+            properties:
+              bodyCls: w-grid4
+              border: 'false'
+              cid: transportationView
+              clickSelect: 'false'
+              data: |-
+                [
+                  { icon: 'location', text: 'Travel' },
+                  { icon: 'train', text: 'Train Tickets' },
+                  { icon: 'car', text: 'Taxi' },
+                  { icon: 'school', text: 'Hotel' },
+                  { icon: 'identity', text: 'Identity' }
+                ]
+              gap: 1em
+              itemTpl: |-
+                <div class="w-item w-column w-align-center w-padding w-gapd5 w-pointer">
+                  <div class="w-size2 w-icon icon-{icon}"></div>
+                  <div class="w-label w-ta-center">{text}</div>
+                </div>
+              layout: grid4
+              padding: 2em
+            text: transportationView
+          properties:
+            cid: transportationPanel
+            icon: car
+            layout: grid1
+            padding: 'false'
+            plainTitle: 'true'
+            roundBorder: 'true'
+            title: Transportation
+          text: transportationPanel
+        properties:
+          background: 'true'
+          cid: serviceCt
+          gap: .5em
+          layout: grid1
+          padding: .5em
+        text: serviceCt
+      properties:
+        cid: serviceCard
+        closable: 'null'
+        icon: briefcase
+        layout: fit
+        title: Service
+      text: serviceCard
+    properties:
+      cid: tab1
+      cls: d-we-chat
+      touchStyle: 'true'
+    text: tab1
+  properties:
+    cid: viewport1
+    layout: fit
+  text: viewport1
+properties:
+  cid: module
+  links: |-
+    [
+      "wb/css/demo.css"
+    ]
+tags: ''
+text: module
+title: ''

@@ -1,0 +1,14 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: View the form of workflow
+  serverScript: function main(){const e=Wb.load("./util.mjs");let r=new Date,t=new
+    Wb.Workflow({flowId:Params.flowId}),o,s=[],i=Wb.userid;Wb.getObject("allFlowId").forEach((e=>{s.push({$flow_id:e,$user_id:i,$status:0,status:1,process_time:r})}));Wb.sync({tableName:"wb_flow_user",whereFields:"flow_id,user_id,status",unique:false,update:s});o=Wb.getBool("handle")?e.getForm(t,"handle"):e.getForm(t,"view");if(!o)Wb.raise("The
+    workflow is configured with neither handleForm nor viewForm.");Wb.send({form:o,back:t.getProperty("back"),transfer:t.getProperty("transfer"),reject:t.getProperty("reject"),signBefore:t.getProperty("signBefore"),signAfter:t.getProperty("signAfter"),restarting:t.restarting})}main();
+tags: ''
+text: module
+title: ''

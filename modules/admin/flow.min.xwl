@@ -1,0 +1,35 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.define(app,{basePath:"|wb/system/resource/flow",getFileUrl:"m?xwl=sys/file/get-resource",get$graph(){return
+    app.tab1.activeCard?.graph},get$inInput(){return document.activeElement.isInput},get$flowDesigner(){return
+    app.tab1.activeCard?.flowDesigner},get$activeCard(){return app.tab1.activeCard},flowPathLength:_$flowPathLength$_,newFile(){Wb.promptFile(((e,t)=>{if(!e.endsWith(".flw"))e+=".flw";Wb.ajax({url:"m?xwl=sys/file/add",params:{fullname:e},json:true,success(e){app.createCard(null,e.path,e.lastModified.dateValue.getTime());t.close()}})}),app.basePath,".flw",Str.addFile,false,app.getFileUrl)},openFile(){Wb.promptFiles(((e,t)=>{e.forEach((e=>app.doOpenFile(e)));t.close()}),app.basePath,".flw",Str.selectFile,app.getFileUrl)},findCard(e){return
+    this.tab1.findBy((t=>t.path==e))},doOpenFile(e,t){let a=app.findCard(e);if(a){a.show();t?.call(app,a)}else{Wb.ajax({url:"m?xwl=sys/file/open-resource",params:{path:e,charset:"UTF-8"},success(i){let
+    l,p,s;l=i.indexOf("|");p=i.substr(0,l);s=i.substr(l+1);if(s)s=Wb.decode(s);app.createCard(s,e,p);t?.call(app,a)}})}},createCard(e,t,a){let
+    i,l,p,s=this;if(Wb.isString(a))a=parseInt(a);if(t){p=Wb.getFilename(t);l=t.substr(app.flowPathLength+1)}else{app.fileIndex??=1;p=Str.new+"
+    - "+app.fileIndex++;l=undefined}i=app.tab1.add({title:p,tabTip:l,path:t,lastModified:a,icon:"flow1",layout:"fit",events:{beforeclose(){return
+    this.confirmClose(s.saveCard,s)}},items:{cname:"flowDesigner",cid:"designerComp",events:{change(){app.setModified(this.parent)}}}});i.flowDesigner=i.down("designerComp");i.graph=i.flowDesigner.graph;i.flowDesigner.flowData=e??{};i.show();return
+    i},saveFile(e,t,a,i){let l="",p=[],s,r,d,n=i??app.activeCard;app.tab1.each((t=>{if(t.isModified&&(e||t==n)){d=t.flowDesigner;d.completeEdit();s=Wb.encode(d.flowData);r=t.path;l+=r+"|UTF-8|"+t.lastModified+"|"+s.length+"|"+s;p.push(t)}}));if(l){Wb.ajax({url:"m?xwl=sys/file/save",data:l,json:true,params:{confirm:a?0:1},success(e){p.forEach(((t,a)=>{t.lastModified=e[a];app.unModified(t)}));t?.call()},failure(a){if(a.errorCode=="modified")Wb.confirm(Str.modifiedConfirm.format(Wb.decode(a.errorText).join(",
+    ")),(a=>app.saveFile(e,t,true)))}})}else{t?.call()}},saveCard(e,t){app.saveFile(false,t,null,e)},setModified(e){Wb.setModified(e);if(e==app.activeCard)app.saveItem.disabled=false;app.saveAllItem.disabled=false},unModified(e){Wb.unModified(e);if(e==app.activeCard)app.saveItem.disabled=true;app.saveAllItem.disabled=!app.tab1.some((e=>e.isModified))},copy(e){if(app.inInput)return;let
+    t=app.flowDesigner,a=t.graph.getSelectedCells();if(a.length)app.clipboard=t[e?"cut":"copy"](a)},paste(){if(app.inInput)return;let
+    e=app.flowDesigner,t=app.clipboard;if(t){let a=e.paste(t),i=e.graph;i.cleanSelection();i.select(a)}}});Wb.make(app,{cname:"viewport",autoContextMenu:true,layout:"fit",cid:"viewport1",tbar:{cname:"toolbar",items:[{icon:"file",text:Str.new,keys:"Ctrl+J",cid:"newItem",events:{click(e,t){app.newFile()}}},{icon:"folder-open",text:Str.open,keys:"F3",cid:"openItem",events:{click(e,t){app.openFile()}}},{icon:"save",disabled:true,text:Str.save,keys:"Ctrl+S",cid:"saveItem",events:{click(e,t){app.saveFile()}}},{icon:"save-all",disabled:true,text:Str.saveAll,keys:"Ctrl+Shift+S",cid:"saveAllItem",events:{click(e,t){app.saveFile(true)}}},{cname:"divider",cid:"divider1"},{icon:"cut",disabled:true,text:Str.cut,stopEvent:false,keys:"Ctrl+X",cid:"cutItem",events:{click(e,t){app.copy(true)}}},{icon:"copy",disabled:true,text:Str.copy,stopEvent:false,keys:"Ctrl+C",cid:"copyItem",events:{click(e,t){app.copy()}}},{icon:"paste",disabled:true,text:Str.paste,stopEvent:false,keys:"Ctrl+V",cid:"pasteItem",events:{click(e,t){app.paste()}}},{icon:"delete",disabled:true,text:Str.del,stopEvent:false,keys:"Delete",cid:"delItem",events:{click(e,t){if(app.inInput)return;let
+    a=app.graph,i=app.graph.getSelectedCells();if(i.length)a.removeCells(i)}}},{icon:"undo",disabled:true,text:Str.undo,stopEvent:false,keys:"Ctrl+Z",cid:"undoItem",events:{click(e,t){if(app.inInput)return;let
+    a=app.graph;if(a.canUndo())a.undo()}}},{icon:"redo",disabled:true,text:Str.redo,stopEvent:false,keys:"Ctrl+Y",cid:"redoItem",events:{click(e,t){if(app.inInput)return;let
+    a=app.graph;if(a.canRedo())a.redo()}}},{icon:"panel",disabled:true,text:Str.selectAll,stopEvent:false,keys:"Ctrl+A",cid:"selectAllItem",events:{click(e,t){if(app.inInput)return;let
+    a=app.graph;a.select(a.getCells())}}}]},items:[{cname:"tab",tabMenu:true,cid:"tab1",events:{cardchange(e,t,a){const
+    i=["cutItem","copyItem","pasteItem","delItem","undoItem","redoItem","selectAllItem"];let
+    l=e?.isModified;app.saveItem.disabled=!l;app.saveAllItem.disabled=!app.tab1.some((e=>e.isModified));i.forEach((t=>app[t].disabled=!e))}}}]});Wb.onUnload(parentContainer,(()=>{if(!app.saveAllItem.disabled){let
+    e=app.tab1.find((e=>e.isModified)),t=e?.tabButton;if(e){e.show();t.highlight();return
+    false}}}));
+hideInMenu: 'false'
+icon: flow1
+img: ''
+properties:
+  cid: module
+  links: '["wb/libs/x6.js","wb/js/flow-designer.js","wb/js/monaco.js"]'
+  remark: Workflow management tool
+  serverScript: function main(){Params.flowPathLength=new Wb.File(true,"wb/system/resource/flow").path.length}main();
+tags: ''
+text: module
+title: '@flowMng'

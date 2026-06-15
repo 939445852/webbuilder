@@ -1,0 +1,24 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Edit task
+  serverScript: |-
+    function main() {
+      const Util = Wb.load('./util.mjs');
+      let id = Params.$sid, db = Wb.getConn();
+      Wb.sync({ tableName: 'wb_job', update: Params, db });
+      if (Wb.parseBool(Wb.getx('status'))) {
+        JobUtil.reloadJob(id, db.connection);
+      } else {
+        JobUtil.stopJob(id);
+      }
+      Wb.send(Util.getFireTime(id));
+    }
+    main();
+tags: ''
+text: module
+title: ''

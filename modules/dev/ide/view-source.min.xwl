@@ -1,0 +1,19 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: 'Wb.make(app,{cname:"viewport",layout:"fit",cid:"viewport1",bbar:{cname:"toolbar",justify:"end",items:[{cname:"label",cid:"cursorLabel",text:"1
+    : 1"}]},items:[{cname:"codeEditor",readonly:true,wrapBorder:0,value:_$code$_,cid:"codeEditor1",events:{cursorchange(e,r){app.cursorLabel.text=e?e.lineNumber+"
+    : "+e.column:Wb.nbsp}}}]});app.codeEditor1.cursor={lineNumber:_$line$_,column:1};'
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  links: '["wb/js/monaco.js"]'
+  remark: View file source code
+  serverScript: function main(){let e=Params.file.split(":"),t=e[0],i=parseInt(e[1]),l;if(t.endsWith(".xwl"))l=Xwl.get(t).getServerScript();else{let
+    e="wb/modules/"+t;if(new File(Base.path,e).exists())t=e;l=SourceBuffer.get(t).getCharacters()}l=Wb.encode(l);l=l.replaceAll("<\/script>","<\\/script>");Wb.set({line:i,code:l})}main();
+tags: ''
+text: module
+title: ''

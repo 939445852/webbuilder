@@ -1,0 +1,78 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+items: [
+  ]
+properties:
+  cid: module
+  serverScript: |-
+    let actions = {
+      /**
+       * Process get request.
+       */
+      get() {
+        Wb.log(Wb.get('string'));
+        Wb.log(Params.string);
+        Wb.log(Wb.getInt('int')); //Params.int is string type
+        Wb.log(Wb.getFloat('float'));
+        Wb.log(Wb.getDate('date'));
+        Wb.log(Wb.getBool('bool'));
+        Wb.log(Wb.getObject('object'));
+        Wb.log(Wb.getObject('array'));
+        Wb.send('done');
+      },
+      /**
+       * Process post request.
+       */
+      post() {
+        let val = Wb.get('foo');
+        //For the processing of uploading files, please refer to [file-updownload] example
+        Wb.send(val);
+      },
+      /**
+       * Process object.
+       */
+      deserializeObject() {
+        //The system will automatically deserialize the values sent by the client
+        Wb.log(Wb.get('string')); // same as Params.string
+        Wb.log(Wb.get('int')); // Params.int is Number type
+        Wb.log(Params.float); // Params.float is Number type
+        Wb.log(Params.date); // Params.date is Date type
+        Wb.log(Params.bool); // Params.bool is Boolean type
+        Wb.log(Params.object);// Params.object is Object type
+        Wb.log(Params.array);// Params.array is Array type
+      },
+      /**
+       * Process multiple same parameters.
+       */
+      postMultipleParams() {
+        let arrayList = Wb.getParams('myParam');
+        Wb.log(Wb.encode(arrayList)); //Use Wb.getParams to always return array like params
+      },
+      /**
+       * Process payload data.
+       */
+      postPayload() {
+        Wb.log(Wb.payload);
+      },
+      /**
+       * Process payload json.
+       */
+      postPayloadJson() {
+        Wb.log(Wb.get('foo') + ',' + Params.bar);
+        Wb.log(Wb.payload); // text
+        Wb.log(Wb.payloadParams); // json
+      },
+      /**
+       * Process submit.
+       */
+      postSubmit() {
+        Wb.invoke('docs');
+      }
+    };
+    actions[Params.xaction]();
+tags: ''
+text: module
+title: ''

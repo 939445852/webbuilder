@@ -1,0 +1,240 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: |-
+    Wb.apply(app, {
+      /** @property {Boolean} - Whether to auto show window. */
+      autoShow: false,
+      /**
+       * Fires after displaying the window.
+       * @param {String} flowId The workflow instance id.
+       * @return {String} type Window type.
+       * -'start': Start window.
+       * -'handle': Handle window.
+       * -'view': View window.
+       * @param {Wb.GridItem} record The workflow record.
+       */
+      init(flowId, type, record) {
+        app.opinionsTitle.visible = app.opinions.visible = type == 'handle';
+        app.getData(flowId);
+        Wb.log(record.data.node_name);
+      },
+      /**
+       * Fires before action execution.
+       * @param {String} action The action name.
+       * @return {Object} Parameter object to be submitted. If returns false, the execution is canceled.
+       * @param {Wb.GridItem} record The workflow record.
+       */
+      beforeAction(action, record) {
+        Wb.log('action: ' + action + ', node name: ' + record.data.node_name);
+      },
+      /**
+       * Fires after action execution.
+       * @param {String} action The action name.
+       * @param {Object} response The response object.
+       * @param {Object} [.result] The flow record data.
+       * @param {Object} [.before] The returned value of server beforeAction.
+       * @param {Object} [.after] The returned value of server afterAction.
+       * @param {Wb.GridItem} record The workflow record.
+       */
+      afterAction(action, response, record) {
+        let afterData = response.after;
+        Wb.log('action: ' + action + ', node name: ' + record.data.node_name);
+        if (afterData?.type == 'done')
+          Wb.tip(afterData.msg);
+      },
+      /**
+       * Get window data. @priv
+       * @param {String} flowId The workflow instance id.
+       */
+      getData(flowId) {
+        Wb.ajax({
+          url: xpath + '/../actions&xaction=selectHandleData',
+          params: { flowId },
+          json: true,
+          success(resp) {
+            let amount = 0, { list, history, applicant } = resp;
+
+            app.grid1.addData(list);
+            list.forEach(item => {
+              amount += item.amount;
+            })
+            Wb.setValue(app.main, { applicant, amount });
+            createHistory();
+            app.main.show();
+            // show opinions history
+            function createHistory() {
+              let comp = app.opinionsHistory, titleEl;
+              comp.cls = 'w-padding w-sized8';
+              history.forEach((item, i) => {
+                titleEl = comp.addEl('w-row w-gap w-sub-color');
+                if (i > 0)
+                  titleEl.cls = 'w-margin-top';
+                titleEl.addEl().textContent = item.process_time.dateValue.dateTimeText;
+                titleEl.addEl().textContent = item.display_name;
+                comp.addEl().textContent = item.opinions;
+              });
+            }
+          }
+        });
+      }
+    });
+hideInMenu: 'false'
+icon: ''
+img: ''
+items:
+- _expanded: true
+  _icon: window
+  cls: Wb.Window
+  items:
+  - _icon: label1
+    cls: Wb.DisplayField
+    properties:
+      cid: applicant
+      text: Applicant
+    text: applicant
+  - _icon: label1
+    cls: Wb.DisplayField
+    properties:
+      cid: amount
+      text: Total amount
+    text: amount
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: detailsTitle
+      title: Details
+    text: detailsTitle
+  - _expanded: true
+    _icon: grid
+    cls: Wb.Grid
+    items:
+    - _expanded: true
+      _icon: array
+      cls: Wb.Array
+      items:
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: rowCol
+          rowNum: 'true'
+        text: rowCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: dateCol
+          fieldName: exp_date
+          text: Date
+        text: dateCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: itemNameCol
+          fieldName: item_name
+          text: Item name
+          width: '-1'
+        text: itemNameCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: amountCol
+          fieldName: amount
+          text: Amount
+          width: 10em
+        text: amountCol
+      properties:
+        cid: columns
+      text: columns
+    properties:
+      cid: grid1
+      fields: '({ process_time: { type: ''date'' } })'
+      flex: '1'
+      minHeight: 8em
+      pageSize: '-1'
+      pagingBar: 'false'
+    text: grid1
+  - _expanded: true
+    _icon: title
+    cls: Wb.Title
+    properties:
+      cid: opinionsHistoryTitle
+      title: Approval opinions history
+    text: opinionsHistoryTitle
+  - _expanded: true
+    _icon: component
+    cls: Wb.Component
+    properties:
+      autoScroll: 'true'
+      cid: opinionsHistory
+      cls: w-pre
+      maxHeight: 10em
+    text: opinionsHistory
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: opinionsTitle
+      title: Approval opinions
+    text: opinionsTitle
+  - _icon: textarea
+    cls: Wb.TextArea
+    properties:
+      cid: opinions
+      height: 6em
+      required: 'true'
+    text: opinions
+  properties:
+    autoScroll: 'true'
+    cid: main
+    gap: 'true'
+    height: 40em
+    icon: money
+    layout: column
+    padding: 'true'
+    title: Reimburse Form
+    visible: 'true'
+    width: 60em
+  text: main
+properties:
+  cid: module
+  serverScript: |-
+    Wb.apply(app, {
+      /**
+       * Fires before action execution.
+       * @param {String} action The action name.
+       * @param {Wb.Workflow} flow The workflow instance.
+       * @return {Object} The returned "before" parameter to the client.
+       */
+      beforeAction(action, flow) {
+      },
+      /**
+       * Fires after action execution.
+       * @param {String} action The action name.
+       * @param {Wb.Workflow} flow The workflow instance.
+       * @return {Object} The returned "after" parameter to the client.
+       */
+      afterAction(action, flow) {
+        let node = flow.beforeNode, reimburse_id = Wb.getRecord('select sid from wb_reimburse where flow_id={?flowId?}')?.[0],
+          node_text = flow.getNodeLabel(node);
+
+        // Params._newUser: New user id of transfer, signBefore, signAfter
+        // Params._backNode: Back to node name.
+        Wb.sync({
+          tableName: 'wb_ra_opinions',
+          insert: {
+            sid: Wb.getId(), reimburse_id, process_time: new Date(), approver_user_id: flow.handleUser, node_text,
+            opinions: 'Action: ' + action + '\nNode: ' + node_text + '\n' + Params.opinions
+          }
+        });
+        if (action == 'pass' && flow.completed) {
+          return { type: 'done', msg: 'Congratulations! The process has been fully completed.' };
+        }
+      }
+    });
+tags: ''
+text: module
+title: ''

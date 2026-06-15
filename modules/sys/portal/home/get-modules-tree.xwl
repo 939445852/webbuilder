@@ -1,0 +1,17 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Get modules tree
+  serverScript: |-
+    function main() {
+      const Util = Wb.load('./util.mjs');
+      Wb.send(Util.getModules());
+    }
+    main();
+tags: ''
+text: module
+title: ''

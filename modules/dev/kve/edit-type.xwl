@@ -1,0 +1,21 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Edit key type
+  serverScript: |-
+    function main() {
+      const Util = Wb.load('./util.mjs');
+      let oldKeyName = Params.$key_name;
+
+      Wb.sync({ tableName: 'wb_key_type', update: Params });
+      KVBuffer.buffer.remove(oldKeyName);
+      Util.loadKey(Params.key_name || oldKeyName);
+    }
+    main();
+tags: ''
+text: module
+title: ''

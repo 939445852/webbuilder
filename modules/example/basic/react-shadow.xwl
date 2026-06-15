@@ -1,0 +1,129 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: |-
+    Wb.apply(app, {
+      /**
+       * Login handler invoked by the "Log In" button in reactShadow.html via `parentApp.login`.
+       */
+      login(values) {
+        Wb.tip('Login: ' + Wb.encode(values));
+      }
+    });
+hideInMenu: 'false'
+icon: ''
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _expanded: true
+    _icon: toolbar
+    cls: Wb.Toolbar
+    items:
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: |-
+          let reactShadow = app.reactShadow, values;
+
+          values = {
+            username: reactShadow.shadowRoot.querySelector('#login_username').value, // via dom query
+            password: reactShadow.expose.form.getFieldValue('password') // via expose form
+          };
+          Wb.tip(Wb.encode(values));
+      properties:
+        cid: getItem
+        text: Get Values
+      text: getItem
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: app.reactShadow.expose.form.setFieldValue('username', 'new ' + Wb.getId());
+      properties:
+        cid: setItem
+        text: Set Values
+      text: setItem
+    properties:
+      cid: tbar
+      isProperty: 'true'
+    text: tbar
+  - _icon: data-provider
+    cls: Wb.ShadowDom
+    properties:
+      cid: reactShadow
+      html: "<!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n  <meta charset=\"UTF-8\"\
+        >\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"\
+        >\n  <title>React Login Page (jsDelivr)</title>\n\n  <!-- Ant Design CSS via\
+        \ jsDelivr -->\n  <link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/antd@4.24.15/dist/antd.min.css\"\
+        >\n\n  <style>\n    body {\n      margin: 0;\n      padding: 0;\n      background-color:\
+        \ #f0f2f5;\n      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI',\
+        \ Roboto, 'Helvetica Neue', Arial, sans-serif;\n    }\n\n    .login-wrapper\
+        \ {\n      display: flex;\n      justify-content: center;\n      align-items:\
+        \ center;\n      min-height: 100vh;\n    }\n\n    .login-card {\n      width:\
+        \ 380px;\n      padding: 32px;\n      background: #ffffff;\n      border-radius:\
+        \ 8px;\n      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);\n    }\n\n    .login-title\
+        \ {\n      text-align: center;\n      margin-bottom: 28px;\n      font-size:\
+        \ 24px;\n      color: #1f1f1f;\n      font-weight: 600;\n    }\n  </style>\n\
+        </head>\n\n<body>\n  <div id=\"root\"></div>\n\n  <!-- React & ReactDOM via\
+        \ jsDelivr -->\n  <script src=\"https://cdn.jsdelivr.net/npm/react@17.0.2/umd/react.production.min.js\"\
+        ></script>\n  <script src=\"https://cdn.jsdelivr.net/npm/react-dom@17.0.2/umd/react-dom.production.min.js\"\
+        ></script>\n\n  <!-- Babel Standalone via jsDelivr -->\n  <script src=\"https://cdn.jsdelivr.net/npm/@babel/standalone@7.23.9/babel.min.js\"\
+        ></script>\n\n  <!-- Ant Design JS via jsDelivr -->\n  <script src=\"https://cdn.jsdelivr.net/npm/antd@4.24.15/dist/antd.min.js\"\
+        ></script>\n\n  <script type=\"text/babel\">\n    const { Form, Input, Button,\
+        \ message, Typography } = antd;\n\n        const LoginPage = () => {\n   \
+        \         const [form] = Form.useForm();\n            expose.form = form;\n\
+        \            const onFinish = (values) => {\n               parentApp.login(values);\n\
+        \            };\n\n            const onFinishFailed = (errorInfo) => {\n \
+        \               console.log('Validation failed:', errorInfo);\n          \
+        \      message.error('Please check your input and try again.');\n        \
+        \    };\n\n            return (\n                <div className=\"login-wrapper\"\
+        >\n                    <div className=\"login-card\">\n                  \
+        \      <h1 className=\"login-title\">Sign In</h1>\n                      \
+        \  <Form\n                            name=\"login\"\n                   \
+        \         form={form}\n                            initialValues={{ remember:\
+        \ true, username: 'admin', password: '123456' }}\n                       \
+        \     onFinish={onFinish}\n                            onFinishFailed={onFinishFailed}\n\
+        \                            autoComplete=\"off\"\n                      \
+        \      size=\"large\"\n                        >\n                       \
+        \     <Form.Item\n                                label=\"Username\"\n   \
+        \                             name=\"username\"\n                        \
+        \        rules={[\n                                    { required: true, message:\
+        \ 'Please enter your username!' },\n                                    {\
+        \ min: 3, message: 'Username must be at least 3 characters.' }\n         \
+        \                       ]}\n                            >\n              \
+        \                  <Input placeholder=\"Enter your username\" />\n       \
+        \                     </Form.Item>\n\n                            <Form.Item\n\
+        \                                label=\"Password\"\n                    \
+        \            name=\"password\"\n                                rules={[\n\
+        \                                    { required: true, message: 'Please enter\
+        \ your password!' },\n                                    { min: 6, message:\
+        \ 'Password must be at least 6 characters.' }\n                          \
+        \      ]}\n                            >\n                               \
+        \ <Input.Password placeholder=\"Enter your password\" />\n               \
+        \             </Form.Item>\n\n                            <Form.Item style={{\
+        \ marginBottom: 16 }}>\n                                <Button type=\"primary\"\
+        \ htmlType=\"submit\" block>\n                                    Log In\n\
+        \                                </Button>\n                            </Form.Item>\n\
+        \                            \n                            <div style={{ textAlign:\
+        \ 'center' }}>\n                                <Typography.Text type=\"secondary\"\
+        \ style={{ fontSize: '13px' }}>\n                                    Demo\
+        \ account: admin / 123456\n                                </Typography.Text>\n\
+        \                            </div>\n                        </Form>\n   \
+        \                 </div>\n                </div>\n            );\n       \
+        \ };\n\n        ReactDOM.render(<LoginPage />, document.getElementById('root'));\n\
+        \    </script>\n</body>\n\n</html>"
+    text: reactShadow
+  properties:
+    cid: viewport1
+    layout: fit
+  text: viewport1
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

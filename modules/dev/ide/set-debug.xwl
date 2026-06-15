@@ -1,0 +1,38 @@
+_icon: module
+cls: Wb.Module
+properties:
+  cid: module
+  remark: Set module debug status
+  serverScript: |-
+    Wb.checkDemo();
+    function main() {
+      let files = Wb.getObject('files'),
+        type = Params.type, userid = Wb.userid,
+        types = Wb.has('types') ? Wb.getObject('types') : null;
+
+      files.forEach((file, index) => {
+        switch (types ? types[index] : type) {
+          case 'add':
+            DebugFiles.addDebugFile(userid, file);
+            break;
+          case 'remove':
+            DebugFiles.removeDebugFile(userid, file);
+            break;
+          case 'disable':
+            DebugFiles.setDebugStatus(userid, file, 0);
+            break;
+          case 'enable':
+            DebugFiles.setDebugStatus(userid, file, 1);
+            break;
+          case 'terminate':
+            DebugFiles.terminate(userid, file, true);
+            break;
+          case 'resume':
+            DebugFiles.terminate(userid, file, false);
+            break;
+        }
+      });
+    }
+    main();
+text: module
+title: ''

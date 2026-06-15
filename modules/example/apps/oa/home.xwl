@@ -1,0 +1,639 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: |-
+    Wb.apply(app, {
+      /**
+       * Open the specified module.
+       * @param {Object} data Configs data.
+       * @param {Boolean} [reload] Whether reload module.
+       */
+      openModule(data, reload) {
+        let configs, url = 'm?xwl=' + data.path;
+
+        configs = Wb.apply({ url }, Wb.parse(data.tags));
+        if (configs.frame)
+          Wb.browse(configs);
+        else if (configs.newWin)
+          Wb.openWin(configs);
+        else {
+          let ct = app.clientCardCt, card;
+
+          card = ct.find(card => card.moduleUrl == url);
+          if (card) {
+            if (reload) {
+              card.destroy();
+              card = null;
+            } else {
+              app.clientCardCt.activeCard = card;
+            }
+          }
+          if (!card) {
+            let modulePanel = app.clientCardCt.add({ cname: 'container', moduleUrl: url, moduleData: data });
+            app.clientCardCt.activeCard = modulePanel;
+            configs.container = modulePanel;
+            Wb.run(configs);
+          }
+        }
+      }
+    });
+hideInMenu: 'false'
+icon: home
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _expanded: true
+    _icon: array
+    cls: Wb.Array
+    items:
+    - _expanded: false
+      _icon: container
+      cls: Wb.Container
+      items:
+      - _expanded: false
+        _icon: container
+        cls: Wb.Container
+        items:
+        - _expanded: true
+          _icon: logo
+          cls: Wb.Icon
+          properties:
+            cid: logoIcon
+            fontSize: 38px
+            icon: flower
+          text: logoIcon
+        - _expanded: true
+          _icon: component
+          cls: Wb.Component
+          properties:
+            cid: titleComp
+            html: <span style="color:#fff;font-size:32px;font-weight:bold;font-style:italic;padding:.5em">My
+              Office System</span>
+          text: titleComp
+        properties:
+          align: center
+          cid: leftCt
+          layout: row
+        text: leftCt
+      - _expanded: false
+        _icon: container
+        cls: Wb.Container
+        properties:
+          cid: centerCt
+        text: centerCt
+      - _expanded: true
+        _icon: container
+        cls: Wb.Container
+        items:
+        - _expanded: true
+          _icon: button
+          cls: Wb.Button
+          items:
+          - _expanded: true
+            _icon: menu2
+            cls: Wb.Menu
+            items:
+            - _expanded: true
+              _icon: item
+              cls: Wb.Item
+              events:
+                click: |-
+                  // Wb.ajax({
+                  //   url: 'logout'
+                  // });
+              properties:
+                cid: logoutItem
+                icon: power
+                text: '@Str.logout'
+              text: logoutItem
+            properties:
+              cid: menu
+              isProperty: 'true'
+            text: menu
+          properties:
+            cid: menuBtn
+            icon: menu
+            type: tool
+          text: menuBtn
+        properties:
+          cid: rightCt
+        text: rightCt
+      properties:
+        align: center
+        background: url(wb/images/app/banner1.png;) no-repeat 0 0 / 100% 100%
+        border: 'false'
+        cid: bannerCt
+        cls: w-bar-color
+        gap: 20px
+        height: '50'
+        justify: space-between
+        layout: row
+        padding: 0 15px 0 15px
+        textSelectable: 'false'
+      text: bannerCt
+    - _expanded: false
+      _icon: container
+      cls: Wb.Container
+      items:
+      - _expanded: true
+        _icon: text
+        cls: Wb.Text
+        properties:
+          cid: urlText
+          flex: '1'
+          readonly: 'true'
+          selectOnFocus: 'true'
+          text: URL
+        text: urlText
+      - _icon: divider
+        cls: Wb.Divider
+        properties:
+          cid: divider1
+        text: divider1
+      - _expanded: true
+        _icon: button
+        cls: Wb.Button
+        events:
+          click: |-
+            let moduleData = app.clientCardCt.activeCard?.moduleData;
+            if (moduleData) {
+              app.openModule(moduleData, true);
+            }
+        properties:
+          cid: refreshItem
+          icon: refresh
+          tip: '@Str.refresh'
+          type: tool
+        text: refreshItem
+      - _expanded: true
+        _icon: button
+        cls: Wb.Button
+        events:
+          click: app.clientCardCt.activeCard?.destroy();
+        properties:
+          cid: closeItem
+          icon: delete
+          tip: '@Str.close'
+          type: tool
+        text: closeItem
+      properties:
+        align: stretch
+        cid: addressCt
+        gap: .2em
+        layout: row
+        padding: 'true'
+      text: addressCt
+    properties:
+      cid: tbar
+    text: tbar
+  - _expanded: true
+    _icon: tree-view
+    cls: Wb.Tree
+    events:
+      beforeload: |-
+        let node = configs.node;
+
+        // params.path = node?.data.path || _$oaPath$_;
+        params.path = node?.data.path;
+      itemclick: |-
+        if (item.leaf)
+          app.openModule(item.data);
+        else
+          item.toggleExpand();
+    properties:
+      cid: moduleTree
+      cls: w-home-tree
+      dblclickExpand: 'false'
+      rightExpander: 'true'
+      treeStyle: menu
+      url: m?xwl=sys/portal/home/get-modules-tree
+      width: 18em
+    text: moduleTree
+  - _expanded: true
+    _icon: splitter
+    cls: Wb.Splitter
+    properties:
+      cid: splitter1
+    text: splitter1
+  - _expanded: true
+    _icon: win-restore
+    cls: Wb.CardCt
+    events:
+      cardchange: |-
+        let url = newCard?.moduleUrl;
+        app.urlText.value = url ? Wb.qualifyURL(url) : '';
+    items:
+    - _expanded: true
+      _icon: container
+      cls: Wb.Container
+      items:
+      - _expanded: false
+        _icon: container
+        cls: Wb.Container
+        items:
+        - _icon: logo
+          cls: Wb.Icon
+          properties:
+            cid: icon1
+            icon: calendar
+          text: icon1
+        - _expanded: true
+          _icon: button
+          cls: Wb.Button
+          properties:
+            active: 'true'
+            border: 'false'
+            cid: today
+            groupName: dateButtons
+            shape: round
+            text: Today
+          text: today
+        - _expanded: true
+          _icon: button
+          cls: Wb.Button
+          properties:
+            border: 'false'
+            cid: week
+            groupName: dateButtons
+            shape: round
+            text: This Week
+          text: week
+        - _expanded: true
+          _icon: button
+          cls: Wb.Button
+          properties:
+            border: 'false'
+            cid: month
+            groupName: dateButtons
+            shape: round
+            text: This Month
+          text: month
+        - _expanded: true
+          _icon: button
+          cls: Wb.Button
+          properties:
+            border: 'false'
+            cid: year
+            groupName: dateButtons
+            shape: round
+            text: This Year
+          text: year
+        - _expanded: true
+          _icon: calendar
+          cls: Wb.Date
+          properties:
+            cid: date1
+            placeholder: Select Date
+          text: date1
+        properties:
+          align: center
+          background: 'false'
+          cid: searchCt
+          gap: .8em
+          layout: row
+          padding: 'true'
+          roundBorder: 'true'
+        text: searchCt
+      - _expanded: false
+        _icon: container
+        cls: Wb.Container
+        items:
+        - _expanded: true
+          _icon: component
+          cls: Wb.Component
+          properties:
+            cid: data1
+            frame: 'true'
+            html: |-
+              <div class='w-row w-align-center w-justify-around w-padding1' style='background:#c0f9cb'>
+                <div class='w-column w-gap2'>
+                  <div><span class='w-bold w-size1d5'>9.5%</span> Increase</div>
+                  <div><span class='w-bold w-size1d5'>387</span> Amount</div>
+                </div>
+                <div class='w-icon icon-table w-size4'></div>
+              </div>
+          text: data1
+        - _icon: component
+          cls: Wb.Component
+          properties:
+            cid: data2
+            frame: 'true'
+            html: |-
+              <div class='w-row w-align-center w-justify-around w-padding1' style='background:#fde0f8'>
+                <div class='w-column w-gap2'>
+                  <div><span class='w-bold w-size1d5'>$3,259</span> Total</div>
+                  <div><span class='w-bold w-size1d5'>2,328</span> Visits</div>
+                </div>
+                <div class='w-icon icon-dt-picker w-size4'></div>
+              </div>
+          text: data2
+        - _icon: component
+          cls: Wb.Component
+          properties:
+            cid: data3
+            frame: 'true'
+            html: |-
+              <div class='w-row w-align-center w-justify-around w-padding1' style='background:#f6efbd'>
+                <div class='w-column w-gap2'>
+                  <div><span class='w-bold w-size1d5'>165</span> Items</div>
+                  <div><span class='w-bold w-size1d5'>5.2%</span> Percent</div>
+                </div>
+                <div class='w-icon icon-list w-size4'></div>
+              </div>
+          text: data3
+        - _icon: component
+          cls: Wb.Component
+          properties:
+            cid: data4
+            frame: 'true'
+            html: |-
+              <div class='w-row w-align-center w-justify-around w-padding1' style='background:#f1fffd'>
+                <div class='w-column w-gap2'>
+                  <div><span class='w-bold w-size1d5'>629</span> Users</div>
+                  <div><span class='w-bold w-size1d5'>9,185</span> Count</div>
+                </div>
+                <div class='w-icon icon-cluster w-size4'></div>
+              </div>
+          text: data4
+        properties:
+          cid: summaryCt
+          color: '#555'
+          layout: grid4
+          padding: 'false'
+          textSelectable: 'false'
+        text: summaryCt
+      - _expanded: false
+        _icon: container
+        cls: Wb.Container
+        items:
+        - _icon: chart-bar
+          cls: Wb.Chart
+          properties:
+            cid: chart1
+            height: 25em
+            option: |-
+              ({
+                legend: false,
+                grid: {
+                  left: 20,
+                  right: 20,
+                  bottom: 20,
+                  top: 20,
+                  containLabel: true
+                },
+                xAxis: [
+                  {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+                  }
+                ],
+                yAxis: [
+                  {
+                    type: 'value'
+                  }
+                ],
+                series: [
+                  {
+                    name: 'Email',
+                    type: 'line',
+                    stack: 'Total',
+                    areaStyle: {},
+                    emphasis: {
+                      focus: 'series'
+                    },
+                    data: [120, 132, 101, 134, 90, 230, 210]
+                  },
+                  {
+                    name: 'Union Ads',
+                    type: 'line',
+                    stack: 'Total',
+                    areaStyle: {},
+                    emphasis: {
+                      focus: 'series'
+                    },
+                    data: [220, 182, 191, 234, 290, 330, 310]
+                  },
+                  {
+                    name: 'Video Ads',
+                    type: 'line',
+                    stack: 'Total',
+                    areaStyle: {},
+                    emphasis: {
+                      focus: 'series'
+                    },
+                    data: [150, 232, 201, 154, 190, 330, 410]
+                  },
+                  {
+                    name: 'Direct',
+                    type: 'line',
+                    stack: 'Total',
+                    areaStyle: {},
+                    emphasis: {
+                      focus: 'series'
+                    },
+                    data: [320, 332, 301, 334, 390, 330, 320]
+                  },
+                  {
+                    name: 'Search Engine',
+                    type: 'line',
+                    stack: 'Total',
+                    label: {
+                      show: true,
+                      position: 'top'
+                    },
+                    areaStyle: {},
+                    emphasis: {
+                      focus: 'series'
+                    },
+                    data: [820, 932, 901, 934, 1290, 1330, 1320]
+                  }
+                ]
+              })
+            roundBorder: 'true'
+          text: chart1
+        - _icon: chart-bar
+          cls: Wb.Chart
+          properties:
+            cid: chart2
+            height: 25em
+            option: |-
+              ({
+                legend: false,
+                grid: {
+                  left: 20,
+                  right: 20,
+                  bottom: 20,
+                  top: 20,
+                  containLabel: true
+                },
+                xAxis: [
+                  {
+                    type: 'category',
+                    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+                  }
+                ],
+                yAxis: [
+                  {
+                    type: 'value'
+                  }
+                ],
+                series: [
+                  {
+                    name: 'Direct',
+                    type: 'bar',
+                    emphasis: {
+                      focus: 'series'
+                    },
+                    data: [320, 332, 301, 334, 390, 330, 320]
+                  },
+                  {
+                    name: 'Email',
+                    type: 'bar',
+                    stack: 'Ad',
+                    emphasis: {
+                      focus: 'series'
+                    },
+                    data: [120, 132, 101, 134, 90, 230, 210]
+                  },
+                  {
+                    name: 'Union Ads',
+                    type: 'bar',
+                    stack: 'Ad',
+                    emphasis: {
+                      focus: 'series'
+                    },
+                    data: [220, 182, 191, 234, 290, 330, 310]
+                  },
+                  {
+                    name: 'Video Ads',
+                    type: 'bar',
+                    stack: 'Ad',
+                    emphasis: {
+                      focus: 'series'
+                    },
+                    data: [150, 232, 201, 154, 190, 330, 410]
+                  },
+                  {
+                    name: 'Search Engine',
+                    type: 'bar',
+                    data: [862, 1018, 964, 1026, 1679, 1600, 1570],
+                    emphasis: {
+                      focus: 'series'
+                    },
+                    markLine: {
+                      lineStyle: {
+                        type: 'dashed'
+                      },
+                      data: [[{ type: 'min' }, { type: 'max' }]]
+                    }
+                  },
+                  {
+                    name: 'Baidu',
+                    type: 'bar',
+                    barWidth: 5,
+                    stack: 'Search Engine',
+                    emphasis: {
+                      focus: 'series'
+                    },
+                    data: [620, 732, 701, 734, 1090, 1130, 1120]
+                  },
+                  {
+                    name: 'Google',
+                    type: 'bar',
+                    stack: 'Search Engine',
+                    emphasis: {
+                      focus: 'series'
+                    },
+                    data: [120, 132, 101, 134, 290, 230, 220]
+                  },
+                  {
+                    name: 'Bing',
+                    type: 'bar',
+                    stack: 'Search Engine',
+                    emphasis: {
+                      focus: 'series'
+                    },
+                    data: [60, 72, 71, 74, 190, 130, 110]
+                  },
+                  {
+                    name: 'Others',
+                    type: 'bar',
+                    stack: 'Search Engine',
+                    emphasis: {
+                      focus: 'series'
+                    },
+                    data: [62, 82, 91, 84, 109, 110, 120]
+                  }
+                ]
+              })
+            roundBorder: 'true'
+          text: chart2
+        properties:
+          background: 'false'
+          cid: chartCt
+          frame: 'true'
+          layout: grid2
+          padding: 'false'
+        text: chartCt
+      - _icon: icon-list
+        cls: Wb.IconView
+        events:
+          itemclick: Wb.tip(item.data.text + ' clicked');
+        properties:
+          cid: iconView
+          data: |-
+            [
+                { icon: 'user', text: 'User Management' },
+                { icon: 'support', text: 'Support Service' },
+                { icon: 'list', text: 'Consumption List' },
+                { icon: 'preview', text: 'Disabled Item', _disabled: true, _tip: 'This item is disabled' },
+                { icon: 'gear', text: 'System Settings' },
+                { icon: 'truck', text: 'The text content of this item is too long and maybe overflowed' },
+                { icon: 'database', text: 'Database Management' },
+                { icon: 'flow1', text: 'WorkFlow Design' }
+              ]
+          defaultFields: |-
+            ({
+              badge: { value: 99 }
+            })
+          gap: 1em
+          iconField: icon
+          layout: grid4
+          padding: .5em
+          roundBorder: 'true'
+          selectColor: active
+        text: iconView
+      properties:
+        autoScroll: 'true'
+        background: 'true'
+        cid: mainCt
+        gap: 1em
+        layout: column
+        padding: 1em
+        shrink: 'false'
+      text: mainCt
+    properties:
+      cid: clientCardCt
+      flex: '1'
+      useHash: 'true'
+    text: clientCardCt
+  properties:
+    border: 'false'
+    cid: viewport1
+    layout: row
+  text: viewport1
+properties:
+  cid: module
+  serverScript: |-
+    function main() {
+      Params.oaPath = Wb.encode(Base.pathText + 'wb/modules/example/apps/oa');
+    }
+    main();
+tags: '{newWin: true}'
+text: module
+title: Office Home

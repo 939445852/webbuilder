@@ -1,0 +1,453 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  beforeunload: |-
+    if (!app.saveAllItem.disabled) {
+      let card = app.tab1.find(card => card.isModified), btn = card?.tabButton;
+      if (card) {
+        card.show();
+        btn.highlight();
+        return false;
+      }
+    }
+  initialize: |-
+    Wb.define(app, {
+      /** @property {String} - Workflow files base path. */
+      basePath: '|wb/system/resource/flow',
+      /** @property {String} - The URL used to get the workflow files path. */
+      getFileUrl: 'm?xwl=sys/file/get-resource',
+      /** @property {Object} - Current actived workflow graph. */
+      get$graph() {
+        return app.tab1.activeCard?.graph;
+      },
+      /** @property {Boolean} - Whether current focus in the input. */
+      get$inInput() {
+        return document.activeElement.isInput;
+      },
+      /** @property {Object} - Current actived workflow designer. */
+      get$flowDesigner() {
+        return app.tab1.activeCard?.flowDesigner;
+      },
+      /** @property {Wb.Card} - Current active card. */
+      get$activeCard() {
+        return app.tab1.activeCard;
+      },
+      /** @property {String} - Root path length of the workflow folder. */
+      flowPathLength: _$flowPathLength$_,
+      /**
+       * Create a new flow file.
+       */
+      newFile() {
+        Wb.promptFile((fullname, win) => {
+          if (!fullname.endsWith('.flw'))
+            fullname += '.flw';
+          Wb.ajax({
+            url: 'm?xwl=sys/file/add',
+            params: { fullname },
+            json: true,
+            success(resp) {
+              app.createCard(null, resp.path, resp.lastModified.dateValue.getTime());
+              win.close();
+            }
+          });
+        }, app.basePath, '.flw', Str.addFile, false, app.getFileUrl);
+      },
+      /**
+       * Create a new flow file.
+       */
+      openFile() {
+        Wb.promptFiles((files, win) => {
+          files.forEach(file => app.doOpenFile(file));
+          win.close();
+        }, app.basePath, '.flw', Str.selectFile, app.getFileUrl);
+      },
+      /**
+       * Find the file tab from the file path.
+       * @param {String} path The file path.
+       * @return {Wb.Card} The found card, returns null if not found.
+       */
+      findCard(path) {
+        return this.tab1.findBy(card => card.path == path);
+      },
+      /**
+       * Open the file at the specified path.
+       * @param {String} path Full file path.
+       * @param {Function} [callback] The callback function after successfully opening.
+       * @param {Wb.Card} callback.card The opened card.
+       */
+      doOpenFile(path, callback) {
+        let card = app.findCard(path);
+        if (card) {
+          card.show();
+          callback?.call(app, card);
+        } else {
+          Wb.ajax({
+            url: 'm?xwl=sys/file/open-resource', params: { path, charset: 'UTF-8' }, success(resp) {
+              let divPos, lastModified, content;
+
+              divPos = resp.indexOf('|');
+              lastModified = resp.substr(0, divPos);
+              content = resp.substr(divPos + 1);
+              if (content)
+                content = Wb.decode(content);
+              app.createCard(content, path, lastModified);
+              callback?.call(app, card);
+            }
+          });
+        }
+      },
+      /**
+       * Create a flow card from the flow data.
+       * @param {Object} [data] Flow data.
+       * @param {String} [path] Flow file path.
+       * @param {Number} [lastModified] File last modified date.
+       * @return {Wb.Card} New created card.
+       */
+      createCard(data, path, lastModified) {
+        let card, tabTip, title, me = this;
+
+        if (Wb.isString(lastModified))
+          lastModified = parseInt(lastModified);
+        if (path) {
+          title = Wb.getFilename(path);
+          tabTip = path.substr(app.flowPathLength + 1);
+        } else {
+          app.fileIndex ??= 1;
+          title = Str.new + ' - ' + (app.fileIndex++)
+          tabTip = undefined;
+        }
+        card = app.tab1.add({
+          title, tabTip, path, lastModified, icon: 'flow1', layout: 'fit',
+          events: {
+            beforeclose() {
+              return this.confirmClose(me.saveCard, me);
+            }
+          }, items: {
+            cname: 'flowDesigner', cid: 'designerComp', events: {
+              change() {
+                app.setModified(this.parent);
+              }
+            }
+          }
+        });
+        card.flowDesigner = card.down('designerComp')
+        card.graph = card.flowDesigner.graph;
+        card.flowDesigner.flowData = data ?? {};
+        card.show();
+        return card;
+      },
+      /**
+       * Save workflow files.
+       * @param {Boolean} [isAll] Whether to save all files.
+       * @param {Function} [callback] The callback function after success.
+       * @param {Boolean} [noConfirm] If the file has been modified, whether to prompt to overwrite it.
+       * @param {Wb.Card} [card] The saved card. Default to the current card.
+       */
+      saveFile(isAll, callback, noConfirm, card) {
+        let data = '', cards = [], content, path, designer, activeCard = card ?? app.activeCard;
+
+        app.tab1.each(card => {
+          if (card.isModified && (isAll || card == activeCard)) {
+            designer = card.flowDesigner;
+            designer.completeEdit();
+            content = Wb.encode(designer.flowData);
+            path = card.path;
+            data += path + '|UTF-8|' + card.lastModified + '|' + content.length + '|' + content;
+            cards.push(card);
+          }
+        });
+        if (data) {
+          Wb.ajax({
+            url: 'm?xwl=sys/file/save', data, json: true,
+            params: {
+              confirm: noConfirm ? 0 : 1
+            },
+            success(lastModified) {
+              cards.forEach((card, i) => {
+                card.lastModified = lastModified[i];
+                app.unModified(card);
+              });
+              callback?.call();
+            },
+            failure(resp) {
+              if (resp.errorCode == 'modified')
+                Wb.confirm(Str.modifiedConfirm.format(Wb.decode(resp.errorText).join(', ')),
+                  f => app.saveFile(isAll, callback, true));
+            }
+          });
+        } else {
+          callback?.call();
+        }
+      },
+      /**
+       * Save the file where the specified card has been modified.
+       * @param {Wb.Card} [card] The saved card. Default to the current card.
+       * @param {Function} [callback] The callback function after successfully saving.
+       */
+      saveCard(card, callback) {
+        app.saveFile(false, callback, null, card);
+      },
+      /**
+       * Mark the specified file card modified.
+       * @param {Wb.Card} card File card.
+       */
+      setModified(card) {
+        Wb.setModified(card);
+        if (card == app.activeCard)
+          app.saveItem.disabled = false;
+        app.saveAllItem.disabled = false;
+      },
+      /**
+       * Mark the specified file card unmodified.
+       * @param {Wb.Card} card File card.
+       */
+      unModified(card) {
+        Wb.unModified(card);
+        if (card == app.activeCard)
+          app.saveItem.disabled = true;
+        app.saveAllItem.disabled = !app.tab1.some(t => t.isModified);
+      },
+      /**
+       * Copy the specified cells. @priv
+       * @param {Boolean} [cut] Whether perform cut.
+       */
+      copy(cut) {
+        if (app.inInput)
+          return;
+        let designer = app.flowDesigner, cells = designer.graph.getSelectedCells();
+
+        if (cells.length)
+          app.clipboard = designer[cut ? 'cut' : 'copy'](cells);
+      },
+      /**
+       * Paste clone cells to the current graph.
+       */
+      paste() {
+        if (app.inInput)
+          return;
+        let designer = app.flowDesigner, clipboard = app.clipboard;
+
+        if (clipboard) {
+          let cells = designer.paste(clipboard), graph = designer.graph;
+          graph.cleanSelection();
+          graph.select(cells);
+        }
+      }
+    });
+hideInMenu: 'false'
+icon: flow1
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _expanded: true
+    _icon: toolbar
+    cls: Wb.Toolbar
+    items:
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: app.newFile();
+      properties:
+        cid: newItem
+        icon: file
+        keys: Ctrl+J
+        text: '@Str.new'
+      text: newItem
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: app.openFile();
+      properties:
+        cid: openItem
+        icon: folder-open
+        keys: F3
+        text: '@Str.open'
+      text: openItem
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: app.saveFile();
+      properties:
+        cid: saveItem
+        disabled: 'true'
+        icon: save
+        keys: Ctrl+S
+        text: '@Str.save'
+      text: saveItem
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: app.saveFile(true);
+      properties:
+        cid: saveAllItem
+        disabled: 'true'
+        icon: save-all
+        keys: Ctrl+Shift+S
+        text: '@Str.saveAll'
+      text: saveAllItem
+    - _icon: divider
+      cls: Wb.Divider
+      properties:
+        cid: divider1
+      text: divider1
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: app.copy(true);
+      properties:
+        cid: cutItem
+        disabled: 'true'
+        icon: cut
+        keys: Ctrl+X
+        stopEvent: 'false'
+        text: '@Str.cut'
+      text: cutItem
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: app.copy();
+      properties:
+        cid: copyItem
+        disabled: 'true'
+        icon: copy
+        keys: Ctrl+C
+        stopEvent: 'false'
+        text: '@Str.copy'
+      text: copyItem
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: app.paste();
+      properties:
+        cid: pasteItem
+        disabled: 'true'
+        icon: paste
+        keys: Ctrl+V
+        stopEvent: 'false'
+        text: '@Str.paste'
+      text: pasteItem
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: |-
+          if (app.inInput)
+            return;
+          let graph = app.graph, cells = app.graph.getSelectedCells();
+
+          if (cells.length)
+            graph.removeCells(cells);
+      properties:
+        cid: delItem
+        disabled: 'true'
+        icon: delete
+        keys: Delete
+        stopEvent: 'false'
+        text: '@Str.del'
+      text: delItem
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: |-
+          if (app.inInput)
+            return;
+          let graph = app.graph;
+
+          if (graph.canUndo())
+            graph.undo();
+      properties:
+        cid: undoItem
+        disabled: 'true'
+        icon: undo
+        keys: Ctrl+Z
+        stopEvent: 'false'
+        text: '@Str.undo'
+      text: undoItem
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: |-
+          if (app.inInput)
+            return;
+          let graph = app.graph;
+
+          if (graph.canRedo())
+            graph.redo();
+      properties:
+        cid: redoItem
+        disabled: 'true'
+        icon: redo
+        keys: Ctrl+Y
+        stopEvent: 'false'
+        text: '@Str.redo'
+      text: redoItem
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: |-
+          if (app.inInput)
+            return;
+          let graph = app.graph;
+          graph.select(graph.getCells());
+      properties:
+        cid: selectAllItem
+        disabled: 'true'
+        icon: panel
+        keys: Ctrl+A
+        stopEvent: 'false'
+        text: '@Str.selectAll'
+      text: selectAllItem
+    properties:
+      cid: tbar
+      isProperty: 'true'
+    text: tbar
+  - _expanded: true
+    _icon: tab
+    cls: Wb.Tab
+    events:
+      cardchange: |-
+        const editButtons = ['cutItem', 'copyItem', 'pasteItem', 'delItem', 'undoItem', 'redoItem', 'selectAllItem'];
+        let isModified = newCard?.isModified;
+        app.saveItem.disabled = !isModified;
+        app.saveAllItem.disabled = !app.tab1.some(t => t.isModified);
+        editButtons.forEach(item => app[item].disabled = !newCard);
+    properties:
+      cid: tab1
+      tabMenu: 'true'
+    text: tab1
+  properties:
+    autoContextMenu: 'true'
+    cid: viewport1
+    layout: fit
+  text: viewport1
+properties:
+  cid: module
+  links: |-
+    [
+      "wb/libs/x6.js",
+      "wb/js/flow-designer.js",
+      "wb/js/monaco.js"
+    ]
+  remark: Workflow management tool
+  serverScript: |-
+    function main() {
+      Params.flowPathLength = new Wb.File(true, 'wb/system/resource/flow').path.length;
+    }
+    main();
+tags: ''
+text: module
+title: '@flowMng'

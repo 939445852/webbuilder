@@ -1,0 +1,53 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: 'Cls["My.Select"]=class mySelect extends Wb.Control{init(e){let t=this;super.init(e);t.selectEl=t.addEl("w-flex
+    w-fit").addEl();t.vue=new Vue({el:t.selectEl,template:`<el-select v-model="value"
+    ref="select" placeholder="Select" @visible-change="handleVisibleChange">\n                    <el-option\n                      v-for="item
+    in items"\n                      :key="item.value"\n                      :label="item.text"\n                      :value="item.value">\n                    </el-option>\n                 </el-select>`,data:{multiple:false,clearable:false,items:[],value:""},methods:{handleVisibleChange(e){if(e){setTimeout((e=>this.$refs.select.popperElm.style.zIndex=Globals.zIndex++))}}}})}destroy(){super.destroy();this.vue.$destroy()}set
+    value(e){this.vue.value=e}get value(){return this.vue.value}set items(e){this.vue.items=e}get
+    items(){return this.vue.items}set clearable(e){this.vue.clearable=e}get clearable(){return
+    this.vue.clearable}};Wb.make(app,{cname:"viewport",layout:"grid1",cid:"viewport1",items:[{cname:"label",cid:"mainLabel",cls:"w-title3",text:"Use
+    Vue Element UI"},{cname:"label",cid:"descLabel",text:"This example demonstrates
+    how to use third-party components, such as vue element UI. We strongly recommend  that
+    you use WebBuilder components, this example is only for demonstration purposes."},{cname:"title",title:"Element
+    Select",cid:"tplTitle"},{cname:"component",cid:"selectComp",cls:"w-fit",events:{ready(e,t){let
+    l=this;l.vue=new Vue({el:l.el.addEl(),template:`<el-select v-model="value" placeholder="Select">\n                <el-option\n                  v-for="item
+    in options"\n                  :key="item.value"\n                  :label="item.label"\n                  :value="item.value">\n                </el-option>\n             </el-select>`,data(){return{options:[{value:"option1",label:"Golden
+    Cake"},{value:"option2",label:"Chocolate"},{value:"option3",label:"Cookie"},{value:"option4",label:"Noodles"},{value:"option5",label:"Beef"}],value:""}}})}}},{cname:"button",justifySelf:"start",cid:"setValueBtn",text:"Set
+    Value",events:{click(e,t){app.selectComp.vue.value="option4"}}},{cname:"button",justifySelf:"start",cid:"getValueBtn",text:"Get
+    Value",events:{click(e,t){let l=app.selectComp.vue,n=l.value;Wb.tip("Select value
+    is: "+l.options.find((e=>e.value==n))?.label)}}},{cname:"title",title:"Encapsulate
+    into a class as a WebBuilder control",cid:"encapsulateToClassTitle"},{cname:"button",justifySelf:"start",cid:"addSelectBtn",text:"Add
+    Select Component",events:{click(e,t){let l;app.selectIndex??=1;l=app.selectContainer.add({cname:"mySelect",text:"Select
+    "+app.selectIndex,value:"value2",clearable:true,items:[{value:"value1",text:"Golden
+    Cake"},{value:"value2",text:"Chocolate"},{value:"value3",text:"Cookie"}]});l.focus();l.highlight();app.selectIndex++}}},{cname:"container",layout:"grid2",cid:"selectContainer",height:"10em"},{cname:"label",cid:"sourceLabel",text:"Source
+    code of the class"},{cname:"codeEditor",readonly:true,value:''// Defined in module.initialize
+    event\nCls[\''My.Select\''] = class mySelect extends Wb.Control {\n  /** @property
+    {Element} selectEl Select dom element. */\n  /** @property {Object} vue Vue object.
+    */\n  /***/\n  init(configs) {\n    let me = this;\n    super.init(configs);\n    me.selectEl
+    = me.addEl(\''w-flex w-fit\'').addEl();\n    me.vue = new Vue({\n      el: me.selectEl,\n      template:
+    `<el-select v-model="value" ref="select" placeholder="Select" @visible-change="handleVisibleChange">\n                    <el-option\n                      v-for="item
+    in items"\n                      :key="item.value"\n                      :label="item.text"\n                      :value="item.value">\n                    </el-option>\n                 </el-select>`,\n      data:
+    {\n        multiple: false,\n        clearable: false,\n        items: [],\n        value:
+    \''\''\n      },\n      methods: {\n        handleVisibleChange(visible) {\n          if
+    (visible) {\n            // ElementUI PopupManager may read zindex from Globals.zIndex++\n            setTimeout(f
+    => this.$refs.select.popperElm.style.zIndex = Globals.zIndex++);\n          }\n        }\n      }\n    });\n  }\n  /***/\n  destroy()
+    {\n    super.destroy();\n    this.vue.$destroy();\n  }\n  /** @property {String}
+    - The value of the select control. */\n  set value(value) {\n    this.vue.value
+    = value;\n  }\n  /***/\n  get value() {\n    return this.vue.value;\n  }\n  /**
+    @property {Array} - Dropdown option list. @key */\n  set items(value) {\n    this.vue.items
+    = value;\n  }\n  /***/\n  get items() {\n    return this.vue.items;\n  }\n  /**
+    @property {Boolean} - Whether to include a clear button. */\n  set clearable(value)
+    {\n    this.vue.clearable = value;\n  }\n  /***/\n  get clearable() {\n    return
+    this.vue.clearable;\n  }\n}'',cid:"codeEditor1",height:"25em"}]});'
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  links: '["https://cdn.jsdelivr.net/npm/element-ui@2.15.14/lib/theme-chalk/index.css","https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.js","https://cdn.jsdelivr.net/npm/element-ui@2.15.14/lib/index.js","wb/js/monaco.js"]'
+tags: ''
+text: module
+title: ''

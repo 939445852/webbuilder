@@ -1,0 +1,16 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.make(app,{cname:"viewport",layout:"column",cid:"viewport1",items:[{cname:"grid",textSelectable:true,autoSelect:true,flex:1,url:xpath+"/select-users",cid:"userGrid",multiSelect:true,columns:[{cname:"column",cid:"rowCol",rowNum:true},{cname:"column",width:"12em",fieldName:"username",text:Str.username,render(e,t,i,c){let
+    m=t.sessions;if(m>1)return e+" ("+m+")";else return e},cid:"usernameCol"},{cname:"column",width:"12em",fieldName:"dispname",text:Str.displayName,cid:"dispnameCol"},{cname:"column",width:"18em",fieldName:"ip",text:Str.ip,cid:"ipCol"},{cname:"column",width:"13em",fieldName:"createTime",text:Str.createTime,cid:"createTimeCol"},{cname:"column",width:"13em",fieldName:"lastAccessTime",text:Str.lastAccessTime,cid:"lastAccessTimeCol"}],tbar:{cname:"toolbar",items:[{icon:"delete",cid:"delItem",text:Str.logout,events:{click(e,t){app.userGrid.removeRecords(xpath+"/remove-sessions","username",null,null,null,Str.logout)}}}]},events:{selectionchange(e){let
+    t=this.selection?.data.userid;if(t)app.sessionGrid.load({params:{userid:t}})}}},{cname:"splitter",cid:"splitter1"},{cname:"grid",autoLoad:false,textSelectable:true,url:xpath+"/select-sessions",cid:"sessionGrid",height:"14em",columns:[{cname:"column",cid:"rowCol",rowNum:true},{cname:"column",width:"18em",fieldName:"ip",text:Str.ip,cid:"ipCol"},{cname:"column",width:"13em",fieldName:"createTime",text:Str.createTime,cid:"createTimeCol"},{cname:"column",width:"13em",fieldName:"lastAccessTime",text:Str.lastAccessTime,cid:"lastAccessTimeCol"}]}]});
+hideInMenu: 'false'
+icon: earth
+img: ''
+properties:
+  cid: module
+  remark: View online users
+tags: ''
+text: module
+title: '@onlineUsers'

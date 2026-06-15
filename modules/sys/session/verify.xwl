@@ -1,0 +1,30 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  loginRequired: 'false'
+  remark: Verify user account and login to system
+  serverScript: |-
+    /**
+     * Verify the user name and password, the session will be created after success. @priv
+     */
+    function main() {
+      try {
+        Wb.UserUtil.login(Params.username, Params.password, Params.verifyCode);
+        if (WebUtil.fromAjax(request))
+          Wb.send([Wb.username, Wb.dispname]);
+        else
+          response.sendRedirect('home');
+      } catch (e) {
+        if (e instanceof Java.type('java.lang.IllegalStateException'))
+          Wb.raise(Str.exceedUsersLimit);
+        else
+          Wb.raise(e);
+      }
+    }
+    main();
+text: module
+title: ''

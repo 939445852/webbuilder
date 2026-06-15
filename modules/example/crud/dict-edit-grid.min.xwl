@@ -1,0 +1,15 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.apply(app,{onChange(){app.saveBtn.disabled=false},save(e){app.grid1.sync({url:xpath+"/../actions&xaction=save",success(){app.saveBtn.disabled=true;e?.()},failure(e){Wb.checkExists(e,"wb_staff_code",Str.code)}})}});Wb.make(app,{cname:"viewport",layout:"fit",cid:"viewport1",tbar:{cname:"toolbar",items:[{icon:"add",text:Str.add,keys:"Ctrl+E",cid:"addBtn",events:{click(e,a){app.grid1.addRecord()}}},{icon:"delete",text:Str.del,keys:"Ctrl+D",cid:"delBtn",events:{click(e,a){app.grid1.delRecords()}}},{cname:"divider",cid:"divider1"},{icon:"save",disabled:true,text:Str.save,keys:"Ctrl+S",cid:"saveBtn",events:{click(e,a){app.save()}}},{cname:"divider",cid:"divider2"},{cname:"text",minWidth:"5em",clearButton:true,placeholder:Str.search,flex:1,cid:"search",maxWidth:"20em",events:{change(e,a,t){app.grid1.delayLoad({comps:app.search})}}}]},items:[{cname:"grid",columnsSortable:true,sorters:"code",editable:true,url:xpath+"/../actions&xaction=dictSelect",cid:"grid1",multiSelect:true,events:{itemchange(e,a){app.onChange()},beforeedit(e,a,t,d){if(a.fieldName=="photo"){let
+    d=a.render.call(e,t.value,e.data);if(d)t.value=d}},beforeload(e,a,t){return this.saveConfirm(app.saveBtn,app.save)},editing(e,a,t){app.onChange()}}}]});Wb.onUnload(parentContainer,(()=>{if(!app.saveBtn.disabled)return
+    false}));
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

@@ -1,0 +1,95 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: 'Wb.apply(app,{addFetchValueButton(e){e.addTrigger({icon:"share",tip:"Show
+    value",weight:991,handler(){Wb.tip(e.cid+" value is: "+e.value)}})}});Wb.make(app,{cname:"viewport",layout:"grid1",cid:"viewport1",items:[{cname:"label",cid:"mainLabel",cls:"w-title3",text:"Select,
+    Trigger and Picker"},{cname:"title",title:"Select",cid:"selectTitle"},{cname:"container",layout:"grid",cid:"selectCt",frame:true,gridTplColumns:"repeat(auto-fill,
+    22em)",items:[{cname:"select",data:["item1","item2","item3"],cid:"commonSelect",text:"Common
+    Select"},{cname:"select",text:"No Editable",data:["item1","item2","item3"],editable:false,cid:"noEditableSelect"},{cname:"select",data:[["name1","value1"],["name2","value2"],["name3","value3"]],cid:"nameValueSelect",text:"Name
+    Value",events:{ready(e,t){app.addFetchValueButton(this)}}},{cname:"select",noWrap:true,loadOnce:true,text:"Remote
+    Select No Wrap",valueField:"code",url:"demo-source?xaction=staffRows",cid:"remoteSelect",textField:"full_name",events:{ready(e,t){app.addFetchValueButton(this)}}},{cname:"select",noWrap:true,autoLoad:"all",text:"Auto
+    Load",valueField:"code",value:"10003",url:"demo-source?xaction=staffRows",cid:"autoLoadSelect",subtextField:"code",textField:"full_name"},{cname:"select",text:"Live
+    Seach",valueField:"code",url:"demo-source?xaction=staffSearch",cid:"liveSearchSelect",textField:"full_name"},{cname:"select",loadOnce:true,pickerMinWidth:"20em",cls:"w-rownum-reset",text:"Template
+    Select",valueField:"code",url:"demo-source?xaction=staffRows",cid:"templateSelect",itemTpl:''<div
+    class="w-row w-align-center">\n  <div style="width: 3em" class="w-cell w-rownum"></div>\n  <div
+    class="w-icon icon-user2"></div>\n  <div class="w-cell w-flex">{code}</div>\n  <div
+    class="w-cell w-flex3">{full_name}</div>\n</div>'',textField:"full_name",events:{ready(e,t){app.addFetchValueButton(this)}}},{cname:"select",itemTplFn(e,t){return`<div
+    class="w-row w-align-center">\n  <div style="width: 3em" class="w-cell w-rownum"></div>\n  <div
+    class="w-icon icon-user2"></div>\n  <div class="w-cell w-flex">${e.code}</div>\n  <div
+    class="w-cell w-flex3">${e.full_name}</div>\n</div>`},loadOnce:true,pickerMinWidth:"20em",cls:"w-rownum-reset",text:"Template
+    Function",valueField:"code",url:"demo-source?xaction=staffRows",cid:"templateFnSelect",textField:"full_name",events:{ready(e,t){app.addFetchValueButton(this)}}},{cname:"select",keyName:"status",cid:"keyNameSelect",text:"Key
+    Name",events:{ready(e,t){app.addFetchValueButton(this)}}},{cname:"select",forceSelect:true,text:"Force
+    Select",valueField:"code",url:"demo-source?xaction=staffSearch",cid:"forceSelect",textField:"full_name",triggers:{icon:"data-provider",tip:"Set
+    value",events:{click(e,t){this.parent.value=["10003","Michael Sullivan"]}}},events:{ready(e,t){app.addFetchValueButton(this)}}},{cname:"select",text:"Custom
+    Match",data:["item1 abc item1","item2 abc item2","item3 def item3"],matchMode:"includesIC",selectMode:"startsWithIC",cid:"customMatchSelect"},{cname:"select",data:[{text:"With
+    icon",_icon:"user2"},{text:"With image",_img:"add"},{text:"With tip",_tip:"Item
+    tip"},{text:"Nowrap line with overflow text",_cls:"w-nowrap"},{text:"Fixed item",_fixed:true},{text:"Disabled
+    Item",_disabled:true}],cid:"miscSelect",text:"Miscellaneous"},{cname:"select",text:"Bind
+    Field",valueField:"code",bindField:"myValueField",url:"demo-source?xaction=staffSearch",cid:"bindFieldSelect",textField:"full_name",triggers:{icon:"data-provider",tip:"Set
+    value",events:{click(e,t){Wb.setValue(app.viewport1,{myValueField:"10003",bindFieldSelect:"Michael
+    Sullivan"})}}},events:{ready(e,t){let i=this;i.addTrigger({icon:"share",tip:"Show
+    values",weight:991,handler(){Wb.tip(Wb.encode(Wb.getValue(i)))}})}}},{cname:"select",text:"Value
+    Field",valueField:"code",url:"demo-source?xaction=staffSearch",cid:"valueFieldSelect",textField:"full_name",triggers:{icon:"data-provider",tip:"Set
+    value",events:{click(e,t){Wb.setValue(app.viewport1,{valueFieldSelect:"10003",valueFieldSelect$:"Michael
+    Sullivan"})}}},events:{ready(e,t){let i=this;i.addTrigger({icon:"share",tip:"Show
+    values",weight:991,handler(){Wb.tip(Wb.encode(Wb.getValue(i)))}})}}},{cname:"select",gridColumn:"1
+    / -1",valueMap:{code:"my_code",email:"my_email",full_name:"valueMapSelect"},text:"Value
+    Map",url:"demo-source?xaction=staffSearch",cid:"valueMapSelect",subtextField:"code",textField:"full_name",triggers:{icon:"data-provider",tip:"Set
+    value",events:{click(e,t){Wb.setValue(app.valueMapSelect,{my_code:"10003",my_email:"michael8@geejing.com",valueMapSelect:"Michael
+    Sullivan"})}}},events:{ready(e,t){let i=this;i.addTrigger({icon:"share",tip:"Show
+    values",weight:991,handler(){Wb.tip(Wb.encode(Wb.getValue(i)))}})}}},{cname:"select",noWrap:true,clearButton:true,gridColumn:"1
+    / -1",text:"Multi Select",valueField:"code",url:"demo-source?xaction=staffRows",cid:"multiSelect",multiSelect:true,textField:"full_name",triggers:[{icon:"data-provider",tip:"Set
+    values",cid:"setBtn",events:{click(e,t){this.parent.value=[{code:"10001",full_name:"Terri
+    Duffy"},{code:"10005",full_name:"Gail Erickson"},{code:"10008",full_name:"Janice
+    Galvin"}]}}},{icon:"share",tip:"Get values",cid:"getBtn",events:{click(e,t){Wb.tip(Wb.encode(this.parent.value))}}},{icon:"setup",tip:"Manual
+    select the first item",cid:"manualSelect",events:{click(e,t){let i=this.parent;i.picker.load({success(){i.value=this.data.firstItem}})}}}]},{cname:"select",tagTipField:"email",gridColumn:"1
+    / -1",tagWrap:true,valueField:"code",url:"demo-source?xaction=staffSearch",tagWidth:"calc(100%
+    - 8em)",textField:"full_name",noWrap:true,clearButton:true,maxHeight:"10em",tagSortable:true,text:"Multi
+    Select Wrap",cid:"multiSelectWrap",multiSelect:true,subtextField:"code"},{cname:"select",data:[{text:"Asia",_icon:"flag1",myCheck:1,sid:"a",remark:"Asia
+    is the largest continent in the world",area:44579e3,percentage:.3,items:[{text:"China",_leaf:true,myCheck:0,sid:"a1"},{text:"Japan",_leaf:true,myCheck:1,sid:"a2"},{text:"Korea",_leaf:true,myCheck:0,sid:"a3"}]},{text:"Europe",_icon:"flag1",myCheck:1,sid:"b",remark:"Europe
+    is between Asia and Africa",area:9938e3,percentage:.067,items:[{text:"France",_leaf:true,sid:"b1"},{text:"Germany",_leaf:true,sid:"b2"},{text:"UK",_leaf:true,sid:"b3"}]},{text:"North
+    America",_icon:"flag1",_selected:true,_expanded:true,sid:"c",remark:"North America
+    is the third largest of the world''s continents",area:24256e3,percentage:.165,items:[{text:"Canada",_leaf:true,sid:"c1"},{text:"Mexico",_leaf:true,sid:"c2"},{text:"USA",_leaf:true,sid:"c3"}]},{text:"South
+    America",_icon:"flag1",_disabled:true,sid:"d",remark:"Sorth America is the fourth
+    largest of the world''s continents",area:17819e3,percentage:.12,items:[{text:"Argentina",_leaf:true,sid:"d1"},{text:"Brazil",_leaf:true,sid:"d2"}]}],gridColumn:"1
+    / -1",treePicker:true,text:"Tree Select",valueField:"sid",cid:"treeSelect",textField:"text",events:{beforeselect(e,t,i,a){if(!t.leaf){Wb.tip("Please
+    select a leaf node");return false}}}},{cname:"select",clearButton:true,gridColumn:"1
+    / -1",useTag:true,treePicker:true,text:"Single Tag Tree",valueField:"sid",url:"demo-source?xaction=listAreaTree1",cid:"singleTagTreeSelect",textField:"text",triggers:[{icon:"data-provider",tip:"Set
+    values",cid:"setBtn",events:{click(e,t){this.parent.value={text:"Paris",subtext:"004LMY1FA9D40",sid:"004LMY1FA9D40"}}}},{icon:"share",tip:"Get
+    values",cid:"getBtn",events:{click(e,t){Wb.tip(Wb.encode(this.parent.value))}}}],events:{change(e,t,i){}}},{cname:"select",gridColumn:"1
+    / -1",tagWrap:true,treePicker:true,valueField:"sid",url:"demo-source?xaction=listAreaTree1",tagWidth:"70%",textField:"text",clearButton:true,maxHeight:"10em",tagSortable:true,text:"Multi
+    Select Tree",cid:"multiTreeSelect",multiSelect:true,triggers:[{icon:"data-provider",tip:"Set
+    values",cid:"setBtn",events:{click(e,t){this.parent.value=[{text:"Lyon",subtext:"004LMY1FA9D41",sid:"004LMY1FA9D41"},{text:"Paris",subtext:"004LMY1FA9D40",sid:"004LMY1FA9D40"}]}}},{icon:"share",tip:"Get
+    values",cid:"getBtn",events:{click(e,t){Wb.tip(Wb.encode(this.parent.value))}}}],events:{change(e,t,i){}}}]},{cname:"title",title:"Linked
+    Select",cid:"linkedSelectTitle"},{cname:"container",layout:"grid",cid:"linkedSelectCt",frame:true,items:[{cname:"select",forceSelect:true,placeholder:"Continent",valueField:"sid",required:true,url:"demo-source?xaction=listRootArea",cid:"continentSelect",textField:"area_name",events:{ready(e,t){let
+    i=this;i.picker.load({success(){i.valueIndex=0}})}}},{cname:"select",forceSelect:true,placeholder:"Country",valueField:"sid",required:true,url:"demo-source?xaction=listArea",cid:"countrySelect",textField:"area_name",events:{beforeload(e,t,i){let
+    a=app.continentSelect;if(a.verify())t.parent_id=a.value;else{a.focus();return
+    false}}}},{cname:"select",forceSelect:true,placeholder:"City",valueField:"sid",required:true,url:"demo-source?xaction=listArea",cid:"citySelect",textField:"area_name",events:{beforeload(e,t,i){let
+    a=app.countrySelect;if(a.verify())t.parent_id=a.value;else{a.focus();return false}}}}]},{cname:"title",title:"Trigger",cid:"triggerTitle"},{cname:"container",layout:"grid",cid:"triggerCt",frame:true,items:[{cname:"trigger",cid:"commonTrigger",text:"Common
+    Trigger",events:{triggerclick(e,t){Wb.tip(this.cid+" triggered")}}},{cname:"trigger",enterTriggerClick:true,placeholder:"Press
+    enter",text:"Readonly Trigger",triggerIcon:"location",editable:false,cid:"readonlyTrigger",events:{triggerclick(e,t){Wb.tip(this.cid+"
+    triggered")}}},{cname:"trigger",cid:"extraTrigger",text:"Extra Triggers",triggers:[{icon:"gear",tip:Str.set,cid:"setItem",events:{click(e,t){Wb.tip("Set
+    trigger clicked")}}},{icon:"copy",tip:Str.copy,cid:"copyItem"}],events:{triggerclick(e,t){Wb.tip("Default
+    trigger clicked")}}}]},{cname:"title",title:"Picker",cid:"pickerTitle"},{cname:"container",layout:"grid",cid:"pickerCt",frame:true,items:[{cname:"picker",editable:false,cid:"commonPicker",text:"Common
+    Picker",picker:{cname:"container",layout:"grid1",defaults:{labelWidth:"5em"},items:[{cname:"text",cid:"nameText",text:"name"},{cname:"text",cid:"typeText",text:"type"},{cname:"number",cid:"countNumber",text:"Count"}]},events:{collapse(e){this.value=Wb.encode(Wb.getValue(this.picker))},expand(e){Wb.setValue(this.picker,this.value?Wb.decode(this.value):{})}}},{cname:"picker",cid:"gridPicker",text:"Grid
+    Picker",picker:{cname:"grid",url:"demo-source?xaction=staffDict"}},{cname:"picker",editable:false,cid:"treePicker",text:"Tree
+    Picker",picker:{cname:"tree",url:"demo-source?xaction=listAreaTree",events:{itemclick(e,t,i){let
+    a=this.parent;if(e.leaf){a.setValue(e.data.area_name);a.collapse();a.focus()}}}},events:{collapse(e){this.value=this.picker.checkedNodes.pluck("text").join(",
+    ")}}},{cname:"picker",cid:"lazyPicker",lazyPicker:true,text:"Lazy Picker",picker:{cname:"container",padding:true,text:"Load
+    large data asynchronously",frame:true}},{cname:"date",shareView:false,text:"Picker
+    docked bottom",cid:"dockedPicker",dockedPicker:true}]},{cname:"title",title:"Others",cid:"othersTitle"},{cname:"container",layout:"grid",cid:"othersCt",frame:true,items:[{cname:"color",cid:"color1",placeholder:"Color"},{cname:"colorSelect",cid:"colorSelect1"},{cname:"boolSelect",cid:"boolSelect1",placeholder:"Bool
+    selector"}]},{cname:"title",title:"Coding",cid:"codingTitle"},{cname:"container",layout:"grid1",cid:"codingCt",frame:true,items:[{cname:"container",layout:"form-compact",cid:"demoCt",items:[{cname:"select",data:["item1","item2","item3"],cid:"localSelect",text:"Local
+    Select"},{cname:"select",loadOnce:true,text:"Remote Select",valueField:"code",url:"demo-source?xaction=staffRows",cid:"remoteSelect1",textField:"full_name",events:{beforeload(e,t,i){t.foo="bar"}}}]},{cname:"line",dashed:true,title:"Demonstrate",dimTitle:true,cid:"line1"},{cname:"container",layout:"form-compact",cid:"actionCt",items:[{cname:"button",cid:"addBtn",text:"Insert
+    Item",events:{click(e,t){app.localSelect.data.push({text:"New Item"})}}},{cname:"button",cid:"removeBtn",text:"Remove
+    Item",events:{click(e,t){app.localSelect.data.erase(0)}}},{cname:"button",cid:"expandLocalBtn",text:"Expand
+    Local Select",events:{click(e,t){app.localSelect.expand()}}},{cname:"button",cid:"expandRemoteBtn",text:"Expand
+    Remote Select",events:{click(e,t){app.remoteSelect1.query()}}}]}]}]});'
+hideInMenu: 'false'
+icon: combo
+img: ''
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

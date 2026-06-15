@@ -1,0 +1,40 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: 'Wb.make(app,{cname:"viewport",layout:"grid1",cid:"viewport1",items:[{cname:"label",cid:"mainLabel",cls:"w-title3",text:"Client
+    load module, js, mjs and css"},{cname:"title",title:"Open module",cid:"openModuleTitle"},{cname:"label",cid:"openModuleLabel",text:''Open
+    module in "main tab" or new window.''},{cname:"button",type:"primary",cid:"openModuleBtn",text:"Open
+    module",events:{click(e,t){Wb.open("m?xwl=admin/role")}}},{cname:"title",title:''Open
+    module as "normal type"'',cid:"openNormalModuleTitle"},{cname:"label",cid:"openNormalModuleLabel",text:''Open
+    module in "main tab" or new window, and allow the page to reload/refresh.''},{cname:"button",type:"primary",cid:"openNormalModuleBtn",text:''Open
+    module as "normal type"'',events:{click(e,t){Wb.openNormal("m?xwl=admin/perm")}}},{cname:"title",title:"Run
+    module and get panel",cid:"runModulePanelTitle"},{cname:"label",cid:"runModulePanelLabel",text:"Run
+    module and get it''s content to the container."},{cname:"button",type:"primary",cid:"runModulePanelBtn",text:"Run
+    module",events:{click(e,t){let n=app.runModulePanelCt;n.destroyAll();Wb.run({url:xpath+"/panel",success(e){n.add(e.main)}})}}},{cname:"container",minHeight:"10em",cid:"runModulePanelCt",frame:true},{cname:"title",title:"Run
+    module and get tab card",cid:"runModuleCardTitle"},{cname:"label",cid:"runModuleCardLabel",text:"Run
+    module and get it''s content to the new tab card."},{cname:"button",type:"primary",cid:"runModuleCardBtn",text:"Run
+    module",events:{click(e,t){let n;app.cardIndex??=1;n=app.runModuleCardTab.add({title:"Card
+    "+app.cardIndex++,icon:"card",layout:"fit"}).show();Wb.run({url:xpath+"/card",app:app,owner:n,cached:true,success(e){n.add(e.panel1);e.init()}})}}},{cname:"tab",minHeight:"10em",cid:"runModuleCardTab",frame:true},{cname:"title",title:"Invoke
+    window",cid:"invokeWindowTitle"},{cname:"label",cid:"invokeWindowLabel",text:"Invoke
+    a common window and pass callback function as parameter."},{cname:"button",type:"primary",cid:"invokeWindowBtn",text:"Invoke
+    window",events:{click(e,t){Wb.run({url:xpath+"/common-window",owner:"window1",success(e){e.add(3,5,((e,t)=>{Wb.tip("Total
+    value is: "+e);t.close()}))}})}}},{cname:"title",title:"Invoke single module",cid:"invokeSingleModuleTitle"},{cname:"label",cid:"invokeSingleModuleLabel",text:"Invoke
+    a single module and pass callback function as parameter."},{cname:"button",type:"primary",cid:"invokeSingleBtn",text:"Invoke
+    single module",events:{click(e,t){Wb.run({url:xpath+"/single-window",single:true,success(e){e.add(3,5,((e,t)=>{Wb.tip("Total
+    value is: "+e);t.close()}))}})}}},{cname:"title",title:"Dynamic load js/css",cid:"dynamicLoadJsCssTitle"},{cname:"label",cid:"dynamicLoadJsCssLabel",text:"Use
+    [Wb.load] method to dynamic load js/css resources. Set the [links] property of
+    the module node to static load js/mjs/css resources, you can drag js/mjs/css files
+    to the [links] property directly."},{cname:"button",type:"primary",cid:"dynamicLoadJsCssBtn",text:"Dynamic
+    load JS/CSS",events:{click(e,t){Wb.load(["wb/css/demo.css",{url:"wb/libs/echarts.js",async:true}],(e=>Wb.tipSucc("The
+    js/css resources has been successfully loaded.")))}}},{cname:"label",cid:"importMJSLabel",text:"Dynamic
+    import Javascript module."},{cname:"button",type:"primary",cid:"importMJSBtn",text:"Dynamic
+    import mjs",events:{click(e,t){}}}]});'
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

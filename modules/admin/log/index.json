@@ -1,0 +1,9 @@
+{
+  "title": "@systemLog",
+  "icon": "",
+  "img": "",
+  "hideInMenu": "true",
+  "items": [
+    "select.xwl"
+  ]
+}

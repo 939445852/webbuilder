@@ -1,0 +1,33 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: 'Wb.make(app,{cname:"viewport",layout:"grid1",cid:"viewport1",items:[{cname:"label",cid:"mainLabel",cls:"w-title3",text:"Label
+    and decorative components"},{cname:"title",title:"Label",cid:"labelTitle"},{cname:"container",layout:"form",cid:"labelCt",frame:true,items:[{cname:"label",cid:"textLabel",text:"Text
+    label"},{cname:"label",html:''HTML <span class="w-error-color">label</span>'',cid:"htmlLabel"},{cname:"label",href:"https://www.geejing.com",text:"Link
+    label",cid:"linkLabel",target:"_blank"}]},{cname:"title",title:"BoxLabel",cid:"boxLabelTitle"},{cname:"container",layout:"form",defaults:{width:"10em",height:"5em"},cid:"boxLabelCt",frame:true,items:[{cname:"boxLabel",cid:"centerLabel",frame:true,text:"Center"},{cname:"boxLabel",text:"Top
+    left",align:"topLeft",cid:"topLeftLabel",frame:true},{cname:"boxLabel",text:"Bottom
+    right",align:"bottomRight",cid:"bottomRightLabel",frame:true}]},{cname:"title",title:"Breadcrumb",cid:"breadcrumbTitle"},{cname:"container",layout:"form",cid:"breadcrumbCt",frame:true,items:[{cname:"breadcrumb",items:["Item1",{text:"Item2",id:"myId"},"Item3",123],cid:"breadcrumb1",events:{itemclick(t,e,i,n){Wb.tip("Clicked:
+    "+Wb.encode(t)+", index: "+e)}}}]},{cname:"title",title:"Decorative components",cid:"decTitle"},{cname:"container",layout:"grid1",cid:"decCt",frame:true,items:[{cname:"title",title:"Title",cid:"commonTitle"},{cname:"title",icon:"external-link",title:"Icon
+    title",cid:"iconTitle"},{cname:"title",icon:"map",title:"Title without line",line:false,cid:"noLineTitle"},{cname:"line",cid:"commonLine"},{cname:"line",title:"Line
+    Title",cid:"titleLine"},{cname:"line",dashed:true,title:"Dashed Line",dimTitle:true,cid:"dashedLine"},{cname:"line",icon:"favorite",title:"Icon
+    line",cid:"iconLine"},{cname:"fieldset",icon:"splitter",layout:"row",title:"Horizontal
+    split and fill",cid:"horizontalFieldSet",items:[{cname:"button",cid:"button1",text:"Button
+    1"},{cname:"divider",cid:"divider1"},{cname:"button",cid:"button2",text:"Button
+    2"},{cname:"button",cid:"button3",text:"Button 3"},{cname:"space",cid:"space1"},{cname:"button",cid:"button4",text:"Button
+    4"},{cname:"fill",cid:"fill1"},{cname:"button",cid:"button5",text:"Button 5"}]},{cname:"fieldset",icon:"splitter",layout:"column",width:"20em",title:"Vertical
+    split and fill",cid:"verticalFieldSet",height:"20em",items:[{cname:"button",cid:"button1",text:"Button
+    1"},{cname:"divider",cid:"divider1"},{cname:"button",cid:"button2",text:"Button
+    2"},{cname:"button",cid:"button3",text:"Button 3"},{cname:"space",cid:"space1"},{cname:"button",cid:"button4",text:"Button
+    4"},{cname:"fill",cid:"fill1"},{cname:"button",cid:"button5",text:"Button 5"}]}]},{cname:"title",title:"Component",cid:"compTitle"},{cname:"container",layout:"form",cid:"compCt",frame:true,items:[{cname:"component",border:true,padding:true,width:"25em",html:''Component
+    is a "div" element that can show HTML or serve as a placeholder for third-party
+    components.'',cls:"w-key-color",autoScroll:true,cid:"component1",height:"7em"},{cname:"component",html:"<div>Custom
+    script</div>"}]}]});'
+hideInMenu: 'false'
+icon: label
+img: ''
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

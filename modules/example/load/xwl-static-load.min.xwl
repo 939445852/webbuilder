@@ -1,0 +1,34 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.make(app,{cname:"viewport",layout:"row",cid:"viewport1",items:[{cname:"container",layout:"fit",width:"50%",cid:"container1",items:[_$004V7KE4QVEXM$_]},{cname:"splitter",cid:"splitter1"},{cname:"container",layout:"fit",flex:1,cid:"container2",items:[_$004V7KE4QVEXN$_]}]});
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  description: |-
+    Please note that since the xwl module can be recursively loaded,
+    its dependent js/css resources need to be explicitly loaded in the module's links property
+  links: '["wb/js/monaco.js"]'
+tags: ''
+text: module
+title: ''
+xwlMap:
+  004V7KE4QVEXM:
+    cid: userXwl
+    container: '({ padding: ''.5em'' })'
+    path: admin/user.xwl
+    ready: |-
+      // parentApp in user.xwl is app of this module
+      // parentContainer in user.xwl is Wb.Container of the user.xwl wrapper
+      scope.viewport1.title = 'User Module'; // same as app.userXwl.viewport1.title = 'User Module';
+      container.border = 1;
+  004V7KE4QVEXN:
+    cid: dbeXwl
+    container: '({ padding: ''.5em'' })'
+    path: admin/dbe.xwl
+    ready: |-
+      scope.viewport1.title = 'DBE Module';
+      container.border = 1;

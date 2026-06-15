@@ -1,0 +1,32 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Export files in any path
+  serverScript: |-
+    Wb.checkDemo();
+    function main() {
+      let files = Wb.getObject('files'), file = new Wb.File(files[0]), zip = Wb.getBool('zip'), len = files.length,
+        filename = Params.filename;
+
+      if (zip || len > 1 || file.isFolder) {
+        if (!filename) {
+          if (len == 1)
+            filename = file.isFile ? file.normalName : file.name;
+          else
+            filename = file.parent.name || 'file';
+        }
+        files = files.map(file => new File(file));
+        Wb.setContentType(filename + '.zip');
+        ZipUtil.zip(files, response.getOutputStream());
+      } else {
+        Wb.exportData(file, filename);
+      }
+    }
+    main();
+tags: ''
+text: module
+title: ''

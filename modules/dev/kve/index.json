@@ -1,0 +1,15 @@
+{
+  "title": "@kve",
+  "icon": "",
+  "img": "",
+  "hideInMenu": "true",
+  "items": [
+    "select-type.xwl",
+    "add-type.xwl",
+    "edit-type.xwl",
+    "del-types.xwl",
+    "select-list.xwl",
+    "save-list.xwl",
+    "util.mjs"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "title": "",
+  "icon": "",
+  "img": "",
+  "hideInMenu": "false",
+  "items": [
+    "get-dict.xwl",
+    "get-kv.xwl",
+    "export.xwl"
+  ]
+}

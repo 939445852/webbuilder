@@ -1,0 +1,28 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: 'Wb.apply(app,{autoShow:false,init(e,t,a){app.opinionsTitle.visible=app.opinions.visible=t=="handle";app.getData(e);Wb.log(a.data.node_name)},beforeAction(e,t){Wb.log("action:
+    "+e+", node name: "+t.data.node_name)},afterAction(e,t,a){let i=t.after;Wb.log("action:
+    "+e+", node name: "+a.data.node_name);if(i?.type=="done")Wb.tip(i.msg)},getData(e){Wb.ajax({url:xpath+"/../actions&xaction=selectHandleData",params:{flowId:e},json:true,success(e){let
+    t=0,{list:a,history:i,applicant:n}=e;app.grid1.addData(a);a.forEach((e=>{t+=e.amount}));Wb.setValue(app.main,{applicant:n,amount:t});createHistory();app.main.show();function
+    createHistory(){let e=app.opinionsHistory,t;e.cls="w-padding w-sized8";i.forEach(((a,i)=>{t=e.addEl("w-row
+    w-gap w-sub-color");if(i>0)t.cls="w-margin-top";t.addEl().textContent=a.process_time.dateValue.dateTimeText;t.addEl().textContent=a.display_name;e.addEl().textContent=a.opinions}))}}})}});Wb.make(app,{cname:"window",layout:"column",padding:true,visible:true,gap:true,icon:"money",width:"60em",title:"Reimburse
+    Form",autoScroll:true,cid:"main",height:"40em",items:[{cname:"displayField",cid:"applicant",text:"Applicant"},{cname:"displayField",cid:"amount",text:"Total
+    amount"},{cname:"title",title:"Details",cid:"detailsTitle"},{cname:"grid",minHeight:"8em",pagingBar:false,pageSize:-1,fields:{process_time:{type:"date"}},flex:1,cid:"grid1",columns:[{cname:"column",cid:"rowCol",rowNum:true},{cname:"column",cid:"dateCol",fieldName:"exp_date",text:"Date"},{cname:"column",width:-1,fieldName:"item_name",text:"Item
+    name",cid:"itemNameCol"},{cname:"column",width:"10em",fieldName:"amount",text:"Amount",cid:"amountCol"}]},{cname:"title",title:"Approval
+    opinions history",cid:"opinionsHistoryTitle"},{cname:"component",cls:"w-pre",autoScroll:true,maxHeight:"10em",cid:"opinionsHistory"},{cname:"title",title:"Approval
+    opinions",cid:"opinionsTitle"},{cname:"textArea",required:true,cid:"opinions",height:"6em"}]});'
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  serverScript: 'Wb.apply(app,{beforeAction(e,o){},afterAction(e,o){let r=o.beforeNode,s=Wb.getRecord("select
+    sid from wb_reimburse where flow_id={?flowId?}")?.[0],n=o.getNodeLabel(r);Wb.sync({tableName:"wb_ra_opinions",insert:{sid:Wb.getId(),reimburse_id:s,process_time:new
+    Date,approver_user_id:o.handleUser,node_text:n,opinions:"Action: "+e+"\nNode:
+    "+n+"\n"+Params.opinions}});if(e=="pass"&&o.completed){return{type:"done",msg:"Congratulations!
+    The process has been fully completed."}}}});'
+tags: ''
+text: module
+title: ''

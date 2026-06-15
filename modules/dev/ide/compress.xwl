@@ -1,0 +1,217 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Compress and protect source code
+  serverScript: |-
+    /**
+     * Compress files.
+     */
+    Wb.checkDemo();
+    const buildDate = new Date().textValue, cssConfigs = { restructure: false },
+      obfsConfigs = {
+        compact: true,
+        controlFlowFlattening: false,
+        deadCodeInjection: false,
+        debugProtection: false,
+        debugProtectionInterval: 0,
+        disableConsoleOutput: false,
+        identifierNamesGenerator: 'hexadecimal',
+        log: false,
+        numbersToExpressions: false,
+        renameGlobals: false,
+        selfDefending: false,
+        simplify: true,
+        splitStrings: false,
+        stringArray: true,
+        stringArrayCallsTransform: false,
+        stringArrayCallsTransformThreshold: 0.5,
+        stringArrayEncoding: [],
+        stringArrayIndexShift: true,
+        stringArrayRotate: true,
+        stringArrayShuffle: true,
+        stringArrayWrappersCount: 1,
+        stringArrayWrappersChainedCalls: true,
+        stringArrayWrappersParametersMaxCount: 2,
+        stringArrayWrappersType: 'variable',
+        stringArrayThreshold: 0.75,
+        unicodeEscapeSequence: false
+      },
+      jsConfigs = { compress: false, keep_fnames: true, mangle: true, parse: { bare_returns: true } };
+    let forceObfuscate = Wb.getConfig('sys.app.obfuscate'), client = Params.client;
+    /**
+     * Compress script
+     */
+    function compress() {
+      const copyrightFiles = ['wb', 'wb-client', 'wb-server', 'wb-docs', 'ide'];
+      let filename, script, minFile, isJs, isMjs, isCss, isXwl, path, object, module, text, obfuscate, modulePath,
+        libPath = new Wb.File(true, 'wb/libs').path, doCompress, rebuild = Wb.getBool('rebuild');
+
+      if (forceObfuscate == 'null')
+        forceObfuscate = null;
+      else
+        forceObfuscate = Wb.parseBool(forceObfuscate);
+      doCompress = file => {
+        path = file.path;
+        if (file.isFolder)
+          return;
+        if (path.startsWith(libPath))
+          return;
+        path = path.substr(Base.pathLen);
+        if (path == 'wb/docs/data.js')
+          return;
+        filename = file.name;
+        isJs = filename.endsWith('.js') && !filename.endsWith('.min.js');
+        isMjs = filename.endsWith('.mjs') && !filename.endsWith('.min.mjs');
+        isCss = filename.endsWith('.css') && !filename.endsWith('.min.css');
+        isXwl = filename.endsWith('.xwl') && !filename.endsWith('.min.xwl');
+        if (isJs || isMjs || isCss || isXwl) {
+          if (isJs)
+            filename = filename.slice(0, -3) + '.min.js';
+          else if (isMjs)
+            filename = filename.slice(0, -4) + '.min.mjs';
+          else if (isCss)
+            filename = filename.slice(0, -4) + '.min.css';
+          else
+            filename = filename.slice(0, -4) + '.min.xwl';
+          minFile = new Wb.File(file.parent, filename);
+          if (rebuild || file.lastModified > minFile.lastModified) {
+            notify(Str.compress + ' ' + path + '...');
+            try {
+              if (isJs || isMjs) {
+                text = file.text;
+                text = compressJs(text, text.includes('/* obfuscate */'));
+                if (copyrightFiles.some(name => name + '.min.js' == filename))
+                  text = '/*\n * WebBuilder Javascript Library\n * Copyright (c) Geejing, ' +
+                    'All Rights Reserved.\n * https://www.geejing.com\n * Build Date: ' + buildDate + '\n */\n' + text;
+                minFile.text = text;
+              } else if (isCss) {
+                if (!globalThis.csso)
+                  Wb.load('wb/libs/csso.js');
+                minFile.text = csso.minify(file.text, cssConfigs).css;
+              } else {
+                modulePath = file.modulePath;
+                if (modulePath) {
+                  object = file.object;
+                  module = Xwl.get(modulePath);
+                  obfuscate = object.properties.obfuscate == 'true';
+                  script = module.clientScript;
+                  object.properties.links = mergeLinks(object.properties.links, module.libList.toString());
+                  if (script)
+                    object.events = { initialize: compressJs(script, obfuscate) };
+                  script = object.properties.serverScript;
+                  if (script)
+                    object.properties.serverScript = compressJs(script, obfuscate);
+                  if (module.hasStateData)
+                    object.stateMap = toJSType(module.stateMap);
+                  if (module.hasModuleBind)
+                    object.moduleMap = toJSType(module.moduleMap);
+                  if (module.hasXwl)
+                    object.xwlMap = toJSType(module.xwlMap);
+                  delete object.items;
+                  minFile.object = object;
+                }
+              }
+            } catch (e) {
+              notify(Str.loadFailed.format(path) + '\n' + e?.toString(), true);
+              Wb.sleep(500);
+            }
+          }
+        }
+      };
+      Wb.File.appFolder.cascadeSelf(doCompress);
+    }
+
+    /**
+     * Convert HashSet, HashMap to it's JS types.
+     */
+    function toJSType(data) {
+      const XwlData = Java.type('com.wb.tool.XwlData');
+      let result = {};
+
+      data.forEach((k, v) => {
+        if (v instanceof XwlData)
+          v = Wb.applyValue({}, v);
+        result[k] = v;
+      });
+      return result;
+    }
+    /**
+     * Merge links @priv
+     * @param {Array} links1 links 1
+     * @param {Array} links2 links 2
+     * @return {Array} The merged links
+     */
+    function mergeLinks(links1, links2) {
+      let links = [], urls = [], url;
+
+      try {
+        links1 = links1 ? Wb.parse(links1) : [];
+      } catch (e) {
+        links1 = [];
+      }
+      try {
+        links2 = links2 ? Wb.parse(links2) : [];
+      } catch (e) {
+        links2 = [];
+      }
+      links1.pushAll(links2);
+      links1.forEach(object => {
+        if (Wb.isString(object))
+          url = object;
+        else
+          url = object.url;
+        if (!urls.includes(url)) {
+          urls.push(url);
+          links.push(object);
+        }
+      });
+      if (links.length > 0)
+        return Wb.encode(links);
+      else
+        return undefined;
+    }
+    /**
+     * Notify progress
+     * @param {String} text message
+     * @param {Boolean} failed whether to send failed flag
+     */
+    function notify(text, failed) {
+      let data = { client, text, type: 'notifyProgress' };
+
+      if (text !== true)
+        Wb.info(text);
+      if (failed)
+        data.failed = 1;
+      Wb.send(data, '$ide');
+    }
+    /**
+     * Compress script @priv
+     * @param {String} script Script content
+     * @param {Boolean} [obfuscate] whether to obfuscate
+     * @return {String} compressed script
+     */
+    function compressJs(script, obfuscate) {
+      if (forceObfuscate != null)
+        obfuscate = forceObfuscate;
+      if (obfuscate) {
+        if (!globalThis.JavaScriptObfuscator)
+          Wb.load('wb/libs/obfuscator.js');
+        return JavaScriptObfuscator.obfuscate(script, obfsConfigs).getObfuscatedCode();
+      } else {
+        if (!globalThis.Terser)
+          Wb.load('wb/libs/terser.js');
+        return Terser.minify(script, jsConfigs).code;
+      }
+    }
+    try {
+      compress();
+    } finally {
+      if (!Wb.getBool('finalUnmask'))
+        notify(true);
+    }
+text: module
+title: ''

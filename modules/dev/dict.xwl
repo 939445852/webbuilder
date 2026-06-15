@@ -1,0 +1,134 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: |-
+    Wb.apply(app, {
+      /**
+       * Load grid with search controls.
+       */
+      load() {
+        app.grid1.delayLoad({ comps: app.viewport1.tbar });
+      }
+    });
+hideInMenu: 'false'
+icon: dict
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _expanded: true
+    _icon: toolbar
+    cls: Wb.Toolbar
+    items:
+    - _expanded: false
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: app.grid1.dictAdd(xpath + '/add', Str.dictConfig);
+      properties:
+        cid: addBtn
+        icon: add
+        keys: Ctrl+E
+        text: '@Str.add'
+      text: addBtn
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: |-
+          let data = app.grid1.selection?.data;
+          app.grid1.dictEdit(xpath + '/edit', 'name', { oldName: data?.name, oldGroup: data?.group_name });
+      properties:
+        cid: editBtn
+        icon: edit
+        keys: Ctrl+J
+        text: '@Str.edit'
+      text: editBtn
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: app.grid1.removeRecords(xpath + '/del', 'name');
+      properties:
+        cid: delBtn
+        icon: delete
+        keys: Ctrl+D
+        text: '@Str.del'
+      text: delBtn
+    - _icon: divider
+      cls: Wb.Divider
+      properties:
+        cid: divider1
+      text: divider1
+    - _icon: text
+      cls: Wb.Text
+      events:
+        change: app.load();
+      properties:
+        cid: search
+        clearButton: 'true'
+        flex: '1'
+        maxWidth: 20em
+        minWidth: 5em
+        placeholder: '@Str.name'
+      text: search
+    - _icon: text
+      cls: Wb.Text
+      events:
+        change: app.load();
+      properties:
+        cid: searchGroup
+        clearButton: 'true'
+        flex: '1'
+        maxWidth: 20em
+        minWidth: 5em
+        placeholder: '@Str.groupName'
+      text: searchGroup
+    - _icon: text
+      cls: Wb.Text
+      events:
+        change: app.load();
+      properties:
+        cid: searchContent
+        clearButton: 'true'
+        flex: '1'
+        maxWidth: 20em
+        minWidth: 5em
+        placeholder: '@Str.content'
+      text: searchContent
+    properties:
+      cid: tbar
+      isProperty: 'true'
+    text: tbar
+  - _expanded: true
+    _icon: grid
+    cls: Wb.Grid
+    events:
+      itemdblclick: app.editBtn.fireEvent('click');
+    properties:
+      cid: grid1
+      columnsSortable: 'true'
+      keyFields: sid
+      keyWalking: name
+      multiSelect: 'true'
+      sorters: name
+      url: '@xpath + ''/select'''
+    text: grid1
+  properties:
+    autoContextMenu: 'true'
+    cid: viewport1
+    layout: fit
+  text: viewport1
+properties:
+  cid: module
+  links: |-
+    [
+      "wb/js/monaco.js"
+    ]
+  remark: Dictionary configuration utility
+tags: ''
+text: module
+title: '@dictConfig'

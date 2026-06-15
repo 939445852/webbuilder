@@ -1,0 +1,30 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Compress and protect source code
+  serverScript: 'Wb.checkDemo();const buildDate=(new Date).textValue,cssConfigs={restructure:false},obfsConfigs={compact:true,controlFlowFlattening:false,deadCodeInjection:false,debugProtection:false,debugProtectionInterval:0,disableConsoleOutput:false,identifierNamesGenerator:"hexadecimal",log:false,numbersToExpressions:false,renameGlobals:false,selfDefending:false,simplify:true,splitStrings:false,stringArray:true,stringArrayCallsTransform:false,stringArrayCallsTransformThreshold:.5,stringArrayEncoding:[],stringArrayIndexShift:true,stringArrayRotate:true,stringArrayShuffle:true,stringArrayWrappersCount:1,stringArrayWrappersChainedCalls:true,stringArrayWrappersParametersMaxCount:2,stringArrayWrappersType:"variable",stringArrayThreshold:.75,unicodeEscapeSequence:false},jsConfigs={compress:false,keep_fnames:true,mangle:true,parse:{bare_returns:true}};let
+    forceObfuscate=Wb.getConfig("sys.app.obfuscate"),client=Params.client;function
+    compress(){const e=["wb","wb-client","wb-server","wb-docs","ide"];let s,t,r,i,a,n,l,o,f,c,u,p,b,d=new
+    Wb.File(true,"wb/libs").path,g,m=Wb.getBool("rebuild");if(forceObfuscate=="null")forceObfuscate=null;else
+    forceObfuscate=Wb.parseBool(forceObfuscate);g=g=>{o=g.path;if(g.isFolder)return;if(o.startsWith(d))return;o=o.substr(Base.pathLen);if(o=="wb/docs/data.js")return;s=g.name;i=s.endsWith(".js")&&!s.endsWith(".min.js");a=s.endsWith(".mjs")&&!s.endsWith(".min.mjs");n=s.endsWith(".css")&&!s.endsWith(".min.css");l=s.endsWith(".xwl")&&!s.endsWith(".min.xwl");if(i||a||n||l){if(i)s=s.slice(0,-3)+".min.js";else
+    if(a)s=s.slice(0,-4)+".min.mjs";else if(n)s=s.slice(0,-4)+".min.css";else s=s.slice(0,-4)+".min.xwl";r=new
+    Wb.File(g.parent,s);if(m||g.lastModified>r.lastModified){notify(Str.compress+"
+    "+o+"...");try{if(i||a){u=g.text;u=compressJs(u,u.includes("/* obfuscate */"));if(e.some((e=>e+".min.js"==s)))u="/*\n
+    * WebBuilder Javascript Library\n * Copyright (c) Geejing, "+"All Rights Reserved.\n
+    * https://www.geejing.com\n * Build Date: "+buildDate+"\n */\n"+u;r.text=u}else
+    if(n){if(!globalThis.csso)Wb.load("wb/libs/csso.js");r.text=csso.minify(g.text,cssConfigs).css}else{b=g.modulePath;if(b){f=g.object;c=Xwl.get(b);p=f.properties.obfuscate=="true";t=c.clientScript;f.properties.links=mergeLinks(f.properties.links,c.libList.toString());if(t)f.events={initialize:compressJs(t,p)};t=f.properties.serverScript;if(t)f.properties.serverScript=compressJs(t,p);if(c.hasStateData)f.stateMap=toJSType(c.stateMap);if(c.hasModuleBind)f.moduleMap=toJSType(c.moduleMap);if(c.hasXwl)f.xwlMap=toJSType(c.xwlMap);delete
+    f.items;r.object=f}}}catch(e){notify(Str.loadFailed.format(o)+"\n"+e?.toString(),true);Wb.sleep(500)}}}};Wb.File.appFolder.cascadeSelf(g)}function
+    toJSType(e){const s=Java.type("com.wb.tool.XwlData");let t={};e.forEach(((e,r)=>{if(r
+    instanceof s)r=Wb.applyValue({},r);t[e]=r}));return t}function mergeLinks(e,s){let
+    t=[],r=[],i;try{e=e?Wb.parse(e):[]}catch(s){e=[]}try{s=s?Wb.parse(s):[]}catch(e){s=[]}e.pushAll(s);e.forEach((e=>{if(Wb.isString(e))i=e;else
+    i=e.url;if(!r.includes(i)){r.push(i);t.push(e)}}));if(t.length>0)return Wb.encode(t);else
+    return undefined}function notify(e,s){let t={client:client,text:e,type:"notifyProgress"};if(e!==true)Wb.info(e);if(s)t.failed=1;Wb.send(t,"$ide")}function
+    compressJs(e,s){if(forceObfuscate!=null)s=forceObfuscate;if(s){if(!globalThis.JavaScriptObfuscator)Wb.load("wb/libs/obfuscator.js");return
+    JavaScriptObfuscator.obfuscate(e,obfsConfigs).getObfuscatedCode()}else{if(!globalThis.Terser)Wb.load("wb/libs/terser.js");return
+    Terser.minify(e,jsConfigs).code}}try{compress()}finally{if(!Wb.getBool("finalUnmask"))notify(true)}'
+text: module
+title: ''

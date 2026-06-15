@@ -1,0 +1,16 @@
+{
+  "title": "",
+  "icon": "",
+  "img": "",
+  "hideInMenu": "false",
+  "items": [
+    "mail-sender.xwl",
+    "mail-sender",
+    "excel-report.xwl",
+    "excel-report",
+    "excel-form.xwl",
+    "excel-form",
+    "sql-to-excel.xwl",
+    "sql-to-excel"
+  ]
+}

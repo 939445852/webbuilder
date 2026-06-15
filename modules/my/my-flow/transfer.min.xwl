@@ -1,0 +1,12 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Approval workflow transfered
+  serverScript: function main(){const n=Wb.load("./util.mjs");n.doAction("transfer")}main();
+tags: ''
+text: module
+title: ''

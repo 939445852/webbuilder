@@ -1,0 +1,41 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: 'Wb.make(app,{cname:"codeEditor",readonly:true,wrapBorder:0,value:"//Output
+    to the IDE devtools console associated with the specified user.\n//These methods
+    are recommended to show logging information\nWb.log(''log''); //Output log message
+    to IDE devtools console of current user, if current user is not available then
+    output to the anonymous user(Config item: \"sys.ss.anonymousDebugUser\")\nWb.log(''admin-log'',
+    \"admin\"); //Output log message to IDE devtools console of admin user\nWb.log(''all-log'',
+    true); //Output log message to IDE devtools console of all users\nWb.info(''info'');\nWb.info(''all-info'',
+    true);\nWb.warn(''warn'');\nWb.warn(''all-warn'', true);\nWb.error(''error'');\nWb.error(''all-error'',
+    true);\nWb.table([{ a: 1, b: 2, c: 3 }, { a: 4, b: 5, c: 6 }]); //Output table
+    to IDE devtools console of the current user\nWb.table([{ a: 1, b: 2, c: 3 }, {
+    a: 4, b: 5, c: 6 }], true); //Output table to IDE devtools console of all users\nWb.debug(''debug'');\nWb.debug(''all-debug'',
+    true); //Output \"debug\" to IDE devtools console of all users\n\n//Output to
+    the IDE devtools console and the server file logs.\nWb.recordTrace(''trace'');\nWb.recordDebug(''debug'');\nWb.recordInfo(''info'');\nWb.recordWarn(''warn'');\nWb.recordError(''error'');\nWb.recordExcept(new
+    Classes.NullPointerException(''exception''));\nWb.recordFatal(''fatal'');\n\n//Output
+    to the IDE devtools console and the server db logs.\nWb.recordInfox(''info'',
+    ''myInfo'');\nWb.recordWarnx(''warn'');\nWb.recordErrorx(''error'');\nWb.recordExceptx(new
+    Classes.NullPointerException(''exception''));\n\n//Output to the server logs\nLogUtil.trace(''trace'');\nLogUtil.trace(''trace'',
+    request); //Logs object as trace and outputs to the client IDE devtools console
+    associated with the specified session or request.\nLogUtil.debug(''debug'');\nLogUtil.info(''info'');\nLogUtil.warn(''warn'');\nLogUtil.error(''error'');\nLogUtil.except(new
+    Classes.NullPointerException(''exception''));\nLogUtil.fatal(''fatal'');\n\n//Output
+    to the server db\nLogxUtil.info(''info'');\nLogxUtil.info(''info'', ''type'');\nLogxUtil.info(''info'',
+    ''type'', request); //Logs object as information and outputs to the client IDE
+    devtools console associated with the specified session.\nLogxUtil.warn(''warn'');\nLogxUtil.error(''error'');\nLogxUtil.except(new
+    Classes.NullPointerException(''exception''));\n\n//Output to the remote debugging
+    devtools console\nconsole.log(''log'');\nconsole.info(''info'');\nconsole.debug(''debug'');\nconsole.warn(''info'');\nconsole.error(''error'')\nconsole.assert(1
+    == 2, ''not equal'');\nconsole.clear();\nconsole.count();\nconsole.countReset();\nconsole.group();\nconsole.groupEnd();\nconsole.time();\nconsole.timeLog();\nconsole.timeEnd();\n\n//Others\nSystem.out.println(''msg'');
+    //Output to the system console\nprint(''msg''); //Output to the system console
+    and the remote debugging devtools console",cid:"codeEditor1",full:true});'
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  links: '["wb/js/monaco.js"]'
+tags: ''
+text: module
+title: ''

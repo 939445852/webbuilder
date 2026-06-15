@@ -1,0 +1,189 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Edit database source
+  serverScript: |-
+    function main() {
+      let file = new Wb.File(true, 'wb/system/db/source.json'), configs = file.object, data, name = Params.name;
+
+      /**
+       * Sets the missing Boolean members in the data object. @priv
+       * @param {String} name The data source name.
+       * @param {Object} data Data object.
+       */
+      function setBoolMembers(name, data) {
+        const members = {
+          cacheState: true, autoCommitOnReturn: true, rollbackOnReturn: true, testOnBorrow: true,
+          logExpiredConnections: true, lifo: true
+        };
+        Wb.each(members, (k, v) => {
+          data[k] ??= v;
+        });
+      }
+      /**
+       * Determines whether the name is valid.
+       */
+      function checkName(name) {
+        if (configs[name])
+          Wb.raise(Str.alreadyExists.format(name));
+      }
+
+      /**
+       * Operate data source.
+       */
+      function operateDataSource(mode) {
+        Wb.checkDemo();
+        const BasicDataSource = Java.type('org.apache.commons.dbcp2.BasicDataSource').class;
+        const DefaultPooledObjectInfo = Java.type('org.apache.commons.pool2.impl.DefaultPooledObjectInfo').class;
+        let dataSource, poolField, objectField, pool, object, conn, id, findId = Params.id, items = [];
+
+        dataSource = DataSource.getSource(name);
+        poolField = BasicDataSource.getDeclaredField('connectionPool');
+        poolField.setAccessible(true);
+        objectField = DefaultPooledObjectInfo.getDeclaredField('pooledObject');
+        objectField.setAccessible(true);
+        pool = poolField.get(dataSource);
+        if (pool == null) {
+          dataSource.getConnection().close(); // load lib
+          pool = poolField.get(dataSource);
+        }
+        if (mode == 'clear') {
+          pool.clear();
+          return;
+        }
+        pool.listAllObjects().forEach(item => {
+          object = objectField.get(item);
+          conn = object.getObject();
+          id = conn.hashCode();
+          if (mode == 'close' && id == findId) {
+            conn.close();
+            return;
+          }
+          if (mode == 'get') {
+            items.push({
+              id,
+              borrowedCount: object.getBorrowedCount(),
+              createTime: new Date(object.getCreateTime()),
+              lastBorrowTime: new Date(object.getLastBorrowTime()),
+              lastReturnTime: new Date(object.getLastReturnTime()),
+              lastUsedTime: new Date(object.getLastUsedTime()),
+              isClosed: conn.isClosed()
+            });
+          }
+        });
+        if (mode == 'get') {
+          items.mixSort('id');
+          return {
+            pool: {
+              maxTotal: dataSource.getMaxTotal().intText, numActive: dataSource.getNumActive().intText,
+              numIdle: dataSource.getNumIdle().intText, createdCount: pool.getCreatedCount().intText,
+              destroyedCount: pool.getDestroyedCount().intText, borrowedCount: pool.getBorrowedCount().intText,
+              numWaiters: pool.getNumWaiters().intText
+            }, items
+          };
+        }
+      }
+
+      /**
+       * Service handler.
+       */
+      function service() {
+        switch (Params.type) {
+          case 'list':
+            //Get all database list
+            Wb.send(Wb.load('wb/ss/dbe.mjs').getDbNames(true));
+            break;
+          case 'get':
+            //Get details
+            data = configs[name];
+            data.text = name;
+            setBoolMembers(name, data);
+            data.password &&= Wb.UserUtil.protectedText;
+            Wb.send(data);
+            break;
+          case 'add':
+            //Add new database
+            checkName(name);
+            data = { driverClassName: 'driverClassName', url: 'url' };
+            configs[name] = data;
+            file.text = Wb.encodePretty(configs);
+            DataSource.setSource(name, Wb.toJava(data));
+            break;
+          case 'delete':
+            if (name == Wb.getConfig('sys.db.defaultSource'))
+              Wb.raise(Str.cannotDelete.format(name));
+            delete configs[name];
+            file.text = Wb.encodePretty(configs);
+            DataSource.removeSource(name);
+            break;
+          case 'copy':
+            //Copy database
+            let newName = Params.newName, dbConfigs;
+            checkName(newName);
+            dbConfigs = configs[newName] = configs[name];
+            file.text = Wb.encodePretty(configs);
+            DataSource.setSource(newName, Wb.toJava(dbConfigs));
+            break;
+          case 'save':
+            //Save configs
+            let oldName = Params.oldName, deferName = oldName != name, newPwd, oldPwd;
+            if (deferName)
+              checkName(name);
+            data = Wb.decode(Params.data);
+            delete data.text;
+            newPwd = data.password;
+            if (newPwd) {
+              oldPwd = configs[name]?.password;
+              if (newPwd == Wb.UserUtil.protectedText)
+                newPwd = oldPwd;
+              else
+                newPwd = newPwd ? '$$:' + Encrypter.encrypt(newPwd, Config.key) : '';
+              data.password = newPwd;
+            }
+            configs[name] = data;
+            if (deferName)
+              delete configs[oldName];
+            file.text = Wb.encodePretty(configs);
+            DataSource.setSource(name, Wb.toJava(data));
+            if (deferName) {
+              DataSource.removeSource(oldName);
+              if (oldName == Config.defaultSource)
+                Wb.setConfig('sys.db.defaultSource', name);
+            }
+            if (name == Config.defaultSource) {
+              DataSource.defaultDataSource = DataSource.getSource(name);
+            }
+            break;
+          case 'test':
+            Wb.getConn(name).close();
+            break;
+          case 'property':
+            Wb.send(operateDataSource('get'));
+            break;
+          case 'clear':
+            operateDataSource('clear');
+            break;
+          case 'close':
+            operateDataSource('close');
+            break;
+          case 'abort':
+            operateDataSource('abort');
+            break;
+        }
+      }
+      //Start execute
+      file.lock();
+      try {
+        service();
+      } finally {
+        file.unlock();
+      }
+    }
+    main();
+tags: ''
+text: module
+title: ''

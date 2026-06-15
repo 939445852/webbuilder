@@ -1,0 +1,14 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Set block actions
+  serverScript: let actions={file:new Wb.File(Base.path,Wb.getConfig("sys.file.blockedIPs")),getIPs(){var
+    e=this.file,s;if(e.exists){s=e.text}else{s=""}Wb.send(s)},save(){var e=this.file,s=Wb.payload;if(s)e.text=s;else
+    if(e.exists)e.remove();this.clear()},clear(){Base.reloadBlockedIPs()}};actions[Params.xaction]();
+tags: ''
+text: module
+title: ''

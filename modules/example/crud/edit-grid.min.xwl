@@ -1,0 +1,19 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.apply(app,{onChange(){app.saveBtn.disabled=false},save(e){app.grid1.sync({url:xpath+"/../actions&xaction=save",success(){app.saveBtn.disabled=true;e?.()},failure(e){if(e?.toLowerCase().includes("wb_staff_code"))Wb.error(Str.duplicate.format(Str.code))}})}});Wb.make(app,{cname:"viewport",layout:"fit",cid:"viewport1",tbar:{cname:"toolbar",items:[{icon:"add",text:Str.add,keys:"Ctrl+E",cid:"addBtn",events:{click(e,t){app.grid1.addRecord()}}},{icon:"delete",text:Str.del,keys:"Ctrl+D",cid:"delBtn",events:{click(e,t){app.grid1.delRecords()}}},{cname:"divider",cid:"divider1"},{icon:"save",disabled:true,text:Str.save,keys:"Ctrl+S",cid:"saveBtn",events:{click(e,t){app.save()}}},{cname:"divider",cid:"divider2"},{cname:"text",minWidth:"5em",clearButton:true,placeholder:Str.search,flex:1,cid:"search",maxWidth:"20em",events:{change(e,t,a){app.grid1.delayLoad({comps:app.search})}}}]},items:[{cname:"grid",columnsSortable:true,sorters:"code",editable:true,url:xpath+"/../actions&xaction=select",cid:"grid1",multiSelect:true,columns:[{cname:"column",cid:"rowNumCol",rowNum:true},{cname:"column",width:"5em",fieldName:"code",text:"Code",cid:"codeCol",editor:{cname:"text",maxLength:5,required:true}},{cname:"column",width:"13em",fieldName:"full_name",text:"Full
+    name",cid:"fullNameCol",editor:{cname:"text",required:true}},{cname:"column",cid:"usernameCol",fieldName:"user_name",text:"Username",editor:{cname:"select",bindField:"user_id",forceSelect:true,valueField:"sid",required:true,url:xpath+"/../actions&xaction=selectUsers",textField:"user_name"}},{cname:"column",width:"20em",fieldName:"dept_name",text:"Department",render(e,t,a,d){Wb.Column.addSubText(d,e,t.dept_code)},cid:"deptCol",editor:{cname:"select",valueMap:{sid:"dept_id",dept_name:"dept_name",dept_code:"dept_code"},treePicker:true,required:true,url:"m?xwl=sys/dialog/dept-selector/select",subtextField:"dept_code",textField:"dept_name"}},{cname:"column",cid:"birthDateCol",fieldName:"birth_date",text:"Birth
+    date",editor:{cname:"date"}},{cname:"column",width:"6em",fieldName:"gender",text:"Gender",keyValue:true,cid:"genderCol",editor:{cname:"select",keyName:"gender"}},{cname:"column",width:"6em",fieldName:"height",text:"Height",cid:"heightCol",editor:{cname:"number",minValue:0,decimalCount:0,maxValue:999}},{cname:"column",width:"18em",fieldName:"email",text:"Email",cid:"emailCol",editor:{cname:"text",valueType:"email"}},{cname:"column",width:"9em",fieldName:"salary",text:"Salary",type:"usd",cid:"salaryCol",editor:{cname:"number",decimalCount:2}},{cname:"column",width:"15em",fieldName:"cv",sortable:false,text:"CV",cid:"cvCol",editor:{cname:"textArea",maximizable:true}},{cname:"column",width:"15em",fieldName:"photo",sortable:false,text:"Photo",render(e,t,a,d){if(e)return
+    e instanceof File?e.name:"(photo)"},cid:"photoCol",editor:{cname:"fileInput",download:true,accept:".png"}}],events:{itemchange(e,t){app.onChange()},beforeedit(e,t,a,d){if(t.fieldName=="photo"){let
+    d=t.render.call(e,a.value,e.data);if(d)a.value=d}},beforeload(e,t,a){let d=this,i=app.saveBtn;if(i&&!i.disabled){Wb.choose(Str.modifiedConfirm.format(Str.list),(e=>{if(e=="yes")app.save((e=>d.reload()));else
+    if(e=="no"){i.disabled=true;d.reload()}}));return false}},editing(e,t,a){app.onChange()}}}]});Wb.onUnload(parentContainer,(()=>{if(!app.saveBtn.disabled)return
+    false}));
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

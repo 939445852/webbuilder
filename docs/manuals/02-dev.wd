@@ -1,0 +1,581 @@
+##System Module.Development Suite.Development Environment
+The Integrated Development Environment (IDE) is the main module for application development. It allows you to complete all development tasks for application features, including design, coding, and debugging. On the system {#%Homepage|home}, click [Development Suite] -> [{#%Development Environment|ide}] in the left function menu to enter the WebBuilder IDE.
+The IDE consists of 4 main parts. The top section is the menu and toolbar, used to perform operations on the context or selected content. The left section is the [File Explorer], used to display and manage files/directories. The client area displays opened files for viewing or editing. The right section is the tool panel, which contains the component tree; this tree is only visible when a module file is opened. The bottom section is the multi-function view, used to view and manage context-related content.
+#File Explorer
+The left side of the IDE is the [File Explorer], which displays the structure of all files/directories of modules, applications, and the operating system in a tree structure. Module files/directories displayed in the active color (usually blue) are hidden. The [File Explorer] tree supports key navigation; pressing a key jumps to files/directories starting with the corresponding letter.
+The [File Explorer] tree typically has 3 default root nodes:
+-Modules: The module directory, located at [wb/modules] under the application directory. The main title of file/directory nodes displayed under the module node is the file/directory name, and the subtitle is the title.
+-Application: The root directory of the current application.
+-System: The operating system directory.
+In the [File Explorer], you can open specified files by double-clicking nodes, and you can also copy, cut, paste, and drag files/directories. Click the [Property] button on the toolbar to view file/directory properties or modify attributes such as the name.
+The top of the [File Explorer] has the following tool buttons:
+-Link with editor: Links the file pointed to by the node with the opened file. When switching files in the client area file tabs, the corresponding file node in the browser is automatically selected.
+-Search: Quickly retrieve or jump to a specified file. You can search by the absolute path of the file, the relative path based on the application directory, or the relative path based on the module directory. Paths starting with "m?xwl=" represent module files.
+-Sort Alphabetically: All files/directories under the module directory are sorted by filename. By default, they are displayed in the configured order.
+-Refresh: Refreshes the directory tree in the [File Explorer].
+#Client Area File Tabs
+The client area tabs display all opened files. Different types of files are opened by their corresponding editors: for example, xwl files by the module editor, js files by the script editor, and image files by the image editor.
+#Component Tree
+When a module file is opened, the component tree is displayed on the right side of the module file. Components in the tree are structured according to the configuration in {#%Control Manager|controls}. Double-clicking a component or dragging it to the component tree in the module editor adds the component to the module. The component tree supports key navigation; pressing a key jumps to components starting with the corresponding letter.
+#Multi-Function View
+The multi-function view is a tabbed panel for viewing and managing context-related content.
+The [Markers] tab displays a list of code hints, warnings, or error entries. Double-clicking an entry jumps to the corresponding code.
+The [Debug] tab displays a list of module files waiting for backend code debugging. It is only valid for modules containing "serverScript". See the following paragraphs for debugging instructions. The [Debug] tab contains the following tool buttons:
+-Run: Runs the selected module.
+-Resume: Resumes execution of the module waiting for debugging.
+-Terminate: Stops the execution of the debugging module.
+-Disable: Disables the debugging function. The module will not wait for debugging when running after being disabled.
+-Enable: Enables the disabled debugging function. The module will wait for debugging when running after being enabled.
+-Delete: Clears the debugging status of the module file, restoring its normal runtime state.
+-Copy the URL and open a new window: Copies the URL of the debugging page and opens a new window for further debugging. Double-clicking a debugging module entry performs this function. Note that the URL cannot be copied without clipboard access permissions. For security reasons, browsers do not allow direct opening of debugging windows, so you need to manually copy the debugging URL from the window's address bar to open the debugging window.
+-Copy URL: Copies the URL of the debugging page to the clipboard. Note that the URL cannot be copied without clipboard access permissions.
+-Refresh: Refreshes the list of debugging module files.
+The [Search] tab displays a list of all searched content entries. Double-clicking an entry opens the file and jumps to the content pointed to by the entry.
+The [Threads] tab displays all threads in the current JVM process.
+The [AI Gen] tab is used to automatically generate files via AI. On the left is the history message list, in the middle is the details of the selected message, and on the right is the text to be sent to AI. The [AI Gen] tab contains the following tool buttons:
+-Run: Send the text to AI and generate files.
+-Add: Add a new dialog.
+-Delete: Delete the selected dialogs.
+Before using AI, configure these items in {#%System Config|config}: "sys.ai.model", "sys.ai.inputPath", "sys.ai.outputPath" and other "sys.ai.*" values.
+Example:
+
+     // sys.ai.model
+     {
+      "url": "https://ark.cn-beijing.volces.com/api/v3/chat/completions",
+      "timeout": 1200000,
+      "header": {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer keyId"
+      },
+      "method": "POST",
+      "data": {
+        "model": "doubao-seed-2-0-code-preview-260215",
+        "temperature": 0,
+        "top_p": 0.35,
+        "stream": false,
+        "max_completion_tokens": 128000
+      }
+     }
+     // sys.ai.inputPath
+     data.messages
+     // sys.ai.outputPath
+     choices[0].message.content
+
+For AI example, see {#%AI Automatically Generates|ide?openModule=example/basic/ai-gen.xwl}
+#File Menu
+Add File/Directory:
+Click the [Add File] or [Add Folder] button to create a new file/directory in the selected directory or the directory of the currently selected file. Possible properties of files/directories include:
+-Name: The name of the file or directory. When adding a file in the module directory, the default extension is ".xwl" (module file) if not specified. Specify the extension for other file types.
+-Title: The title of the file or directory, valid only in the module directory. When displaying files/directories in modules such as the homepage, the title replaces the file/directory name. Titles starting with "@" indicate displaying corresponding text based on the current language; see {#Internationalization Development|System Module.Development Suite.Internationalization Development} for details.
+-Icon: The vector icon of the file or directory, valid only in the module directory.
+-Image Icon: The image icon of the file or directory, valid only in the module directory. Image icon files are usually located in the [wb/images] directory.
+-URL Shortcut: Specifies a short URL path for the module, valid only for module files. For example, setting it to [my-module] allows quick access to the module via a URL like [localhost:8080/[app]/my-module] (the app name can be omitted when deployed to the application root directory). Note that when setting a multi-level path, it is usually only applicable to pure backend modules. Setting multi-level shortcuts for frontend modules may cause path errors in loading system resource files.
+-Parameters: Parameters passed when opening the module, valid only for module files. Parameters are configured in JSON format, e.g., {frame: true, newWin: true}. [frame] indicates whether to open in an iframe, [newWin] indicates whether to open in a new window. For other parameters, see the parameter description of the {#Wb.run} method.
+-Hide in the Menu: Sets whether the module is hidden in the function menu list of [{#%Homepage|home}], valid only for module files. Usually, pure backend function modules can be hidden to avoid being directly opened by clicking.
+-Insert: When clicking the Insert button, the file/directory is inserted before the selected node, valid only in the module directory.
+Generator:
+The generator is used to automatically generate module files.
+Create a Query Module, which automatically generates a query-oriented module based on database tables, views, procedures, or arbitrary SQL selected by the user. In the General group of the dialog box, enter the information for the created module file. The Dictionary configuration is the group name of the {#%Dictionary Information|dict} corresponding to the data; multiple group names are separated by commas. "true" means using dictionaries without a specified group name. The dictionary is used to set the automatically generated field titles, types, formats, etc. The Data group contains the query data source, which can be an object (table, view, procedure) or SQL. The "Use Wb.sql" option means using the "Wb.sql" method to return all data (e.g., when the query result needs to return multiple result sets or multiple output parameters). In this case, the generated module will return all data in JSON format instead of generating a grid, allowing developers to customize data display using the returned JSON data. When using SQL, the SQL query parameters need to be manually edited, e.g., the following SQL:
+
+     $sql:select * from wb_user where ({?name?} is null or user_name={?name?}) and ({?timestamp|date?} is null or create_date={?timestamp|date?})
+
+Create a CRUD Module, used to generate add, delete, update, and query functions based on a table. Developers can extend development based on the automatically generated CRUD module.
+Other Functions:
+-Open: Opens all selected files.
+-Import: Imports files to the currently selected directory. You can also directly drag files from the operating system file manager to the [File Explorer] tree to import files.
+-Import and Unzip: Imports files to the currently selected directory and unzips them. Only applicable to ".zip" files; other file types are only imported.
+-Export: Exports the currently selected file/directory. If the selected node is a directory or multiple files, they are automatically exported as a compressed file.
+-Export and zip: Exports the currently selected file/directory as a compressed file.
+-Check In: Checks in the selected file from the file system to the version database.
+-Check Out: Checks out the specified file from the version database to the file system.
+-Save: Saves the currently modified file.
+-Save All: Saves all modified files.
+-Rename: Renames the selected file.
+-Refresh: Refreshes the directory tree in the [File Explorer].
+-Property: Views or edits the relevant properties of the file/directory.
+#Edit Menu
+-Cut: Cuts the selected content. The content can be text, files, nodes, or other selected items. Non-text content is cut to a virtual clipboard.
+-Copy: Copies the selected content. See the [Cut] description for details.
+-Paste: Pastes the cut or copied content to the current object. See the [Cut] description for details.
+-Delete: Deletes the selected content. See the [Cut] description for details.
+#Navigate Menu
+-Open File Menu: Expands the file menu for quick keyboard selection.
+-Goto File Explorer: Moves focus to the [File Explorer].
+-Goto File Tab: Moves focus to the file tab bar in the client area.
+-Goto View Tab: Moves focus to the tab bar of the bottom multi-function view.
+-Goto Tools Panel: Moves focus to the right tool panel, valid only when the panel is visible.
+-Back: Navigates back to the previous file tab or cursor position in the code editor.
+-Forward: Navigates forward to the file tab or cursor position before the back operation.
+-Main Card Back: Navigates back to the previous file tab.
+-Main Card Forward: Navigates forward to the file tab before the back operation.
+-Sub Card Back: Navigates back to the previous sub-tab. Sub-tabs include module editor tabs.
+-Sub Card Forward: Navigates forward to the sub-tab before the back operation. Sub-tabs include module editor tabs.
+-Regroup Tabs: Automatically arranges the order of file tabs, including placing source files and runtime pages of the same module adjacent to each other.
+-Toggle Source/Page: Switches between the template source file and runtime page.
+-Goto Design Page: Switches the current module file's sub-tab to the design page. Valid only when a module file is opened.
+#Search Menu
+Search Text: Searches for a specified string in files of a specified type within a specified directory. Search results are displayed in the bottom multi-function view. Double-clicking a search result entry opens the file and jumps to the content. A dialog box is displayed during the search, with entries explained as follows:
+-Search: The content to search for.
+-File Type: The type of files to search in the specified directory.
+-Path: The search scope. [Application] searches the entire application directory, [Module] searches the [wb/modules] directory, [Selection] searches the selected directory, [Current] searches the currently opened file. Note that the system automatically skips third-party library directories and compressed files during the search.
+-Options: [Case Sensitive] makes the search case-sensitive, [Regular Expression] treats the search content as a regular expression, [Whole Word] performs full word matching, [Include libs Directory] includes the third-party library directory [wb/libs] in the search.
+Replace: Replaces a specified string within a specified directory. A dialog box is displayed during replacement, with entries explained as follows:
+-Replace To: The content to replace with.
+-For other entries, see the search dialog description.
+Search File: Searches for files with a specified filename in the application directory.
+Search TODO: Searches for keywords marked as TODO within a specified directory.
+Search URL: Searches for modules whose URL shortcuts contain a specified name.
+None Login Modules: Searches for all modules accessible without login, i.e., modules where the module's loginRequired property is false.
+#Run Menu
+-Run: Runs the current module or other files.
+-Run in a New Window: Runs in a new window. In an opened file, hold Ctrl and double-click the file's tab to open the file in a new window; hold Ctrl+Shift and double-click the tab to open the file in a new window and jump to the page immediately.
+-Toggle Debugging Status: Toggles the debug state of the file selected in the [File Explorer]. Valid only when selecting a module file within the application. If set to debug state, the module will wait for debugging when running. See the debugging chapter for using the debugging function.
+-Reload System: WebBuilder has a caching mechanism. This function refreshes cached data. After manually modifying certain system files or system database tables, use this function to apply changes immediately.
+#Tools Menu
+-Database Explorer: Opens the [Management Tools] -> [{#%Database Explorer|dbe}] module.
+-Dictionary Config: Opens the [Development Suite] -> [{#%Dictionary Config|dict}] module.
+-Key Value Editor: Opens the [Development Suite] -> [{#%Key Value Editor|kve}] module.
+-Create UI Theme: Generates CSS files based on 'wb_tpl.css' and theme files.
+-Compress Script: Compresses all js, css, mjs, and xwl files. If a file contains the "/* obfuscate */" keyword or the module file's "module.obfuscate" property is true, an obfuscated compressed version is generated. These compressed files are enabled when running in optimized mode (when the "sys.optimal" configuration item is true).
+#Help Menu
+-Documents: Opens the [Development Suite] -> [{#%Documentation|docs}] module.
+-Create Docs: Regenerates documentation and components in the system component library. Also refer to {#Writing and Reading Documentation|System Module.Development Suite.Writing and Reading Documentation}.
+-About: Displays information about this software.
+#Module Editor
+The module editor is a tool for editing module files, consisting of tabs such as [Design], [Source], and Scripts. The right side of the [Design] tab is the component tree, and the left side is the object inspector. The [Source] tab displays the pseudo-source code of the module, which is not directly editable and is mainly used to view the entire module's code. Clicking property/event links in the source code jumps to the corresponding values in the object inspector.
+The component tree displays all client-side components contained in the module hierarchically. Each node represents a component, with the node name being the component's "cid" property. Important properties/events of the component are displayed on the right side of the node; clicking them jumps to the property/event. Adding a node under another node has two states: as a subordinate component or as a property (the property name is set by the "cid" property). Whether it acts as a property is determined by the child node's {#Wb.Configurable.isProperty} property. Child nodes acting as properties are displayed in the active color (blue) by default. By default, added child nodes act as subordinate components. For example, adding a toolbar to a panel: by default, the toolbar is a subordinate component of the panel. If the toolbar's "isProperty" is set to true and "cid" is set to "tbar", the toolbar becomes the "tbar" property of the panel. Single or multiple nodes in the component tree can be cut, copied, pasted, deleted, or dragged simultaneously. Selecting the root node (module node) cuts/copies the entire module. Child nodes under the same parent node cannot have duplicate names (cid property), but child nodes under different parents can. Duplicate-named nodes in the module are highlighted. The component tree supports key navigation; pressing a key jumps to nodes starting with the corresponding letter.
+The object inspector displays the properties and events of the component selected in the component tree. When multiple components are selected, only common properties/events are displayed. If property/event values are inconsistent, their names are displayed in an error color (usually red). Key and important properties/events are highlighted. Hold Ctrl and click a property/event name to quickly view the corresponding API documentation. When focus is on the object inspector, pressing keys quickly locates specified properties/events (e.g., pressing "cid" jumps to the cid property). Pressing the first letter of an event name twice (e.g., "dd") locates events starting with "d". The top toolbar of the object inspector provides shortcut buttons for common functions:
+-Back: Navigates back to the previously selected component node.
+-Forward: Navigates forward to the component node before the back operation.
+-Property: Jumps to the first property.
+-Event: Jumps to the first event.
+-Show Header: Displays the table header for adjusting the width of property name and value columns.
+-Show Own Members: Displays only properties/events inherent to the component, excluding inherited ones.
+-Show Key Members: Displays important and commonly used properties/events.
+-Show Valued Members: Displays only properties/events with values, excluding empty ones.
+Different properties have different value editors; values can be set by input or selecting dropdown items. Dragging a file from the [File Explorer] to a property quickly adds the file's relative URL or path to the property; hold Shift to add the full URL or path. When editing events or properties linked to the script editor, the script editor can be displayed via a dropdown, or you can click the trigger button or double-click the value to edit the property/event in a new tab.
+Prefixing a property value with "@" explicitly specifies the property as an expression value. For example, setting the title property to @ok means using the value of the ok variable as the title.
+Tool buttons related to the module editor:
+-UI Designer: Opens the UI Designer for visual design of the selected container node. Valid when a container node is selected.
+-Rebuild Design: Refreshes the visual interface of the UI Designer.
+-Add Components: Automatically adds components by selecting database tables, views, procedures, SQL, or xwl modules. When a dictionary is set, properties configured in the dictionary are directly referenced. When a module is selected, parameters represent the parameter object passed to the module in JSON format.
+-Add Column: Automatically adds grid columns by selecting database tables, views, procedures, SQL, or xwl modules. The operation method is the same as [Add Component].
+-Clear Values: Clears all property/event values of the selected component.
+-Goto Design Page: Switches to the module editor's design page.
+-Node link to Control: Automatically selects the component in the component tree when a component node is selected in the module editor.
+#Module Debugging
+WebBuilder debugging for module code is divided into frontend and backend, both of which can be debugged using the browser's built-in {#%DevTools|docs:Glossary/Developer_Tools} tool. When debugging a client-side page, you can run the page in the IDE or a new window, then press F12 to open the client-side DevTools for debugging. When debugging a backend module, first select the module to debug in the [File Explorer], then click the [Toggle Debug State] button in the toolbar to set the module to debug state. When the module runs or is called, a waiting module entry with a debugging status appears in the Debug tab of the bottom multi-function view.\
+Double-clicking the entry opens a new window; paste the debugging address into the window's address bar and press Enter to open the debugging page. If the page does not allow clipboard access, manually copy the debugging address from the window to the address bar. During remote debugging, for security reasons, the browser may block access to the debugging page and prompt that the page is not found. In this case, press [F12] to open "devtools" and press Enter in the browser's address bar. For debugging examples, see {#%devtools-debug|ide?openModule=example/coding/server-js/devtools-debug.xwl}.
+When initiating backend debugging of a module file in the IDE, the IDE cancels modal mode; no modal dialog overlays or progress prompts are displayed; to avoid blocking the interface. You can toggle this state by clicking the [Toggle Modal Mode] button in the bottom-right corner of the IDE.
+#Script Editor
+The script editor is developed based on the Monaco Editor (same as VS Code) with enhanced and optimized functions. Therefore, usage methods such as shortcut keys are identical to VS Code. The following are common functions added by WebBuilder, accessible via the right-click menu:
+-Goto Link (Ctrl+F11): Jumps to the file or code at the URL or file path pointed to by the cursor.
+-Last Edit Location (Ctrl+,): Jumps to the cursor position of the last edited code in the current editor.
+-Back (Ctrl+9): Navigates back to the previously opened file or cursor position.
+-Forward (Ctrl+0): Navigates forward to the file or cursor position before the back operation.
+Code hints, warnings, and error messages in opened script editors can be found in the [Markers] page of the multi-function view.
+In the script editor, hold Ctrl and double-click a file in the [File Explorer] to add the file's relative URL or path at the cursor position; hold Ctrl+Shift and double-click to add the full URL or path.
+When opening a file with the script editor, the system-specified character set is used by default. You can click the character set button in the bottom toolbar to set the character set.
+##System Module.Development Suite.Control Manager
+{#%Control Manager|controls} is used to organize the directory hierarchy of automatically generated controls in the system. In {#%IDE|ide}, you can generate the control library with one click by clicking the [Help] -> [Generate Documentation] menu. The system automatically extracts classes marked with "@icon" defined in all "js" and "mjs" files under the "js" and "ss" directories as controls\
+and adds them to the control library. Newly extracted controls are added to the "Ungrouped" directory by default. You can create new control directories and drag controls to specified directories to adjust their belonging and position.
+Common Functions:
+-Add Folder: Adds a new directory within the current directory. Added to the root directory if no directory is selected.
+-Edit: Edits the directory name.
+-Delete: Deletes controls or directories.
+-Save: Saves all modifications.
+-Drag: Drags nodes to adjust directories or controls.
+##System Module.Development Suite.Dictionary Config
+{#%Dictionary Config|dict} is used to define properties/events for displaying and editing database table fields in grids or dialog boxes. A dictionary consists of multiple dictionary items, each corresponding to a field name via its name and group name.
+#Dictionary Item
+A dictionary item describes the display and editing behavior of a field, consisting of the following properties:
+General: Overall properties of the dictionary item
+-Name: The name of the dictionary item, identical to the field name, usually in lowercase. The system automatically converts field names to lowercase to avoid differences between databases.
+-Title: The column name displayed in the grid or the title when converted to an edit control.
+-Alias: Other names used by the dictionary item, separated by commas. For example, the alias of "id" can be "sid,rec_id,pk_id".
+-Group Name: The group the dictionary item belongs to, used to distinguish dictionary items with the same name but different properties. Leave empty if the dictionary item does not belong to any group.
+-Group Title: The group title displayed in the dialog box. Dictionary items under the same group can share the same group title.
+-Remark: Description of the dictionary item.
+Edit: Properties for editing components in dialog boxes
+-Hidden: Whether the component is hidden during editing.
+-Control Name: The {#Wb.Component.cname} property of the component.
+-Length: The {#Wb.Text.maxLength} property of the control.
+-Precision: The {#Wb.Number.decimalCount} property of the control.
+-Height: The {#Wb.Component.height} property of the control.
+-Type: The {#Wb.Text.valueType} property of the control.
+-Hint: The {#Wb.Control.hint} property of the control.
+-Required: The {#Wb.Control.required} property of the control.
+-Read Only: The {#Wb.Text.readonly} property of the control.
+-Colspan: The span number of columns for the component's {#Wb.Component.gridColumn} property.
+-Fill: Whether to add a {#Wb.Fill} component after this component to occupy the remaining space of the current row.
+-Key Name: The key name defined in {#%Key Value Editor|kve}, using all lists under this key name as the dropdown list. Specifying this property sets the default control to a {#Wb.Select} control.
+-Validation Script: The {#Wb.Text.validator} property of the control.
+-Additional Items: An object consisting of arbitrary properties or events of the component. E.g.: {{({required: true, events: {change(value){Wb.tip(value)}}})}}
+Display: Properties for grid columns
+-Hidden: Whether hidden in the grid column.
+-Width: The {#Wb.Column.width} property of the column.
+-Format: The {#Wb.Column.format} property of the column.
+-Type: The {#Wb.Column.type} property of the column.
+-Wrap Type: The {#Wb.Column.autoWrap} property of the column.
+-Check Type: The {#Wb.Column.checkBox} property of the column.
+-Render Script: The {#Wb.Column.render} property of the control.
+-Additional Items: An object consisting of arbitrary properties or events of the column. E.g.: {{({titleAlign: 'center'})}}
+#Function Operations
+-Add: Adds a new dictionary item.
+-Edit: Edits the selected dictionary item, achievable by double-clicking the entry to edit.
+-Delete: Deletes the selected dictionary item.
+-Name Search Box: Searches dictionary items by name, alias, or title.
+-Group Name Search Box: Searches dictionary items by their group name.
+-Content Search Box: Searches dictionary validation scripts, edit extra items, render scripts, and display extra items.
+#Dictionary Related APIs
+On the backend, methods such as {#Wb.getDict}, {#Wb.getDictRecords}, {#Wb.sendDict}, and {#Wb.sendDictRecords} convert SQL-queried data through the dictionary to obtain JSON scripts of data and metadata, which are output to the client for use by grids/dialogs. Additionally, dictionary data can be accessed via the {#Wb.ServerDict} class.
+On the frontend, dictionary related APIs of the {#Wb.Grid} class or the {#Wb.Dict} class can be used to access the dictionary and directly generate interfaces from it.
+#Dictionary Table Structure
+Dictionary information is stored in the [wb_dict] table, with the following structure:
+|Field Name|Description|
+|sid|Primary Key|
+|name|Name|
+|title|Title|
+|alias|Alias|
+|group_name|Group Name|
+|group_title|Group Title|
+|remark|Remark|
+|edit_hidden|Hidden|
+|cname|Control Class Name|
+|edit_length|Length|
+|edit_scale|Scale|
+|edit_height|Height|
+|edit_type|Type|
+|edit_hint|Hint|
+|edit_required|Required|
+|edit_readonly|Read Only|
+|edit_colspan|Column Span|
+|edit_fill|Fill|
+|key_name|Key Name|
+|validate_script|Validation Script|
+|edit_tags|Extra Items|
+|display_hidden|Column Hidden|
+|display_width|Column Width|
+|display_format|Column Format|
+|display_type|Column Type|
+|auto_wrap|Column Wrap Type|
+|check_box|Column Check Type|
+|render_script|Column Render Script|
+|column_tags|Column Extra Items|
+Dictionary data has a caching function. If you directly modify database table data, click [Reload System] under the [Run] menu in {#%IDE|ide} to update cached data.
+#Usage Example
+The following example demonstrates using a dictionary to develop a simple "Employee Application". For dictionary information, see relevant entries in {#%Dictionary Config|dict}.
+Grid-style Query and Edit: {#%dict-edit-grid|ide?openModule=example/crud/dict-edit-grid.xwl}
+
+Dialog-style Query and Edit: {#%dict-edit-dialog|ide?openModule=example/crud/dict-edit-dialog.xwl}
+##System Module.Development Suite.Key Value Editor
+{#%Key Value Editor|kve} is used to configure key-value pairs. Key-values are usually used to define correspondences between codes and names. For example, for gender, 0 can be defined as "Male" and 1 as "Female".
+The left table of the Key Value Editor defines key names, and the right table displays all key-value lists of the currently selected key.
+#Key Name
+-Add: Adds a new key name. Enter any name in the [Key Name] field and set whether the key is numeric in the [Value Type] field.
+-Edit: Modifies the selected key name, also editable by double-clicking the key name.
+-Delete: Deletes the selected key name and all its list data.
+-Search: Searches for key names.
+#Key List
+-Add: Adds a new key list entry. Usually, the key is the code and the value is the name.
+-Delete: Deletes the selected key list.
+-Save: Saves data added, modified, or deleted in the key list.
+-Search: Searches for keys and values.
+#Using Key-Values
+Key-values can be used in controls, APIs, or dictionaries, for example:
+-Setting the {#Wb.Select.keyName} property of a selector control directly generates a dropdown list.
+-Using the {#Wb.sendRows} method with the kv property converts key-values, e.g., "Wb.sendRows({ sql: 'select code,gender from wb_staff', kv: {gender: 'gender'} })".
+-Setting a specified key name in the [Key Name] property of a dictionary item automatically performs key-value conversion.
+##System Module.Development Suite.Language Management
+{#%Language Management|m?xwl=dev/lang} is used to configure the locale files in the wb/js/locale folder.
+#Function Operations
+-Add: Adds an item. The "name" column specifies the item name, while the other columns represent specific language-region codes.
+-Delete: Deletes the selected items.
+-Save: Saves data added, modified, or deleted in the grid.
+-Search: Searches for items.
+##System Module.Development Suite.Version Management
+In WebBuilder, you can use either third-party version control tools such as SVN or Git, or {#%Version Management|m?xwl=dev/version} for file version management.
+#Function Operations
+-Check Out: Checks out the selected file from the version database to the file system.
+-Back: Reverts to a specified version.
+-Delete: Deletes the selected file from the version repository.
+-Version: Searches for all files of a specified version.
+-Search: Searches for all files of a specified name.
+##System Module.Development Suite.Documentation
+Used to view user manuals and API documentation. The top of the documentation is the search toolbar, the left is the documentation directory tree, and the client area is tabs for opened documents.
+#Documentation Browsing
+User manuals and API documentation can be viewed according to the document directory structure. Clicking tree nodes opens the corresponding document content. Clicking the browser's [Back] and [Forward] buttons navigates to previous or next content.
+#API Documentation
+The system provides a dedicated API documentation viewer for reading API documentation. The document title is the class name, and the subtitle consists of identifiers such as the class "cname", mixin, or the file where the class is located. All inherited classes are displayed below the title. In the [Search] bar,\
+you can search for property or event names. On the left side of the [Search] bar, a set of function buttons is provided:
+-Show Own Members: Displays only properties/events inherent to the current class, excluding inherited ones.
+-Show Key Members: Displays important properties/events.
+-Show Public Members: Displays public properties/events.
+-Toggle Expand/Collapse: Expands or collapses all properties/events.
+-Property: Jumps to properties. Hovering the mouse displays a list of all properties; clicking jumps to the corresponding property. Properties starting with "!" are static properties.
+-Method: Jumps to methods. Hovering the mouse displays a list of all methods; clicking jumps to the corresponding method. Methods starting with "!" are static methods.
+-Event: Jumps to events. Hovering the mouse displays a list of all events; clicking jumps to the corresponding event.
+#Full-Text Search
+Enter keywords to search in the top toolbar. The system displays search results in the dropdown list by matching degree and priority. Clicking a dropdown entry opens the associated document.
+For examples, searching for "grid", "wb.grid", "kv", or "Object Inspector" all retrieves specified content.
+##System Module.Development Suite.Writing and Reading Documentation
+WebBuilder provides automatic documentation generation, extracting content from source code or related files to generate documents.
+#Documentation Writing
+Documentation includes user manuals and API documentation. The former is written in text files with the ".wd" extension under the "wb/docs" directory, and the latter is automatically extracted from source code. The writing methods for both are identical. Content between "/**" and "*/" in source code is documentation comments, which the system automatically extracts as documentation.
+#Documentation Tags
+Tags identify specific content, starting with "@", including:
+-class: Identifies a class name, e.g., "@class My.Class". Classes defined with the {#Cls} keyword do not need this tag; the system automatically extracts the class name from context.
+-function: Identifies a method, e.g., "@function myFunc". Descriptions above methods usually do not need this tag; the system automatically extracts the method name from context.
+-property: Identifies a property, e.g., "@property {Number} name Description". If "name" appears below the comment, "name" can be replaced with "-".
+-event: Identifies an event, e.g., "@event name Description".
+-param: Parameter, representing a parameter, e.g., "@param {Type} name Description". Parameter names enclosed in "[]" are optional. A "." prefix indicates a level-2 parameter, ".." indicates level-3, and so on. If no default value is specified, the default is usually undefined, null, 0, empty string, or false.
+-return: Return value, e.g., "@return {Type} Description".
+-singleton: Singleton class, usually instantiated without "new"; static members or methods are called directly.
+-key: Key important item. Highlighted in the property/event editor when tagged.
+-icon: Class icon. When tagged, the class is automatically added to the IDE component tree. The order and directory of controls can be adjusted via {#%Control Manager|controls}. Note that after adding new components to the IDE component tree, it is recommended to click [Run] -> [Reload System] in {#%IDE|ide} to activate them.
+-design: Property allowing visual design. When an inherited subclass needs to reset this tag of the parent class, marking it as true or false explicitly resets whether the property can be visually designed. Default value: true.
+-noDesign: Component not allowing visual design, e.g., WebSocket, xwl, script components.
+-readonly: Read-only. Automatically tagged for getter/setter properties.
+-writeonly: Write-only. Automatically tagged for getter/setter properties.
+-priv/private: Private, usually for internal class use. The difference is that "private" also verifies whether members are used internally in the script.
+-static: Static class, property, or method.
+-desktop: Desktop, applicable only to desktop applications.
+-touch: Touch-enabled, applicable only to mobile touch applications.
+-override: Overridden item, automatically tagged by the system.
+-code: Property valid only during coding, i.e., not displayed in the IDE.
+-container: Explicitly specifies treating the component as a container during design.
+-implicit: Specifies not generating the cname attribute when parsing components on the server side.
+-lib: URL of js/css files depended on by the control. When the control is added to a module, the system automatically loads dependent js/css files before running the module.
+#Class Description
+Describes a class.
+Example:
+
+     /**
+      * Class description. Specify class name.
+      * @class MyClass
+      */
+     globalThis.MyClass = {
+     };
+     /**
+      * Class description, auto-retrieve class info.
+      */
+     Cls['My.TestClass'] = class testClass extends Wb.Base {
+     }
+
+After a class declaration, all subsequent property, method, and event descriptions are automatically added to the class.
+#Method Description
+Describes a method.
+Example:
+
+     /**
+      * Method comment.
+      * Example:
+      *
+      *     let foo = bar();
+      *
+      * @param {type} name1 Required parameter description.
+      * @param {type} .sub1 Sub-parameter description of `name1`.
+      * @param {type} .sub2 Sub-parameter description of `name1`.
+      * @param {type} [name2] Optional parameter description.
+      * @return {type} Return value description.
+      */
+      myFunc() = {
+      }
+     /**
+      * Specify method name via function tag.
+      * @param {type} name1 Required parameter description.
+      * @function myFunc.
+      */
+
+In the example above, "{type}" after "@param" is the parameter type, such as {#Object}, {#String}, {#Wb.Component}, etc.
+#Property Description
+Properties include two types: configuration properties and getter/setter properties. The former is usually valid only during configuration, while the latter can be dynamically set during runtime. Configuration properties are marked with "config" in the documentation; unmarked properties are getter/setter properties.
+Example:
+
+     /** @property {type} name Specify name parameter description */
+     /** @property {String} - Parameter name omitted with "-", auto-take "foo" below as parameter name. */
+     foo = 'bar';
+     /**
+      * @property {Object} foo Describe sub-parameters of the parameter
+      * @param {Array} .bar Description of sub-parameter bar of `foo`.
+      * @param {Wb.Component} .comp Description of sub-parameter comp of foo.
+      * @key
+      */
+
+#getter and setter Description
+Unlike ordinary configuration properties, getter/setter properties can usually be dynamically set during runtime. The system defines getter/setter methods as properties and merges them into a single property description. If getter/setter descriptions differ, the system automatically merges them.
+Merge Example Diagram:
+{@accessor}
+Example:
+
+     /** @property {String} name Specify name and getter. @getter */
+     /** @property {Array} - Auto-recognize parameter name and getter. */
+     get name() {
+     }
+     /** @property {Object} - System auto-merges getter/setter as the same property. */
+     get foo() {
+     }
+     /** @property {Array} - System auto-merges getter/setter as the same property. */
+     set foo() {
+     }
+
+When a class has only a getter method, the system automatically tags it as readonly; when only a setter method exists, it is automatically tagged as writeonly.
+#Event Description
+Describes an event.
+Example:
+
+     /**
+      * @event eventName Event description
+      * @param {type} name Parameter description.
+      */
+
+In the example above, eventName is the event name. Parameter descriptions are the same as in method descriptions.
+#Using Default Comments
+/***/ means using default comments. The system automatically finds descriptions from parent classes or properties/methods/events with the same name as the item.
+Example:
+
+     //Auto-corresponds to getter documentation
+     /***/
+     set bar(){
+     }
+     //Auto-corresponds to documentation of the same-named property
+     /** @property */
+     foo = 'bar';
+     //Specify property type and auto-correspond to documentation of the same-named property
+     /** @property {String} */
+     foo = 'bar';
+     //Specify property type and name, auto-correspond to documentation of the same-named property
+     /** @property {String} foo */
+     foo = 'bar';
+
+Note that the property tag must be used for default property identification; otherwise, it is treated as a method.
+#Code Block
+Content with a blank line before and after and 5 leading spaces is automatically referenced as a code block. Code is parsed using JavaScript syntax by default.\
+You can also specify the language by prefixing the script with "$mimeType:", e.g., sql for SQL language, css for CSS language.
+Example:
+-SQL:
+
+     $sql: $sql: select * from table where field1 = 'abc' order by field2
+
+-CSS:
+
+     $css: $css: .my-css {
+       margin: 0;
+       padding: 0;
+       width: 100%;
+       height: 100%;
+       font-size: 14px;
+       overflow: hidden;
+     }
+
+-Plain Text:
+
+     $text: $text: Plain text content
+     Use text tag for plain text
+
+#Link Jump
+You can quickly define a link in the document using the following syntax. Clicking the link automatically jumps to the specified target.
+Example:
+
+     {#Wb} //Ordinary class
+     {#Wb.Component} //Ordinary class
+     {#Wb.Component.destroy}  //Ordinary class member
+     {#destroy} //Class name omitted, represents "destroy" member under the current class
+     {#Wb.Component.!firstNames} //Static class member, "!" can be omitted if "firstNames" is unique
+     {#Wb.View.*success} //Event, "*" can be omitted if "success" is unique
+     {#Visible|Wb.Component.visible} //Visible as label
+     {#%https://www.geejing.com} //Link address
+     {#%Geejing|https://www.geejing.com} //Label and link
+     {#%Boolean} //Boolean is predefined variable
+     {#%Object.assign|obj:object/assign} //Object.assign as label, obj: is predefined URL prefix
+
+In the example above:
+-# represents a class or ordinary member link.
+-A "!" prefix in the link indicates a static member link. "!" can be omitted if the static member name does not conflict with method, property, or event names.
+-A "*" prefix in the link indicates an event link. "*" can be omitted if the event name does not conflict with method, property, or static member names.
+-#% represents an external resource link, which can be a URL or a predefined address variable. A ":" prefix before the address indicates a predefined address prefix.
+If a link contains "|", the string before the symbol is the link label, and the string after is the link address.
+Accessing links in the current class can omit the class name. For example, "Wb.Component.visible" can be abbreviated as "visible" in the "Wb.Component" class.
+#List
+Each line starting with "-" represents a list item.
+Example:
+
+     -item1
+     -item2
+     -item3
+
+Generated content:
+-item1
+-item2
+-item3
+#Table
+Each line starting with "|" represents a table row, with columns separated by "|".
+Example:
+
+     |Column 1|Column 2|Column 3|
+     |col1|col2|col3|
+
+Generated content:
+|Column 1|Column 2|Column 3|
+|col1|col2|col3|
+#Image
+You can quickly insert images using the following syntax:
+
+     {@image} //Path is docs/images/image.png
+     {@image.jpg} //Path is docs/images/image.jpg
+     {@path/image} //Path is docs/images/path/image.png
+     {@http:/www.site.com/pic.jpg} //Path is http:/www.site.com/pic.jpg
+
+In the example above, "image" is the image name; the ".png" extension can be omitted. Images can be multi-level paths or URL addresses.
+#Line Break and Continuation
+If a line does not end with [.。?？!！:：], the next line is appended to the current line by default. A line ending with "\" explicitly appends the next line to the current line.
+Forced line breaks to create new paragraphs can be achieved by adding extra blank lines.
+#More Formatting
+Specific characters in the document represent formatting modifiers.
+Example:
+
+     Double curly braces {{while}} denote code //while represents code
+     Double square brackets [[url]] denote emphasis //url represents emphasis
+     Curly braces plus square brackets {[ok]} denote icon //ok is icon name
+
+Generated content:
+Double curly braces {{while}} denote code
+
+Double square brackets [[url]] denote emphasis
+
+Curly braces plus square brackets {[ok]} denote icon
+#User Manual Writing
+The user manual describes software usage. Manual content can be placed in one or more files with the ".wd" extension, usually under the "wb/docs/manuals" directory.
+Chapters start with "##", followed by the chapter path and title. Paths are separated by ".", e.g., "##Operation Usage.Directory1.Directory2.Introduction" generates a multi-level directory.
+Paragraphs start with "#", followed by the paragraph title, e.g., "#Instructions".
+##System Module.Development Suite.Internationalization Development
+Internationalization development refers to internationalizing text, numbers, dates, etc., used in the system. The system automatically handles internationalization of numbers and dates based on the currently selected language. Developers only need to internationalize custom text.
+#Setting the System Language
+The specific language is specified by a string consisting of a language code and a region code. For example, "zh-cn" represents Chinese (China), "en-us" represents English (United States). For details, refer to "ISO 639-1" and "ISO 3166-1" codes.
+The system provides multiple places to set the specified language, in descending order of priority:
+-Module Settings: Each module can set an independent language, which is used after the module runs. Set the language code in the module's "module.language" property.
+-User Settings: Each user can set an independent language, effective after login. The system default language is used if not logged in. Set the language code in {#%User Management|user} or the [My Account] menu in the top-right corner of {#%Homepage|home}.
+-Configuration Settings: Set the language code via the {#%System Config|config} module. Set the used language code in the "sys.locale.language" configuration item; "auto" means automatically using the client's language. If the system does not configure the client-specified language, set the default language in the "sys.locale.defaultLanguage" configuration item. For example, setting it to "en-us" uses the default language "en-us" when the client language is "ja-JP" and the system does not configure that language. Additionally, the system provides a configuration function for language recognition regardless of region, set in the "sys.locale.defaultRegionLanguage" configuration item. For example, specifying "en=en-us" uses "en-us" when the requested language is "en-GB" and the system does not configure that language.
+#Definition and Usage of Languages and Text
+Languages and text used by the system are defined in the [wb/js/locale] directory, you can use {#%Language Management|m?xwl=dev/lang} to configure it. Each "js" file in this directory represents a language, with filenames starting with "wb-" followed by the language code.
+These defined texts can be accessed and used in multiple places, where "name" represents the text name defined in the "js" file:
+-Client: Accessed using "Str.name" in code. Accessed using "@Str.name" in the property editor.
+-Server: Accessed using "Str.name" in code.
+-Title of Module File/Directory: Accessed using "@name".
+-Dictionary Title: Accessed using "@name".
+-Key-Value: Accessed using "@name".
+Some important predefined names in the system:
+-lang: The currently used language code.
+-startDay: The first day of the week, e.g., displayed in the calendar. 1 represents Monday, 7 represents Sunday.
+-monthFormat: Year-month format.
+-altMonthFormats: Alternative year-month formats, used for parsing year-month.
+-dateFormat: Date format.
+-altDateFormats: Alternative date formats, used for parsing dates.
+-timeFormat: Time format.
+-altTimeFormats: Alternative time formats, used for parsing time.
+-dateTimeFormat: Date-time format.
+-altDateTimeFormats: Alternative date-time formats, used for parsing date-time.
+#Formatting Text
+Text can be formatted using custom string prototype methods. For example, formatting the "notFound" prompt uses the following code:
+
+     let text = Str.notFound.format('abc'); // text is 'Not found "abc".'

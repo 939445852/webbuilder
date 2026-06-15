@@ -1,0 +1,16 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Get new version
+  serverScript: |-
+    function main() {
+      Wb.send(Wb.submit({ url: 'https://www.geejing.com/get-version', timeout: 8000 }));
+    }
+    main();
+tags: ''
+text: module
+title: ''

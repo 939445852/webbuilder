@@ -1,0 +1,13 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Delete departments
+  serverScript: function main(){let e,t=[];e=Wb.Builder.getTreeItems(Wb.getAllRows("select
+    sid,parent_id from wb_dept"),Wb.getObject("del").pluck("$sid"));e.forEach((e=>t.push({$sid:e})));Wb.sync({tableName:"wb_dept",del:t})}main();
+tags: ''
+text: module
+title: ''

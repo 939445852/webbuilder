@@ -1,0 +1,59 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Get dictionary data
+  serverScript: |-
+    let actions = {
+      /**
+       * Gets a list of dictionary entries.
+       * @return {Array} A list of dictionary entries.
+       */
+      getItems() {
+        let items = Params.items, maxRows = Config.maxRows, result, dictItem;
+
+        //max 1000 items
+        if (items.length > maxRows)
+          Wb.raise('The dictionary only allows ' + maxRows + ' items to be returned.');
+        result = [];
+        items.forEach(item => {
+          dictItem = DictCls.findItem(item);
+          if (!dictItem)
+            Wb.raise(`The dictionary item "${item}" not found.`);
+          if (!dictItem.displayHidden)
+            dictItem.displayHidden = undefined;
+          if (!dictItem.editFill)
+            dictItem.editFill = undefined;
+          if (!dictItem.editHidden)
+            dictItem.editHidden = undefined;
+          result.push(Wb.applyValue({}, dictItem));
+        });
+        Wb.send(result);
+      },
+      /**
+        * Gets a list of dictionary groups.
+        * @return {Array} A list of dictionary groups.
+        */
+      getGroups() {
+        let sql, result = [];
+
+        sql = 'select distinct group_name from wb_dict';
+        if (Params.query) {
+          Wb.setLike('query');
+          sql += ' where group_name like {?query?}';
+        }
+        else {
+          result.push('true');
+        }
+        sql += ' order by group_name';
+        result.pushAll(Wb.getRecords(sql).pluck(0));
+        Wb.send(result);
+      }
+    };
+    actions[Params.xaction]();
+tags: ''
+text: module
+title: ''

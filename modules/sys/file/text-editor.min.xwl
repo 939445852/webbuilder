@@ -1,0 +1,21 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: 'Wb.define(app,{args:_$args$_,path:_$path$_,charset:"UTF-8",reOpen(e){Wb.ajax({url:"m?xwl=sys/file/open",params:{path:app.path,charset:app.charset},success(a){let
+    t=a.indexOf("|");app.lastModified=a.substr(0,t);app.editor.rawValue=a.substr(t+1);app.saveBtn.disabled=true;e?.()}})},setCharset(){let
+    e=app.args;Wb.prompt({icon:"earth",title:Str.setCharset},[{cid:"charset",cname:"select",text:Str.charset,required:true,value:app.charset,data:["UTF-8",e.charset,e.osCharset,e.fileCharset,e.filenameCharset].filter((e=>e)).unique()},{cname:"displayField",showEmptyLabel:true,icon:"warn",value:Str.overwriteTextHint}],((e,a)=>{app.charsetItem.text=app.charset=e.charset;app.reOpen((e=>a.close()))}))},onLoad(){app.reOpen();if(!Globals.WbMainTab)document.title=Wb.getFilename(app.path);app.editor.focus()},save(e){if(app.saveBtn.disabled)return;let
+    a,t=app.editor.value;a=app.path+"|"+app.charset+"|"+app.lastModified+"|"+t.length+"|"+t;Wb.ajax({url:"m?xwl=sys/file/save",data:a,params:{confirm:e?0:1},success(e){app.lastModified=Wb.decode(e)[0];app.saveBtn.disabled=true},failure(e){if(e.errorCode=="modified")Wb.confirm(Str.modifiedConfirm.format(Wb.decode(e.errorText)[0]),(e=>app.save(true)))}})}});Wb.make(app,{cname:"viewport",layout:"fit",cid:"viewport1",tbar:{cname:"toolbar",items:[{keys:"Ctrl+S",icon:"save",disabled:true,text:Str.save,cid:"saveBtn",events:{click(e,a){app.save()}}}]},bbar:{cname:"toolbar",items:[{cname:"fill",cid:"fill1"},{cname:"label",cid:"cursorLabel"},{cname:"divider",cid:"divider1"},{text:app.charset,cid:"charsetItem",events:{click(e,a){app.setCharset()}}},{cname:"space",cid:"space1"}]},items:[{cname:"codeEditor",border:true,language:app.args.language,wrapBorder:false,cid:"editor",events:{change(e,a){app.saveBtn.disabled=false},cursorchange(e,a){app.cursorLabel.text=e?e.lineNumber+"
+    : "+e.column:Wb.nbsp}}}]});Wb.onUnload(parentContainer,(()=>{if(!app.saveBtn.disabled)return
+    false}));'
+hideInMenu: 'false'
+icon: text1
+img: ''
+properties:
+  cid: module
+  links: '["wb/js/monaco.js"]'
+  remark: Text editor shell
+  serverScript: let path=Params.path;Wb.set("args",Wb.encode({osCharset:Base.osCharset?.toUpperCase(),charset:System.getProperty("file.encoding")?.toUpperCase(),fileCharset:Wb.getConfig("sys.file.charset")?.toUpperCase(),language:Wb.getFileExt(path),filenameCharset:Wb.getConfig("sys.locale.filenameCharset")?.toUpperCase()}));Wb.set({path:Wb.encode(path)});
+tags: ''
+text: module
+title: ''

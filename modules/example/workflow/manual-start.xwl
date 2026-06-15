@@ -1,0 +1,47 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: title1
+      title: Manual start a new workflow
+    text: title1
+  - _expanded: true
+    _icon: button
+    cls: Wb.Button
+    events:
+      click: |-
+        Wb.ajax({
+          url: xpath + '/start',
+          success() {
+            Wb.tip('The workflow started, click to view it.', null,
+              f => Wb.openNormal({
+                url: 'my-flow', success(scope) {
+                  scope.grid1.reload();
+                }
+              }));
+          }
+        });
+    properties:
+      cid: button1
+      text: Start a new workflow
+      type: primary
+    text: button1
+  properties:
+    cid: viewport1
+    layout: grid1
+  text: viewport1
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

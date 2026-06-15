@@ -1,0 +1,14 @@
+{
+  "items": [
+    "file",
+    "portal",
+    "session",
+    "service",
+    "dialog",
+    "backup"
+  ],
+  "title": "@system",
+  "icon": "gear",
+  "img": "",
+  "hideInMenu": "true"
+}

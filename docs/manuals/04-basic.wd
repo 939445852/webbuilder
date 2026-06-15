@@ -1,0 +1,194 @@
+##Development Basics.Basic and Module Files
+WebBuilder is a complete development and runtime environment with both frontend and backend functionality. The frontend is developed using standard JavaScript/CSS/HTML, and the backend is developed using Java/JS and other related languages. The backend is developed based on the Java EE specification and supports multi-language programming, and all these codes can run with high performance. WebBuilder supports development using the latest and most advanced frontend and backend technologies.
+#WebBuilder Directory Structure
+The system contains 2 default directories, including the [WEB-INF] and [wb] directories. The former contains some jar packages required for system runtime, and the latter consists of the following directories:
+-css: CSS files for pages.
+-docs: Documentation directory.
+-images: Image directory. Icon files can be added to this directory.
+-js: Client-side JavaScript/module directory.
+-libs: Third-party library directory.
+-modules: xwl module file directory. All files are protected except those whose filenames end with the "$" symbol, meaning they cannot be directly accessed by clients.
+-ss: Server-side JavaScript/module directory. All files in this directory are protected.
+-system: System directory for storing system-related files. The "config.json" file is the system configuration file, the "controls.json" file is the control library file, the "url.json" file is the URL shortcut configuration file, the "db" directory is the database-related directory, and the "resource" directory is the system resource directory.
+The system automatically traverses the modules directory and extracts accessible module titles to generate the functional menu tree of the application {#%Home|home}. The application structure can be organized by adjusting the structure and order of module directories/files.
+#Module Files
+WebBuilder uses a JSON file called Extensible Web Language (xwl file for short) to store application logic and code. An xwl file can serve as a frontend module, a backend module, or a module containing both frontend and backend functions. Frontend modules can be directly compiled into JS/CSS/HTML to run on the client side, and backend modules can be directly compiled into native code to run on the server side with high performance. In addition to being directly requested and invoked by clients as Web services, module files can also be used as ordinary modules, such as being invoked via Java as scheduled task modules.
+Each xwl file deployed under the module directory (wb/modules) can be requested and invoked by clients as a web module. Each module has a unique URL with the address "m?xwl=path", where path is the relative path based on the module directory. For example, the user management module "admin/user.xwl" corresponds to the URL "m?xwl=admin/user", with the file extension "xwl" omitted. In addition, you can set a URL shortcut such as "user" for the module, and then access it via the URL "user".
+When a client requests a module, the system intercepts the request in a filter and hands it over to the module executor for execution. If the module returns client-side scripts or other content, these contents will be output to the client.
+{@wb-arch1}
+xwl Module Runtime Process:
+-The client requests an xwl file, such as by sending an ajax request or entering the module file's URL in the address bar, e.g., m?xwl=admin/user
+-The server reads the compiled xwl module file from the cache.
+-Checks if the current user needs to log in; if not logged in, sends the login page to the client.
+-Checks if the current user has permission to execute the module; if not, throws an exception message.
+-Checks if the module contains server-side scripts (scripts defined in the "module.serverScript" property); if so, executes these pre-compiled native code scripts with high performance.
+-Checks if the module contains client-side scripts (components or scripts defined except for the "module.serverScript" property); if so, sends the pre-generated client-side scripts stored in the cache to the client in one go. If the client-side scripts have not changed, only a 304 status code is sent.
+-After receiving the scripts, the client executes them if they are executable JavaScript scripts.
+#Creating Modules
+The following demonstrates how to create a module by taking the creation of the [Staff Management] application function as an example.
+First, enter {#%Development Environment|ide}, select the [Development Suite] node under the module node in the [File Explorer], then click the [Add Folder] button on the toolbar. The system will display the create directory dialog box, enter the following information in the dialog box:
+-Name: test
+-Title: Test
+-Icon: Select the archive icon {[archive]}
+-Check [Insert before current item]
+Click the OK button, and the [Test] directory will be created before the [Development Suite] directory.
+Add Staff Module:
+Select the newly created [Test] directory, then click the [Add File] button. The system will display the create module file dialog box, enter the following information in the dialog box:
+-Name: person
+-Title: Staff Management
+-Icon: Select the user2 icon {[user2]}
+Click the OK button, and the [Staff Management] module will be created in the [Test] directory.
+After opening the [Staff Management] module, you can drag the [viewport] control from the control box on the right into the module, or add it by double-clicking the [General->viewport] control. Select the [viewport1] control in the module and set
+its "layout" property to "fit". Press the [Ctrl] key and double-click the [List View->grid] control to add it under the [viewport1] control.
+Add Staff Directory:
+Select the newly created [Test] directory, then click the [Add Folder] button. The system will display the create directory dialog box, enter the following information in the dialog box:
+-Name: person
+-Title: Staff Management
+-Check [Hide in the Menu]
+Click the OK button, and the [Staff Management] directory will be created in the [Test] directory. This directory serves as a hidden subdirectory of the [Staff Management] module and will be hidden in the application {#%Home|home}, used to store backend modules.
+Add Backend Query Module:
+Select the newly created [Staff Management] directory, then click the [Add File] button. The system will display the create module file dialog box, enter the following information in the dialog box:
+-Name: select
+-Title: Query
+Click the OK button, and the [Query] module will be created in the [Staff Management] directory.
+After opening the [Query] module, add the following code to the "serverScript" property of the [module] node:
+
+     Wb.sendRowx('select * from wb_staff');
+
+Click the save button on the toolbar to save the module.
+Edit and Run Staff Module:
+Double-click the [person.xwl] node to open the module and select the [grid1] control. Drag the [select.xwl] node from the [File Explorer] to the url property of the [grid1] control in the module editor to set the URL of the [select.xwl] module to the url property of [grid1]. After saving the [person.xwl] file,
+click the [Run] button on the toolbar to run the [person.xwl] module.
+Go to the system's {#%Home|home}, and you will see the newly added [Test] directory and the [Staff Management] module inside it. Click [Staff Management] to view the staff data displayed in a table.
+#Referencing js and css Files
+The system provides 3 methods to reference js and css files:
+-Global Reference: Frontend js/css files can be referenced in the "sys.app.links" property of the {#%System Config|config} module, and backend js files can be referenced in the "sys.ss.files" property of the {#%System Config|config} module. Resources are globally available after system startup. Commonly used js/css files can be loaded this way.
+-Module Reference: Frontend js/css files can be imported in the links property of the module node in the xwl module file. Referenced resources take effect after module execution. js/css files used within the module can be loaded this way.
+-Code Reference: Frontend js/mjs/css files can be loaded using the {#Wb.load|Wb-Client.load} method, and backend js/mjs/xwl files can be loaded using {#Wb.load|Wb-Server.load}, {#Wb.run}, {#Wb.invoke}, {#Wb.execute}. This method allows dynamic loading and execution of js/mjs/css/xwl files via code.
+#Server-side Scripts
+Each module's module node has a serverScript property, which is used to write server-side scripts that execute when the module is called. See {#Development Basics.JavaScript Development} for details.
+#app Object in Modules
+Both frontend and backend of a module have an object variable named "app" for sharing variables and passing parameters.
+On the frontend, the "app" object is accessible throughout the module, and some global properties and methods are usually defined in this object. The onLoad method in the frontend app object is executed after each module load. The difference between this method and {#finalize|Wb.Module.finalize} is that the former executes whenever the module is loaded regardless of whether it is a singleton,
+while the latter executes only once for singleton modules after loading. The onDestroy method in the frontend app object is executed after the module is destroyed.
+For example, define the following code in the {#initialize|Wb.Module.initialize} event:
+
+     Wb.apply(app, {
+       onLoad(){
+         Wb.tip('Module loaded');
+       },
+       onDestroy(){
+         Wb.tip('Module destroyed');
+       },
+       myProp: 'abc',
+       myMethod(param){
+       }
+     });
+     app.myParam = 'foo';
+
+On the backend, the "app" object runs through the entire execution context lifecycle, created at the start of execution and released at the end. All modules within the execution context obtain the same "app" object.
+For example, the following code:
+Write the following code in the serverScript of test1.xwl:
+
+     app.myParam = 'foo';
+
+Execute the following code in the serverScript of test2.xwl:
+
+    Wb.run('test1.xwl');
+    Wb.log(app.myParam);
+
+Since the "app" is the same throughout the execution context, test2.xwl can obtain the app.myParam variable defined in test1.xwl.
+Note that both frontend and backend code should avoid setting variables to globalThis; the alternative is to set variables to the "app".
+#Module Client Container Components
+When a module runs in a client container, such as in a tab of {#%Home|home}, you can access the container via the {{parentContainer}} variable, which is {{undefined}} when the module runs outside the container. The following code will close the current module client interface:
+
+     parentContainer ? parentContainer.close() : window.close();
+
+#Accessing Modules Without Login
+By default, each module requires login to access. You can set the loginRequired property of the module node to false to make the module accessible without login. Note that if the module calls a login-required module via the client, such as using the {#Wb.ajax} method, login is still required for the call. Module access permissions are controlled by the {#%Permission Management|perm} module.
+##Development Basics.Events and Listeners
+In this document, "event" specifically refers to events of the Wb class {#events|Wb.Base.events}; "listener" specifically refers to listeners based on page DOM elements {#listeners|Wb.Component.listeners}. Frontend classes (components) based on DOM elements have both events and listeners. For example, a button has a preset {#click|Wb.Component.click} event, and you can also add a click listener to the element {#el|Wb.Component.el} associated with the button to listen for button clicks, both of which have the same effect. See {#%Event} for detailed descriptions of listeners.
+#Using Events
+Events can observe behaviors occurring on instances of Wb class objects. For example, the {#success|Wb.View.success} event of a view can perform related operations after the view is loaded successfully. You can directly set the success event of the view during IDE design, or add events via the {#on|Wb.Base.on} method during runtime:
+
+     view.on('success', resp => { doSomething(); });
+     button.on('click', e => console.log('clicked'));
+
+When you need to remove an event from an instance or component, you can remove it via the {#un|Wb.Base.un} method:
+
+     view.un('success', fn);
+
+#Using Listeners
+Listeners can observe behaviors occurring on DOM elements. For example, the mouseenter listener of a button can monitor the behavior when the mouse enters the button. Use the {#mon|Wb.Component.mon} method to add listeners, such as adding the following code in the {#ready|Wb.Configurable.ready} event of a button:
+
+     button.mon('mouseenter', e => { doSomething(); });
+     component.mon(el, 'click', e => {doSomething();}, scope, {once: true, capture: true});
+
+When you need to explicitly remove a listener from a component, you can remove it via the {#mun|Wb.Component.mun} method:
+
+     button.mun('mouseenter', fn);
+
+##Development Basics.JavaScript Development
+System development is divided into frontend and backend development. Frontend development is usually done using the {#%JavaScript|docs:Web/JavaScript} language, and the backend can be developed using languages including {#%Java|https://www.w3schools.com/java}, {#%JavaScript|docs:Web/JavaScript}, Python, etc. Since
+the frontend uses JavaScript for development, it is recommended to use JavaScript for backend development as well. Developing the backend with JavaScript has the following advantages:
+-Share JavaScript code between frontend and backend, maximizing code reusability.
+-Reduce requirements for developers; using the same development language for frontend and backend lowers learning and usage difficulty.
+-Access Java class libraries using JavaScript syntax, and flexibly and efficiently use any Java class library with the latest JavaScript features. See the {#%common-usage|ide?openModule=example/coding/server-js/common-usage.xwl} example for details.
+#JavaScript Classes
+JavaScript classes can be created using the class keyword. For example, the following code:
+
+
+     class myClassName {
+     }
+
+The above code defines a normal class that can be accessed by class name or assigned to a variable. Non-global classes can have their definition code placed in code snippets or mjs module files.
+In addition, you can assign a class to a global variable to create a global class, such as the following code:
+
+
+     Cls['My.pack.ClassName'] = class myClassName extends Wb.Base {
+     }
+
+In the above code, "Cls" is a Proxy object, and Cls['My.pack.ClassName'] defines a global class based on globalThis. After the code creating this class is loaded, you can access it via {{My.pack.ClassName}} anywhere in the code. Global classes can have their definition code
+placed in js files.
+#Quick Definition of Getters and Setters
+The {#Wb.define} method can be used to quickly define getters and setters.
+For example, extend the properties and methods of "app" with the following code:
+
+     Wb.define(app, {
+       /** @property {String} - Setter description. */
+       set$name(value) {
+       },
+       /** @property {String} - Getter description. */
+       get$name() {
+       },
+       /**
+        * Function description.
+        */
+       myMethod() {
+       }
+     });
+
+#Extended Prototype Properties and Methods
+The system provides extended prototype properties and methods for types such as {#String}, {#Number}, {#Date}, {#Object}, {#Array}, {#Map}, {#Set} to improve development capability and efficiency.
+Such as the following code:
+
+     date = '2021-03-12 14:19:39.614'.dateValue;
+     val = (12345.625).format('$#,##0.00');
+     val = (1234.5).cny;
+     date = new Date().addDay(3);
+
+#Judging Value Types
+Judging value types is commonly used in development, such as implementing different functions by judging different types of input parameters.
+The following methods can judge value types:
+-{#Wb.isString}: Judges if it is a string.
+-{#Wb.isNumber}: Judges if it is a numeric value.
+-{#Wb.isNumeric}: Judges if it can be converted to a numeric value.
+-{#Wb.isDate}: Judges if it can be a date.
+-{#Wb.isBoolean}: Judges if it can be a boolean value.
+-{#Wb.isArray}: Judges if it is an array.
+-{#Wb.isObject}: Judges if it is an object.
+-{#Wb.isFunction}: Judges if it is a function.
+-{#Wb.isPrimitive}: Judges if it is a primitive numeric type.
+-{#Wb.isIterable}: Judges if it is iterable.
+-{#Wb.isEmpty}: Judges if it is a null value, null, undefined, empty object or empty array.
+For more examples, refer to: {#%coding|ide?openModule=example/coding}

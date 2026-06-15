@@ -1,0 +1,24 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Select my flow list
+  serverScript: function main(){let e,a,s=Wb.userid;e=`select a.sid,a.user_id,a.start_time,a.title,a.status,a.node_name,a.node_text,a.tpl_file,d.display_name,\n        b.status
+    as user_status,b.user_type,b.node_name as user_node_name from\n        wb_flow
+    a,\n        wb_flow_user b,\n        (select flow_id,max(accept_time) as accept_time
+    from wb_flow_user where user_id={?sys.userid?} group by flow_id) c,\n        wb_user
+    d\n        where a.sid=b.flow_id and b.flow_id=c.flow_id and b.accept_time=c.accept_time
+    and b.user_id={?sys.userid?} and a.user_id=d.sid`;e+=getTypeSql(Params.type);if(Params.search){Wb.setLike("search");e+="
+    and a.title like {?search?}"}e+=Wb.getOrderSql({display_name:"d.display_name",$:"a"});a=Wb.getRowx({sql:e});a.items.forEach((e=>e.initiate=e.user_id==s?1:0));Wb.send(a)}function
+    getTypeSql(e){switch(e){case"initiated":return" and a.user_id={?sys.userid?}";case"pendHandle":return"
+    and a.status=1 and b.status<2 and b.user_type<2 and a.node_name=b.node_name";case"handled":return"
+    and b.status>1";case"pass":return" and b.status=2";case"reject":return" and b.status=3";case"back":return"
+    and b.status=4";case"transfer":return" and b.status=5";case"signBefore":return"
+    and b.status=6";case"signAfter":return" and b.status=7";case"backed":return" and
+    b.status=8";default:return""}}main();
+tags: ''
+text: module
+title: ''

@@ -1,0 +1,57 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Set current user value
+  serverScript: |-
+    /**
+     * Store short value to database
+     * @param {String} name value name.
+     * @param {String} value stored value, empty value will clear the value.
+     * @param {String} [type] value type:
+     * -'number': represent a number value.
+     * -'date': represent a date value.
+     * -'bool': represent a boolean value.
+     * -'string': represent a string value, default.
+     */
+    function setValue() {
+      //allowed names when starts with "sys."
+      const allowSysNames = ['sys.theme', 'sys.fontSize'];
+      let { name, value, type } = Params, isSysName, session;
+
+      isSysName = name.startsWith('sys.');
+      if (isSysName && !allowSysNames.includes(name))
+        Wb.accessDenied();
+      if (value) {
+        /* type: 0 string, 1 number, 2 date, 3 bool */
+        switch (type) {
+          case 'number':
+            type = 1;
+            break;
+          case 'date':
+            type = 2
+            break;
+          case 'bool':
+            type = 3
+            break;
+        }
+      } else {
+        value = null;
+      }
+      Wb.setValue(name, value, app.userid, type);
+      if (isSysName) {
+        //System variables are added to the session attributes
+        session = request.getSession();
+        if (value == null)
+          session.removeAttribute(name);
+        else
+          session.setAttribute(name, value);
+      }
+    }
+    setValue();
+tags: ''
+text: module
+title: ''

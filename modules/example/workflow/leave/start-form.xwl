@@ -1,0 +1,112 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: |-
+    Wb.apply(app, {
+      /** @property {Boolean} - Whether to auto show window. */
+      autoShow: false,
+      /**
+       * Fires after displaying the window.
+       * @param {String} flowId The workflow instance id.
+       * @return {String} type Window type.
+       * -'start': Start window.
+       * -'handle': Handle window.
+       * -'view': View window.
+       * @param {Wb.GridItem} record The workflow record.
+       */
+      init(flowId, type, record) {
+        if (flowId) {
+          Wb.ajax({
+            url: xpath + '/../actions&xaction=selectLeave',
+            params: { flowId },
+            json: true,
+            success(resp) {
+              Wb.setValue(app.main, resp);
+              app.main.show();
+            }
+          });
+        } else {
+          app.main.show();
+        }
+      }
+    });
+hideInMenu: 'false'
+icon: ''
+img: ''
+items:
+- _expanded: true
+  _icon: window
+  cls: Wb.Window
+  items:
+  - _icon: text
+    cls: Wb.Text
+    properties:
+      cid: flowTitle
+      required: 'true'
+      text: Title
+    text: flowTitle
+  - _expanded: true
+    _icon: calendar
+    cls: Wb.Date
+    properties:
+      cid: begin_date
+      required: 'true'
+      text: Begin Date
+    text: begin_date
+  - _expanded: true
+    _icon: calendar
+    cls: Wb.Date
+    properties:
+      cid: end_date
+      required: 'true'
+      text: End Date
+    text: end_date
+  - _icon: number-edit
+    cls: Wb.Number
+    properties:
+      cid: leave_days
+      decimalCount: '0'
+      maxLength: '5'
+      minValue: '0'
+      required: 'true'
+      text: Leave days
+    text: leave_days
+  - _icon: text
+    cls: Wb.Text
+    properties:
+      cid: leave_reason
+      required: 'true'
+      text: Reason
+    text: leave_reason
+  properties:
+    autoScroll: 'true'
+    cid: main
+    icon: paper-plane
+    layout: grid1
+    title: Leave application
+    visible: 'true'
+  text: main
+properties:
+  cid: module
+  serverScript: |-
+    Wb.apply(app, {
+      /**
+       * Fires after action execution.
+       * @param {String} action The action name.
+       * @param {Wb.Workflow} flow The workflow instance.
+       * @return {Object} The returned "after" parameter to the client.
+       */
+      afterAction(action, flow) {
+        if (flow.restarting) {
+          Params.$flow_id = flow.flowId;
+          Wb.sync({ tableName: 'wb_leave', update: Params, whereFields: 'flow_id' });
+        } else {
+          Wb.apply(Params, { sid: Wb.getId(), flow_id: flow.flowId, user_id: flow.handleUser });
+          Wb.sync({ tableName: 'wb_leave', insert: Params });
+        }
+      }
+    });
+tags: '{container: false}'
+text: module
+title: ''

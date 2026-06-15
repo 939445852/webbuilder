@@ -1,0 +1,31 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.make(app,{cname:"codeEditor",readonly:true,wrapBorder:0,value:"//Loads
+    a JS/MJS script file at the specified path. Use Wb.load method to load only once,\n//and
+    if it is already loaded, the script will no longer be executed.\nWb.load('wb/ss/my.js');
+    //Load files based on the root directory of the web-app\nWb.load('./foo/bar.mjs');
+    //Load the foo/bar.mjs file in the current directory\nlet module = Wb.load('../foo/my.mjs');
+    //Load the foo/my.mjs module file in the parent directory and get exported object\nmodule.exportObject.method();
+    //Call the method of exportObject\n\n//Run ServerScript of the xwl module, and
+    the ServerScript will be executed every time\nWb.run('shortcut'); //Run modules
+    through module shortcut URL\nWb.run('my/file.xwl', {foo:'bar'}); //Run the my/file
+    module in the module root directory and pass the parameters\nWb.run('./my/file.xwl');
+    //Run the my/file module in the current directory\nWb.run('../my/file'); //Run
+    the my/file module in the parent directory (.xwl extension can be omitted)\nWb.run('m?xwl=my/file');
+    //Run the module through URI\nWb.log(Wb.run('myModule')); //Log the return value
+    in myModule's ServerScript\n\n//Call the xwl module, Wb.execute/Wb.invoke differs
+    from Wb.run in that it retrieves client script\n//Invoke the module, run the called
+    module's ServerScript and output client script\nWb.execute('my/file');\nWb.invoke('my/file');\n//Invoke
+    the module, run the called module's ServerScript and get the client full HTML
+    to script variable\nlet script = Wb.invoke('my/file', params, true, false);",cid:"codeEditor1",full:true});
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  links: '["wb/js/monaco.js"]'
+tags: ''
+text: module
+title: ''

@@ -1,0 +1,15 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.apply(app,{onLoad(){app.reloadItem.fireEvent("click")}});Wb.make(app,{cname:"viewport",layout:"fit",autoScroll:true,cid:"viewport1",tbar:{cname:"toolbar",items:[{icon:"refresh",cid:"reloadItem",text:"Reload",events:{click(t,e){Wb.ajax({url:xpath+"/actions&xaction=reload",success(t){app.container1.html="";app.container1.html=t}})}}},{icon:"export",cid:"exportItem",text:"Export",events:{click(t,e){Wb.download(xpath+"/actions&xaction=export")}}},{icon:"print",cid:"printItem",text:"Print",events:{click(t,e){Wb.print(app.container1,"A3
+    landscape")}}}]},items:[{cname:"container",layout:"middle",cid:"container1",cls:"w-max-size
+    /* for print centered only */"}]});
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

@@ -1,0 +1,30 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Select tasks
+  serverScript: |-
+    function main() {
+      const Util = Wb.load('./util.mjs');
+      let sql, rows, dateType = { type: "date" };
+
+      sql = 'select * from wb_job';
+      if (Params.search) {
+        Wb.setLike('search');
+        sql += ' where job_name like {?search?}';
+      }
+      sql += ' order by status desc,' + Wb.getOrderSql(null, null, false);
+      rows = Wb.getRowx(sql);
+      Wb.apply(rows.fields, { trigger_time: dateType, previous_time: dateType, next_time: dateType });
+      rows.items?.forEach(item => {
+        Wb.apply(item, Util.getFireTime(item.sid));
+      });
+      Wb.send(rows);
+    }
+    main();
+tags: ''
+text: module
+title: ''

@@ -1,0 +1,14 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  serverScript: |-
+    Wb.info('after flow action: ' + app.action); // action name
+    Wb.info('after flow id: ' + app.flow.flowId); // workflow id
+    //return 'value'; // return to client
+tags: ''
+text: module
+title: ''

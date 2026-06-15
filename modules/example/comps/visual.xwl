@@ -1,0 +1,186 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: image
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: mainLabel
+      cls: w-title3
+      text: Image, Video and Icon
+    text: mainLabel
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: imageVideoIconListTitle
+      title: Image, video and icon list
+    text: imageVideoIconListTitle
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _icon: label
+      cls: Wb.Label
+      properties:
+        cid: commonImageLabel
+        text: Common image with click preview feature
+      text: commonImageLabel
+    - _icon: image
+      cls: Wb.Image
+      properties:
+        cid: commonImage
+        clickPreview: 'true'
+        height: 6em
+        src: wb/images/app/logo.png
+        width: 6em
+      text: commonImage
+    - _icon: label
+      cls: Wb.Label
+      properties:
+        cid: commonPictureLabel
+        text: Common picture with click preview feature
+      text: commonPictureLabel
+    - _icon: picture
+      cls: Wb.Picture
+      properties:
+        cid: commonPicture
+        clickPreview: 'true'
+        src: wb/images/app/logo.png
+      text: commonPicture
+    - _icon: label
+      cls: Wb.Label
+      properties:
+        cid: originalSizeLabel
+        text: Original size image
+      text: originalSizeLabel
+    - _icon: image
+      cls: Wb.Image
+      properties:
+        cid: originalSizeImage
+        height: 5em
+        size: auto
+        src: wb/images/support.png
+        width: 6em
+      text: originalSizeImage
+    - _icon: label
+      cls: Wb.Label
+      properties:
+        cid: videoLabel
+        text: Video
+      text: videoLabel
+    - _icon: video
+      cls: Wb.Video
+      properties:
+        cid: demoVideo
+        controls: 'true'
+        height: 20em
+        src: https://59b5fe18-b640-4ed9-a7d0-5867d0563fe4.mdnplay.dev/shared-assets/videos/flower.mp4
+      text: demoVideo
+    - _icon: label
+      cls: Wb.Label
+      properties:
+        cid: commonIconLabel
+        text: Common icon
+      text: commonIconLabel
+    - _expanded: true
+      _icon: logo
+      cls: Wb.Icon
+      properties:
+        cid: commonIcon
+        icon: gear
+      text: commonIcon
+    - _icon: label
+      cls: Wb.Label
+      properties:
+        cid: commonImageIconLabel
+        text: Image icon
+      text: commonImageIconLabel
+    - _expanded: true
+      _icon: logo
+      cls: Wb.Icon
+      properties:
+        cid: commonImageIcon
+        img: support
+      text: commonImageIcon
+    - _icon: label
+      cls: Wb.Label
+      properties:
+        cid: anySizeIconLabel
+        text: Any size icon, image and char Icon
+      text: anySizeIconLabel
+    - _expanded: true
+      _icon: container
+      cls: Wb.Container
+      items:
+      - _expanded: true
+        _icon: logo
+        cls: Wb.Icon
+        properties:
+          cid: icon1
+          icon: flower
+        text: icon1
+      - _expanded: true
+        _icon: logo
+        cls: Wb.Icon
+        properties:
+          cid: icon2
+          fontSize: 1.2em
+          img: field
+        text: icon2
+      - _expanded: false
+        _icon: logo
+        cls: Wb.Icon
+        properties:
+          cid: icon3
+          fontSize: 1.5em
+          icon: 🏥
+        text: icon3
+      - _expanded: false
+        _icon: logo
+        cls: Wb.Icon
+        properties:
+          cid: icon4
+          fontSize: 2em
+          icon: list
+        text: icon4
+      - _expanded: false
+        _icon: logo
+        cls: Wb.Icon
+        properties:
+          cid: icon5
+          fontSize: 3em
+          icon: 🥋
+        text: icon5
+      - _expanded: false
+        _icon: logo
+        cls: Wb.Icon
+        properties:
+          cid: icon6
+          fontSize: 4em
+          icon: 🎭
+        text: icon6
+      properties:
+        cid: anySizeCt
+        layout: form
+      text: anySizeCt
+    properties:
+      cid: imageVideoIconListCt
+      frame: 'true'
+      layout: grid1
+    text: imageVideoIconListCt
+  properties:
+    cid: viewport1
+    layout: grid1
+  text: viewport1
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

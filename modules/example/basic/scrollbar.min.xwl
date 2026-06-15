@@ -1,0 +1,24 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.make(app,{cname:"viewport",layout:"grid1",cid:"viewport1",items:[{cname:"label",cid:"mainLabel",cls:"w-title3",text:"Scrollbar"},{cname:"title",title:"Overflow
+    visible by default",cid:"defaultTitle"},{cname:"component",padding:true,html:"No
+    scrollbar by default<br>\nand overflow content will be displayed<br>\n(overflow
+    content)",margin:"0 0 1em 0",cid:"defaultComp",frame:true,height:"3em"},{cname:"title",title:"Overflow
+    hidden",cid:"overflowHiddenTitle"},{cname:"component",padding:true,html:"No scrollbar<br>\nand
+    overflow content will be hidden<br>\n(overflow content)",autoScroll:false,cid:"overflowHiddenComp",frame:true,height:"3em"},{cname:"title",title:"Overflow
+    scroll",cid:"overflowScrollTitle"},{cname:"component",padding:true,html:"Enable
+    scrollbar<br>\nscrollbar is auto<br>\n(overflow content)",autoScroll:true,cid:"overflowScrollComp",frame:true,height:"3em"},{cname:"title",title:"Overflow
+    scroll with auto show scrollbar",cid:"overflowScrollAutoTitle"},{cname:"component",padding:true,html:"Enable
+    scrollbar<br>\ndisplay scrollbars only when hovering<br>\n(overflow content)",autoScroll:"auto",cid:"overflowScrollAutoComp",frame:true,height:"3em"},{cname:"title",title:"Overflow
+    scroll without show scrollbar",cid:"overflowScrollNoBarTitle"},{cname:"component",padding:true,html:"Enable
+    scrollbar<br>\nalways hide scroll bars<br>\n(overflow content)",autoScroll:"hide",cid:"overflowScrollNoBarComp",frame:true,height:"3em"}]});
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

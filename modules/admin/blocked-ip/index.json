@@ -1,0 +1,9 @@
+{
+  "title": "@blockedIPs",
+  "icon": "",
+  "img": "",
+  "hideInMenu": "true",
+  "items": [
+    "set-actions.xwl"
+  ]
+}

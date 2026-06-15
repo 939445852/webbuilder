@@ -1,0 +1,17 @@
+{
+  "title": "@roleConfig",
+  "icon": "",
+  "img": "",
+  "hideInMenu": "true",
+  "items": [
+    "select.xwl",
+    "add.xwl",
+    "edit.xwl",
+    "del.xwl",
+    "get-users-by-role.xwl",
+    "set-user-roles.xwl",
+    "get-modules-by-role.xwl",
+    "set-module-roles.xwl",
+    "util.mjs"
+  ]
+}

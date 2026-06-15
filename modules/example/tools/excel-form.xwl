@@ -1,0 +1,201 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: |-
+    Wb.apply(app, {
+      /**
+       * Fire after module is loaded.
+       */
+      onLoad() {
+        Wb.ajax({
+          url: xpath + '/actions&xaction=getForm',
+          success(resp) {
+            app.container1.html = resp;
+            Wb.setValue(app.container1, { name: 'Your name', code: '10000' });
+          }
+        });
+      }
+    });
+hideInMenu: 'false'
+icon: ''
+img: ''
+items:
+- _expanded: true
+  _icon: array
+  cls: Wb.Array
+  items:
+  - _icon: text
+    cls: Wb.Text
+    properties:
+      cid: name
+      instanced: 'false'
+      required: 'true'
+    text: name
+  - _icon: text
+    cls: Wb.Text
+    properties:
+      cid: nation
+      instanced: 'false'
+    text: nation
+  - _icon: combo
+    cls: Wb.Select
+    properties:
+      cid: gender
+      instanced: 'false'
+      keyName: gender
+    text: gender
+  - _icon: calendar
+    cls: Wb.Date
+    properties:
+      cid: birthdate
+      instanced: 'false'
+    text: birthdate
+  - _icon: number-edit
+    cls: Wb.Number
+    properties:
+      cid: height
+      decimalCount: '1'
+      instanced: 'false'
+    text: height
+  - _icon: number-edit
+    cls: Wb.Number
+    properties:
+      cid: weight
+      instanced: 'false'
+    text: weight
+  - _icon: number-edit
+    cls: Wb.Number
+    properties:
+      cid: salary
+      instanced: 'false'
+    text: salary
+  - _expanded: true
+    _icon: text
+    cls: Wb.Text
+    properties:
+      cid: marry
+      instanced: 'false'
+    text: marry
+  - _expanded: true
+    _icon: text
+    cls: Wb.Text
+    properties:
+      cid: mobile
+      instanced: 'false'
+    text: mobile
+  - _expanded: true
+    _icon: text
+    cls: Wb.Text
+    properties:
+      cid: email
+      instanced: 'false'
+    text: email
+  - _expanded: true
+    _icon: text
+    cls: Wb.Text
+    properties:
+      cid: address
+      instanced: 'false'
+    text: address
+  - _expanded: true
+    _icon: text
+    cls: Wb.Text
+    properties:
+      cid: contact
+      instanced: 'false'
+    text: contact
+  - _icon: image
+    cls: Wb.Image
+    properties:
+      cid: photo
+      height: '140'
+      instanced: 'false'
+      src: wb/images/app/logo.png
+    text: photo
+  - _expanded: true
+    _icon: text
+    cls: Wb.Text
+    properties:
+      cid: university
+      instanced: 'false'
+    text: university
+  - _expanded: true
+    _icon: text
+    cls: Wb.Text
+    properties:
+      cid: grade
+      instanced: 'false'
+    text: grade
+  - _expanded: true
+    _icon: text
+    cls: Wb.Text
+    properties:
+      cid: speciality
+      instanced: 'false'
+    text: speciality
+  - _expanded: true
+    _icon: text
+    cls: Wb.Text
+    properties:
+      cid: class
+      instanced: 'false'
+    text: class
+  - _icon: grid
+    cls: Wb.Grid
+    properties:
+      cid: grid
+      height: '169'
+      instanced: 'false'
+      url: '@xpath + ''/actions&xaction=select'''
+    text: grid
+  - _icon: textarea
+    cls: Wb.TextArea
+    properties:
+      cid: resume
+      height: '186'
+      instanced: 'false'
+    text: resume
+  properties:
+    cid: bindComps
+  text: bindComps
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _expanded: true
+    _icon: toolbar
+    cls: Wb.Toolbar
+    items:
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: 'Wb.download(xpath + ''/actions&xaction=export'', { data: Wb.getValue(app.container1)
+          });'
+      properties:
+        cid: exportItem
+        icon: export
+        text: Export
+      text: exportItem
+    properties:
+      cid: tbar
+      isProperty: 'true'
+    text: tbar
+  - _icon: container
+    cls: Wb.Container
+    properties:
+      autoMake: 'true'
+      cid: container1
+      layout: middle
+    text: container1
+  properties:
+    autoScroll: 'true'
+    cid: viewport1
+    layout: fit
+  text: viewport1
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

@@ -1,0 +1,64 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  loginRequired: 'false'
+  remark: Session service without login
+  serverScript: |-
+    if (!Params.xaction)
+      return;
+    let actions = {
+      /**
+       * Create captcha image.
+       */
+      captcha() {
+        const CaptchaGenerator = Java.type('com.wb.tool.CaptchaGenerator');
+        const ImageIO = Java.type('javax.imageio.ImageIO');
+        const charCount = 4;
+        const fontSize = Math.min(parseInt(Params.fontSize) || 20, 80);
+        let captcha, image, code, session;
+
+        captcha = new CaptchaGenerator(Math.round(fontSize * 1.1 * charCount * 1.2), Math.round(fontSize * 1.5), charCount, 9);
+        image = captcha.getImage();
+        code = captcha.getCode();
+        session = request.getSession();
+        session.setAttribute('sys.verifyCode', code);
+        response.setContentType('image/jpeg');
+        response.setHeader('Pragma', 'no-cache');
+        response.setHeader('Cache-Control', 'no-cache');
+        response.setDateHeader('Expires', 0);
+        ImageIO.write(image, 'png', response.getOutputStream());
+      },
+      /**
+       * Monitoring websocket open and close for auto logout.
+       */
+      monWebsocket() {
+        if (Wb.getConfig('sys.session.autoLogout') && WebUtil.isLogined(httpSession)) {
+          const timerName = 'sys.logoutTimer';
+          if (event == 'open') {
+            httpSession.getAttribute(timerName)?.cancel(false);
+            httpSession.removeAttribute(timerName);
+          } else if (event == 'close' && !httpSession.getAttribute(timerName)) {
+            let timer, map;
+
+            map = Sessions.getWSMap(httpSession);
+            if (map == null || map.size() < 2) {
+              // Only this socket exists, which means need to logout.
+              timer = Wb.setTimeout(f => {
+                let session = params.session;
+                session.removeAttribute('sys.logoutTimer');
+                session.invalidate();
+              }, 10000, { session: httpSession });
+              httpSession.setAttribute(timerName, timer);
+            }
+          }
+        }
+      }
+    };
+    actions[Params.xaction]();
+tags: ''
+text: module
+title: ''

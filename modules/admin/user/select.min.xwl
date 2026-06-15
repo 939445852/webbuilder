@@ -1,0 +1,18 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Select users
+  serverScript: function main(){const e=Wb.UserUtil.protectedText;let a;a=`select
+    a.sid, a.user_name, a.display_name, '${e}' as password, '${e}' as confirm_password,\n           a.email,
+    a.mobile_phone, a.use_lang, b.sid as dept_id, b.dept_code as dept_code_hide, b.dept_name
+    as dept_name_tree,\n           a.login_times, a.create_date, a.last_login,a.status,
+    a.sid as user_id_disp\n           from wb_user a left join wb_dept b on a.dept_id=b.sid`;if(Params.search){Wb.setLike("search");a+="
+    where a.user_name like {?search?} or a.display_name like {?search?} or a.sid like
+    {?search?}"}a+=Wb.getOrderSql({dept_name_tree:"b.dept_name",user_id_disp:"a.sid",$:"a"});Wb.sendDict(a,"wb,")}main();
+tags: ''
+text: module
+title: ''

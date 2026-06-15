@@ -1,0 +1,109 @@
+_icon: module
+cls: Wb.Module
+properties:
+  cid: module
+  remark: Search text in app folder
+  serverScript: |-
+    /**
+     * Search text in app folder.
+     */
+    Wb.checkDemo();
+    let actions = {
+      /**
+       * Search text in the files
+       */
+      searchText() {
+        Wb.load('./ide-ss.js');
+        let result, fileSearcher, FileSearcher = Wb.ide.FileSearcher;
+
+        fileSearcher = new FileSearcher(Wb.getObject('path'), Params.search, Params.fileType, Wb.getObject('options'));
+        result = fileSearcher.searchReplace();
+        Wb.send(result);
+      },
+      /**
+       * Search file name
+       */
+      searchFile() {
+        let name = Params.search, result = [];
+
+        name = '*' + name + '*';
+        Wb.File.appFolder.cascade(file => {
+          if (!file.isMinFile && file.match(name)) {
+            result.push({ path: file.path, content: file.name.htmlText, lineNumber: 1, column: 1 });
+            if (result.length > 999)
+              return false;
+          }
+        });
+        Wb.send(result);
+      },
+      /**
+       * Search url shortcut
+       */
+      searchUrl() {
+        let result = [], object = new Wb.File(true, 'wb/system/url.json').object, key = Params.search, value,
+          modulePath = Base.modulePathText;
+
+        if (value = object['/' + key]) {
+          result.push({ path: modulePath + value, content: key.htmlText, lineNumber: 1, column: 1 });
+          delete object['/' + key];
+        }
+        Wb.each(object, (k, v) => {
+          if (k.includes(key))
+            result.push({ path: modulePath + v, content: k.substr(1).htmlText, lineNumber: 1, column: 1 });
+        });
+        Wb.send(result);
+      },
+      /**
+       * Peek file name
+       */
+      peekFile() {
+        let result = [], query = Params.query, module, text, name, title, notMinFile;
+        Wb.File.appFolder.cascade(file => {
+          name = file.name;
+          notMinFile = !file.isMinFile;
+          if (notMinFile && file.isModuleFile) {
+            title = Wb.optText(file.object.title);
+          } else {
+            title = null;
+          }
+          if (notMinFile && (name.includes(query) || title?.includes(query))) {
+            module = file.inModuleFolder;
+            if (module)
+              text = file.modulePath;
+            else
+              text = file.relPath;
+            result.push({ text, module, subtext: title });
+            if (result.length > 999)
+              return false;
+          }
+        });
+        Wb.send(result);
+      },
+      /**
+       * Search none login modules.
+       */
+      noneLoginModule() {
+        let object, result = [];
+        Wb.File.moduleFolder.cascade(file => {
+          if (file.isModuleFile && !file.isMinFile) {
+            try {
+              object = file.object.properties;
+              if (!object)
+                throw object;
+            } catch (e) {
+              Wb.raise('Invalid module "' + file.modulePath + '".')
+            }
+            if (!Wb.parseBool(object.loginRequired ?? true)) {
+              result.push({
+                path: file.path, compPath: object.cid, propName: 'loginRequired',
+                propType: 'properties', content: 'loginRequired', lineNumber: 1, column: 1
+              });
+            }
+          }
+        });
+        Wb.send(result);
+      }
+    };
+    actions[Params.xaction]();
+text: module
+title: ''

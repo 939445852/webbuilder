@@ -1,0 +1,11 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: cart
+img: ''
+properties:
+  cid: module
+  remark: Buy WebBuilder
+tags: '{url: ''https://www.geejing.com/buy'', newWin: true}'
+text: module
+title: '@buyWebBuilder'

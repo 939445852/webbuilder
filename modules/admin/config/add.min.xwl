@@ -1,0 +1,12 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Add config item
+  serverScript: Wb.checkDemo();function main(){let{nameEditor:i,typeEditor:t,valueEditor:e,listEditor:o,descEditor:a}=Params;Config.set(i,e,t,o,a)}main();
+tags: ''
+text: module
+title: ''

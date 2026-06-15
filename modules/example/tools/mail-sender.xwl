@@ -1,0 +1,129 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: titleComp
+      title: Email Sender
+    text: titleComp
+  - _icon: text
+    cls: Wb.Text
+    properties:
+      cid: smtp
+      required: 'true'
+      text: Smtp
+      value: smtp.xxx.com
+    text: smtp
+  - _expanded: true
+    _icon: text
+    cls: Wb.Text
+    properties:
+      cid: username
+      required: 'true'
+      text: Username
+      value: name@xxx.com
+    text: username
+  - _expanded: true
+    _icon: text
+    cls: Wb.Text
+    properties:
+      cid: password
+      required: 'true'
+      text: Password
+      value: password
+    text: password
+  - _expanded: true
+    _icon: text
+    cls: Wb.Text
+    properties:
+      cid: authUsername
+      text: Auth username
+      value: name@xxx.com
+    text: authUsername
+  - _expanded: true
+    _icon: text
+    cls: Wb.Text
+    properties:
+      cid: authPassword
+      text: Auth password
+      value: someAuthNumber
+    text: authPassword
+  - _icon: text
+    cls: Wb.Text
+    properties:
+      cid: from
+      required: 'true'
+      text: From
+      value: name@xxx.com
+    text: from
+  - _icon: text
+    cls: Wb.Text
+    properties:
+      cid: to
+      required: 'true'
+      text: To
+      value: to@xxx.com
+    text: to
+  - _icon: text
+    cls: Wb.Text
+    properties:
+      cid: cc
+      text: CC
+    text: cc
+  - _icon: text
+    cls: Wb.Text
+    properties:
+      cid: title
+      text: Title
+    text: title
+  - _icon: textarea
+    cls: Wb.TextArea
+    properties:
+      cid: content
+      text: Mail Content
+      value: Hello world
+    text: content
+  - _icon: search-file
+    cls: Wb.FileInput
+    properties:
+      cid: attachFiles
+      multiple: 'true'
+      text: Attach Files
+    text: attachFiles
+  - _icon: button
+    cls: Wb.Button
+    events:
+      click: |-
+        if (!Wb.verify(app.viewport1))
+          return;
+        Wb.ajax({
+          url: xpath + '/send',
+          comps: app.viewport1,
+          success() {
+            Wb.tipSucc('The email has been successfully sent.');
+          }
+        });
+    properties:
+      cid: Send
+      icon: paper-plane
+      text: Send
+      type: primary
+    text: Send
+  properties:
+    cid: viewport1
+    layout: grid1
+  text: viewport1
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

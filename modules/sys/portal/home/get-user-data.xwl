@@ -1,0 +1,21 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Get current user data
+  serverScript: |-
+    function main() {
+      const protectedText = Wb.UserUtil.protectedText;
+      let sql;
+
+      sql = `select '${protectedText}' as password, '${protectedText}' as confirm_password, display_name, create_date,
+        login_times, email, mobile_phone, use_lang from wb_user where sid={?sys.userid?}`;
+      Wb.sendDict(sql, 'wb,');
+    }
+    main();
+tags: ''
+text: module
+title: ''

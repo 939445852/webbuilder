@@ -1,0 +1,25 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Table select, save and download
+  serverScript: |-
+    function main() {
+      if (Params.download || Params.save)
+        Wb.sync(Params);
+      else {
+        const Util = Wb.load('./util.mjs');
+        let sql = 'select * from ' + Params.tableName;
+        if (Params.where)
+          sql += ' where ' + Wb.decodeBase64(Params.where);
+        sql += Wb.getOrderSql();
+        Wb.sendRowx({ sql, db: Params.db, dateFormat: true, rs: Util.maxRows, paging: Wb.getBool('useDbPaging') ? 'db' : true });
+      }
+    }
+    main();
+tags: ''
+text: module
+title: ''

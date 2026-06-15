@@ -1,0 +1,13 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Export files in any path
+  serverScript: Wb.checkDemo();function main(){let e=Wb.getObject("files"),i=new Wb.File(e[0]),t=Wb.getBool("zip"),n=e.length,a=Params.filename;if(t||n>1||i.isFolder){if(!a){if(n==1)a=i.isFile?i.normalName:i.name;else
+    a=i.parent.name||"file"}e=e.map((e=>new File(e)));Wb.setContentType(a+".zip");ZipUtil.zip(e,response.getOutputStream())}else{Wb.exportData(i,a)}}main();
+tags: ''
+text: module
+title: ''

@@ -1,0 +1,564 @@
+{
+  "sys.ss.remoteDebug": {
+    "text": "Whether to allow remote debugging by proxy. This method is safe.",
+    "type": "bool",
+    "zh-cn": "是否允许通过代理的方式进行远程调试。该方法是安全的。",
+    "value": true
+  },
+  "sys.file.gzipSize": {
+    "text": "Enable GZIP compression if file size in byte exceed this value. -1 means no compression.",
+    "type": "int",
+    "zh-cn": "对超过该值以字节为单位大小的文件启用 GZIP 压缩。-1表示不压缩。",
+    "value": 10240
+  },
+  "sys.ai.imageFormat": {
+    "text": "Image format: openai = {type:image_url}, string = base64 text.",
+    "type": "enum",
+    "list": [
+      "openai",
+      "string"
+    ],
+    "zh-cn": "图片格式：openai=标准结构，string=纯base64字符串。",
+    "value": "openai"
+  },
+  "sys.file.blockedIPs": {
+    "text": "The file path of the blocked IP list.",
+    "type": "string",
+    "zh-cn": "屏蔽 IP 列表的文件路径。",
+    "value": "wb/system/ips.txt"
+  },
+  "sys.file.allowedHeaders": {
+    "text": "The file path of the allowed request header list.",
+    "type": "string",
+    "zh-cn": "允许请求头列表的文件路径。",
+    "value": "wb/system/headers.txt"
+  },
+  "sys.locale.language": {
+    "text": "The language used by the system, \"auto\" means auto detect.",
+    "type": "string",
+    "zh-cn": "系统使用的语言。\"auto\"表示自动监测。",
+    "value": "auto"
+  },
+  "sys.session.timeout": {
+    "text": "The timeout in seconds to be used for HTTP session. 0 or a negative number means never timeout.",
+    "type": "int",
+    "zh-cn": "以秒为单位的HTTP会话超时时间。0或负数表示永不超时。",
+    "value": 1800
+  },
+  "sys.ss.autoReload": {
+    "text": "Whether to automatically reload when the server's JS and MJS files are changed.",
+    "type": "bool",
+    "zh-cn": "当服务端 JS 和 MJS 文件更新时是否自动重新加载。",
+    "value": true
+  },
+  "sys.ss.wsBufferSize": {
+    "text": "WebSocket text buffer size in bytes of Devtools.",
+    "type": "int",
+    "zh-cn": "Devtools的WebSocket文本缓冲区大小，以字节为单位。",
+    "value": 20971520
+  },
+  "sys.ss.contextCount": {
+    "text": "The number of execution contexts automatically created at startup.",
+    "type": "int",
+    "zh-cn": "启动时自动创建的执行上下文数量。",
+    "value": 30
+  },
+  "sys.session.anonymousWebsocket": {
+    "text": "Whether to allow the client to connect to the Websocket without login.",
+    "type": "bool",
+    "zh-cn": "是否允许客户端不登录连接到WebSocket。",
+    "value": false
+  },
+  "sys.app.defaultPermission": {
+    "text": "Whether the newly added module is automatically added with the current user's permissions.",
+    "type": "bool",
+    "zh-cn": "新添加的模块是否自动加上当前用户的权限。",
+    "value": true
+  },
+  "sys.db.logLevel": {
+    "text": "Log level when logging to database table.",
+    "type": "enum",
+    "list": [
+      "info",
+      "warn",
+      "error",
+      "none"
+    ],
+    "zh-cn": "记录日志到数据库表时的日志级别。",
+    "value": "info"
+  },
+  "sys.db.closeDerby": {
+    "text": "Whether the built-in Derby database is automatically closed when the system is shut down.",
+    "type": "bool",
+    "zh-cn": "关闭系统时是否自动关闭内置的Derby数据库。",
+    "value": true
+  },
+  "sys.session.httpHeartbeatInterval": {
+    "text": "The interval in sencods to send HTTP messages in the Home and IDE pages to keep the HTTP session. -1 means never send.",
+    "type": "int",
+    "zh-cn": "在主页和IDE页面中，定时发送HTTP消息的周期，用于保持HTTP会话。以秒为单位，-1表示不发送。",
+    "value": -1
+  },
+  "sys.office.exportMaxRows": {
+    "text": "The default maximum number of rows allowed when exporting to a file.",
+    "type": "int",
+    "zh-cn": "导出到文件时允许的默认最大行数。",
+    "value": 100000
+  },
+  "sys.ss.inspect": {
+    "text": "The IP address of the debugging service binding. Empty value means local.",
+    "type": "string",
+    "zh-cn": "调试服务绑定的IP地址。为空表示为本地。",
+    "value": ""
+  },
+  "sys.office.plainColor": {
+    "text": "Whether to use plain colors when generating pages. Plain colors can adapt to the color of the current UI theme.",
+    "type": "bool",
+    "zh-cn": "生成页面时是否使用素色。素色能自适应当前界面主题的颜色。",
+    "value": false
+  },
+  "sys.file.uploadTotalMaxSize": {
+    "text": "The total maximum number of bytes for upload, -1 means no limit.",
+    "type": "long",
+    "zh-cn": "上传允许的最大字节数，-1表示无限制。",
+    "value": 104857600
+  },
+  "sys.ai.compressImage": {
+    "text": "Compress image to JPG format before sending to AI.",
+    "type": "bool",
+    "zh-cn": "输出给AI前将图片压缩为JPG格式。",
+    "value": true
+  },
+  "sys.ai.userRole": {
+    "text": "User role name in message.",
+    "type": "string",
+    "zh-cn": "消息中的用户角色名称。",
+    "value": "user"
+  },
+  "sys.session.loginPage": {
+    "text": "The login page URL.",
+    "type": "string",
+    "zh-cn": "登录页面URL。",
+    "value": "login"
+  },
+  "sys.office.bottomToMiddle": {
+    "text": "Whether change cell vertical alignment bottom to middle.",
+    "type": "bool",
+    "zh-cn": "是否把单元格底部对齐转换为居中对齐。",
+    "value": true
+  },
+  "sys.locale.filenameCharset": {
+    "text": "The filename charset. Empty value means OS charset.",
+    "type": "string",
+    "zh-cn": "文件名称编码，为空表示操作系统使用的编码。",
+    "value": ""
+  },
+  "sys.db.lowercase": {
+    "text": "Whether to convert field name to lowercase without starts with \"#\".",
+    "type": "bool",
+    "zh-cn": "是否把除#开头的字段名转换为小写。",
+    "value": true
+  },
+  "sys.locale.defaultRegionLanguage": {
+    "text": "The default language to be used when no region is specified. Multiple languages are separated by semicolons.",
+    "type": "string",
+    "zh-cn": "未指定区域时使用的默认语言。多个语言使用分号分隔。",
+    "value": "en=en-us;zh=zh-cn"
+  },
+  "sys.file.charset": {
+    "text": "The charset used to open files outside the application directory. Empty value means OS charset.",
+    "type": "string",
+    "zh-cn": "打开应用目录之外的文件使用的编码方式，为空表示操作系统使用的编码。",
+    "value": "UTF-8"
+  },
+  "sys.app.homeExpandNodes": {
+    "text": "The home page menu's root nodes are automatically expanded when the number of them is less than or equal to this number.",
+    "type": "int",
+    "zh-cn": "主页功能菜单根节点数量小于等于该值时自动展开。",
+    "value": 2
+  },
+  "sys.service.wsBufferSize": {
+    "text": "WebSocket text buffer size in bytes.",
+    "type": "int",
+    "zh-cn": "WebSocket文本缓冲区大小，以字节为单位。",
+    "value": 1048576
+  },
+  "sys.service.wsBinBufferSize": {
+    "text": "WebSocket binary buffer size in bytes.",
+    "type": "int",
+    "zh-cn": "WebSocket二进制缓冲区大小，以字节为单位。",
+    "value": 1048576
+  },
+  "sys.app.name": {
+    "text": "Name of application.",
+    "type": "string",
+    "zh-cn": "应用的名称。",
+    "value": "wb"
+  },
+  "sys.db.defaultSource": {
+    "text": "The default database name.",
+    "type": "string",
+    "zh-cn": "默认数据库名称。",
+    "value": "system"
+  },
+  "sys.session.wsTimeout": {
+    "text": "The timeout in seconds to be used for WebSocket session. 0 or a negative number means never timeout.",
+    "type": "int",
+    "zh-cn": "以秒为单位的WebSocket会话超时时间。0或负数表示永不超时。",
+    "value": 0
+  },
+  "sys.db.maxRows": {
+    "text": "The default maximum number of records when reading from database or system.",
+    "type": "long",
+    "zh-cn": "当从数据库或系统读取数据时，每次允许读取的默认最大数量。",
+    "value": 1000
+  },
+  "sys.app.key": {
+    "text": "Encryption key for sensitive data.",
+    "type": "string",
+    "zh-cn": "用于加密敏感数据的密钥。",
+    "value": "!@*d8ACz"
+  },
+  "sys.ai.knowledgeFile": {
+    "text": "AI knowledge file path. \":\" denotes relative path to app directory.",
+    "type": "string",
+    "zh-cn": "AI知识库文件路径，\":\"表示相对应用目录路径。",
+    "value": ":wb/system/webbuilder.md"
+  },
+  "sys.file.uploadBufferSize": {
+    "text": "The cache size in bytes to be used for uploading files.",
+    "type": "int",
+    "zh-cn": "上传文件的缓存大小，以字节为单位。",
+    "value": 512000
+  },
+  "sys.ss.debugPort": {
+    "text": "The port number used by the debugging service.",
+    "type": "string",
+    "zh-cn": "调试服务使用的端口号。\"auto\"表示随机自动获取一个有效的端口号。",
+    "value": "auto"
+  },
+  "sys.file.cacheMaxAge": {
+    "text": "The browser cache max age, -1 means default policy, 0 no cache, and greater than 0 cache duration in seconds.",
+    "type": "int",
+    "zh-cn": "浏览器缓存时长，-1默认策略，0不缓存，大于0缓存以秒为单位的时长。",
+    "value": -1
+  },
+  "sys.debug": {
+    "text": "Whether to run the system in debugging mode. Take effect after reload the system. No affect if \"sys.optimal\" is true.",
+    "type": "bool",
+    "zh-cn": "是否在调试模式下运行系统。重新加载系统后生效。当\"sys.optimal\"设置true后该项无效。",
+    "value": true
+  },
+  "sys.app.version": {
+    "text": "WebBuilder version.",
+    "type": "string",
+    "zh-cn": "WebBuilder 版本。",
+    "value": "11.2"
+  },
+  "sys.app.obfuscate": {
+    "text": "Whether to confuse JavaScript. True means confused, false no confuse, and null default.",
+    "type": "enum",
+    "list": [
+      "true",
+      "false",
+      "null"
+    ],
+    "zh-cn": "是否对JavaScript进行混淆。true混淆，false不混淆，null默认。",
+    "value": "null"
+  },
+  "sys.ai.outputPath": {
+    "text": "Output data path in AI models use \".\" as the delimiter.",
+    "type": "string",
+    "zh-cn": "AI大模型中输出数据部分的路径，以\".\"为分隔符。",
+    "value": "choices[0].message.content"
+  },
+  "sys.ai.inputPath": {
+    "text": "Input data path in AI models use \".\" as the delimiter.",
+    "type": "string",
+    "zh-cn": "AI大模型中输入数据部分的路径，以\".\"为分隔符。",
+    "value": "data.messages"
+  },
+  "sys.locale.adaptTimeZone": {
+    "text": "Whether to automatically adapt the time zone when the client and server time zone are inconsistent.",
+    "type": "bool",
+    "zh-cn": "当服务器端和客户端如果时区不一致时，是否自动适配时区。",
+    "value": "false"
+  },
+  "sys.session.heartbeatInterval": {
+    "text": "The interval in sencods to send WebSocket messages in the Home and IDE pages to keep the WebSocket session. -1 means never send.",
+    "type": "int",
+    "zh-cn": "在主页和IDE页面中，定时发送WebSocket消息的周期，用于保持WebSocket会话。以秒为单位，-1表示不发送。",
+    "value": -1
+  },
+  "sys.app.fileVersion": {
+    "text": "File format version.",
+    "type": "string",
+    "zh-cn": "文件格式版本。",
+    "value": "1.8"
+  },
+  "sys.locale.defaultLanguage": {
+    "text": "The default language to be used if the specified language definition cannot be found.",
+    "type": "string",
+    "zh-cn": "如果找不到指定的语言定义，使用的默认语言。",
+    "value": "en-us"
+  },
+  "sys.theme": {
+    "text": "The default user interface theme.",
+    "type": "string",
+    "zh-cn": "默认使用的用户界面主题。",
+    "value": "classic"
+  },
+  "sys.office.SXSSFWorkbook": {
+    "text": "Whether SXSSFWorkbook is allowed.",
+    "type": "bool",
+    "zh-cn": "是否允许使用SXSSFWorkbook。",
+    "value": false
+  },
+  "sys.session.addDefaultRole": {
+    "text": "Whether to automatically add the \"default\" role to each logged-in user.",
+    "type": "bool",
+    "zh-cn": "是否为每一个登录用户自动加上\"default\"角色。",
+    "value": true
+  },
+  "sys.app.links": {
+    "text": "The list of JS and CSS links automatically loaded to the web page.",
+    "type": "array",
+    "zh-cn": "自动加载到网页的JS和CSS链接列表。",
+    "value": []
+  },
+  "sys.app.forceShutdown": {
+    "text": "Whether to allow a forced shutdown of the system.",
+    "type": "bool",
+    "zh-cn": "是否允许强制关闭系统。",
+    "value": false
+  },
+  "sys.ai.model": {
+    "text": "AI large model configuration object.",
+    "type": "text",
+    "zh-cn": "AI大模型配置对象。",
+    "value": ""
+  },
+  "sys.ai.maxHistory": {
+    "text": "Maximum number of historical messages sent to the AI.",
+    "type": "int",
+    "zh-cn": "发送给AI的历史消息最大记录条数。",
+    "value": 25
+  },
+  "sys.optimal": {
+    "text": "Whether the system run in optimization mode. It will optimize running, stop debugging, and stop printing etc. Take effect after reload the system.",
+    "type": "bool",
+    "zh-cn": "系统是否运行在最优化模式下。它将优化运行、停止调试和停止打印等。重新加载系统后生效。",
+    "value": false
+  },
+  "sys.app.date": {
+    "text": "Last update date of WebBuilder version.",
+    "type": "date",
+    "zh-cn": "WebBuilder 版本最后更新日期。",
+    "value": "2026-06-12 10:15:48.180"
+  },
+  "sys.session.passwordMethod": {
+    "text": "The encryption method for user password. Null means no encryption is required.",
+    "type": "string",
+    "zh-cn": "用户密码的加密方法。为空表示无需加密。",
+    "value": "com.wb.tool.Encrypter.getSHA"
+  },
+  "sys.office.flexColumnWidth": {
+    "text": "The flex column width in characters when outputting to the office documents.",
+    "type": "int",
+    "zh-cn": "输出到 office 文档时的弹性列宽度，以字符数为单位。",
+    "value": 20
+  },
+  "sys.session.autoLogout": {
+    "text": "When closing Home or IDE page,  whether to automatically logout.",
+    "type": "bool",
+    "zh-cn": "当关闭主页或IDE页面时，是否自动注销当前会话。",
+    "value": false
+  },
+  "sys.ss.addDebugger": {
+    "text": "Whether to automatically add the \"debugger\" keyword at the beginning of the debugging script.",
+    "type": "enum",
+    "list": [
+      "true",
+      "false",
+      "auto"
+    ],
+    "zh-cn": "是否在调试的脚本开始处自动加上\"debugger\"关键字。",
+    "value": "auto"
+  },
+  "sys.ai.assistantRole": {
+    "text": "Assistant role name in message.",
+    "type": "string",
+    "list": [
+      "assistant",
+      "bot",
+      "answer"
+    ],
+    "zh-cn": "消息中的助手角色名称。",
+    "value": "assistant"
+  },
+  "sys.file.uploadMaxSize": {
+    "text": "The maximum number of bytes allowed for a single file upload. -1 means no limit.",
+    "type": "long",
+    "zh-cn": "单个文件上传允许的最大字节数，-1表示无限制。",
+    "value": 104857600
+  },
+  "sys.consolePrint": {
+    "text": "Whether to allow printing on the client console. No affect if \"sys.optimal\" is true.",
+    "type": "bool",
+    "zh-cn": "是否允许在客户端控制台上打印。当\"sys.optimal\"设置true后该项无效。",
+    "value": true
+  },
+  "sys.serverId": {
+    "text": "Any two characters used to identify the server.",
+    "type": "string",
+    "zh-cn": "任意两位用于标识服务器的字符。",
+    "value": "00"
+  },
+  "sys.task.threadCount": {
+    "text": "The number of threads that execute the scheduled task. -1 means the default value.",
+    "type": "int",
+    "zh-cn": "执行计划任务的线程数。-1表示默认值。",
+    "value": -1
+  },
+  "sys.db.logSql": {
+    "text": "Whether to record SQL logs when using the Query class for database access. No affect if \"sys.optimal\" is true.",
+    "type": "bool",
+    "zh-cn": "当使用Query类进行数据库访问时是否记录SQL日志。当\"sys.optimal\"设置true后该项无效。",
+    "value": true
+  },
+  "sys.logEnabled": {
+    "text": "Whether logging is enabled, please refer to the settings of commons logging for the logging level.",
+    "type": "bool",
+    "zh-cn": "是否启用日志，日志的记录级别请参考 commons logging 的设置。",
+    "value": true
+  },
+  "sys.index": {
+    "text": "The module file path of the Index page.",
+    "type": "string",
+    "zh-cn": "Index页的模块文件路径。",
+    "value": "sys/portal/index.xwl"
+  },
+  "sys.ss.timerThreadCount": {
+    "text": "Maximum number of threads used when executing Wb.setInterval and Wb.setTimeout methods.",
+    "type": "int",
+    "zh-cn": "执行Wb.setInterval和Wb.setTimeout方法时使用的最多线程数。",
+    "value": 10
+  },
+  "sys.ss.anonymousDebugUser": {
+    "text": "User ID of anonymous debugging.",
+    "type": "string",
+    "zh-cn": "匿名调试的用户id。",
+    "value": "admin"
+  },
+  "sys.file.useMinFile": {
+    "text": "Whether to use the minimized JS/MJS/XWL/CSS files. No affect if \"sys.optimal\" is true.",
+    "type": "bool",
+    "zh-cn": "是否使用最小化的JS/MJS/XWL/CSS文件。当\"sys.optimal\"设置true后该项无效。",
+    "value": false
+  },
+  "sys.file.csvCharset": {
+    "text": "The charset used to create csv files. Empty value means OS charset.",
+    "type": "string",
+    "zh-cn": "生成CSV文件使用的编码方式，为空表示操作系统使用的编码。",
+    "value": ""
+  },
+  "sys.ss.showHostException": {
+    "text": "Whether to display detailed exception of host language.",
+    "type": "bool",
+    "zh-cn": "是否显示宿主语言的详细异常信息。",
+    "value": false
+  },
+  "sys.app.title": {
+    "text": "Application title.",
+    "type": "string",
+    "zh-cn": "应用系统的标题。",
+    "value": "WebBuilder 11"
+  },
+  "sys.ss.preloadModules": {
+    "text": "Whether to preload the server-side scripts of all modules at startup.",
+    "type": "bool",
+    "zh-cn": "是否在启动的时候预加载所有模块的服务器端脚本。",
+    "value": false
+  },
+  "sys.file.checkModified": {
+    "text": "Whether to check the cached file has been modified when getting it. Take effect after reload the system. No affect if \"sys.optimal\" is true.",
+    "type": "bool",
+    "zh-cn": "获取被缓存的文件时是否检查该文件已经被更新。重新加载系统后生效。当\"sys.optimal\"设置true后该项无效。",
+    "value": true
+  },
+  "sys.file.xwlEtag": {
+    "text": "Whether to automatically enable module Etag when it is available.",
+    "type": "bool",
+    "zh-cn": "是否在模块Etag可用时自动启用。",
+    "value": true
+  },
+  "sys.session.verifyCode": {
+    "text": "Whether to use verification code when logging in.",
+    "type": "bool",
+    "zh-cn": "登录时是否需要使用验证码。",
+    "value": false
+  },
+  "sys.app.type": {
+    "text": "WebBuilder version type.",
+    "type": "string",
+    "zh-cn": "WebBuilder 版本类型。",
+    "value": "Enterprise"
+  },
+  "sys.file.cacheEnabled": {
+    "text": "Whether to cache wb files into memory.",
+    "type": "bool",
+    "zh-cn": "是否把wb文件缓存到内存中。",
+    "value": true
+  },
+  "sys.ss.waitAttached": {
+    "text": "Whether to wait for the debugger to attach when debugging.",
+    "type": "bool",
+    "zh-cn": "调试时是否等待调试器打开。",
+    "value": true
+  },
+  "sys.task.enabled": {
+    "text": "Whether to allow starting the scheduled tasks at the system startup.",
+    "type": "bool",
+    "zh-cn": "是否允许在系统启动的时候自动启动计划任务。",
+    "value": true
+  },
+  "sys.file.syncPath": {
+    "text": "Automatically synchronize changes in the current application directory to this directory.",
+    "type": "string",
+    "zh-cn": "把对当前应用目录内任何更改自动同步到该目录。",
+    "value": ""
+  },
+  "sys.ss.files": {
+    "text": "The list of JS files automatically loaded to the server.",
+    "type": "array",
+    "zh-cn": "自动加载到服务器端的JS文件列表。",
+    "value": [
+      "wb/ss/workflow.js"
+    ]
+  },
+  "sys.ai.systemRole": {
+    "text": "System role name in message.",
+    "type": "string",
+    "zh-cn": "消息中的系统角色名称。",
+    "value": "system"
+  },
+  "sys.office.gridBorderLine": {
+    "text": "How to display the border lines of a grid. \"true\" displays all borders, \"false\" no borders, \"horizontal\" displays horizontal borders, \"vertical\" displays vertical borders, \"auto\" automatically determines.",
+    "type": "enum",
+    "list": [
+      "true",
+      "false",
+      "horizontal",
+      "vertical",
+      "auto"
+    ],
+    "zh-cn": "如何显示表格的边框线。\"true\"显示全部边框，\"false\"不显示边框，\"horizontal\"显示水平边框，\"vertical\"显示垂直边框，\"auto\"自动判断。",
+    "value": "true"
+  },
+  "sys.app.releasePath": {
+    "text": "Application release folder.",
+    "type": "string",
+    "zh-cn": "应用的发布目录。",
+    "value": "../release"
+  }
+}

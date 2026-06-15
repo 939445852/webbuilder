@@ -1,0 +1,17 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Approval workflow rejected
+  serverScript: |-
+    function main() {
+      const Util = Wb.load('./util.mjs');
+      Util.doAction('reject');
+    }
+    main();
+tags: ''
+text: module
+title: ''

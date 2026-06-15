@@ -1,0 +1,30 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.define(app,{get$roleId(){return app.roleTree1.selectionData?.sid},setPerm(e,t,l,r){let
+    a;e=Wb.toArray(e);a=e.length;if(a>1||!e[0].leaf){let s=a>1?Str.nItems.format(a):e[0].text;s='
+    "'+s+'" ';Wb.confirm(Str.doConfirm.format(l?Str.permit+s:Str.forbid+s),(a=>app.doSetPerm(e,t,l,r)))}else
+    app.doSetPerm(e,t,l,r)},doSetPerm(e,t,l,r){let a=[],s=[],c;e.forEach((e=>{if(e.leaf)s.push(e);else
+    s.pushAll(e.downAll((e=>e.leaf)))}));s.forEach((e=>a.push(e.data.path)));Wb.ajax({url:xpath+"/set-actions&xaction=setPerm",data:{modules:a,roleId:t,checked:l},success(){s.forEach((e=>{if(e.leaf){c=e.data.roles??=[];if(l){if(!c.includes(t))c.push(t)}else{c.remove(t)}}}));app.refreshPerms();app.refreshRoles();r?.()}})},refreshPerms(){let
+    e=app.moduleTree;e.suspendEvent();app.scanPerms(app.roleId,e,true);e.resumeEvent()},refreshRoles(){let
+    e=app.roleTree2,t=app.moduleTree.selection;e.suspendEvent();e.each((e=>{e.checked=app.scanPerms(e.data.sid,t)}));e.resumeEvent()},scanPerms(e,t,l){let
+    r,a,s=true,c=true;if(t.leaf){r=t.data.roles?.includes(e);if(l)t.checked=r;if(r)c=false;else
+    s=false}else{t.each((t=>{a=app.scanPerms(e,t,l);if(a=="half"){s=false;c=false}else
+    if(a)c=false;else s=false}))}if(s)a=true;else if(c)a=false;else a="half";if(l&&t.isNode)t.checked=a;return
+    a},selectOnLoad(e){if(e.loaded)e.firstItem?.doSelect(true);else e.on("success",(t=>e.firstItem?.doSelect(true)),true,{once:true})}});Wb.make(app,{cname:"viewport",layout:"row",cid:"viewport1",items:[{cname:"tree",icon:"role",width:"20vw",title:Str.role,showIcon:false,url:xpath+"/select-roles",cid:"roleTree1",leafExpander:false,events:{selectionchange(e){this.subTitle=this.selection.text;app.refreshPerms()}}},{cname:"splitter",cid:"splitter1"},{cname:"tree",flex:1,itemIcon:"module",allowDeselect:false,minWidth:"10em",url:xpath+"/select-modules",cid:"moduleTree",multiSelect:true,tbar:{cname:"toolbar",items:[{icon:"ok",text:Str.permit,keys:"Ctrl+E",cid:"permitItem",events:{click(e,t){if(app.roleId)app.setPerm(app.moduleTree.topSelections,app.roleId,true);else
+    Wb.tipSelect(Str.role)}}},{icon:"cancel",text:Str.forbid,keys:"Ctrl+D",cid:"forbidItem",events:{click(e,t){if(app.roleId)app.setPerm(app.moduleTree.topSelections,app.roleId,false);else
+    Wb.tipSelect(Str.role)}}},{cname:"divider",cid:"divider1"},{icon:"expand",cid:"expandAll",text:Str.expandAll,events:{click(e,t){app.moduleTree.expandAll()}}},{icon:"compress",cid:"collapseAll",text:Str.collapseAll,events:{click(e,t){app.moduleTree.collapseAll()}}},{cname:"divider",cid:"divider2"},{icon:"recycle",tip:Str.clearInvalidData,text:Str.clear,cid:"clearItem",events:{click(e,t){Wb.confirm(Str.doConfirm.format(Str.clear),(e=>{Wb.ajax({url:xpath+"/set-actions&xaction=cleanInvalid",success(){Wb.tipDone(Str.clear)}})}))}}}]},columns:[{cname:"column",fieldName:"text",expander:true,render(e,t,l,r){let
+    a=t.remark;if(a){let t=r.addTag("span");t.textContent=e;t=r.addEl("w-sub-color
+    w-margin-l","span");t.textContent=Wb.optText(a)}else{return e}},cid:"expanderCol"}],events:{success(e,t,l,r,a,s){app.selectOnLoad(app.roleTree1)},beforecheckchange(e,t,l){if(app.roleId)app.setPerm(e,app.roleId,t);return
+    false},selectionchange(e){app.roleTree2.subTitle=this.selection.text;app.refreshRoles()}}},{cname:"splitter",cid:"splitter2"},{cname:"tree",icon:"role",width:"20vw",title:Str.set,showIcon:false,url:xpath+"/select-roles&check=1",cid:"roleTree2",leafExpander:false,events:{success(e,t,l,r,a,s){app.selectOnLoad(app.moduleTree)},beforecheckchange(e,t,l){app.setPerm(app.moduleTree.selection,e.data.sid,t,(l=>{this.suspendEvent();e.checked=t;this.resumeEvent()}));return
+    false}}}]});
+hideInMenu: 'false'
+icon: lock
+img: ''
+properties:
+  cid: module
+  remark: System permission management tool
+tags: ''
+text: module
+title: '@permMng'

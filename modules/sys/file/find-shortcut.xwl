@@ -1,0 +1,27 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Find file path of the specified URL shortcut
+  serverScript: |-
+    function main() {
+      let file, result, path = Params.path;
+      file = UrlBuffer.getBuffer().get('/' + path);
+      if (file)
+        result = Base.modulePathText + file;
+      else {
+        file = new Wb.File(Base.modulePath, path + '.xwl');
+        if (file.exists)
+          result = file.path;
+        else
+          result = '';
+      }
+      Wb.send(result);
+    }
+    main();
+tags: ''
+text: module
+title: ''

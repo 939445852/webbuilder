@@ -1,0 +1,51 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Select database resource list
+  serverScript: |-
+    function main() {
+      const DBE = Wb.load('wb/ss/dbe.mjs');
+      let result, db = Params.db, schem = Params.schem, type = Params.type;
+
+      switch (type) {
+        case 'db':
+          result = DBE.getSchemas(db);
+          break;
+        case 'schem':
+          result = DBE.getCategory(db, schem, Wb.getInt('cateMode'));
+          break;
+        case 'tableCate':
+          result = DBE.getTables(db, schem);
+          break;
+        case 'viewCate':
+          result = DBE.getTables(db, schem, true);
+          break;
+        case 'procCate':
+          result = DBE.getProcs(db, schem);
+          break;
+        case 'proc':
+          result = DBE.getProcColumns(db, schem, Params.procName);
+          break;
+        case 'func':
+          result = DBE.getProcColumns(db, schem, Params.funcName);
+          break;
+        case 'funcCate':
+          result = DBE.getFuncs(db, schem);
+          break;
+        case 'table':
+        case 'view':
+          result = DBE.getColumns(db, schem, Params.tableName, type == 'table');
+          break;
+        default:
+          result = DBE.getDbNames();
+      }
+      Wb.send(result);
+    }
+    main();
+tags: ''
+text: module
+title: ''

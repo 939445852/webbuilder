@@ -1,0 +1,52 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Edit user
+  serverScript: |-
+    function main() {
+      const Util = Wb.UserUtil;
+      const protectedText = Util.protectedText;
+      let password = Params.password, oldUserName = Params.$user_name, username = Params.user_name;
+
+      if (username && Util.reservedName.includes(oldUserName))
+        Wb.raise(Str.cannotModify.format(oldUserName));
+      if (username && Util.reservedName.includes(username))
+        Wb.raise(Str.cannotModify.format(username));
+      if (password)
+        Wb.set('password', Util.encryptPassword(password));
+      Wb.sync({ tableName: 'wb_user', update: Params });
+      updateRoles(Params.$sid);
+      Wb.send({ password: protectedText, confirm_password: protectedText });
+    }
+    /**
+     * Update user roles.
+     * @param {String} user_id User id.
+     */
+    function updateRoles(user_id) {
+      let roles = Wb.getObject('roleBox'), insert = [], oldUserid = Params.$sid;
+
+      Wb.sql({ sql: 'delete from wb_user_role where user_id={?user_id?}', params: { user_id } });
+      roles.forEach(role_id => insert.push({ sid: Wb.getId(), user_id, role_id }));
+      Wb.sync({ tableName: 'wb_user_role', insert });
+      if (Params.user_name || Params.status == '0') {
+        //logout when changed
+        Sessions.invalidate(oldUserid);
+      } else {
+        //Update the session role
+        let sessions = Sessions.getSessions(oldUserid);
+        if (sessions) {
+          if (Config.getBool('sys.session.addDefaultRole'))
+            roles.push('default');
+          roles = roles.stringArray;
+          sessions.forEach(session => session.setAttribute('sys.roles', roles));
+        }
+      }
+    }
+    main();
+tags: ''
+text: module
+title: ''

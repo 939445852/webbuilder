@@ -1,0 +1,11 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  serverScript: function main(){let a,s,m=[];a=new Wb.MailSender(Params.smtp,Params.username,Params.password,Params.authUsername,Params.authPassword,{"mail.smtp.auth":true,"mail.smtp.sendpartial":true});s=Wb.getParams("attachFiles");s.forEach((a=>{m.push({name:a.name,data:a.stream})}));try{a.send(Params.from,Params.to,Params.title,Params.content,m,Params.cc)}finally{a.close()}}main();
+tags: ''
+text: module
+title: ''

@@ -1,0 +1,24 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  serverScript: |-
+    function main() {
+      let flow, now = new Date();
+
+      flow = new Wb.Workflow({ file: 'example/leave.flw', title: 'My leave application' });
+      flow.start();
+      Wb.sync({
+        tableName: 'wb_leave', insert: {
+          sid: Wb.getId(), begin_date: now.addDay(2), end_date: now.addDay(5),
+          flow_id: flow.flowId, user_id: Wb.userid, leave_days: 8, leave_reason: 'Go on vacation'
+        }
+      });
+    }
+    main();
+tags: ''
+text: module
+title: ''

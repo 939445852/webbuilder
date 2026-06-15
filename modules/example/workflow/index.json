@@ -1,0 +1,13 @@
+{
+  "title": "",
+  "icon": "",
+  "img": "",
+  "hideInMenu": "false",
+  "items": [
+    "reimburse",
+    "leave",
+    "start-route",
+    "manual-start.xwl",
+    "manual-start"
+  ]
+}

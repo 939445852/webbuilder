@@ -1,0 +1,13 @@
+_icon: module
+cls: Wb.Module
+properties:
+  cid: module
+  remark: Reload all system resources
+  serverScript: |-
+    Wb.checkDemo();
+    function main() {
+      SysUtil.reloadSystem(true);
+    }
+    main();
+text: module
+title: ''

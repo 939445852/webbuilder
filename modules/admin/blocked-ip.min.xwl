@@ -1,0 +1,16 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.apply(app,{reload(){Wb.ajax({url:xpath+"/set-actions&xaction=getIPs",success(e){app.codeEditor1.value=e;app.saveItem.disabled=true}})},save(){Wb.ajax({url:xpath+"/set-actions&xaction=save",data:app.codeEditor1.value,success(e){app.saveItem.disabled=true}})}});Wb.make(app,{cname:"viewport",layout:"fit",cid:"viewport1",tbar:{cname:"toolbar",items:[{icon:"save",disabled:true,text:Str.save,keys:"Ctrl+S",cid:"saveItem",events:{click(e,a){app.save()}}},{cname:"divider",cid:"divider1"},{icon:"refresh",cid:"refreshItem",text:Str.refresh,events:{click(e,a){if(app.saveItem.disabled){app.reload()}else{Wb.choose(Str.saveChanges.format("IPs"),(e=>{if(e=="yes")app.save();else
+    if(e=="no"){app.reload()}}))}}}},{icon:"recycle",tip:Str.clearInvalidData,text:Str.clear,cid:"clearItem",events:{click(e,a){Wb.ajax({url:xpath+"/set-actions&xaction=clear",success(){Wb.tipDone(Str.clear)}})}}}]},items:[{cname:"codeEditor",language:"txt",wrapBorder:false,minimap:false,cid:"codeEditor1",events:{ready(e,a){app.reload()},change(e,a){app.saveItem.disabled=false}}}]});Wb.onUnload(parentContainer,(()=>{if(!app.saveItem.disabled){return
+    false}}));
+hideInMenu: 'false'
+icon: delete3
+img: ''
+properties:
+  cid: module
+  links: '["wb/js/monaco.js"]'
+tags: ''
+text: module
+title: '@blockedIPs'

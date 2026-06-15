@@ -1,0 +1,11 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Paste or move files in any path
+  serverScript: let fs=Wb.load("./fs.mjs");Wb.send(fs.pasteFiles(Wb.getObject("source"),Params.dest,Params.relName,Wb.getBool("isCut"),Params.mode));
+text: module
+title: ''

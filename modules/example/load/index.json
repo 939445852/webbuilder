@@ -1,0 +1,21 @@
+{
+  "title": "",
+  "icon": "",
+  "img": "",
+  "hideInMenu": "false",
+  "items": [
+    "client-request.xwl",
+    "client-request",
+    "server-request.xwl",
+    "server-request",
+    "file-updownload.xwl",
+    "file-updownload",
+    "client-load-module.xwl",
+    "client-load-module",
+    "server-load-module.xwl",
+    "server-load-module",
+    "switch-module.xwl",
+    "xwl-static-load.xwl",
+    "code-static-load.xwl"
+  ]
+}

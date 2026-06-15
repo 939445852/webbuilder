@@ -1,0 +1,35 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Add user
+  serverScript: |-
+    function main() {
+      const UserUtil = Wb.UserUtil;
+      const protectedText = UserUtil.protectedText;
+      let sid = Params.user_id_disp || Wb.getId(), create_date = new Date(), login_times = 0;
+
+      if (UserUtil.reservedName.includes(Params.user_name))
+        Wb.raise(Str.cannotModify.format(Params.user_name));
+      Wb.set({ sid, create_date, login_times, password: UserUtil.encryptPassword(Params.password) });
+      Wb.sync({ tableName: 'wb_user', insert: Params });
+      addRoles(sid);
+      Wb.send({ sid, user_id_disp: sid, password: protectedText, confirm_password: protectedText, create_date, login_times });
+    }
+    /**
+     * add user roles.
+     * @param {String} user_id User id.
+     */
+    function addRoles(user_id) {
+      let roles = Wb.getObject('roleBox'), insert = [];
+
+      roles.forEach(role_id => insert.push({ sid: Wb.getId(), user_id, role_id }));
+      Wb.sync({ tableName: 'wb_user_role', insert });
+    }
+    main();
+tags: ''
+text: module
+title: ''

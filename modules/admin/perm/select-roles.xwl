@@ -1,0 +1,30 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Select roles
+  serverScript: |-
+    function main() {
+      let roles = Wb.roles, inRoles, params;
+
+      if (Wb.isAdmin) {
+        inRoles = '';
+      } else {
+        let sqlMap = Wb.Query.getArraySql(roles, 'varchar');
+        inRoles = ' and sid not in (' + sqlMap.sql + ')';
+        params = sqlMap.params;
+      }
+      Wb.sendRows({
+        sql: `select sid,role_name as text` + (Params.check ? `,0 as "_checked"` : '') +
+          `,'true' as "_leaf" from wb_role where sid<>'admin'${inRoles} order by role_name`,
+        params,
+        rs: -1
+      });
+    }
+    main();
+tags: ''
+text: module
+title: ''

@@ -1,0 +1,12 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Edit key type
+  serverScript: function main(){const a=Wb.load("./util.mjs");let e=Params.$key_name;Wb.sync({tableName:"wb_key_type",update:Params});KVBuffer.buffer.remove(e);a.loadKey(Params.key_name||e)}main();
+tags: ''
+text: module
+title: ''

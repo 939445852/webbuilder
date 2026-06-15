@@ -1,0 +1,12 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Add dictionary item
+  serverScript: function main(){const a=Wb.load("./util.mjs");let e={sid:Wb.getId()};a.checkDuplicate(Params.name,Params.group_name);Wb.set(e);Wb.sync({tableName:"wb_dict",insert:Params});a.updateBuffer();Wb.send(e)}main();
+tags: ''
+text: module
+title: ''

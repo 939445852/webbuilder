@@ -1,0 +1,11 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  serverScript: let actions={getHtml(){Wb.send(Wb.submit("https://developer.mozilla.org"))},postParams(){},postPayload(){},postFiles(){},loginAndLogout(){}};actions[Params.xaction]();
+tags: ''
+text: module
+title: ''

@@ -1,0 +1,12 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Delete config items
+  serverScript: Wb.checkDemo();function main(){Config.remove(Params.nameEditor)}main();
+tags: ''
+text: module
+title: ''

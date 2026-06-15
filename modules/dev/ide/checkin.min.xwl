@@ -1,0 +1,17 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Check in files to the database
+  serverScript: function main(){let e,i=Wb.getObject("files");Wb.startTrans();i.forEach((i=>{e=new
+    Wb.File(i);if(e.isFile){importFile(e)}else{e.cascade((e=>{e.isFile&&importFile(e)}))}}))}function
+    importFile(e){let i={sid:Wb.getId(),sdate:new Date,file_path:e.relPath,file_version:Params.version,version_remark:Params.remark,modify_date:e.lastModifiedDate,file_content:e.bytes};Wb.sql({sql:"delete
+    from wb_version where file_path={?file_path?} and file_version={?file_version?}",params:i});Wb.sql({sql:`insert
+    into wb_version values({?sid?}, {?sdate?}, {?file_path?}, {?file_version?}, {?version_remark?},\n         {?modify_date?},
+    {?file_content?})`,params:i})}main();
+tags: ''
+text: module
+title: ''

@@ -1,0 +1,11 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'true'
+icon: ''
+img: ''
+properties:
+  cid: module
+  serverScript: let result=Polyglot.evalFile("python","wb/modules/example/coding/server-js/demo.py");Wb.send(result);
+tags: ''
+text: module
+title: ''

@@ -1,0 +1,58 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+items:
+- _expanded: true
+  _icon: edit
+  cls: Wb.CodeEditor
+  properties:
+    cid: codeEditor1
+    full: 'true'
+    readonly: 'true'
+    value: |-
+      //This example demonstrates number. Only extended members are demonstrated, and native members are described at:
+      //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number
+
+      //General usage
+      (92).snap(5); //Converts to the value closest to the specified step, output: 90
+      (56).constrain(80, 90); //limit value >= minValue and value <= maxValue, output: 80
+
+      //Formatting
+      (12345.625).format('$#,##0.00'); //"$12,345.63"
+      (12345.625).format('0.0###'); //"12345.625"
+      (1.23).format('000'); //"001"
+      (1.235).format('0.00%'); //"1.24%"
+      (1234.5678).text; //to local text, in some regions output: "1,234.568"
+      (1234.5678).intText; //to local integer text, in some regions output: "1,235"
+      (1.2).floatText; //to local float text, in some regions output: "1.2"
+      (1.2).percent; //to local percent text(2 decimal places), in some regions output: "120.00%"
+      (1.2).percentInt; //to local percent text(no decimals), in some regions output: "120%"
+      (1.2).percentAuto; //to local percent text(Keep up to 2 decimal places), in some regions output: "120%"
+
+      //Currency
+      (1234.5).usd; //to local USD currency text, in some regions output: "US$1,234.50"
+      (1234.5).cny; //to local RMB currency text, in some regions output: "¥1,234.50"
+      (1234.5).eur; //to local Euro currency text, in some regions output: "€1,234.50"
+      (1234.5).gbp; //to local GBP currency text, in some regions output: "£1,234.50"
+      (1234.5).jpy; //to local Yen currency text, in some regions output: "JP¥1,235"
+      (1234.5).cad; //to local Cad currency text, in some regions output: "CA$1,234.50"
+      (1234.5).aud; //to local Australian dollars currency text, in some regions output: "AU$1,234.50"
+      (1234.5).hkd; //to local Hong Kong dollars currency text, in some regions output: "HK$1,234.50"
+
+      //Byte size
+      (12345678).kb; //to local KB size text, in some regions output: "12,056 KB"
+      (12345678912).mb; //to local MB size text, in some regions output: "11,774 MB"
+      (12345678912).fileSize; //to local MB/KB/B size text, in some regions output: "11,774 MB"
+
+      //Getter properties
+      (123.45).decimalCount; //Decimal place count
+    wrapBorder: '0'
+  text: codeEditor1
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

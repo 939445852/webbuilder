@@ -1,0 +1,20 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Delete key types
+  serverScript: |-
+    function main() {
+      let del = Wb.getObject('del');
+
+      Wb.sync({ tableName: 'wb_key_type', del });
+      Wb.sql({ sql: 'delete from wb_key where rid={?$sid?}', params: del });
+      del.forEach(item => { KVBuffer.buffer.remove(item.$key_name) });
+    }
+    main();
+tags: ''
+text: module
+title: ''

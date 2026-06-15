@@ -1,0 +1,229 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: |-
+    // app.flowId: The workflow id
+    // app.restarting: Whether the workflow is restarting
+    Wb.apply(app, {
+      /** @property {Boolean} - Whether to auto show window. */
+      autoShow: false,
+      /**
+       * Fires after displaying the window.
+       * @param {String} flowId The workflow instance id.
+       * @param {String} type Window type.
+       * -'start': Start window.
+       * -'handle': Handle window.
+       * -'view': View window.
+       * @param {Wb.GridItem} record The workflow record.
+       */
+      init(flowId, type, record) {
+        if (flowId) {
+          app.grid1.load({
+            params: { flowId }, success(a, b, resp) {
+              app.flowTitle.value = resp.flowTitle;
+              app.main.show();
+            }
+          });
+        } else {
+          app.main.show();
+        }
+      },
+      /**
+       * Fires before action execution.
+       * @param {String} action The action name.
+       * @param {Wb.GridItem} record The workflow record.
+       * @return {Object} Parameter object to be submitted. If returns false, the execution is canceled.
+       */
+      beforeAction(action, record) {
+        let grid = app.grid1;
+        if (!grid.hasChild) {
+          Wb.tipWarn('Please input at least one item');
+          grid.startEdit(grid.addData({}), 1);
+          return false;
+        }
+        return { data: app.grid1.modifiedData };
+      },
+      /**
+       * Fires after action execution.
+       * @param {String} action The action name.
+       * @param {Object} response The response object.
+       * @param {Object} [.result] The flow record data.
+       * @param {Object} [.before] The returned value of server beforeAction.
+       * @param {Object} [.after] The returned value of server afterAction.
+       * @param {Wb.GridItem} record The workflow record.
+       */
+      afterAction(action, response, record) {
+        Wb.log('action: ' + action + ', node name: ' + record.data.node_name);
+      }
+    });
+hideInMenu: 'false'
+icon: ''
+img: ''
+items:
+- _expanded: true
+  _icon: window
+  cls: Wb.Window
+  items:
+  - _icon: text
+    cls: Wb.Text
+    properties:
+      cid: flowTitle
+      required: 'true'
+      text: Title
+    text: flowTitle
+  - _expanded: true
+    _icon: grid
+    cls: Wb.Grid
+    items:
+    - _expanded: true
+      _icon: toolbar
+      cls: Wb.Toolbar
+      items:
+      - _expanded: false
+        _icon: item
+        cls: Wb.Item
+        events:
+          click: app.grid1.addRecord();
+        properties:
+          cid: addBtn
+          icon: add
+          keys: Ctrl+E
+          text: '@Str.add'
+        text: addBtn
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        events:
+          click: app.grid1.delRecords();
+        properties:
+          cid: delBtn
+          icon: delete
+          keys: Ctrl+D
+          text: '@Str.del'
+        text: delBtn
+      properties:
+        cid: tbar
+        isProperty: 'true'
+      text: tbar
+    - _expanded: true
+      _icon: array
+      cls: Wb.Array
+      items:
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: rowCol
+          rowNum: 'true'
+        text: rowCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        items:
+        - _expanded: true
+          _icon: calendar
+          cls: Wb.Date
+          properties:
+            cid: editor
+            isProperty: 'true'
+            required: 'true'
+          text: editor
+        properties:
+          cid: dateCol
+          fieldName: exp_date
+          text: Date
+        text: dateCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        items:
+        - _expanded: true
+          _icon: text
+          cls: Wb.Text
+          properties:
+            cid: editor
+            isProperty: 'true'
+            required: 'true'
+          text: editor
+        properties:
+          cid: itemNameCol
+          fieldName: item_name
+          text: Item name
+          width: '-1'
+        text: itemNameCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        items:
+        - _expanded: true
+          _icon: number-edit
+          cls: Wb.Number
+          properties:
+            cid: editor
+            decimalCount: '2'
+            isProperty: 'true'
+            required: 'true'
+          text: editor
+        properties:
+          cid: amountCol
+          fieldName: amount
+          text: Amount
+          width: 10em
+        text: amountCol
+      properties:
+        cid: columns
+      text: columns
+    properties:
+      autoLoad: 'false'
+      cid: grid1
+      editable: 'true'
+      flex: '1'
+      minHeight: 8em
+      pageSize: '-1'
+      pagingBar: 'false'
+      url: '@xpath + ''/../actions&xaction=selectStartData'''
+    text: grid1
+  properties:
+    autoScroll: 'true'
+    cid: main
+    gap: 'true'
+    height: 30em
+    icon: money
+    layout: column
+    padding: 'true'
+    title: Start reimbursement workflow
+    visible: 'true'
+    width: 60em
+  text: main
+properties:
+  cid: module
+  serverScript: |-
+    Wb.apply(app, {
+      /**
+       * Fires before action execution.
+       * @param {String} action The action name.
+       * @param {Wb.Workflow} flow The workflow instance.
+       * @return {Object} The returned "before" parameter to the client.
+       */
+      beforeAction(action, flow) {
+      },
+      /**
+       * Fires after action execution.
+       * @param {String} action The action name.
+       * @param {Wb.Workflow} flow The workflow instance.
+       * @return {Object} The returned "after" parameter to the client.
+       */
+      afterAction(action, flow) {
+        let flow_id = flow.flowId, user_id = Wb.userid, data = Wb.getObject('data');
+
+        flow_id = flow.flowId;
+        data.insert?.forEach(item => {
+          Wb.apply(item, { sid: Wb.getId(), flow_id, user_id });
+        });
+        Wb.sync(Wb.apply({ tableName: 'wb_reimburse' }, data));
+      }
+    });
+tags: '{container: false}'
+text: module
+title: ''

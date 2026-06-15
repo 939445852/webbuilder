@@ -1,0 +1,647 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: check6
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: mainLabel
+      cls: w-title3
+      text: Check, radio, toggle and slider
+    text: mainLabel
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: checkTitle
+      title: Check
+    text: checkTitle
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _icon: check6
+      cls: Wb.Check
+      events:
+        change: Wb.tip(this.cid + ' value is ' + value);
+      properties:
+        cid: commonCheck
+        text: Common check
+      text: commonCheck
+    - _icon: check6
+      cls: Wb.Check
+      properties:
+        cid: labelCheck
+        label: Label check
+        text: With label
+        value: 'true'
+      text: labelCheck
+    - _expanded: true
+      _icon: check6
+      cls: Wb.Check
+      properties:
+        cid: onlyLabelCheck
+        label: Only label check
+      text: onlyLabelCheck
+    - _icon: check6
+      cls: Wb.Check
+      properties:
+        cid: onlyLabelEmptyTextCheck
+        label: Only label check with empty text
+        showEmptyLabel: 'true'
+      text: onlyLabelEmptyTextCheck
+    - _expanded: true
+      _icon: model
+      cls: Wb.ControlCt
+      items:
+      - _expanded: true
+        _icon: check6
+        cls: Wb.Check
+        properties:
+          cid: intValueCheck
+          label: return int value
+          returnType: int
+        text: intValueCheck
+      - _icon: button
+        cls: Wb.Button
+        events:
+          click: Wb.tip('The value is ' + this.previousSibling.value);
+        properties:
+          cid: getValueBtn
+          text: Get value
+        text: getValueBtn
+      properties:
+        cid: intValueCt
+        gap: 1em
+        showEmptyLabel: 'true'
+      text: intValueCt
+    properties:
+      cid: checkCt
+      frame: 'true'
+      layout: grid1
+    text: checkCt
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: checkGroupTitle
+      title: CheckGroup
+    text: checkGroupTitle
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _icon: label
+      cls: Wb.Label
+      properties:
+        cid: commonCheckGroupLabel
+        text: Common checkGroup
+      text: commonCheckGroupLabel
+    - _expanded: true
+      _icon: container
+      cls: Wb.Container
+      items:
+      - _expanded: true
+        _icon: checks
+        cls: Wb.CheckGroup
+        items:
+        - _icon: check6
+          cls: Wb.Check
+          properties:
+            cid: check1
+            label: item 1
+          text: check1
+        - _icon: check6
+          cls: Wb.Check
+          properties:
+            cid: check2
+            label: item 2
+            value: 'true'
+          text: check2
+        - _expanded: true
+          _icon: check6
+          cls: Wb.Check
+          properties:
+            cid: check3
+            label: item 3
+            value: 'true'
+          text: check3
+        properties:
+          cid: commonCheckGroup
+        text: commonCheckGroup
+      - _icon: button
+        cls: Wb.Button
+        events:
+          click: Wb.tip(Wb.encode(app.commonCheckGroup.value));
+        properties:
+          cid: getValueBtn
+          text: Get value
+        text: getValueBtn
+      - _icon: button
+        cls: Wb.Button
+        events:
+          click: 'app.commonCheckGroup.setValue({ check1: true, check3: true });'
+        properties:
+          cid: setValueBtn
+          text: Set value
+        text: setValueBtn
+      properties:
+        cid: commonCheckCt
+        gap: 1em
+        layout: row
+      text: commonCheckCt
+    - _icon: label
+      cls: Wb.Label
+      properties:
+        cid: allCheckGroupLabel
+        text: Return all and return array value checkGroup
+      text: allCheckGroupLabel
+    - _expanded: true
+      _icon: container
+      cls: Wb.Container
+      items:
+      - _expanded: true
+        _icon: checks
+        cls: Wb.CheckGroup
+        items:
+        - _icon: check6
+          cls: Wb.Check
+          properties:
+            cid: check1
+            label: item 1
+          text: check1
+        - _icon: check6
+          cls: Wb.Check
+          properties:
+            cid: check2
+            label: item 2
+            value: 'true'
+          text: check2
+        - _expanded: true
+          _icon: check6
+          cls: Wb.Check
+          properties:
+            cid: check3
+            label: item 3
+            value: 'true'
+          text: check3
+        properties:
+          cid: allCheckGroup
+          returnAll: 'true'
+          returnArray: 'true'
+        text: allCheckGroup
+      - _icon: button
+        cls: Wb.Button
+        events:
+          click: Wb.tip(Wb.encode(app.allCheckGroup.value));
+        properties:
+          cid: getValueBtn
+          text: Get value
+        text: getValueBtn
+      - _icon: button
+        cls: Wb.Button
+        events:
+          click: 'app.allCheckGroup.setValue({ check1: true, check3: ''true'' });'
+        properties:
+          cid: setValueObjectBtn
+          text: Set value by object
+        text: setValueObjectBtn
+      - _expanded: true
+        _icon: button
+        cls: Wb.Button
+        events:
+          click: app.allCheckGroup.setValue([false, 1, 'true']);
+        properties:
+          cid: setValueArrayBtn
+          text: Set value by array
+        text: setValueArrayBtn
+      - _icon: button
+        cls: Wb.Button
+        events:
+          click: app.allCheckGroup.setValue(['check1', 'check3'] );
+        properties:
+          cid: setValueCidsBtn
+          text: Set value by cids
+        text: setValueCidsBtn
+      properties:
+        cid: allCheckCt
+        gap: 1em
+        layout: row
+      text: allCheckCt
+    properties:
+      cid: checkGroupCt
+      frame: 'true'
+      layout: grid1
+    text: checkGroupCt
+  - _expanded: true
+    _icon: title
+    cls: Wb.Title
+    properties:
+      cid: radioTitle
+      title: Radio
+    text: radioTitle
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _expanded: true
+      _icon: check2
+      cls: Wb.Radio
+      properties:
+        cid: radio1
+        group: group1
+        label: item 1
+      text: radio1
+    - _expanded: false
+      _icon: check2
+      cls: Wb.Radio
+      properties:
+        cid: radio2
+        group: group1
+        label: item 2
+      text: radio2
+    - _icon: divider
+      cls: Wb.Divider
+      properties:
+        cid: divider1
+      text: divider1
+    - _expanded: true
+      _icon: check2
+      cls: Wb.Radio
+      properties:
+        cid: radio3
+        group: group2
+        label: item 3
+      text: radio3
+    - _expanded: false
+      _icon: check2
+      cls: Wb.Radio
+      properties:
+        cid: radio4
+        group: group2
+        label: item 4
+        value: 'true'
+      text: radio4
+    - _expanded: true
+      _icon: check2
+      cls: Wb.Radio
+      properties:
+        cid: radio5
+        group: group2
+        label: item 5
+      text: radio5
+    properties:
+      cid: radioCt
+      frame: 'true'
+      layout: form
+    text: radioCt
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: radioGroupTitle
+      title: RadioGroup
+    text: radioGroupTitle
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _icon: label
+      cls: Wb.Label
+      properties:
+        cid: commonRadioGroupLabel
+        text: Common radioGroup
+      text: commonRadioGroupLabel
+    - _expanded: true
+      _icon: container
+      cls: Wb.Container
+      items:
+      - _expanded: true
+        _icon: radios
+        cls: Wb.RadioGroup
+        items:
+        - _icon: check2
+          cls: Wb.Radio
+          properties:
+            cid: radio1
+            label: item 1
+          text: radio1
+        - _icon: check2
+          cls: Wb.Radio
+          properties:
+            cid: radio2
+            label: item 2
+          text: radio2
+        - _expanded: true
+          _icon: check2
+          cls: Wb.Radio
+          properties:
+            cid: radio3
+            label: item 3
+          text: radio3
+        properties:
+          cid: commonRadioGroup
+        text: commonRadioGroup
+      - _icon: button
+        cls: Wb.Button
+        events:
+          click: Wb.tip(app.commonRadioGroup.value);
+        properties:
+          cid: getValueBtn
+          text: Get value
+        text: getValueBtn
+      - _icon: button
+        cls: Wb.Button
+        events:
+          click: app.commonRadioGroup.setValue(2);
+        properties:
+          cid: setValueBtn
+          text: Set value
+        text: setValueBtn
+      properties:
+        cid: commonRadioCt
+        gap: 1em
+        layout: row
+      text: commonRadioCt
+    - _icon: label
+      cls: Wb.Label
+      properties:
+        cid: returnCidRadioGroupLabel
+        text: Return cid as value radioGroup
+      text: returnCidRadioGroupLabel
+    - _expanded: true
+      _icon: container
+      cls: Wb.Container
+      items:
+      - _expanded: true
+        _icon: radios
+        cls: Wb.RadioGroup
+        items:
+        - _icon: check2
+          cls: Wb.Radio
+          properties:
+            cid: radio1
+            label: item 1
+            value: 'true'
+          text: radio1
+        - _icon: check2
+          cls: Wb.Radio
+          properties:
+            cid: radio2
+            label: item 2
+          text: radio2
+        - _expanded: true
+          _icon: check2
+          cls: Wb.Radio
+          properties:
+            cid: radio3
+            label: item 3
+          text: radio3
+        properties:
+          cid: returnNameRadioGroup
+          returnName: 'true'
+        text: returnNameRadioGroup
+      - _icon: button
+        cls: Wb.Button
+        events:
+          click: Wb.tip(app.returnNameRadioGroup.value);
+        properties:
+          cid: getValueBtn
+          text: Get value
+        text: getValueBtn
+      - _icon: button
+        cls: Wb.Button
+        events:
+          click: app.returnNameRadioGroup.setValue(2);
+        properties:
+          cid: setValueByIndexBtn
+          text: Set value by index
+        text: setValueByIndexBtn
+      - _icon: button
+        cls: Wb.Button
+        events:
+          click: app.returnNameRadioGroup.setValue('radio2');
+        properties:
+          cid: setValueByCidBtn
+          text: Set value by cid
+        text: setValueByCidBtn
+      properties:
+        cid: returnNameRadioCt
+        gap: 1em
+        layout: row
+      text: returnNameRadioCt
+    properties:
+      cid: radioGroupCt
+      frame: 'true'
+      layout: grid1
+    text: radioGroupCt
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: toggleTitle
+      title: Toggle
+    text: toggleTitle
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _icon: switcher-on
+      cls: Wb.Toggle
+      events:
+        change: Wb.tip(this.cid + ' is ' + value);
+      properties:
+        cid: commonToggle
+        text: Common toggle
+      text: commonToggle
+    - _icon: switcher-on
+      cls: Wb.Toggle
+      properties:
+        cid: prefixSuffixToggle
+        prefix: Prefix text
+        suffix: Suffix text
+        text: Prefix suffix
+      text: prefixSuffixToggle
+    - _expanded: true
+      _icon: switcher-on
+      cls: Wb.Toggle
+      properties:
+        cid: dragToToggle
+        clickToggle: 'false'
+        text: Drag to toggle
+      text: dragToToggle
+    - _icon: switcher-on
+      cls: Wb.Toggle
+      properties:
+        cid: alignRightToggle
+        text: Align right toggle
+        toggleAlign: end
+      text: alignRightToggle
+    - _icon: switcher-on
+      cls: Wb.Toggle
+      properties:
+        cid: verticalToggle
+        text: Vertical toggle
+        vertical: 'true'
+      text: verticalToggle
+    - _expanded: true
+      _icon: model
+      cls: Wb.ControlCt
+      items:
+      - _icon: switcher-on
+        cls: Wb.Toggle
+        properties:
+          cid: returnIntToggle
+          returnType: int
+        text: returnIntToggle
+      - _icon: button
+        cls: Wb.Button
+        events:
+          click: Wb.tip(this.cid + ' value is ' + this.previousSibling.value);
+        properties:
+          cid: getValue
+          text: Get value
+        text: getValue
+      properties:
+        cid: returnIntCt
+        gap: 1em
+        text: Return int value
+      text: returnIntCt
+    properties:
+      cid: toggleCt
+      frame: 'true'
+      layout: grid1
+    text: toggleCt
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: sliderTitle
+      title: Slider
+    text: sliderTitle
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _icon: slidebar
+      cls: Wb.Slider
+      events:
+        enddrag: Wb.tip('End drag at ' + value);
+        startdrag: Wb.tip('Start drag at ' + value);
+      properties:
+        cid: commonSlider
+        text: Common slider
+        value: '30'
+      text: commonSlider
+    - _icon: slidebar
+      cls: Wb.Slider
+      events:
+        enddrag: Wb.tip('The values are ' + Wb.encode(value));
+      properties:
+        cid: multiSlider
+        prefix: Prefix
+        suffix: Suffix
+        text: Multi slider
+        value: '[10, 50, 80]'
+      text: multiSlider
+    - _expanded: true
+      _icon: model
+      cls: Wb.ControlCt
+      items:
+      - _expanded: true
+        _icon: slidebar
+        cls: Wb.Slider
+        properties:
+          cid: verticalSlider
+          labelAlign: center
+          labelSeparator: 'false'
+          labelUp: 'true'
+          text: Text
+          value: '20'
+          vertical: 'true'
+        text: verticalSlider
+      - _expanded: true
+        _icon: slidebar
+        cls: Wb.Slider
+        events:
+          enddrag: Wb.tip('The values are ' + Wb.encode(value));
+        properties:
+          cid: verticalMulSlider
+          labelUp: 'true'
+          prefix: Prefix
+          suffix: Suffix
+          value: '[30, 70]'
+          vertical: 'true'
+        text: verticalMulSlider
+      properties:
+        align: stretch
+        cid: verticalSliderCt
+        gap: 2em
+        height: 10em
+        layout: row
+        text: Vertical slider
+      text: verticalSliderCt
+    - _icon: slidebar
+      cls: Wb.Slider
+      properties:
+        cid: justifyLeftVerticalSlider
+        height: 6em
+        justifySelf: start
+        text: Justify left
+        value: '20'
+        vertical: 'true'
+      text: justifyLeftVerticalSlider
+    - _expanded: true
+      _icon: slidebar
+      cls: Wb.Slider
+      events:
+        change: Wb.toast('Volumn is ' + value);
+      properties:
+        cid: volumeSlider
+        maxValue: '100'
+        suffix: 'true'
+        suffixWidth: 3em
+        text: Volume
+        value: '50'
+      text: volumeSlider
+    - _icon: slidebar
+      cls: Wb.Slider
+      properties:
+        cid: miscSlider
+        maxValue: '500'
+        minValue: '100'
+        prefix: '100'
+        step: '10'
+        suffix: '500'
+        text: Misc slider
+        tipRender: return 'Custom render ' + value;
+        value: '200'
+      text: miscSlider
+    - _icon: check3
+      cls: Wb.AreaSlider
+      events:
+        enddrag: Wb.toast('The value is ' + Wb.encode(value));
+      properties:
+        cid: areaSlider1
+        height: 10em
+        maxValue: '[300, 200]'
+        text: Area slider
+        value: '[20, 30]'
+        width: 30em
+      text: areaSlider1
+    properties:
+      cid: sliderCt
+      frame: 'true'
+      layout: grid1
+    text: sliderCt
+  properties:
+    cid: viewport1
+    layout: grid1
+  text: viewport1
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

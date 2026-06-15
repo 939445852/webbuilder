@@ -1,0 +1,162 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Multilingual editor server side actions
+  serverScript: |-
+    let actions = {
+      /**
+       * Select lang items.
+       */
+      select() {
+        const enUS = 'en-us';
+        const search = Params.search?.toLowerCase();
+        let columns = [], rows = [], langs, value, found, type, row, langNames, keys;
+
+        langs = getLangs();
+        langNames = Object.keys(langs).lowerSort();
+        langNames.remove(enUS);
+        langNames.insert(0, enUS);
+        keys = Object.keys(langs[enUS]).lowerSort();
+        keys.forEach(key => {
+          found = false;
+          row = { name: key };
+          if (search && key.includesIC(search))
+            found = true;
+          langNames.forEach(lang => {
+            value = langs[lang][key];
+            if (lang == enUS) {
+              if (Wb.isNumber(value))
+                type = 'number';
+              else if (Wb.isBoolean(value))
+                type = 'boolean';
+              else if (Wb.isObject(value) || Wb.isArray(value))
+                type = 'object';
+              else
+                type = 'string';
+              row.type = type;
+            }
+            if (Wb.isObject(value) || Wb.isArray(value))
+              value = Wb.encode(value);
+            row[lang] = value;
+            if (search && String(value).includesIC(search))
+              found = true;
+          });
+          if (found || !search)
+            rows.push(row);
+        });
+        columns.push(
+          { rowNum: true },
+          { text: 'name', width: '15em', fieldName: 'name', editor: { cname: 'text', required: true } }
+        );
+        langNames.forEach(lang => {
+          columns.push({
+            text: lang, align: 'left', minWidth: '15em', width: -1, fieldName: lang,
+            editor: { cname: 'text', required: true }
+          });
+        });
+        columns.push({
+          text: 'type', width: '7em', fieldName: 'type', editor: {
+            cname: 'select', forceSelect: true, required: true,
+            data: ['string', 'number', 'boolean', 'object']
+          }
+        });
+        Wb.send({ items: rows.slice(Wb.getInt('_from'), Wb.getInt('_to') + 1), total: rows.length, columns });
+      },
+      /**
+       * Save data.
+       */
+      save() {
+        let langs, type, object, name, enLang, oldValue;
+
+        langs = getLangs(true);
+        enLang = langs['en-us'];
+        // delete
+        Params.del?.forEach(item => {
+          Wb.each(langs, (k, v) => {
+            delete v[1][item.$name];
+          });
+        });
+        // update
+        Params.update?.forEach(item => {
+          if (item.name && enLang[1][item.name])
+            Wb.raise(Str.alreadyExists.format(item.name));
+          type = item.type ?? item.$type;
+          name = item.name ?? item.$name;
+          Wb.each(langs, (k, v) => {
+            object = v[1];
+            oldValue = object[item.$name];
+            delete object[item.$name];
+            object[name] = createValue(type, item[k] ?? oldValue);
+          });
+        });
+        // insert
+        Params.insert?.forEach(item => {
+          if (enLang[1][item.name])
+            Wb.raise(Str.alreadyExists.format(item.name));
+          Wb.each(langs, (k, v) => {
+            v[1][item.name] = createValue(item.type, item[k]);
+          });
+        });
+        // save
+        Wb.each(langs, (k, v) => {
+          v[0].text = '// Define resources for a specified language.\nglobalThis.Str = ' + Wb.encodePretty(v[1]) + ';';
+        });
+        StrCls.load();
+      },
+    };
+    actions[Params.xaction]();
+
+    /**
+     * Get all language data. @priv
+     * @param {Boolean} [containsFile] Whether contains file.
+     */
+    function getLangs(containsFile) {
+      let folder = new Wb.File(true, 'wb/js/locale'), langs = {}, text, filename, object;
+
+      folder.each(file => {
+        filename = file.name;
+        if (!file.isMinFile && filename.startsWith('wb-') && filename.endsWith('.js')) {
+          text = file.text;
+          object = Wb.parse(text.substring(text.indexOf('{',
+            text.indexOf('globalThis.Str')), text.lastIndexOf('}') + 1));
+          langs[filename.slice(3, -3)] = containsFile ? [file, object] : object;
+        }
+      });
+      return langs;
+    }
+
+    /**
+     * Creates a value based on the specified type. @priv
+     * @param {String} type Data type.
+     * @param {Object} value Data value.
+     * @return {Object} New value.
+     */
+    function createValue(type, value) {
+      switch (type) {
+        case 'number':
+          value = parseFloat(value);
+          break;
+        case 'boolean':
+          value = Wb.parseBool(value);
+          break;
+        case 'object':
+          if (!Wb.isArray(value) && !Wb.isObject(value)) {
+            try {
+              value = Wb.parse(String(value));
+            } catch (e) {
+              Wb.raise(Str.invalidValue.format(value));
+            }
+          }
+          break;
+        default:
+          value = String(value);
+      }
+      return value;
+    }
+tags: ''
+text: module
+title: ''

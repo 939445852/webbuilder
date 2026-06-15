@@ -1,0 +1,13 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Set all users resource
+  serverScript: app.userid=Params.userid;Wb.run("set-resource");
+tags: ''
+text: module
+title: ''

@@ -1,0 +1,111 @@
+##Overview.What is WebBuilder
+Welcome to WebBuilder. This document is designed to help you quickly master how to use WebBuilder.
+#WebBuilder Introduction
+WebBuilder is a powerful, comprehensive and efficient application development and runtime platform. WebBuilder is both a powerful application development platform and an efficient and stable application runtime platform, providing an integrated and unified solution for the development and operation of complex enterprise-level application systems.
+-Based on browser-integrated development environment with intelligent design, it can easily complete the development from conventional desktop applications to mobile applications for mobile phones and other devices.
+-Highly efficient, stable and scalable, suitable for the operation of complex enterprise-level applications.
+-Cross-platform, cross-database and cross-browser architecture, adapting to complex server and client environments.
+-Includes a number of advanced technologies to make application system development faster and easier.
+#WebBuilder Core Advantages
+-Integrated Self-developed Full-stack Foundation: Enterprise-grade Robust InfrastructureBuilt on a native full-stack architecture, it comes with comprehensive built-in enterprise core capabilities, ready for out-of-box deployment without redundant third-party frameworks. Boasting a streamlined structure, ultra-stable operation and low maintenance costs, it serves as a highly secure and reliable digital foundation customized for large core businesses of government and enterprises.
+-AI-powered One-click Application Generation: Revolutionizing Development EfficiencyDeeply integrated with large AI models, it enables fully automatic one-click generation of complete business management systems via text descriptions, image materials, business documents and other forms. Featuring zero-code initiation, intelligent modeling and minute-level application delivery, it redefines the new model of enterprise software development.
+-Full-ecosystem Universal Compatibility: Unlock Infinite Technological PotentialFree from closed proprietary technical barriers, it achieves seamless compatibility with all mainstream frameworks, middleware and technologies. It supports flexible component selection and scalable expansion to keep pace with cutting-edge technologies, ensuring unrestricted long-term technical iteration. Balancing large-scale delivery and personalized innovation, it adapts to all industries and scenarios, delivering more advanced systems, faster development and stronger business empowerment.
+#WebBuilder System Functions and Features
+-Uses advanced technologies and architecture to support the operation of large-scale systems and massive data. WebBuilder is built with advanced technologies and has extremely high performance, which can support the operation of large-scale systems with high load. Flexible and extensible architecture can implement complex business functions.
+-Unified client development based on desktop and mobile devices. Only one set of applications needs to be developed to easily realize the development from desktop browser applications to mobile applications for mobile phones and PADs. Intelligent design helps developers shield the development differences between different terminal devices. You can still use the integrated development environment on your mobile phone for development.
+-The system is simple, easy to learn and use, which greatly reduces the learning cost and enables quick mastery of development using the system. WebBuilder is built with the latest standard technologies, and users do not need to learn additional technologies. For example, only JavaScript is needed to easily master WebBuilder. At the same time, the system provides a complete and easy-to-use document system and rich example modules, allowing users to quickly master the use of the system.
+-Cross-platform, cross-database and cross-terminal. WebBuilder supports all industry-standard operating systems, application servers, databases, browsers, terminals, mobile phones and PADs, truly realizing "develop once, run everywhere".
+-Easy to realize international development. International development can be realized through simple configuration, including the internationalization of text, numbers, dates, formats and typesetting.
+-Multiple development languages support. Multiple languages including Java, JavaScript, Python, Ruby, R can be used for mixed development and run with high performance.
+-Powerful development and debugging functions. The system provides a powerful browser-based IDE, including visual design, intelligent code editor, DevTools-based debugger, etc.
+#Application Scenarios of WebBuilder
+WebBuilder has a very wide range of applications and can develop various types of application systems in various industries. These application systems are applied in finance and banking, telecommunications, energy and electric power, production and manufacturing, retail and e-commerce, medical and health care, education and training, construction and real estate, logistics and transportation, government and public sectors, etc.
+#How to Quickly Master WebBuilder
+First, learn WebBuilder through this document, then refer to the {#%Example Module|ide?openExample=1} included with the system to learn the development of common and classic functions, and develop some similar applications according to the examples.
+If you have the following basic knowledge, it will be of great help for you to quickly master WebBuilder. These basic knowledge include:
+-{#%JavaScript|docs:Web/JavaScript}
+-{#%HTML|docs:Web/HTML}/{#%CSS|docs:Web/CSS}
+-{#%Java|https://www.w3schools.com/java}
+-{#%SQL|https://www.w3schools.com/sql}
+If you do not have the above knowledge, you can also learn these knowledge in the process of using WebBuilder.
+##Overview.WebBuilder Installation and Runtime
+#System Runtime Environment Requirements
+WebBuilder has low hardware requirements, which can be adjusted according to the system scale.
+|Item|Requirements|
+|Operating System|Windows, Linux, MacOS|
+|Web Application Server|Any industry-standard server (Tomcat, Jetty, Resin, WebLogic, etc.)|
+|Memory|800 MB|
+|Disk Space|1 GB (including JDK and Tomcat)|
+|Desktop and Mobile Browser|Modern browser (Chrome, Edge, Firefox, WebView, etc.)|
+#Quick Installation
+The system provides one-click running software packages for X64 architecture Windows and Linux. For detailed methods, see the readme file in the software package. Software packages for other operating systems can be quickly installed as follows:
+-Download the full Linux package, download link: {#%https://www.geejing.com/site/webbuilder-linux64.zip}
+-Download the matching JDK according to the server operating system, download link: {#%https://www.geejing.com/download}
+-Replace the JDK in the java-linux64 directory in the WebBuilder software package with the downloaded JDK, and proceed to the next step according to the readme file in the software package.
+#Custom Installation
+-Install any JDK, such as OpenJDK, OracleJDK, GraalVM for JDK or other JDK. For example, install OpenJDK 21, download link: {#%https://openjdk.org}
+-Install the Web application server and configure the Java path as the above Java path. For example, install Tomcat 10, download link: {#%https://tomcat.apache.org}
+-Download the jar files of GraalVM JavaScript. All these jar files use a friendly open source license agreement. Download link: {#%https://www.geejing.com/site/graal.zip}, if you need to use Python language, please download this link: {#%https://www.geejing.com/site/python/graal.zip}
+-Unzip "graal.zip" and copy all jar files to the valid lib directory (e.g., apache-tomcat/lib).
+-Deploy the webbuilder directory to the Web application server. For example: copy the webbuilder directory to the "webapps" directory of Tomcat.
+#Running WebBuilder
+-Start the Web application server.
+-Open the browser to access the WebBuilder index page. For example: http://localhost:8080/webbuilder, if the application is deployed in the ROOT directory, you can access http://localhost:8080
+-On this index page, please enter the default user name "admin" and password "admin" to log in to WebBuilder.
+-Open the menu "Example" to view some examples of WebBuilder.
+-Open the menu "Development Suite/Documents" to view the WebBuilder documentation.
+-Open the menu "Management Tools/About" to view information about WebBuilder.
+-Open the menu "Development Suite/Development Environment" to run the WebBuilder integrated development environment.
+-Open the menu "Management Tools/Database Configuration" to add your database, and click the [Default] button to set this database as the default database.
+#Deployment to Java Integrated Development Environment
+Deployment to a Java integrated development environment enables the development and debugging of Java code. Common Java integrated development environments include IntelliJ IDEA and Eclipse.
+The deployment steps are:
+-Create a new Web project.
+-Select the appropriate Java SDK and application server for the project, such as the Java SDK and Tomcat in the WebBuilder {#%Software Package|https://www.geejing.com/site/webbuilder-win64.zip}.
+-Copy the WebBuilder Java source code to the src directory of the project, and copy the wb and WEB-INF in the application directory to the WebContent directory of the project.
+-Reference the jar files that the project depends on. These jar files include all jar files in the WEB-INF/lib directory and all jar files of {#%graal|https://www.geejing.com/site/graal.zip} (These jars are in the apache-tomcat/lib directory in the {#%full software package|https://www.geejing.com/site/webbuilder-win64.zip}).
+#Local Database
+WebBuilder comes with an embedded derby database, which can run independently of other databases. This database stores the complete database tables and other related resources required for system operation. You can switch to other databases with one click through the {#%Database Configuration|dbc} module, or switch other databases to this database with one click. It is suitable for use as an intermediate database for database migration. The database is located in the wb/system/db/derby directory. For specific operation instructions, see the {#Database Configuration|System Module.Management Tools.Database Configuration} document.
+##Overview.Develop a Starter Application
+In this chapter, we will briefly understand the development method using WebBuilder by developing a simple staff query application.
+#Open Integrated Development Environment
+The Integrated Development Environment (IDE) is the main functional module for developing applications. On the system {#%Homepage|home}, click [Development Suite] -> [{#%Development Environment|ide}] in the left function menu bar to enter the WebBuilder IDE.
+#Create Database Query Module
+The function of the database query module is to query database data and return the obtained data JSON script to the client. The specific creation steps are as follows:
+-In the [File Explorer] on the left side of the IDE, select the [Module] root node, and click the [Add Folder] button on the toolbar. In the Add Folder dialog box, enter [myapp] in the [Name] field, and then click the OK button to create the directory.
+-In the [File Explorer] on the left side of the IDE, select the [myapp] directory just created, and click the [Add File] button on the toolbar. In the Add File dialog box, enter [select-staff] in the [Name] field, check the [Hide in the Menu] option at the bottom, and then click the OK button to create the module file. This file serves as the database query module.
+-In the module editor of the opened [select-staff.xwl] file, find the [serverScript] property in the [Object Inspector], double-click the edit box of this property, and write the script in the opened [serverScript] tab:
+
+     Wb.sendRowx('select * from wb_staff');
+
+Press [Ctrl+S] to save the [select-staff.xwl] file.
+#Create Main UI Module
+The main UI module is a module that displays data and provides user interaction operations. The specific creation steps are as follows:
+-In the [File Explorer] of the IDE, select the [myapp] directory, and click the [Add File] button on the toolbar. In the New dialog box, enter [staff] in the [Name] field, and then click the OK button to create the module file. This file serves as the main interface module.
+-Double-click the [General]->[viewport] control in the right [Control Tree] to add this control to the [module] node in the module.
+-Select the added [viewport1] node, find the [layout] property in the [Object Inspector], and select the property value as [fit].
+-Select the added [viewport1] node, find the [List View]->[grid] control in the right [Control Tree], then hold down the [Ctrl] key and double-click this control to add this control to the [viewport1] node.
+-Select the added [grid1] node, find the [url] property in the [Object Inspector].
+-Drag the [select-staff.xwl] file in the left [File Explorer] to the [url] property of the [Object Inspector] to set the url address of [select-staff.xwl] to the [url] property.
+-Press [Ctrl+Q] or click the [Run] button on the toolbar to save and run the [staff.xwl] file, and you can see the running result.
+Refresh the system [{#%Home|home}] page, and you can see the [staff] module just developed in the module list on the left.
+At this point, you have completed the development of a simple staff query application. For the complete function, please refer to the {#%staff|ide?openModule=example/crud/staff.xwl} example module.
+##Overview.Frequently Asked Questions
+#• What is the difference between WebBuilder and low-code platforms and conventional software development tools?
+A low-code platform is a development tool that quickly builds applications through a visual interface and a small amount of code, aiming to lower the development threshold and improve efficiency. Conventional software development tools include Java, Python or .net, etc. and their IDE development tools, which are relatively basic underlying software development tools with strong functionality and flexibility. However, because they are basic development tools, they lack rapid development capabilities. Developing complex application systems requires starting from scratch, which puts forward high requirements for developers. WebBuilder combines the advantages of both, having the flexibility and ease of use of low-code platforms, as well as the functionality and flexibility of underlying development tools.
+#• Does WebBuilder support the use of third-party frameworks and packages?
+WebBuilder supports the use of third-party frameworks and packages, including Java packages, JS packages, Java frameworks/components, JS frameworks/components, etc.
+#• Does WebBuilder support front-end and back-end separation?
+WebBuilder supports front-end and back-end separation. Applications built with WebBuilder include client and server. Client applications and server applications can be deployed independently as separate applications or merged into a single application. For example, WebBuilder can be used as both a service platform and a client application.
+#• How is the runtime performance of WebBuilder?
+WebBuilder has extremely high performance:
+-Highly efficient algorithms and refined code enable programs to run faster with fewer resources.
+-The fastest JavaScript and compatible with the latest ECMAScript specifications. The system uses the Graal JIT compiler to run JavaScript at native code speed, providing unparalleled performance.
+-The system caches multiple optimized and preloaded execution contexts to support high concurrency.
+-Share data and code with other languages such as Java, Ruby, Python, LLVM, R.
+#• What databases does WebBuilder support?
+WebBuilder supports all databases, including Oracle, SQL Server, MySQL, PostgreSQL, etc., as well as non-relational databases and any other databases you want to use.
+#• Does WebBuilder meet the Xinchuang requirements?
+WebBuilder is independently developed software with independent intellectual property rights and fully meets the Xinchuang requirements. All third-party software that WebBuilder depends on for operation are software using friendly open source license agreements such as Apache. For the specific list, please refer to the third-party software list of the {#%About|about} module.
+#• How to obtain the license of WebBuilder.
+WebBuilder is released based on a commercial license, so any legal use of WebBuilder requires authorization. To purchase WebBuilder, please visit {#%https://www.geejing.com/buy}

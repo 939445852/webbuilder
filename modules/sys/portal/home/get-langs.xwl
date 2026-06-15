@@ -1,0 +1,23 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Get language list
+  serverScript: |-
+    function main() {
+      let file = new Wb.File(true, 'wb/js/locale'), result = [];
+
+      file.listFiles().forEach(file => {
+        let name = file.name;
+        if (name.startsWith('wb-') && name.endsWith('.js') && !name.endsWith('.min.js'))
+          result.push(name.slice(3, -3));
+      })
+      Wb.send(result);
+    }
+    main();
+tags: ''
+text: module
+title: ''

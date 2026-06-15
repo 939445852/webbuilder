@@ -1,0 +1,21 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.apply(app,{winConfigs:{events:{ready(){let e=this,t=new Wb.Container({layout:"grid2",autoGrid:"up"}),i,a;t.add(e.items.filter((e=>e.cid!="cv")));e.layout="form1";e.insert(0,{cname:"title",title:"General
+    Information"});e.insert(1,t);e.insert(2,{cname:"title",title:"Personal Resume"});i=e.down("cv");Wb.apply(i,{flex:1,text:null,minHeight:"5em"});a=t.down("photo");t.insert(1,a);Wb.apply(a,{gridRow:"span
+    3",browseMode:true,browseHeight:"8em",browseWidth:"12em",fileButtons:false});e.buttonsBar.insert(0,[{cname:"button",active:false,text:"Table
+    Style",plainIcon:true,icon:"table",handler(){t.tableStyle=!t.tableStyle}},"->"])}}},onFailure(e){Wb.checkExists(e,"wb_staff_code",app.grid1.dictWin.down("code"))}});Wb.make(app,{cname:"viewport",autoContextMenu:true,layout:"fit",cid:"viewport1",tbar:{cname:"toolbar",items:[{icon:"add",text:Str.add,keys:"Ctrl+E",cid:"addBtn",events:{click(e,t){app.grid1.dictAdd({url:xpath+"/../actions&xaction=add",failure:app.onFailure},null,null,null,app.winConfigs)}}},{icon:"edit",text:Str.edit,keys:"Ctrl+J",cid:"editBtn",events:{click(e,t){let
+    i=app.grid1.dictEdit({url:xpath+"/../actions&xaction=edit",failure:app.onFailure},"code",null,null,app.winConfigs);let
+    a=app.grid1.selection;if(a)i.down("photo").preview(xpath+"/../actions&xaction=getPhoto&sid="+a.data.sid+"&"+Wb.getId())}}},{icon:"delete",text:Str.del,keys:"Ctrl+D",cid:"delBtn",events:{click(e,t){app.grid1.removeRecords(xpath+"/../actions&xaction=del","code")}}},{cname:"divider",cid:"divider1"},{cname:"text",minWidth:"5em",clearButton:true,placeholder:Str.search,flex:1,cid:"search",maxWidth:"20em",events:{change(e,t,i){app.grid1.delayLoad({comps:app.search})}}}]},items:[{cname:"grid",columnsSortable:true,sorters:"code",url:xpath+"/../actions&xaction=dictSelect",cid:"grid1",multiSelect:true,stateData:"_$004V7KE4QVEXK$_",stateId:"wb.crud-dialog",events:{beforeloadcolumns(e,t){let
+    i=e.find((e=>e.fieldName=="full_name"));if(i)i.width="12em"},itemdblclick(e,t,i){app.editBtn.fireEvent("click")}}}]});
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+stateMap:
+  wb.crud-dialog: 004V7KE4QVEXK
+tags: ''
+text: module
+title: ''

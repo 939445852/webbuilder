@@ -1,0 +1,28 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: 'const points=200;Wb.apply(app,{failCount:0,onReady(){app.autoRefreshTimer??=setInterval((e=>{if(app.isLoading)return;app.isLoading=true;Wb.ajax({url:xpath+"/select&xaction=sysInfo&chart=1",showError:false,showMask:false,json:true,callback(e,a){app.isLoading=false;if(a.ok){app.failCount=0;app.addToChart(e)}else{app.failCount++;if(app.failCount>30)clearInterval(app.autoRefreshTimer)}}})}),1e3)},onDestroy(){clearInterval(app.autoRefreshTimer);app.autoRefreshTimer=null},addToChart(e){const
+    a=points-7;let t=e[0].numValue*100,i=e[1].numValue/1048576,n=e[2].numValue/1048576,l=app.chart1.option,r=l.series[0],o=l.series[1],s;if(app.currentIndex==null){app.currentIndex=0}s=app.fixedIndex??app.currentIndex;if(app.currentIndex>=a){s=app.fixedIndex=a-1;r.data.shift();r.data.push(null);o.data.shift();o.data.push(null)}else{app.currentIndex++}if(t!==null){r.data[s]=t}if(n!==null){o.data[s]=n}l.yAxis[1].max=i;l.yAxis[1].interval=Math.ceil(i/5);app.chart1.option=l}});Wb.make(app,{cname:"socket",cid:"socket1",events:{close(e,a){app.onDestroy()},open(e,a){app.onReady()}}});Wb.make(app,{cname:"viewport",layout:"column",cid:"viewport1",events:{destroy(e){app.onDestroy()}},items:[{cname:"container",layout:"row",flex:1,cid:"container1",items:[{cname:"grid",textSelectable:true,pageSize:-1,reserveScrollbar:true,flex:1,url:xpath+"/select&xaction=sysInfo",cid:"grid1",columns:[{cname:"column",cid:"rowNumCol",rowNum:true},{cname:"column",width:"16em",fieldName:"name",text:"Name",cid:"nameCol"},{cname:"column",width:-1,minWidth:"10em",autoWrap:"break-all",fieldName:"value",text:"Value",cid:"valueCol"}]},{cname:"splitter",cid:"splitter1"},{cname:"grid",defaultFields:{lastAccess:{type:"date"}},columnsSortable:true,textSelectable:true,width:"50%",reserveScrollbar:true,sorters:{name:"avgDuration",desc:true},url:xpath+"/select&xaction=moduleInfo",cid:"grid2",columns:[{cname:"column",cid:"rowNumCol",rowNum:true},{cname:"column",width:-1,minWidth:"10em",fieldName:"module",text:"Module",cid:"moduleCol"},{cname:"column",width:"7em",fieldName:"duration",text:"CPU
+    (s)",type:"intText",cid:"durationCol"},{cname:"column",width:"7em",fieldName:"times",text:"Times",cid:"timesCol"},{cname:"column",width:"7em",fieldName:"avgDuration",text:"Avg
+    (ms)",cid:"avgDurationCol"},{cname:"column",width:"12em",fieldName:"lastAccess",text:"Last
+    Access",type:"dateTimeTextHM",cid:"lastAccessCol"}],events:{ready(e,a){let t=this.pagingBar;t.insertAfter({icon:"trash",tip:"Clear
+    data",handler(){Wb.ajax({url:xpath+"/select&xaction=clear",success(){app.grid2.destroyAll()}})}},t.menuItem)}}}]},{cname:"splitter",cid:"splitter1"},{cname:"chart",cid:"chart1",height:"20em",option:{tooltip:{trigger:"axis",formatter:function(e){const
+    a=[];e.forEach((function(e){let t=e.value;if(t==null)return"";if(e.seriesName==="CPU
+    Usage"){t=(t/points).percent}else if(e.seriesName==="Used Memory"){t=t.intText+"
+    MB"}a.push(`${e.seriesName}: ${t}`)}));return a.join("<br>")}},animation:false,legend:{data:["CPU
+    Usage","Used Memory"]},xAxis:{type:"category",boundaryGap:false,show:false,data:new
+    Array(points).fill(Wb.getId())},yAxis:[{type:"value",name:"CPU (%)",position:"left",min:0,max:100,interval:20},{type:"value",splitLine:{show:false},name:"Memory
+    (MB)",position:"right",min:0,max:1e3}],series:[{name:"CPU Usage",type:"line",yAxisIndex:0,lineStyle:{color:"#ff4d4f"},itemStyle:{color:"#e74c3c"},data:new
+    Array(points).fill(null)},{name:"Used Memory",type:"line",yAxisIndex:1,data:new
+    Array(points).fill(null)}]}}]});'
+hideInMenu: 'false'
+icon: system
+img: ''
+properties:
+  cid: module
+  links: '["wb/libs/echarts.js"]'
+  remark: View system information
+tags: ''
+text: module
+title: '@sysinfo'

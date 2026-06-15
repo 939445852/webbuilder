@@ -1,0 +1,18 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Select departments
+  serverScript: function main(){let e,a,s,d=Params.search;e=`\n        select a.dept_name,
+    a.dept_code, a.sid, a.parent_id, b.sid as user_id,\n        b.display_name as
+    manager_name, a.status, 'folder1' as "_icon", a.sid as dept_id_disp,\n        case
+    when (select count(*) from wb_dept c where c.parent_id=a.sid)>0 then 1 else 0
+    end as items\n        from wb_dept a left join wb_user b on a.manager_id=b.sid\n        `;if(d){Wb.setLike("search");e+="
+    where a.dept_name like {?search?} or a.dept_code like {?search?} or a.sid like
+    {?search?}"}else{Params.parent_id=Params.sid||"0";e+=" where a.parent_id={?parent_id?}"}e+=Wb.getOrderSql({manager_name:"b.display_name"});a=Wb.getDict({sql:e,columns:"tree",rs:d?100:-1},"wb,");if(!d&&!Params.sid&&(s=a.items[0])&&a.items.length==1)s._expanded=true;Wb.send(a)}main();
+tags: ''
+text: module
+title: ''

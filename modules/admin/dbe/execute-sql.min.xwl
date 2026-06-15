@@ -1,0 +1,12 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Execute arbitrary SQL
+  serverScript: function main(){const a=Wb.load("./util.mjs");let t={array:true};if(Wb.getBool("blob"))t.blob="text";Wb.sendSql(Wb.apply(t,{sql:Wb.decodeBase64(Params.data),db:Params.db,returnObject:true,readonly:true,dateFormat:true,rs:a.maxRows}))}main();
+tags: ''
+text: module
+title: ''

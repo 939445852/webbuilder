@@ -1,0 +1,18 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Edit config item
+  serverScript: |-
+    Wb.checkDemo();
+    function main() {
+      let { nameEditor, valueEditor } = Params;
+      Wb.setConfig(nameEditor, valueEditor);
+    }
+    main();
+tags: ''
+text: module
+title: ''

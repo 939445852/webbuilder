@@ -1,0 +1,108 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: edit
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: mainLabel
+      cls: w-title3
+      text: CodeEditor
+    text: mainLabel
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: jsEditorTitle
+      title: JavaScript editor
+    text: jsEditorTitle
+  - _icon: edit
+    cls: Wb.CodeEditor
+    properties:
+      cid: jsEditor
+      height: 18em
+      value: |-
+        Cls['Wb.Button'] = class button extends Wb.mixin.Icon(Wb.Component) {
+          static configs = {
+            tabIndex: Wb.isTouch ? undefined : 0,
+            rippleOnClick: true
+          };
+          /***/
+          init(configs) {
+            let me = this;
+            super.init(configs);
+            me.on('click', me.onClickEvent);
+            me.mon({ [me.tapClick ? Event.tapDownName : 'click']: me.onClick, keydown: me.onKeyDown });
+          }
+        }
+    text: jsEditor
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: sqlEditorTitle
+      title: SQL editor
+    text: sqlEditorTitle
+  - _icon: edit
+    cls: Wb.CodeEditor
+    properties:
+      cid: sqlEditor
+      height: 3em
+      language: sql
+      value: |-
+        select a.field1, b.field2 from table1 a, table2 b where a.sid=b.sid
+        order by a.field1
+    text: sqlEditor
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: htmlEditorTitle
+      title: HTML editor without border
+    text: htmlEditorTitle
+  - _icon: edit
+    cls: Wb.CodeEditor
+    properties:
+      cid: htmlEditor
+      height: 18em
+      language: html
+      value: |-
+        <!DOCTYPE html>
+        <head>
+        <meta charset="UTF-8">
+        <title>html</title>
+        <link rel="icon" href="wb/images/app/favicon.ico">
+        <link rel="stylesheet" href="wb/css/iconfont.css">
+        <link rel="stylesheet" href="wb/css/dark-wb.css">
+        <script src="wb/js/locale/wb-zh-cn.js"></script>
+        <script src="wb/js/wb.js"></script>
+        <script src="wb/js/wb-client.js"></script>
+        </head>
+        <body>
+        <script type="module">
+        Wb.onLoad(f => {
+        });
+        </script>
+        </body>
+        </html>
+      wrapBorder: 'false'
+    text: htmlEditor
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: otherLanguageLabel
+      text: For other languages, please set the language property.
+    text: otherLanguageLabel
+  properties:
+    cid: viewport1
+    layout: grid1
+  text: viewport1
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

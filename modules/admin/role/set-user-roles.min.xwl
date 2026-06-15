@@ -1,0 +1,14 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Set user roles
+  serverScript: let insert=[],del=[],user_id,include=Wb.getBool("include"),role_id=Params.role_id;Params.items.forEach((e=>{if(include)insert.push({sid:Wb.getId(),user_id:e.sid,role_id:role_id});else
+    del.push({$user_id:e.sid,$role_id:role_id})}));if(include)Wb.sync({tableName:"wb_user_role",insert:insert});else
+    Wb.sync({tableName:"wb_user_role",del:del,whereFields:"user_id,role_id"});
+tags: ''
+text: module
+title: ''

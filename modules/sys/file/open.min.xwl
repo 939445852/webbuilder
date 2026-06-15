@@ -1,0 +1,8 @@
+_icon: module
+cls: Wb.Module
+properties:
+  cid: module
+  remark: Get file content in any path
+  serverScript: let fs=Wb.load("./fs.mjs");Wb.send(fs.getFileData(Params.path,Params.charset,Wb.getBool("yaml")));
+text: module
+title: ''

@@ -1,0 +1,83 @@
+_icon: module
+cls: Wb.Module
+properties:
+  cid: module
+  remark: Create css theme files
+  serverScript: |-
+    function main() {
+      let files = new Wb.File(true, 'wb/css').items,
+        cssTpl = new Wb.File(true, 'wb/css/wb-tpl.css').text,
+        name, colorData;
+
+      proccessIconFont();
+      colorData = new Wb.File(true, 'wb/css/icon-color.json').object;
+      files.forEach(file => {
+        name = file.name;
+        if (name.endsWith('-wb.json')) {
+          name = name.slice(0, -8);
+          createCss(cssTpl, file.object, name, colorData);
+        }
+      });
+    };
+    /**
+     * Create Css file from template
+     * @param {String} cssTpl CSS template
+     * @param {Object} tplData theme data
+     * @param {String} theme theme name
+     * @param {Object} colorData icon-color.json
+     */
+    function createCss(cssTpl, tplData, theme, colorData) {
+      let colorFile = new Wb.File(true, 'wb/css/' + theme + '-icon-color.json'),
+        key, value, mergeColorData, iconCssText = '';
+
+      mergeColorData = colorFile.exists ? Wb.apply({}, colorData, colorFile.object) : colorData;
+      Wb.each(mergeColorData, (name, color) => {
+        if (iconCssText)
+          iconCssText += '\n';
+        iconCssText += '/* ' + name + ' color */\n.' + name + ' {\n  color: ' + color + ';\n}';
+      });
+      cssTpl = cssTpl.replaceAll(/__.*?__/g, v => {
+        key = v.slice(2, -2)
+        value = tplData[key];
+        if (!value)
+          Wb.warn('Invalid name "' + key + '"');
+        return value ?? v;
+      });
+      new Wb.File(true, 'wb/css/' + theme + '-wb.css').text = iconCssText + '\n' + cssTpl;
+    }
+    /**
+     * Process iconfont.css
+     */
+    function proccessIconFont() {
+      let file = new Wb.File(true, 'wb/css/iconfont.css'),
+        text = file.text, pos = text.indexOf('.wb {');
+
+      //pos!=-1 means iconfont.css is modified
+      if (pos != -1) {
+        let woffFile = new Wb.File(true, 'wb/css/iconfont.woff2');
+        file.text = text = '@font-face {\n  font-family: "wb";\n' +
+          "  src: url('data:application/x-font-woff2;charset=utf-8;base64," +
+          woffFile.base64 + "') format('woff2');\n}" + text.substr(text.indexOf('}', pos) + 1);
+        woffFile.remove();
+        let icons = text.match(/(?<=\.).*?(?=\:)/g),
+          jsonFile = new Wb.File(true, 'wb/css/icon-color.json'),
+          jsonObject = jsonFile.object,
+          newJson = {},
+          colorStr = '3456789ABCD', color, i;
+        icons.forEach(icon => {
+          color = jsonObject[icon];
+          if (!color) {
+            color = '#';
+            for (i = 0; i < 6; i++) {
+              color += colorStr[Wb.random(11)];
+            }
+          }
+          newJson[icon] = color;
+        });
+
+        jsonFile.text = Wb.encodePretty(newJson);
+      }
+    }
+    main();
+text: module
+title: ''

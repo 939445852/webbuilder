@@ -1,0 +1,18 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Set permission actions
+  serverScript: let actions={setPerm(){let e=Params.modules,r,t,l=Params.roleId,o=Wb.getBool("checked"),a=Wb.roles,s,m=Wb.isAdmin;if(!l||!m&&a.includes(l))Wb.raise("You
+    are not allowed to set your own permissions. Please contact the administrator.");Wb.startTrans();if(o){let
+    o=[];r=Wb.getAllRecords("select module_path from wb_perm where role_id={?roleId?}").pluck(0);e=e.diff(r);e.forEach((e=>{s=e+".xwl";t=new
+    Wb.File(Wb.File.moduleFolder,s);if(!t.exists)Wb.raise(Str.notExists.format(e));if(!m&&!Perm.permit(s,a))Wb.raise(Str.notHavePerm.format(s));o.push({sid:Wb.getId(),module_path:e,role_id:l})}));Wb.sync({tableName:"wb_perm",insert:o});e.forEach((e=>Perm.put(e,l)))}else{let
+    r=[];e.forEach((e=>{s=e+".xwl";if(!m&&!Perm.permit(s,a))Wb.raise(Str.notHavePerm.format(s));r.push({$module_path:e,$role_id:l})}));Wb.sync({tableName:"wb_perm",del:r,whereFields:"module_path,role_id",unique:false});e.forEach((e=>Perm.remove(e,l)))}},cleanInvalid(){let
+    e=[];Wb.getRows("select module_path from wb_perm",(r=>{if(!new Wb.File(true,"wb/modules/"+r.module_path+".xwl").exists)e.push(r)}));Wb.sql({sql:"delete
+    from wb_perm where module_path={?module_path?}",params:e})}};actions[Params.xaction]();
+tags: ''
+text: module
+title: ''

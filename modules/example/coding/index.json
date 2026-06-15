@@ -1,0 +1,11 @@
+{
+  "title": "",
+  "icon": "",
+  "img": "",
+  "hideInMenu": "false",
+  "items": [
+    "js",
+    "client-js",
+    "server-js"
+  ]
+}

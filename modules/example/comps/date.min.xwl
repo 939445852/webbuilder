@@ -1,0 +1,31 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.make(app,{cname:"viewport",layout:"grid1",cid:"viewport1",items:[{cname:"label",cid:"mainLabel",cls:"w-title3",text:"Date
+    and Time"},{cname:"title",title:"Date",cid:"dateTitle"},{cname:"container",layout:"form",cid:"dateCt",frame:true,items:[{cname:"date",cid:"commonDate",text:"Common"},{cname:"date",minValue:(new
+    Date).addDay(-7),text:"Constraint Value",maxValue:(new Date).addDay(7),cid:"constraintDate"},{cname:"controlCt",layout:"row",text:"Date
+    Range",cid:"dateRangeControlCt",gap:"1em",items:[{cname:"date",cid:"fromDate"},{cname:"label",cid:"toLabel",text:"to"},{cname:"date",beginDate:"fromDate",rangeOffset:3,cid:"toDate"}]}]},{cname:"title",title:"Time",cid:"timeTitle"},{cname:"container",layout:"form",cid:"timeCt",frame:true,items:[{cname:"time",cid:"commonTime",text:"Common"},{cname:"time",localFormat:"timeText12",width:"22em",clearButton:true,text:"Local
+    Format",cid:"localFormatTime"}]},{cname:"title",title:"Datetime",cid:"dateTimeTitle"},{cname:"container",layout:"form",cid:"datetimeCt",frame:true,items:[{cname:"datetime",cid:"commonDateTime",text:"Common"}]},{cname:"title",title:"Others",cid:"othersTitle"},{cname:"container",layout:"form",cid:"othersCt",frame:true,items:[{cname:"yearMonth",cid:"yearMonth1",text:"Year
+    Month"}]},{cname:"title",title:"Display date/time prompt window through methods",cid:"promptTitle"},{cname:"label",cid:"tipLabel",text:"There
+    are different dialog representations on the desktop and touch mode."},{cname:"container",layout:"form",cid:"promptCt",frame:true,items:[{cname:"button",cid:"dateAutoBtn",text:"Prompt
+    Date auto",events:{click(t,e){Wb.promptDate((t=>Wb.tip(t.dateText)),new Date,"Select
+    Date")}}},{cname:"button",cid:"dateDrawerBtn",text:"Prompt Date Drawer",events:{click(t,e){Wb.promptDate((t=>Wb.tip(t.dateText)),new
+    Date,"Select Date",true)}}},{cname:"button",cid:"dateDialogBtn",text:"Prompt Date
+    Dialog",events:{click(t,e){Wb.promptDate((t=>Wb.tip(t.dateText)),new Date,"Select
+    Date",false)}}},{cname:"button",cid:"timeDrawerBtn",text:"Prompt Time Drawer",events:{click(t,e){Wb.promptTime((t=>Wb.tip(t.timeText)),null,null,true)}}},{cname:"button",cid:"timeDialogBtn",text:"Prompt
+    Time Dialog",events:{click(t,e){Wb.promptTime((t=>Wb.tip(t.timeText)),null,null,false)}}},{cname:"button",cid:"dateTimeDrawerBtn",text:"Prompt
+    Datetime Drawer",events:{click(t,e){Wb.promptDateTime((t=>Wb.tip(t.dateTimeText)),null,null,true)}}},{cname:"button",cid:"dateTimeDialogBtn",text:"Prompt
+    Datetime Dialog",events:{click(t,e){Wb.promptDateTime((t=>Wb.tip(t.dateTimeText)),null,null,false)}}},{cname:"button",cid:"monthDrawerBtn",text:"Prompt
+    Month Drawer",events:{click(t,e){Wb.promptMonth((t=>Wb.tip(t.format("y-M"))),null,null,true)}}},{cname:"button",cid:"monthDialogBtn",text:"Prompt
+    Month Dialog",events:{click(t,e){Wb.promptMonth((t=>Wb.tip(t.format("y-M"))),null,null,false)}}},{cname:"button",cid:"preventCloseBtn",text:"Prevent
+    Close",events:{click(t,e){Wb.promptDate((t=>{Wb.tip("Close prevented");return
+    false}))}}}]}]});
+hideInMenu: 'false'
+icon: calendar
+img: ''
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

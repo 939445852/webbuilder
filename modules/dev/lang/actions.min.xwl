@@ -1,0 +1,22 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Multilingual editor server side actions
+  serverScript: let actions={select(){const e="en-us";const t=Params.search?.toLowerCase();let
+    a=[],r=[],s,i,n,l,o,c,b;s=getLangs();c=Object.keys(s).lowerSort();c.remove(e);c.insert(0,e);b=Object.keys(s[e]).lowerSort();b.forEach((a=>{n=false;o={name:a};if(t&&a.includesIC(t))n=true;c.forEach((r=>{i=s[r][a];if(r==e){if(Wb.isNumber(i))l="number";else
+    if(Wb.isBoolean(i))l="boolean";else if(Wb.isObject(i)||Wb.isArray(i))l="object";else
+    l="string";o.type=l}if(Wb.isObject(i)||Wb.isArray(i))i=Wb.encode(i);o[r]=i;if(t&&String(i).includesIC(t))n=true}));if(n||!t)r.push(o)}));a.push({rowNum:true},{text:"name",width:"15em",fieldName:"name",editor:{cname:"text",required:true}});c.forEach((e=>{a.push({text:e,align:"left",minWidth:"15em",width:-1,fieldName:e,editor:{cname:"text",required:true}})}));a.push({text:"type",width:"7em",fieldName:"type",editor:{cname:"select",forceSelect:true,required:true,data:["string","number","boolean","object"]}});Wb.send({items:r.slice(Wb.getInt("_from"),Wb.getInt("_to")+1),total:r.length,columns:a})},save(){let
+    e,t,a,r,s,i;e=getLangs(true);s=e["en-us"];Params.del?.forEach((t=>{Wb.each(e,((e,a)=>{delete
+    a[1][t.$name]}))}));Params.update?.forEach((n=>{if(n.name&&s[1][n.name])Wb.raise(Str.alreadyExists.format(n.name));t=n.type??n.$type;r=n.name??n.$name;Wb.each(e,((e,s)=>{a=s[1];i=a[n.$name];delete
+    a[n.$name];a[r]=createValue(t,n[e]??i)}))}));Params.insert?.forEach((t=>{if(s[1][t.name])Wb.raise(Str.alreadyExists.format(t.name));Wb.each(e,((e,a)=>{a[1][t.name]=createValue(t.type,t[e])}))}));Wb.each(e,((e,t)=>{t[0].text="//
+    Define resources for a specified language.\nglobalThis.Str = "+Wb.encodePretty(t[1])+";"}));StrCls.load()}};actions[Params.xaction]();function
+    getLangs(e){let t=new Wb.File(true,"wb/js/locale"),a={},r,s,i;t.each((t=>{s=t.name;if(!t.isMinFile&&s.startsWith("wb-")&&s.endsWith(".js")){r=t.text;i=Wb.parse(r.substring(r.indexOf("{",r.indexOf("globalThis.Str")),r.lastIndexOf("}")+1));a[s.slice(3,-3)]=e?[t,i]:i}}));return
+    a}function createValue(e,t){switch(e){case"number":t=parseFloat(t);break;case"boolean":t=Wb.parseBool(t);break;case"object":if(!Wb.isArray(t)&&!Wb.isObject(t)){try{t=Wb.parse(String(t))}catch(e){Wb.raise(Str.invalidValue.format(t))}}break;default:t=String(t)}return
+    t}
+tags: ''
+text: module
+title: ''

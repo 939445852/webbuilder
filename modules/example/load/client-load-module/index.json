@@ -1,0 +1,12 @@
+{
+  "title": "",
+  "icon": "",
+  "img": "",
+  "hideInMenu": "true",
+  "items": [
+    "panel.xwl",
+    "card.xwl",
+    "common-window.xwl",
+    "single-window.xwl"
+  ]
+}

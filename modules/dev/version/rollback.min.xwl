@@ -1,0 +1,13 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Rollback to the specified version
+  serverScript: Wb.checkDemo();function main(){Wb.sql({sql:"select file_path,file_content
+    from wb_version where file_version={?version?}",blob:true,fn(e){new Wb.File(true,e.file_path).stream=e.file_content}})}main();
+tags: ''
+text: module
+title: ''

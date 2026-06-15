@@ -1,0 +1,19 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: 'Wb.make(app,{cname:"window",padding:true,visible:true,closeAction:"destroy",width:"50em",html:"<p>\n  This
+    example demonstrates that there is no default container (usually a tab card) when
+    the module is displayed, and\n  the\n  entire module is automatically destroyed
+    when the main window is closed.\n</p>\n<p>\n  The module has parameters: {container:
+    false}.\n  Please click the [Properties] button to view the module parameters
+    on the IDE.\n</p>",title:"No container module",autoScroll:true,cid:"main",height:"20em",events:{destroy(e){Wb.tip("The
+    module is destroyed.")}}});'
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+tags: '{container: false}'
+text: module
+title: ''

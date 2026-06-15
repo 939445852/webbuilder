@@ -1,0 +1,17 @@
+_icon: module
+cls: Wb.Module
+properties:
+  cid: module
+  remark: Create css theme files
+  serverScript: 'function main(){let e=new Wb.File(true,"wb/css").items,n=new Wb.File(true,"wb/css/wb-tpl.css").text,t,c;proccessIconFont();c=new
+    Wb.File(true,"wb/css/icon-color.json").object;e.forEach((e=>{t=e.name;if(t.endsWith("-wb.json")){t=t.slice(0,-8);createCss(n,e.object,t,c)}}))}function
+    createCss(e,n,t,c){let o=new Wb.File(true,"wb/css/"+t+"-icon-color.json"),s,i,b,r="";b=o.exists?Wb.apply({},c,o.object):c;Wb.each(b,((e,n)=>{if(r)r+="\n";r+="/*
+    "+e+" color */\n."+e+" {\n  color: "+n+";\n}"}));e=e.replaceAll(/__.*?__/g,(e=>{s=e.slice(2,-2);i=n[s];if(!i)Wb.warn(''Invalid
+    name "''+s+''"'');return i??e}));new Wb.File(true,"wb/css/"+t+"-wb.css").text=r+"\n"+e}function
+    proccessIconFont(){let e=new Wb.File(true,"wb/css/iconfont.css"),n=e.text,t=n.indexOf(".wb
+    {");if(t!=-1){let c=new Wb.File(true,"wb/css/iconfont.woff2");e.text=n=''@font-face
+    {\n  font-family: "wb";\n''+"  src: url(''data:application/x-font-woff2;charset=utf-8;base64,"+c.base64+"'')
+    format(''woff2'');\n}"+n.substr(n.indexOf("}",t)+1);c.remove();let o=n.match(/(?<=\.).*?(?=\:)/g),s=new
+    Wb.File(true,"wb/css/icon-color.json"),i=s.object,b={},r="3456789ABCD",l,f;o.forEach((e=>{l=i[e];if(!l){l="#";for(f=0;f<6;f++){l+=r[Wb.random(11)]}}b[e]=l}));s.text=Wb.encodePretty(b)}}main();'
+text: module
+title: ''

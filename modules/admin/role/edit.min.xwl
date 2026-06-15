@@ -1,0 +1,12 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Edit role
+  serverScript: function main(){const a=Wb.load("./util.mjs");let e=Params.$role_name;if(Params.role_name&&a.isReservedRole(e))Wb.raise(Str.cannotModify.format(Params.role_name));Params.sid=undefined;Wb.sync({tableName:"wb_role",update:Params})}main();
+tags: ''
+text: module
+title: ''

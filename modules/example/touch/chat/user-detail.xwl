@@ -1,0 +1,170 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+items:
+- _expanded: true
+  _icon: dialog
+  cls: Wb.Dialog
+  events:
+    hidden: this.destroy(); // remove this code if Wb.run use single mode
+  items:
+  - _icon: component
+    cls: Wb.Component
+    properties:
+      cid: summaryComp
+      padding: 1em
+      tpl: |-
+        <div class="w-row w-gap1">
+          <div class="w-icon icon-user2 w-size3 w-aligns-center"></div>
+          <div class="w-column w-gap">
+            <div class="w-row w-gap">
+              <div class="w-title4">{display_name}</div>
+              <div class="w-icon icon-user3 w-aligns-center"></div>
+            </div>
+            <div>User name: {user_name}</div>
+            <div>User id: {sid}</div>
+            <div>E-mail: {email}</div>
+          </div>
+        </div>
+    text: summaryComp
+  - _icon: line
+    cls: Wb.Line
+    properties:
+      cid: line1
+      margin: top
+    text: line1
+  - _expanded: false
+    _icon: options
+    cls: Wb.Option
+    events:
+      click: |-
+        let chatApp = app.chatApp, data = chatApp.openUserData;
+        app.main.close(true); // optional
+        chatApp.openChat({ userid: data.sid, display_name: data.display_name });
+    properties:
+      buttonStyle: 'true'
+      cid: sendMsgOption
+      icon: message
+      text: Send message
+    text: sendMsgOption
+  - _icon: padding
+    cls: Wb.Gap
+    properties:
+      cid: gap1
+    text: gap1
+  - _expanded: true
+    _icon: options
+    cls: Wb.Option
+    events:
+      click: Wb.tip(this.text);
+    properties:
+      border: bottom
+      cid: noteOption
+      text: Set notes and labels
+    text: noteOption
+  - _icon: options
+    cls: Wb.Option
+    events:
+      click: Wb.tip(this.text);
+    properties:
+      cid: permOption
+      text: Friend permissions
+    text: permOption
+  - _icon: padding
+    cls: Wb.Gap
+    properties:
+      cid: gap2
+    text: gap2
+  - _expanded: true
+    _icon: options
+    cls: Wb.Option
+    events:
+      click: Wb.tip(this.text);
+    properties:
+      border: bottom
+      cid: momentOption
+      height: 5em
+      text: Moments
+    text: momentOption
+  - _expanded: false
+    _icon: options
+    cls: Wb.Option
+    events:
+      click: Wb.tip(this.text);
+    properties:
+      cid: moreOption
+      text: More information
+    text: moreOption
+  - _expanded: true
+    _icon: padding
+    cls: Wb.Gap
+    properties:
+      cid: gap3
+      flex: '1'
+    text: gap3
+  - _expanded: true
+    _icon: array
+    cls: Wb.Array
+    items:
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      items:
+      - _expanded: true
+        _icon: menu2
+        cls: Wb.Menu
+        items:
+        - _expanded: true
+          _icon: item
+          cls: Wb.Item
+          properties:
+            cid: addItem
+            icon: add
+            text: '@Str.add'
+          text: addItem
+        - _expanded: true
+          _icon: item
+          cls: Wb.Item
+          properties:
+            cid: editItem
+            icon: edit
+            text: '@Str.edit'
+          text: editItem
+        - _expanded: true
+          _icon: divider
+          cls: Wb.Divider
+          properties:
+            cid: divider1
+          text: divider1
+        - _expanded: true
+          _icon: item
+          cls: Wb.Item
+          properties:
+            cid: delItem
+            icon: delete
+            text: '@Str.del'
+          text: delItem
+        properties:
+          cid: menu
+          isProperty: 'true'
+        text: menu
+      properties:
+        cid: menuItem
+        icon: menu
+        plainIcon: 'true'
+      text: menuItem
+    properties:
+      cid: tools
+    text: tools
+  properties:
+    autoScroll: 'true'
+    cid: main
+  text: main
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

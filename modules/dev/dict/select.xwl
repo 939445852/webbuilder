@@ -1,0 +1,35 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Select dictionary items
+  serverScript: |-
+    function main() {
+      let sql = 'select * from wb_dict', where = [];
+
+      if (Params.search) {
+        Wb.setLike('search');
+        where.push(`(name like {?search?} or alias like {?search?} or title like {?search?})`);
+      }
+      if (Params.searchGroup) {
+        Wb.setLike('searchGroup');
+        where.push(`group_name like {?searchGroup?}`);
+      }
+      if (Params.searchContent) {
+        Wb.setLike('searchContent');
+        where.push(`(validate_script like {?searchContent?} or edit_tags like {?searchContent?}
+          or render_script like {?searchContent?} or column_tags like {?searchContent?})`);
+      }
+      if (where.length) {
+        sql += ' where ' + where.join(' and ');
+      }
+      sql += Wb.getOrderSql();
+      Wb.sendDict(sql, 'wb,');
+    }
+    main();
+tags: ''
+text: module
+title: ''

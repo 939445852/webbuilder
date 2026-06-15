@@ -1,0 +1,806 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: |-
+    Wb.apply(app, {
+      /** @property {Array} - Common view data. */
+      viewData: [
+        { icon: 'user', text: 'User Management' },
+        { icon: 'support', text: 'Support Service' },
+        { icon: 'list', text: 'Consumption List' },
+        { icon: 'preview', text: 'Disabled Item', _disabled: true, _tip: 'This item is disabled' },
+        { icon: 'gear', text: 'System Settings' },
+        { icon: 'truck', text: 'The text content of this item is too long and maybe overflowed' },
+        { icon: 'database', text: 'Database Management' },
+        { icon: 'flow1', text: 'WorkFlow Design' }
+      ]
+    });
+hideInMenu: 'false'
+icon: list-view
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: mainLabel
+      cls: w-title3
+      text: View
+    text: mainLabel
+  - _expanded: true
+    _icon: title
+    cls: Wb.Title
+    properties:
+      cid: commonViewTitle
+      title: Common view
+    text: commonViewTitle
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: commonItemTplViewLabel
+      text: Define the content of ViewItem by defining itemTpl.
+    text: commonItemTplViewLabel
+  - _expanded: true
+    _icon: list-view
+    cls: Wb.View
+    properties:
+      cid: commonItemTplView
+      data: app.viewData
+      height: 15em
+      itemTpl: |-
+        <div class="w-row w-align-center w-gapd5 w-padding">
+          <div class="w-icon icon-{icon}"></div>
+          <div class="w-name">{text}</div>
+        </div>
+      layout: column
+    text: commonItemTplView
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: commonItemTplFnViewLabel
+      text: Define the content of ViewItem by defining itemTplFn.
+    text: commonItemTplFnViewLabel
+  - _expanded: true
+    _icon: list-view
+    cls: Wb.View
+    properties:
+      cid: commonItemTplFnView
+      data: app.viewData
+      frame: 'true'
+      height: 15em
+      itemTplFn: |-
+        //Warning: [Wb.toHTML] must be used to convert value to HTML to avoid potential XSS security risks
+
+        return `<div class="w-row w-align-center w-gapd5 w-padding">
+          <div class="w-icon icon-${Wb.toHTML(data.icon)}"></div>
+          <div class="w-name">${Wb.toHTML(data.text)}</div>
+        </div>`;
+      layout: column
+    text: commonItemTplFnView
+  - _expanded: true
+    _icon: title
+    cls: Wb.Title
+    properties:
+      cid: customItemViewTitle
+      title: Customized item itself
+    text: customItemViewTitle
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: customItemViewLabel
+      text: Define ViewItem itself by identifying the "w-item" class in itemTpl.
+    text: customItemViewLabel
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: fixed4ColumnsLabel
+      text: Fixed 4 columns
+    text: fixed4ColumnsLabel
+  - _icon: list-view
+    cls: Wb.View
+    properties:
+      bodyCls: w-grid4 w-padding w-gapd5
+      cid: fixed4ColumnsView
+      data: app.viewData
+      frame: 'true'
+      itemTpl: |-
+        <div class="w-item w-column w-align-center w-padding w-gapd5">
+          <div class="w-size2 w-icon icon-{icon}"></div>
+          <div class="w-label w-ta-center">{text}</div>
+        </div>
+      resizable: 'true'
+    text: fixed4ColumnsView
+  - _expanded: true
+    _icon: label
+    cls: Wb.Label
+    properties:
+      cid: autoWrapItemsLabel
+      text: Auto wrap items with fixed item width
+    text: autoWrapItemsLabel
+  - _icon: list-view
+    cls: Wb.View
+    properties:
+      bodyCls: w-form w-padding w-gapd5
+      cid: autoWrapView
+      data: app.viewData
+      frame: 'true'
+      itemTpl: |-
+        <div class="w-item w-column w-align-center w-padding w-gapd5" style="width:10em">
+          <div class="w-size2 w-icon icon-{icon}"></div>
+          <div class="w-name w-ta-center w-aligns-stretch">{text}</div>
+        </div>
+      resizable: 'true'
+    text: autoWrapView
+  - _expanded: true
+    _icon: label
+    cls: Wb.Label
+    properties:
+      cid: noWrapItemsLabel
+      text: No wrap items with fixed item width and stick selection
+    text: noWrapItemsLabel
+  - _icon: list-view
+    cls: Wb.View
+    events:
+      click: |-
+        let view = this, target = e.target;
+        if (target.closest('[cid=menu-btn]')) {
+          let menu;
+          menu = app.viewContextMenu ??= new Wb.Menu({
+            items: [
+              {
+                text: 'Item 1', icon: 'grid', handler() {
+                  Wb.tip('Click at ' + app.currentWrapViewData.text);
+                }
+              },
+              { text: 'Item 2', icon: 'earth' }
+            ]
+          });
+          app.currentWrapViewData = target.getClosestComp().data;
+          menu.showBy(target);
+        }
+    properties:
+      bodyCls: w-row w-padding w-gapd5 w-visible-all
+      cid: noWrapView
+      data: app.viewData
+      frame: 'true'
+      itemTpl: |-
+        <div class="w-item w-column w-align-center w-padding w-gapd5 w-no-shrink w-rel" style="width:10em">
+          <div class="w-size2 w-icon icon-{icon}"></div>
+          <div class="w-name w-ta-center w-aligns-stretch">{text}</div>
+          <div class="w-sized8 w-icon icon-ellipsis w-btn w-btn-tool w-abs" cid="menu-btn" style="right:0;top:0;"></div>
+        </div>
+      multiSelect: 'true'
+      resizable: 'true'
+      stickSelect: 'true'
+    text: noWrapView
+  - _expanded: true
+    _icon: title
+    cls: Wb.Title
+    properties:
+      cid: variousTemplateSyntaxTitle
+      title: Various template syntax
+    text: variousTemplateSyntaxTitle
+  - _expanded: true
+    _icon: label
+    cls: Wb.Label
+    properties:
+      cid: useItemTplLabel
+      text: Use itemTpl
+    text: useItemTplLabel
+  - _expanded: true
+    _icon: list-view
+    cls: Wb.View
+    properties:
+      cid: variousItemTplSyntaxView
+      data: |-
+        [
+          { num: 1, money: 581234.56, date: new Date(), array: ['item1', 'item2', 'item3'] },
+          { num: 2, money: 324549.7, date: new Date(), array: ['item4', 'item5', 'item6'] },
+          { num: 3, money: 53543.28, date: new Date(), array: ['item7', 'item8', 'item9'] }
+        ]
+      frame: 'true'
+      itemTpl: |-
+        <!-- Tip: For complex templates, it is recommended to use itemTplFn to define custom function -->
+        <div class="w-item w-border" style="display:grid;grid-template-columns:2em 8em 16em 1fr;padding:1em;gap:.5em">
+          <div>{num}</div>
+          <div>{[data.money.usd]}</div>
+          <div>{[data.date.dateTimeText12]}</div>
+          <div>{for data.array}{if index > 0}<span>, </span>{/if}<span>{[index + 1]}: </span><span>{[value]}</span>{/for}</div>
+        </div>
+      layout: column
+      resizable: 'true'
+    text: variousItemTplSyntaxView
+  - _expanded: true
+    _icon: label
+    cls: Wb.Label
+    properties:
+      cid: useItemTplFnLabel
+      text: Use itemTplFn with fixed header
+    text: useItemTplFnLabel
+  - _expanded: true
+    _icon: list-view
+    cls: Wb.View
+    properties:
+      cid: useItemTplFnView
+      data: |-
+        [
+          { num: 1, money: 581234.56, date: new Date(), array: ['item1', 'item2', 'item3'] },
+          { num: 2, money: 324549.7, date: new Date(), array: ['item4', 'item5', 'item6'] },
+          { num: 3, money: 53543.28, date: new Date(), array: ['item7', 'item8', 'item9'] }
+        ]
+      frame: 'true'
+      height: 12em
+      html: |-
+        <div class="w-fixed-bgcolor" style="display:grid;grid-template-columns:2em 8em 16em 1fr;padding:1em;gap:.5em">
+          <div></div>
+          <div>Money</div>
+          <div>Date</div>
+          <div>Content</div>
+        </div>
+        <div class="w-items w-flex">
+        </div>
+      itemTplFn: |-
+        //Warning: [Wb.toHTML] must be used to convert value to HTML to avoid potential XSS security risks
+
+        let arrayText = '';
+        data.array.forEach((item, i) => {
+          if (i > 0)
+            arrayText += '<span>, </span>';
+          arrayText += '<span>' + (i + 1) + ': </span><span>' + Wb.toHTML(item) + '</span>';
+        });
+        return `<div class="w-item w-border" style="display:grid;grid-template-columns:2em 8em 16em 1fr;padding:1em;gap:.5em">
+          <div>${Wb.toHTML(data.num)}</div>
+          <div>${Wb.toHTML(data.money.usd)}</div>
+          <div>${Wb.toHTML(data.date.dateTimeText12)}</div>
+          <div>${arrayText}</div>
+        </div>`;
+      layout: column
+      resizable: 'true'
+    text: useItemTplFnView
+  - _expanded: true
+    _icon: title
+    cls: Wb.Title
+    properties:
+      cid: nameListTitle
+      title: Name list with remote data
+    text: nameListTitle
+  - _expanded: true
+    _icon: label
+    cls: Wb.Label
+    properties:
+      cid: nameListLabel
+      text: A common way to display a list of names with remote data and remote pagination.
+    text: nameListLabel
+  - _expanded: true
+    _icon: list-view
+    cls: Wb.View
+    events:
+      itemclick: |-
+        if (e.target.closest('[cid=xicon]')) {
+          Wb.tip('Click icon at: ' + item.data.full_name);
+        }
+    properties:
+      cid: nameListView
+      frame: 'true'
+      height: 20em
+      itemTpl: |-
+        <div class="w-item w-border w-row w-padding w-align-center w-gapd5">
+          <div class="w-icon icon-user2 w-size2 w-pointer" cid="xicon"></div>
+          <div class="w-column w-gapd2">
+            <div class="w-name">{full_name}</div>
+            <div class="w-name w-sub-color w-sized8">{code}</div>
+          </div>
+          <div class="w-flex"></div>
+          <div class="w-column w-sized8 w-gapd2">
+            <div class="w-name">{[new Date().format('HH:mm')]}</div>
+            <div class="w-icon icon-flag4 w-sub-color w-aligns-end"></div>
+          </div>
+        </div>
+      pageSize: '10'
+      pagingBar: 'true'
+      resizable: 'true'
+      url: demo-source?xaction=staffDict
+    text: nameListView
+  - _expanded: true
+    _icon: title
+    cls: Wb.Title
+    properties:
+      cid: tagListTitle
+      title: Tag style list
+    text: tagListTitle
+  - _expanded: true
+    _icon: label
+    cls: Wb.Label
+    properties:
+      cid: tagListLabel
+      text: Display a list of tags with customized css and closed button.
+    text: tagListLabel
+  - _expanded: true
+    _icon: list-view
+    cls: Wb.View
+    events:
+      captureclick: |-
+        if (e.target.closest('.w-close-btn'))
+          item.destroy();
+    properties:
+      bodyCls: w-form w-padding w-gapd5
+      captureClass: .w-close-btn
+      cid: tagListView
+      cls: d-tag
+      frame: 'true'
+      height: 15em
+      itemTpl: |-
+        <div class="w-item w-row w-padding w-align-center w-gapd5">
+          <div class="w-icon icon-tag"></div>
+          <div class="w-name">{full_name}</div>
+          <div class="w-btn w-close-btn w-btn-light">
+            <div class="w-icon icon-close"></div>
+          </div>
+        </div>
+      multiSelect: 'true'
+      rectSelect: 'true'
+      resizable: 'true'
+      url: demo-source?xaction=staffDict
+    text: tagListView
+  - _expanded: true
+    _icon: title
+    cls: Wb.Title
+    properties:
+      cid: pagingTitle
+      title: Pagination display
+    text: pagingTitle
+  - _expanded: true
+    _icon: label
+    cls: Wb.Label
+    properties:
+      cid: remoteDataPagingLabel
+      text: Remote data pagination
+    text: remoteDataPagingLabel
+  - _expanded: true
+    _icon: list-view
+    cls: Wb.View
+    properties:
+      cid: remotePagingView
+      frame: 'true'
+      height: 20em
+      itemTpl: <div class="w-padding">{code} - {full_name}</div>
+      pageSize: '10'
+      pagingBar: pageNums
+      resizable: 'true'
+      url: demo-source?xaction=staffDict
+    text: remotePagingView
+  - _expanded: true
+    _icon: label
+    cls: Wb.Label
+    properties:
+      cid: cachedPagingLabel
+      text: Caching remote data and paging locally.
+    text: cachedPagingLabel
+  - _expanded: true
+    _icon: list-view
+    cls: Wb.View
+    properties:
+      cached: 'true'
+      cid: cachedPagingView
+      frame: 'true'
+      height: 20em
+      itemTpl: <div class="w-padding">{code} - {full_name}</div>
+      pageSize: '10'
+      pagingBar: pageNums
+      resizable: 'true'
+      url: demo-source?xaction=staffDict
+    text: cachedPagingView
+  - _expanded: true
+    _icon: label
+    cls: Wb.Label
+    properties:
+      cid: localDataPagingLabel
+      text: Local data pagination
+    text: localDataPagingLabel
+  - _expanded: true
+    _icon: list-view
+    cls: Wb.View
+    properties:
+      cid: localDataPagingView
+      frame: 'true'
+      height: 15em
+      itemTpl: <div class="w-padding">{text}</div>
+      layout: column
+      localData: |-
+        [
+          { text: 'item1' }, { text: 'item2' }, { text: 'item3' }, { text: 'item4' }, { text: 'item5' },
+          { text: 'item6' }, { text: 'item7' }, { text: 'item8' }, { text: 'item9' }, { text: 'item10' },
+          { text: 'item11' }, { text: 'item12' }, { text: 'item13' }, { text: 'item14' }, { text: 'item15' },
+          { text: 'item16' }, { text: 'item17' }, { text: 'item18' }, { text: 'item19' }
+        ]
+      pageSize: '10'
+      pagingBar: 'true'
+      resizable: 'true'
+    text: localDataPagingView
+  - _expanded: true
+    _icon: label
+    cls: Wb.Label
+    properties:
+      cid: bottomNextPageLabel
+      text: Auto load next page when scroll to the bottom
+    text: bottomNextPageLabel
+  - _expanded: true
+    _icon: list-view
+    cls: Wb.View
+    properties:
+      autoPaging: 'true'
+      cid: bottomNextPageView
+      frame: 'true'
+      height: 20em
+      itemTpl: <div class="w-item w-padding1">{code} - {full_name}</div>
+      pageSize: '10'
+      resizable: 'true'
+      url: demo-source?xaction=staffDict
+    text: bottomNextPageView
+  - _expanded: true
+    _icon: label
+    cls: Wb.Label
+    properties:
+      cid: topNextPageLabel
+      text: Auto load next page when scroll to the top
+    text: topNextPageLabel
+  - _expanded: true
+    _icon: list-view
+    cls: Wb.View
+    properties:
+      autoPaging: 'false'
+      autoToBottom: 'true'
+      cid: topNextPageView
+      frame: 'true'
+      height: 20em
+      itemTpl: <div class="w-item w-padding1">{code} - {full_name}</div>
+      pageSize: '10'
+      resizable: 'true'
+      reverseData: 'true'
+      url: demo-source?xaction=staffDictDesc
+    text: topNextPageView
+  - _expanded: true
+    _icon: title
+    cls: Wb.Title
+    properties:
+      cid: miscViewTitle
+      title: Miscillaneous view
+    text: miscViewTitle
+  - _expanded: true
+    _icon: list-view
+    cls: Wb.View
+    events:
+      itemdrop: 'Wb.tip(''Drop items: '' + draggable.dropItems.length + ''\nDest:
+        '' + draggable.dest.data.text + ''\nMode: '' + draggable.mode);'
+    items:
+    - _expanded: true
+      _icon: toolbar
+      cls: Wb.Toolbar
+      items:
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        events:
+          click: |-
+            let miscView = app.miscView;
+            miscView.selection = [miscView.items[0], miscView.items[1]];
+            // miscView.items[2].selected = true;
+        properties:
+          cid: selectItem
+          text: Select
+        text: selectItem
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        events:
+          click: app.miscView.deselectAll();
+        properties:
+          cid: deselectItem
+          text: Deselect
+        text: deselectItem
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        events:
+          click: |-
+            let item = app.miscView.addData({ text: 'New Item', icon: 'earth' });
+            item.selected = true;
+            item.highlight();
+            // app.miscView.add({ data: { text: 'New Item', icon: 'earth' } }); //equals above
+        properties:
+          cid: addItem
+          text: Add
+        text: addItem
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        events:
+          click: |-
+            let item = app.miscView.insertData(1, { text: 'Insert Item', icon: 'record' });
+            item.selected = true;
+            item.highlight();
+            // app.miscView.insert(1, { data: { text: 'Insert Item', icon: 'record' } }); //equals above
+        properties:
+          cid: insertItem
+          text: Insert
+        text: insertItem
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        events:
+          click: app.miscView.firstItem?.destroy();
+        properties:
+          cid: deleteItem
+          text: Delete
+        text: deleteItem
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        events:
+          click: |-
+            let view = app.miscView;
+
+            if (!view.selections.length) {
+              Wb.tipSelect();
+              return;
+            }
+            view.destroySelections();
+        properties:
+          cid: deleteSelectionsItem
+          text: Delete selections
+        text: deleteSelectionsItem
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        events:
+          click: |-
+            let item = app.miscView.items[0];
+
+            if (item) {
+              item.set('text', 'Updated'); // equals to: item.proxy.text='Updated';
+              item.set('icon', 'flower'); // equals to: item.proxy.icon='flower';
+              item.focus();
+              item.highlight();
+              // item.update({ text: 'Updated', icon: 'flower' }); // More effective when updating multiple properties
+              // item.data = { text: 'Updated', icon: 'flower' }; // Update all data
+            }
+        properties:
+          cid: updateItem
+          text: Update
+        text: updateItem
+      properties:
+        cid: tbar
+        gap: .5em
+        isProperty: 'true'
+      text: tbar
+    properties:
+      bodyCls: w-grid4
+      cid: miscView
+      data: app.viewData
+      draggable: 'true'
+      droppable: demo.miscView
+      frame: 'true'
+      gap: 2em
+      itemTpl: |-
+        <div class="w-item w-column w-align-center w-padding w-gapd5">
+          <div class="w-size2 w-icon icon-{icon}"></div>
+          <div class="w-label w-ta-center">{text}</div>
+        </div>
+      keyWalking: 'true'
+      layout: grid4
+      multiSelect: 'true'
+      padding: 2em
+      rectSelect: 'true'
+      reserveScrollbar: 'true'
+      resizable: 'true'
+    text: miscView
+  - _icon: component
+    cls: Wb.Component
+    properties:
+      cid: miscDescComp
+      html: |-
+        <div>Feature List:</div>
+        <ul>
+          <li>Drag to draw a rectangle to select items.</li>
+          <li>Press key to enter name in the view can navigate to the specified item.</li>
+          <li>Maintain scrollbar position after reloading data.</li>
+          <li>Intelligent navigate to specified item based on arrow key direction.</li>
+          <li>Drag-and-Drop support.</li>
+        </ul>
+      textSelectable: 'false'
+    text: miscDescComp
+  - _expanded: true
+    _icon: title
+    cls: Wb.Title
+    properties:
+      cid: listViewTitle
+      title: List view
+    text: listViewTitle
+  - _expanded: true
+    _icon: label
+    cls: Wb.Label
+    properties:
+      cid: listViewLabel
+      text: List items in the specified pattern
+    text: listViewLabel
+  - _expanded: true
+    _icon: list1
+    cls: Wb.ListView
+    items:
+    - _expanded: true
+      _icon: toolbar
+      cls: Wb.Toolbar
+      events:
+        buttonclick: app.listView.viewType = button.cid;
+      items:
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        properties:
+          active: 'true'
+          cid: smallList
+          groupName: viewType
+          text: Small List
+        text: smallList
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        properties:
+          active: 'true'
+          cid: list
+          groupName: viewType
+          text: List
+        text: list
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        properties:
+          cid: smallIcon
+          groupName: viewType
+          text: Small Icon
+        text: smallIcon
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        properties:
+          cid: mediumIcon
+          groupName: viewType
+          text: Medium Icon
+        text: mediumIcon
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        properties:
+          cid: bigIcon
+          groupName: viewType
+          text: Big Icon
+        text: bigIcon
+      properties:
+        cid: tbar
+        gap: 'true'
+        isProperty: 'true'
+      text: tbar
+    properties:
+      cid: listView
+      defaultFields: |-
+        ({
+          _icon: { value: 'user2' },
+          badge: { value: 8 },
+          iconvalue: { value: 'bell-off' },
+          datevalue: { value: new Date() }
+        })
+      height: 20em
+      resizable: 'true'
+      subtextField: code
+      textField: full_name
+      url: demo-source?xaction=staffDict
+    text: listView
+  - _expanded: true
+    _icon: title
+    cls: Wb.Title
+    properties:
+      cid: iconViewTitle
+      title: Icon view
+    text: iconViewTitle
+  - _expanded: true
+    _icon: label
+    cls: Wb.Label
+    properties:
+      cid: iconViewLabel
+      text: Display items with a big icon and text label, set layout to "grid4" to
+        display 4 fixed columns, set "padding" and "gap" to adjust space.
+    text: iconViewLabel
+  - _icon: icon-list
+    cls: Wb.IconView
+    events:
+      itemclick: Wb.tip(item.data.text + ' clicked');
+    properties:
+      cid: iconView
+      data: app.viewData
+      defaultFields: |-
+        ({
+          badge: { value: 99 }
+        })
+      gap: 1em
+      iconField: icon
+      layout: grid4
+      padding: .5em
+      resizable: 'true'
+      selectColor: active
+    text: iconView
+  - _expanded: true
+    _icon: title
+    cls: Wb.Title
+    properties:
+      cid: checkViewTitle
+      title: Check view
+    text: checkViewTitle
+  - _expanded: true
+    _icon: label
+    cls: Wb.Label
+    properties:
+      cid: checkViewLabel1
+      text: Display items for single or multiple check
+    text: checkViewLabel1
+  - _expanded: true
+    _icon: check7
+    cls: Wb.CheckView
+    items:
+    - _expanded: true
+      _icon: toolbar
+      cls: Wb.Toolbar
+      items:
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        events:
+          click: app.checkView1.value = [2, 3];
+        properties:
+          cid: setValueItem
+          text: Set Value
+        text: setValueItem
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        events:
+          click: 'Wb.tip(''The value is: '' + Wb.encode(app.checkView1.value));'
+        properties:
+          cid: getValueItem
+          text: Get Value
+        text: getValueItem
+      properties:
+        cid: tbar
+        gap: .5em
+        isProperty: 'true'
+      text: tbar
+    properties:
+      cid: checkView1
+      data: |-
+        [
+          { text: 'Chrome', value: 1, _icon: 'chrome' },
+          { text: 'Edge', value: 2, _icon: 'edge', _selected: true },
+          { text: 'Firefox', value: 3, _icon: 'firefox' },
+          { text: 'Safari', value: 4, _icon: 'safari' },
+          { text: 'Image icon', value: 5, _img: 'wb/images/chart.png' }
+        ]
+      maxWidth: 15em
+      multiSelect: 'true'
+    text: checkView1
+  properties:
+    cid: viewport1
+    layout: grid1
+  text: viewport1
+properties:
+  cid: module
+  description: demo-source=example/common/demo-source.xwl
+  links: |-
+    [
+      "wb/css/demo.css"
+    ]
+tags: ''
+text: module
+title: ''

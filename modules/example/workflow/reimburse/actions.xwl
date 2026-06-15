@@ -1,0 +1,41 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'true'
+icon: ''
+img: ''
+properties:
+  cid: module
+  serverScript: |-
+    let actions = {
+      /**
+       * Select start/restart data.
+       */
+      selectStartData() {
+        let result;
+
+        result = Wb.getRowx('select * from wb_reimburse where flow_id={?flowId?}');
+        result.flowTitle = new Wb.Workflow({ flowId: Params.flowId }).title;
+        Wb.send(result);
+      },
+      /**
+       * Select handle data.
+       */
+      selectHandleData() {
+        let flow, list, history;
+
+        flow = new Wb.Workflow({ flowId: Params.flowId });
+        // Specify userid to limit only the initiate user data to be visible
+        Params.userid = flow.userid;
+        list = Wb.getRows(`select exp_date,item_name,amount from wb_reimburse where flow_id={?flowId?}
+          and user_id={?userid?} order by exp_date`);
+        history = Wb.getRows(`select b.process_time,c.display_name,b.opinions from wb_reimburse a,
+           wb_ra_opinions b, wb_user c where a.flow_id={?flowId?} and a.user_id={?userid?}
+           and a.sid=b.reimburse_id and b.approver_user_id=c.sid
+           order by b.process_time`);
+        Wb.send({ list, history, applicant: flow.getInitUser().text });
+      }
+    };
+    actions[Params.xaction]();
+tags: ''
+text: module
+title: ''

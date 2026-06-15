@@ -1,0 +1,83 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _expanded: true
+    _icon: tab
+    cls: Wb.Tab
+    items:
+    - _icon: card
+      cls: Wb.Card
+      properties:
+        cid: card1
+        title: Card 1
+      text: card1
+    - _icon: card
+      cls: Wb.Card
+      properties:
+        cid: card2
+        title: Card 2
+      text: card2
+    - _expanded: true
+      _icon: card
+      cls: Wb.Card
+      properties:
+        cid: card3
+        title: Card 3
+      text: card3
+    - _expanded: true
+      _icon: card
+      cls: Wb.Card
+      properties:
+        cid: card4
+        title: Card 4
+      text: card4
+    - _expanded: true
+      _icon: card
+      cls: Wb.Card
+      properties:
+        cid: card5
+        title: Card 5
+      text: card5
+    properties:
+      activeIndex: '2'
+      cid: tab1
+      cls: d-tab1
+      height: 10em
+    text: tab1
+  - _icon: desktop
+    cls: Wb.Viewer
+    properties:
+      cid: viewer1
+      flex: '1'
+      html: |-
+        This example demonstrates how to use CSS to customize the style of a component.
+        <ol>
+          <li>Set "links" property of the "module" to ["wb/css/demo.css"].</li>
+          <li>Set "cls" property of the "tab1" to "w-tab1".</li>
+          <li>Define the CSS style for "w-tab1" in the file "wb/css/demo.css".</li>
+        </ol>
+    text: viewer1
+  properties:
+    cid: viewport1
+    cls: d-tab1
+    gap: 2em
+    layout: column
+    padding: 2em
+  text: viewport1
+properties:
+  cid: module
+  links: |-
+    [
+      "wb/css/demo.css"
+    ]
+tags: ''
+text: module
+title: ''

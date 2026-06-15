@@ -1,0 +1,14 @@
+{
+  "title": "@deptMng",
+  "icon": "",
+  "img": "",
+  "hideInMenu": "true",
+  "items": [
+    "select.xwl",
+    "add.xwl",
+    "edit.xwl",
+    "del.xwl",
+    "move.xwl",
+    "select-manager.xwl"
+  ]
+}

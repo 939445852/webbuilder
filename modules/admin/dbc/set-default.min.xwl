@@ -1,0 +1,27 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Set default database
+  serverScript: function main(){function setDefaultDb(){let e=Config.defaultSource,t=Params.name,s,a;if(e==Params.name)Wb.raise("The
+    destination is the same as the source database.");a=Wb.Query.removeComments(new
+    Wb.File(true,"wb/system/db/sqls.sql").text);a=replaceTypes(a,Params.dbType);e=Wb.getConn(e);s=Wb.getConn(t);createTables(a,e,s,Wb.getBool("overwrite"));Wb.setConfig("sys.db.defaultSource",t);s.commit();DataSource.defaultDataSource=DataSource.getSource(t);SysUtil.reloadSystem(true)}function
+    replaceTypes(e,t){let s=new Wb.File(true,"wb/system/db/types.json").object;return
+    e.replaceParams(s[t])}function checkTables(){let e,t,s,a=false;t=Wb.getConn();e=Wb.Query.removeComments(new
+    Wb.File(true,"wb/system/db/sqls.sql").text);e=replaceTypes(e,Params.dbType);e.split(";").forEach((e=>{e=e.trim();if(!e)return;if(e.startsWith("create
+    table")){s=e.substring(e.indexOf("table")+5,e.indexOf("(")-1).trim();a=!checkConsistent(t,s,e);if(a)Wb.sql(e,t)}else{if(a)Wb.sql(e,t)}}))}function
+    createTables(e,t,s,a){const r=["wb_debug_files","wb_log"];let n=e.split(";"),l,b,i=false,c;c=n.length;n.forEach(((e,n)=>{e=e.trim();if(!e)return;if(!e.startsWith("create
+    table")){if(i)Wb.sql(e,s);return}l=e.substring(e.indexOf("table")+5,e.indexOf("(")-1).trim();Wb.send([n/c*100,Str.process.format(l)],"sys.dbc");i=false;if(a){try{Wb.sql("drop
+    table "+l,s)}catch(e){s.rollback()}i=true}else{i=!checkConsistent(s,l,e)}if(i){Wb.sql(e,s);if(!r.includes(l)){try{try{b=Wb.sqlRS("select
+    * from "+l,t)}catch(e){t.rollback();return}b.copyTo(l,s);b.close();s.commit()}catch(e){Wb.sql("drop
+    table "+l,s);Wb.raise(e)}}}}))}function checkConsistent(e,t,s){let a,r,n,l,b=0;try{a=Wb.sqlRS("select
+    * from "+t+" where 1=0",e)}catch(t){e.rollback();return false}r=a.metaData;n=r.getColumnCount();l=s.substring(s.indexOf("(")+1,s.lastIndexOf(")")-1).trim().split("\n");l.forEach((e=>{e=e.trimLeft();if(!e.toLowerCase().startsWith("constraint
+    ")){b++;if(b<=n){e=e.substr(0,e.indexOf(" "));if(!e.equalsIC(r.getColumnLabel(b)))Wb.raise(Str.tableInconsistent.format(t,e))}}}));if(n!=b)Wb.raise(Str.tableInconsistent.format(t,`${n}
+    / ${b}`));a.close();return true}function getDbType(){Wb.send(Wb.getConn(Params.name).metaData.getDatabaseProductName())}switch(Params.type){case"get-db":getDbType();break;case"create":checkTables();break;case"set-default":let
+    e=new Wb.Lock("dbc.setDefault");try{setDefaultDb()}finally{e.unlock()}break}}main();
+tags: ''
+text: module
+title: ''

@@ -1,0 +1,23 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  serverScript: |-
+    function main() {
+      let bos, rowx, cols;
+
+      bos = new ByteArrayOutputStream();
+      rowx = Wb.getRowx({ sql: 'select * from wb_staff', rs: -1 });
+      cols = rowx.columns;
+      cols.shift(); // shift row num col
+      cols.forEach(col => col.width = parseInt(col.width));
+      com.wb.office.SheetWriter.createExcel(bos, Wb.toJava(cols), Wb.toJava(rowx.items), 0, 'Staff List', null);
+      Wb.exportData(bos.toByteArray(), 'staff.xlsx');
+    }
+    main();
+tags: ''
+text: module
+title: ''

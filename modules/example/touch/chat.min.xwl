@@ -1,0 +1,63 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: 'Wb.define(app,{cachedUrls:[],openChat(e,t){let i=e.userid;Wb.ajax({url:xpath+"/actions&xaction=getChatDetail",params:{userid:i},json:true,success(a){let
+    n=app.detailComp,l=app.chatDetailDialog;n.el.textContent="";app.cachedUrls.forEach((e=>URL.revokeObjectURL(e)));app.lastChatDate=null;a.each((e=>{app.addMessage(e,false,true)}),true,true);l.title=e.display_name;l.setVisible(true,(e=>t?.call(l)));app.chatData=e;n.dialogScrollTop??={};n.el.scrollTop=n?.dialogScrollTop[i]??n.el.scrollHeight;l.on("close",(e=>n.dialogScrollTop[i]=n.el.scrollTop),true,{once:true});app.chatsView.findItem("userid",i)?.set("badge",null)}})},addMessage(e,t,i){let
+    a=app.detailComp,n=a.el,l,d,c,o;l=e.send_date.dateValue;if(!app.lastChatDate||l.elapse(app.lastChatDate)>6e5)n.addEl("w-title5
+    w-ta-center").textContent=l.prettyText;d=n.addEl("w-row w-align-center w-gap w-margin-tb1");if(e.direction==1){d.addEl("w-icon
+    icon-user2 w-size2");app.createContent(c=d.addEl(),e)}else{d.cls="w-justify-end";if(t)o=d.addEl("w-icon
+    w-spin icon-loading w-hidden");app.createContent(c=d.addEl(),e);d.addEl("w-icon
+    icon-user3 w-size2")}app.lastChatDate=l;if(!i)a.scrollToBottom();return{loadingEl:o,textEl:c}},createContent(e,t){let
+    i=t.text_content,a=t.bin_len,n=t.sid;if(a!=null){if(Wb.isImageFile(i)){let i=e.addEl("w-pointer","img"),a;if(t.file){a=URL.createObjectURL(t.file);app.cachedUrls.push(a)}else{a=xpath+"/actions&xaction=download&id="+n}i.draggable=false;i.src=a;i.height=80}else{let
+    t=e.addEl("w-column");e.cls="w-btn w-row w-align-center w-gap2 wx-file";t.addEl("w-label").textContent=i;t.addEl("w-title5").textContent=a.fileSize;e.addEl("w-size2
+    w-icon icon-"+Wb.getFileIcon(i));if(n)e.recordSid=n;e.maxWidth="70%"}}else{e.cls=t.direction==1?"w-msg1":"w-msg2";e.textContent=i}},openUser(e){Wb.run({url:xpath+"/user-detail",success(t){let
+    i=t.main;t.chatApp=app;t.summaryComp.update(e);app.openUserData=e;i.show();i.el.scrollTop=0}})},sendText(){let
+    e=app.textArea1,t=e.value;if(t.length){app.doSend({text_content:t});e.clear()}else{Wb.tipWarn("Please
+    input text");e.focus()}},sendFile(){Wb.selectFile((e=>{app.doSend({text_content:e.name,file:e,bin_len:e.size})}))},doSend(e){let
+    t=app.chatData,i,a,n=t.userid;a=app.addMessage(Wb.apply({send_date:(new Date).textValue,direction:2},e),true);i=a.loadingEl;i.removeCls.delay(i,Wb.configs.maskDelay,"w-hidden");Wb.ajax({url:xpath+"/actions&xaction=sendMessage",params:{userid:n,text:e.text_content,file:e.file},mask:false,json:true,callback(e,l){i.removeCls.cancelDelay();if(l.ok)i.remove();else
+    i.className="w-icon icon-error";a.textEl.recordSid=e.sid;app.updateChatView({display_name:t.display_name,userid:n,send_date:e.send_date,text_content:e.text_content})}})},updateChatView(e,t){let
+    i,a=app.chatsView;i=a.findItem("userid",e.userid)??new Wb.ViewItem;a.insert(0,i);if(t)e.badge=Math.min(99,(i.data.badge||0)+1);i.update(e)},receiveMessage(e){let
+    t=Wb.decode(e.data);if(t.from_user==app.chatData?.userid){t.direction=1;app.addMessage(t)}else{app.updateChatView({display_name:t.display_name,userid:t.from_user,send_date:t.send_date,text_content:t.text_content},true)}}});Wb.make(app,{cname:"socket",name:"wb.chat",cid:"socket",events:{message(e,t){app.receiveMessage(e)},close(e,t){if(!Wb.unloading&&!Globals.WbMainTab)Wb.login()}}});Wb.make(app,[{cname:"dialog",layout:"column",focusControl:false,background:"true",cid:"chatDetailDialog",tools:[{icon:"ellipsis",cid:"chatInfoItem"}],events:{close(e){app.chatData=null}},items:[{cname:"component",border:true,cls:"w-scroll-y
+    w-padding-lr1",flex:1,cid:"detailComp",events:{click(e,t){let i=e.target.closest(".wx-file");if(i){let
+    e=i.recordSid;if(e){Wb.download(xpath+"/actions&xaction=download&id="+e)}else{Wb.tip("The
+    file is being sent, please wait...")}}},ready(e,t){this.onClickPreview()}}},{cname:"splitter",cid:"splitter1",visible:Wb.isDesktop},{cname:"panel",border:false,layout:"row",padding:Wb.isTouch,cid:"panel1",tbar:{cname:"toolbar",border:false,plainIcon:true,visible:Wb.isDesktop,background:"true",items:[{icon:"folder-open",handler:app.sendFile,tip:"Send
+    file",cid:"fileItem"}]},items:[{cname:"textArea",minHeight:Wb.isTouch?undefined:"8em",padding:true,maxHeight:Wb.isTouch?"10em":undefined,flex:1,inactiveBorder:true,autoResize:Wb.isTouch,rows:1,cid:"textArea1",events:{keydown(e,t){if(e.isGoKey){if(e.ctrlMeta)this.replaceSelection("\n");else
+    app.sendText();e.stopEvent()}}}},{cname:"toolbar",alignSelf:"center",plainIcon:true,visible:Wb.isTouch,cid:"touchBar",items:[{icon:"folder-open",handler:app.sendFile,tip:"Send
+    file",cid:"fileItem"},{handler:app.sendText,padding:"0 .4em",text:"Send",type:"primary",cid:"sendItem"}]}]},{handler:app.sendText,alignSelf:"end",margin:true,visible:Wb.isDesktop,cname:"simpleButton",text:"Send",type:"primary",cid:"sendBtn"}]}]);Wb.make(app,{cname:"viewport",layout:"fit",cid:"viewport1",items:[{cname:"tab",cid:"tab1",cls:"d-we-chat",touchStyle:true,events:{cardchange(e,t,i){if(e)this.title=e.title},ready(e,t){this.title=this.firstItem.title}},items:[{cname:"card",icon:"message",layout:"fit",title:"Chats",closable:null,cid:"chatsCard",items:[{cname:"listView",border:false,datevalueField:"send_date",defaultFields:{_icon:{value:"user2"},iconvalue:{value:"bell-off"}},cursorPointer:true,selectColor:"active",url:xpath+"/actions&xaction=getChats",cid:"chatsView",subtextField:"text_content",textField:"display_name",events:{itemclick(e,t,i){app.openChat(e.data)}}}]},{cname:"card",icon:"address-book",layout:"fit",title:"Contacts",closable:null,cid:"contactsCard",items:[{cname:"listView",border:false,defaultFields:{_icon:{value:"user2"}},cursorPointer:true,selectColor:"active",url:xpath+"/actions&xaction=getContacts",cid:"contactsView",textField:"display_name",events:{itemclick(e,t,i){app.openUser(e.data)}}}]},{cname:"card",icon:"discovery",layout:"fit",title:"Discover",closable:null,cid:"discoverCard",items:[{cname:"view",border:false,cls:"w-disp-grid",data:[{icon:"moment",title:"Moment"},{gap:true,_disabled:true},{icon:"video",title:"Video"},{icon:"broadcast",title:"Live"},{gap:true,_disabled:true},{icon:"scan",title:"Scan"},{icon:"command",title:"Shake
+    "},{gap:true,_disabled:true},{icon:"search-file",title:"Search "},{gap:true,_disabled:true},{icon:"cart",title:"Shopping
+    "},{icon:"game",title:"Game "},{gap:true,_disabled:true},{icon:"data-provider",title:"Programs
+    "}],background:"true",cid:"discoverView",itemTpl:''{if data.gap}\n<div class="w-item
+    w-fixed-bgcolor-x" style="height:.6em"></div>\n{else}\n<div class="w-item w-border
+    w-row w-padding1 w-align-center w-gapd5 w-main-bgcolor w-pointer">\n  <div class="w-icon
+    icon-{icon} w-size1d5"></div>\n  <div class="w-name">{title}</div>\n  <div class="w-flex"></div>\n  <div
+    class="w-icon icon-right2 w-sub-color"></div>\n</div>\n{/if}'',events:{itemclick(e,t,i){Wb.tip(e.data.title+"
+    clicked")}}}]},{cname:"card",icon:"briefcase",layout:"fit",title:"Service",closable:null,cid:"serviceCard",events:{click(e,t){let
+    i=e.target.getClosestComp(Wb.ViewItem);if(i)Wb.tip(i.data.text+" clicked")}},items:[{cname:"container",layout:"grid1",padding:".5em",background:"true",cid:"serviceCt",gap:".5em",items:[{cname:"component",html:''<div
+    class="w-row w-justify-around w-padding2" style="background:#4caf50">\n  <div
+    class="w-column w-padding w-gap w-align-center w-pointer w-unselect" xid="payment">\n    <div
+    class="w-icon icon-check9 w-size2" style="color:#fff;"></div>\n    <div style="color:
+    #fff;">Payment</div>\n  </div>\n  <div class="w-column w-padding w-gap w-align-center
+    w-pointer w-unselect" xid="wallet">\n    <div class="w-icon icon-card w-size2"
+    style="color:#fff;"></div>\n    <div style="color: #fff;">Wallet</div>\n  </div>\n</div>'',cid:"bannerComp",events:{click(e,t){let
+    i=e.target.closest("[xid]");if(i)Wb.tip(i.getAttribute("xid")+" clicked")}}},{cname:"panel",layout:"grid1",padding:false,roundBorder:true,icon:"money",plainTitle:true,title:"Financial
+    Planning",cid:"financialPanel",items:[{cname:"view",border:false,layout:"grid4",padding:"2em",data:[{icon:"card",text:"Credit
+    Card"},{icon:"money",text:"Loan"},{icon:"command",text:"Wealth"},{icon:"component",text:"Insurance"}],clickSelect:false,gap:"1em",bodyCls:"w-grid4",cid:"financialView",itemTpl:''<div
+    class="w-item w-column w-align-center w-padding w-gapd5 w-pointer">\n  <div class="w-size2
+    w-icon icon-{icon}"></div>\n  <div class="w-label w-ta-center">{text}</div>\n</div>''}]},{cname:"panel",layout:"grid1",padding:false,roundBorder:true,icon:"handshake",plainTitle:true,title:"Life
+    Services",cid:"lifePanel",items:[{cname:"view",border:false,layout:"grid4",padding:"2em",data:[{icon:"mobile",text:"Recharge"},{icon:"module",text:"Pay"},{icon:"qq",text:"QQ
+    Coin"},{icon:"building",text:"City Service"},{icon:"heart1",text:"Public Welfare"},{icon:"disc",text:"Health"}],clickSelect:false,gap:"1em",bodyCls:"w-grid4",cid:"lifeView",itemTpl:''<div
+    class="w-item w-column w-align-center w-padding w-gapd5 w-pointer">\n  <div class="w-size2
+    w-icon icon-{icon}"></div>\n  <div class="w-label w-ta-center">{text}</div>\n</div>''}]},{cname:"panel",layout:"grid1",padding:false,roundBorder:true,icon:"car",plainTitle:true,title:"Transportation",cid:"transportationPanel",items:[{cname:"view",border:false,layout:"grid4",padding:"2em",data:[{icon:"location",text:"Travel"},{icon:"train",text:"Train
+    Tickets"},{icon:"car",text:"Taxi"},{icon:"school",text:"Hotel"},{icon:"identity",text:"Identity"}],clickSelect:false,gap:"1em",bodyCls:"w-grid4",cid:"transportationView",itemTpl:''<div
+    class="w-item w-column w-align-center w-padding w-gapd5 w-pointer">\n  <div class="w-size2
+    w-icon icon-{icon}"></div>\n  <div class="w-label w-ta-center">{text}</div>\n</div>''}]}]}]}]}]});'
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  links: '["wb/css/demo.css"]'
+tags: ''
+text: module
+title: ''

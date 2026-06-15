@@ -1,0 +1,14 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.make(app,{cname:"viewport",layout:"column",padding:".7em",background:"true",cid:"viewport1",gap:".7em",items:[{cname:"label",titleType:"title3",cid:"label1",text:"Search
+    Form"},{cname:"panel",layout:"row",padding:true,roundBorder:true,shrink:true,cid:"formPanel",gap:true,items:[{cname:"text",width:"15em",placeholder:"search",text:"Name",cid:"text1"},{cname:"select",width:"15em",cid:"select1",text:"Type1"},{cname:"select",width:"15em",cid:"select2",text:"Type2"},{cname:"select",width:"15em",cid:"select3",text:"Type3"},{cname:"button",icon:"search",shrinkSelf:false,text:"Search",type:"primary",cid:"button1"},{cname:"button",icon:"undo",shrinkSelf:false,text:"Reset",cid:"button2"}]},{cname:"grid",flex:1,url:"demo-source?xaction=staffAllDict",cid:"grid1",tbar:{cname:"toolbar",padding:true,gap:true,items:[{cname:"button",icon:"add",text:Str.add,type:"primary",cid:"addBtn"},{cname:"button",icon:"edit",cid:"editBtn",text:Str.edit},{cname:"button",icon:"delete",cid:"delBtn",text:Str.del}]}}]});
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

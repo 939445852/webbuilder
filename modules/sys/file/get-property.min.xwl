@@ -1,0 +1,10 @@
+_icon: module
+cls: Wb.Module
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Get file property in any path
+  serverScript: let fs=Wb.load("./fs.mjs");Wb.send(fs.getFileProperty(Params.path));
+text: module
+title: ''

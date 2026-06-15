@@ -1,0 +1,111 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Provide SQL completion items
+  serverScript: |-
+    function main() {
+      const Util = Wb.load('wb/ss/dbe.mjs');
+      let result = [], tableName, schemaName, object, sql = Wb.decodeBase64(Params.data).toLowerCase(),
+        conn = Wb.getConn(Params.db), keysLen, keys, realName, key = Params.key.toLowerCase(),
+        defaultSchema = conn.schema, schemas = Util.getSchemas(conn),
+        defaultTables = Util.getTables(conn, defaultSchema).concat(Util.getTables(conn, defaultSchema, true));
+
+      keys = key.split('.');
+      keysLen = keys.length;
+      key = keys[0];
+      if (keysLen == 1) {
+        [schemas, defaultTables].forEach(type => addItems(result, type, key, 'Unit'));
+        tableName = getTablesFromSQL(sql);
+        tableName.forEach(item => {
+          if (item.includes('.')) {
+            keys = item.split('.');
+            if (object = schemas.find(item => item.text.toLowerCase() == keys[0])) {
+              schemaName = object.text;
+              if (object = Util.getTables(conn, schemaName).concat(Util.getTables(conn, schemaName, true)).find(
+                item => item.text.toLowerCase() == keys[1])) {
+                addItems(result, Util.getColumns(conn, schemaName, object.text), null, 'Field');
+              }
+            }
+          } else if (object = defaultTables.find(sub => sub.text.toLowerCase() == item)) {
+            addItems(result, Util.getColumns(conn, defaultSchema, object.text), null, 'Field');
+          }
+        });
+      } else {
+        if (object = schemas.find(item => item.text.toLowerCase() == key)) {
+          // schema
+          schemaName = object.text;
+          [false, true].forEach(isView => addItems(result, Util.getTables(conn, schemaName, isView), null, 'Unit'));
+        } else {
+          object = defaultTables.find(item => item.text.toLowerCase() == key);
+          if (object) {
+            // table
+            schemaName = defaultSchema;
+            tableName = object.text;
+          } else {
+            // scan alias
+            keys = sql.split(/\s+|,/).filter(k => k);
+            keys.each((item, i) => {
+              if (i > 0 && item == key) {
+                realName = keys[i - 1];
+                if (realName.includes('.')) {
+                  // schema and table name
+                  keys = realName.split('.');
+                  if (Wb.isIdentifier(keys[0]) && (object = schemas.find(item => item.text.toLowerCase() == keys[0]))) {
+                    schemaName = object.text;
+                    if (Wb.isIdentifier(keys[1]) && (
+                      object = Util.getTables(conn, schemaName).concat(Util.getTables(conn, schemaName, true)).find(
+                        item => item.text.toLowerCase() == keys[1]))) {
+                      tableName = object.text;
+                      return false;
+                    }
+                  }
+                } else {
+                  // single table name
+                  object = Wb.isIdentifier(realName) && defaultTables.find(item => item.text.toLowerCase() == realName);
+                  if (object) {
+                    schemaName = defaultSchema;
+                    tableName = object.text;
+                    return false;
+                  }
+                }
+              }
+            });
+          }
+          if (tableName) {
+            addItems(result, Util.getColumns(conn, schemaName, tableName), null, 'Field');
+          }
+        }
+      }
+      Wb.send(result);
+    }
+
+    // add the specified data items to the result
+    function addItems(result, data, key, cate) {
+      let text;
+      data.forEach(item => {
+        text = item.text;
+        if ((!key || text.toLowerCase().includes(key)) && !result.some(item => item.text == text)) {
+          result.push({ text, cate });
+        }
+      });
+    }
+
+    // get table names from sql
+    function getTablesFromSQL(sql) {
+      const regex = /(?:FROM|JOIN|INTO|UPDATE|DELETE)\s+([^\s,\)]+)/gi;
+      const tableNames = [];
+      let match;
+
+      while ((match = regex.exec(sql))) {
+        tableNames.push(match[1]);
+      }
+      return tableNames;
+    }
+    main();
+tags: ''
+text: module
+title: ''

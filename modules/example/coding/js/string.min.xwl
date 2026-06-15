@@ -1,0 +1,35 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: 'Wb.make(app,{cname:"codeEditor",readonly:true,wrapBorder:0,value:"//This
+    example demonstrates string. Only extended members are demonstrated, and native
+    members are described at:\n//https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String\n\n//General
+    usage\n''my name is''.contains(''name''); //Whether to contain \"name\", alias
+    for String.includes\n''foo bar foo''.occur(''foo''); //Gets the number of occurrences
+    of the specified string\n''my name is: _$name$_''.replaceParams({ name: ''Allen''
+    }); //Replaces the text using the _$name$_ syntax\n''<div>''.toHTML(true, true);
+    //To HTML\n''abc, def, ghi''.splitTrim(); //Split the string and trim each item.\n\n//Formatting\n''foo
+    {0} bar {1} and {0}''.format(''abc'', 123);\n''foo {value1} bar {value2}''.format({
+    value1: ''abc'', value2: 123 });\n''23508172639''.formatGroup(''???? ???? ???'');
+    //Group formatting, output: \"2350 8172 639\"\n''abc def''.formatGroup(''??-??
+    ?? ??''); //Group formatting, output: \"ab-cd ef\"\n''abc def''.formatGroup(''??
+    ??''); //Group formatting, output: \"ab cd\"\n\n//Get the substring\n''foo.bar.abc''.firstItem(''.'');
+    //Gets the substring before the first specified string, output: \"foo\"\n''foo.bar.abc''.lastItem(''.'');
+    //Gets the substring after the last specified string, output: \"abc\"\n''foo.bar.abc''.beforeItem(''.'');
+    //Gets the substring before the last specified string, output: \"foo.bar\"\n''foo.bar.abc''.afterItem(''.'');
+    //Gets the substring after the first specified string, output: \"bar.abc\"\n''abc
+    (foo) def''.getPart(''('', '')''); //Gets the string between two strings, output:
+    \"foo\"\n\n//Getter properties\n''allen''.capital; //Convert the first char to
+    an uppercase char, output: \"Allen\"\n''<div>''.htmlText; //to HTML text, output:
+    \"&lt;div&gt;\"\n''<div>\\n</span>''.htmlLine; //to single line HTML text\n''2021-03-12
+    14:19:39.614''.dateValue; //to date value with format \"y-MM-dd HH:mm:ss.SSS\"",cid:"codeEditor1",full:true});'
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  links: '["wb/js/monaco.js"]'
+tags: ''
+text: module
+title: ''

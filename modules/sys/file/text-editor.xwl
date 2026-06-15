@@ -1,0 +1,179 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  beforeunload: |-
+    if (!app.saveBtn.disabled)
+      return false;
+  initialize: |-
+    Wb.define(app, {
+      /** @property {Object} - Server args. @priv */
+      args: _$args$_,
+      /** @property {String} path The file path to edit.  @priv */
+      path: _$path$_,
+      /** @property {String} charset Charset of text encoding.  @priv */
+      charset: 'UTF-8',
+      /**
+       * Reopen the file. @priv
+       * @param {Function} [callback] The function to be executed after open.
+       */
+      reOpen(callback) {
+        Wb.ajax({
+          url: 'm?xwl=sys/file/open',
+          params: { path: app.path, charset: app.charset },
+          success(resp) {
+            let pos = resp.indexOf('|');
+            app.lastModified = resp.substr(0, pos);
+            app.editor.rawValue = resp.substr(pos + 1);
+            app.saveBtn.disabled = true;
+            callback?.();
+          }
+        });
+      },
+      /**
+       * Set text charset. @priv
+       */
+      setCharset() {
+        let args = app.args;
+        Wb.prompt({ icon: 'earth', title: Str.setCharset }, [
+          {
+            cid: 'charset', cname: 'select', text: Str.charset, required: true, value: app.charset,
+            data: ['UTF-8', args.charset, args.osCharset, args.fileCharset, args.filenameCharset].filter(a => a).unique()
+          }, { cname: 'displayField', showEmptyLabel: true, icon: 'warn', value: Str.overwriteTextHint }
+        ], (values, win) => {
+          app.charsetItem.text = app.charset = values.charset;
+          app.reOpen(f => win.close());
+        });
+      },
+      /**
+       * Execute after on load. @priv
+       */
+      onLoad() {
+        app.reOpen();
+        if (!Globals.WbMainTab)
+          document.title = Wb.getFilename(app.path);
+        app.editor.focus();
+      },
+      /**
+       * Save the current file. @priv
+       * @param {Boolean} [noConfirm] Whether no confirm when the file has been modified.
+       */
+      save(noConfirm) {
+        if (app.saveBtn.disabled)
+          return;
+        let data, content = app.editor.value;
+
+        data = app.path + '|' + app.charset + '|' + app.lastModified + '|' + content.length + '|' + content;
+        Wb.ajax({
+          url: 'm?xwl=sys/file/save', data,
+          params: {
+            confirm: noConfirm ? 0 : 1
+          },
+          success(resp) {
+            app.lastModified = Wb.decode(resp)[0];
+            app.saveBtn.disabled = true;
+          },
+          failure(resp) {
+            if (resp.errorCode == 'modified')
+              Wb.confirm(Str.modifiedConfirm.format(Wb.decode(resp.errorText)[0]), f => app.save(true));
+          }
+        });
+      }
+    });
+hideInMenu: 'false'
+icon: text1
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _expanded: true
+    _icon: toolbar
+    cls: Wb.Toolbar
+    items:
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: app.save();
+      properties:
+        cid: saveBtn
+        disabled: 'true'
+        icon: save
+        keys: Ctrl+S
+        text: '@Str.save'
+      text: saveBtn
+    properties:
+      cid: tbar
+      isProperty: 'true'
+    text: tbar
+  - _expanded: true
+    _icon: toolbar
+    cls: Wb.Toolbar
+    items:
+    - _icon: right1
+      cls: Wb.Fill
+      properties:
+        cid: fill1
+      text: fill1
+    - _icon: label
+      cls: Wb.Label
+      properties:
+        cid: cursorLabel
+      text: cursorLabel
+    - _icon: divider
+      cls: Wb.Divider
+      properties:
+        cid: divider1
+      text: divider1
+    - _expanded: false
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: app.setCharset();
+      properties:
+        cid: charsetItem
+        text: '@app.charset'
+      text: charsetItem
+    - _icon: space
+      cls: Wb.Space
+      properties:
+        cid: space1
+      text: space1
+    properties:
+      cid: bbar
+      isProperty: 'true'
+    text: bbar
+  - _icon: edit
+    cls: Wb.CodeEditor
+    events:
+      change: app.saveBtn.disabled = false;
+      cursorchange: 'app.cursorLabel.text = cursor ? (cursor.lineNumber + '' : ''
+        + cursor.column) : Wb.nbsp;'
+    properties:
+      border: 'true'
+      cid: editor
+      language: '@app.args.language'
+      wrapBorder: 'false'
+    text: editor
+  properties:
+    cid: viewport1
+    layout: fit
+  text: viewport1
+properties:
+  cid: module
+  remark: Text editor shell
+  serverScript: |-
+    let path = Params.path;
+    Wb.set('args', Wb.encode({
+      osCharset: Base.osCharset?.toUpperCase(),
+      charset: System.getProperty('file.encoding')?.toUpperCase(),
+      fileCharset: Wb.getConfig('sys.file.charset')?.toUpperCase(),
+      language: Wb.getFileExt(path),
+      filenameCharset: Wb.getConfig('sys.locale.filenameCharset')?.toUpperCase()
+    }));
+    Wb.set({ path: Wb.encode(path) });
+tags: ''
+text: module
+title: ''

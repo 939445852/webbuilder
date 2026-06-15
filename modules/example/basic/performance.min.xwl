@@ -1,0 +1,28 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.make(app,{cname:"viewport",autoScroll:true,html:"<div class='w-html'>\n  <p>Applications
+    built with WebBuilder are high-performance, and the client-applications and\n    server-applications
+    can be deployed separately as independent applications or merged into a single
+    application.</p>\n  <div>Client applications:</div>\n  <ul>\n    <li>Efficient
+    algorithms and refined code are used in JavaScript.</li>\n    <li>The construction
+    of the page uses effective methods to prevent page redraw and reflow.</li>\n    <li>Only
+    uses the native CSS on the page layout without using JavaScript to calculate the
+    layout.</li>\n    <li>Advanced component library allows users to experience smooth
+    and live effects.</li>\n    <li>Modern JS and CSS are used in the client application.</li>\n  </ul>\n  <div>Server
+    applications:</div>\n  <ul>\n    <li>Efficient algorithms and refined code enable
+    programs to run faster with fewer resources.</li>\n    <li>JavaScript on the sytem
+    leverages the compiler to provided unparalleled performance.</li>\n    <li>The
+    system caches multiple optimized and preloaded execution contexts to support high
+    concurrency.</li>\n    <li>Share data and code with other languages like Java,
+    Ruby, Python, LLVM, R, and others.</li>\n    <li>JavaScript compatible with the
+    latest ECMAScript specification.</li>\n  </ul>\n</div>",cid:"viewport1"});
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

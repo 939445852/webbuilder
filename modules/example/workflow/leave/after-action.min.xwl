@@ -1,0 +1,12 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  serverScript: 'Wb.info("after flow action: "+app.action);Wb.info("after flow id:
+    "+app.flow.flowId);'
+tags: ''
+text: module
+title: ''

@@ -1,0 +1,11 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  serverScript: function main(){const a=Wb.load("./util.mjs");let t=Params.$flow_id,e;Params.flowId=t;Wb.startTrans();a.checkProcess();e=Params.title;if(e)Wb.sync({tableName:"wb_flow",update:{$sid:t,title:e}});Wb.sync({tableName:"wb_leave",update:Params})}main();
+tags: ''
+text: module
+title: ''

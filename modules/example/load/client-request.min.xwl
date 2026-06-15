@@ -1,0 +1,40 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.make(app,{cname:"viewport",layout:"grid1",cid:"viewport1",items:[{cname:"label",cid:"mainLabel",cls:"w-title3",text:"Client
+    side web request"},{cname:"title",title:"Send GET request with parameters.",cid:"getTitle"},{cname:"button",type:"primary",cid:"getBtn",text:"Send
+    request",events:{click(t,e){Wb.ajax({url:xpath+"/actions&xaction=get",params:{string:"abc",int:123,float:123.4,date:new
+    Date,bool:true,object:{foo:"bar"},array:[1,2,3]},method:"GET",success(t){Wb.tipSucc(t)}})}}},{cname:"title",title:"Send
+    POST request with parameters, files and blobs.",cid:"postTitle"},{cname:"button",type:"primary",cid:"postBtn",text:"Send
+    request",events:{click(t,e){Wb.ajax({url:xpath+"/actions&xaction=post",params:{foo:"bar"},success(t){Wb.tipSucc(t)}})}}},{cname:"title",title:"Send
+    POST request with large parameters",cid:"useFormTitle"},{cname:"button",type:"primary",cid:"useFormPostBtn",text:"Send
+    request",events:{click(t,e){Wb.ajax({url:xpath+"/actions&xaction=post",form:true,params:{foo:"large
+    text..."},success(t){Wb.tipSucc(t)}})}}},{cname:"title",title:"Send request using
+    object",cid:"deserializeObjectTitle"},{cname:"label",cid:"deserializeObjectLabel",text:"It
+    can serialize object before sending and auto deserialize all original values on
+    the server side."},{cname:"button",type:"primary",cid:"deserializeObjectBtn",text:"Send
+    request",events:{click(t,e){Wb.ajax({url:xpath+"/actions&xaction=deserializeObject",object:{string:"abc",int:123,float:123.4,date:new
+    Date,bool:true,object:{foo:"bar"},array:[1,2,3]},success(){Wb.tipDone()}})}}},{cname:"title",title:"Post
+    multiple parameters with the same name",cid:"postMultipleTitle"},{cname:"button",type:"primary",cid:"postMultipleBtn",text:"Send
+    request",events:{click(t,e){Wb.ajax({url:xpath+"/actions&xaction=postMultipleParams",params:{myParam:Wb.markParams([1,"abc",new
+    Date])},success(){Wb.tipDone()}})}}},{cname:"title",title:"Send request with payload
+    data and specific header",cid:"postPayloadDataTitle"},{cname:"button",type:"primary",cid:"postPayloadDataBtn",text:"Send
+    request",events:{click(t,e){Wb.ajax({url:xpath+"/actions&xaction=postPayload",data:"large
+    text...",header:{"Content-Type":"text/html;charset=utf-8"},success(){Wb.tipDone()}})}}},{cname:"title",title:"Send
+    request with payload json data",cid:"postPayloadJsonTitle"},{cname:"button",type:"primary",cid:"postPayloadJsonBtn",text:"Send
+    request",events:{click(t,e){Wb.ajax({url:xpath+"/actions&xaction=postPayloadJson",data:{foo:"abc",bar:123},success(){Wb.tipDone()}})}}},{cname:"title",title:"Submit
+    a regular HTTP request",cid:"submitTitle"},{cname:"button",type:"primary",cid:"submitBtn",text:"Regular
+    submit",events:{click(t,e){Wb.submit(xpath+"/actions&xaction=postSubmit",{foo:"abc",bar:123})}}},{cname:"title",title:"Browse
+    url",cid:"browseTitle"},{cname:"button",type:"primary",cid:"browseBtn",text:"Browse
+    url",events:{click(t,e){Wb.browse({url:"https://www.geejing.com",title:"Geejing",icon:"earth",params:{foo:"abc",bar:123}})}}},{cname:"title",title:"Open
+    window",cid:"openWinTitle"},{cname:"button",type:"primary",cid:"openWinBtn",text:"Open
+    window",events:{click(t,e){Wb.openWin("https://www.geejing.com")}}}]});
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

@@ -1,0 +1,22 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Select users
+  serverScript: |-
+    function main() {
+      let searchClause = '';
+
+      if (Params.query) {
+        Wb.setLike('query');
+        searchClause = 'and (user_name like {?query?} or display_name like {?query?})'
+      }
+      Wb.sendRows(`select sid,user_name,display_name from wb_user where status=1 ${searchClause} order by user_name`);
+    }
+    main();
+tags: ''
+text: module
+title: ''

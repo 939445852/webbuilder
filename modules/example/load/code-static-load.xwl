@@ -1,0 +1,55 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  events:
+    ready: |-
+      // add user client
+      Wb.run({
+        script: _$user$_, success(scope) {
+          app.container1.add(scope.viewport1);
+        }
+      });
+      // add dbe client
+      Wb.run({
+        script: _$dbe$_, success(scope) {
+          app.container2.add(scope.viewport1);
+        }
+      });
+  items:
+  - _icon: container
+    cls: Wb.Container
+    properties:
+      cid: container1
+      layout: fit
+      width: 50%
+    text: container1
+  - _icon: splitter
+    cls: Wb.Splitter
+    properties:
+      cid: splitter1
+    text: splitter1
+  - _icon: container
+    cls: Wb.Container
+    properties:
+      cid: container2
+      flex: '1'
+      layout: fit
+    text: container2
+  properties:
+    cid: viewport1
+    layout: row
+  text: viewport1
+properties:
+  cid: module
+  serverScript: 'Wb.set({ user: Wb.encode(Wb.execute(''user'')), dbe: Wb.encode(Wb.execute(''admin/dbe''))
+    });'
+tags: ''
+text: module
+title: ''

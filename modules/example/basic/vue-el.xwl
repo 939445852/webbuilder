@@ -1,0 +1,302 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: |-
+    Cls['My.Select'] = class mySelect extends Wb.Control {
+      /** @property {Element} selectEl Select dom element. */
+      /** @property {Object} vue Vue object. */
+      /***/
+      init(configs) {
+        let me = this;
+        super.init(configs);
+        me.selectEl = me.addEl('w-flex w-fit').addEl();
+        me.vue = new Vue({
+          el: me.selectEl,
+          template: `<el-select v-model="value" ref="select" placeholder="Select" @visible-change="handleVisibleChange">
+                        <el-option
+                          v-for="item in items"
+                          :key="item.value"
+                          :label="item.text"
+                          :value="item.value">
+                        </el-option>
+                     </el-select>`,
+          data: {
+            multiple: false,
+            clearable: false,
+            items: [],
+            value: ''
+          },
+          methods: {
+            handleVisibleChange(visible) {
+              if (visible) {
+                // ElementUI PopupManager may read zindex from Globals.zIndex++
+                setTimeout(f => this.$refs.select.popperElm.style.zIndex = Globals.zIndex++);
+              }
+            }
+          }
+        });
+      }
+      /***/
+      destroy() {
+        super.destroy();
+        this.vue.$destroy();
+      }
+      /** @property {String} - The value of the select control. */
+      set value(value) {
+        this.vue.value = value;
+      }
+      /***/
+      get value() {
+        return this.vue.value;
+      }
+      /** @property {Array} - Dropdown option list. @key */
+      set items(value) {
+        this.vue.items = value;
+      }
+      /***/
+      get items() {
+        return this.vue.items;
+      }
+      /** @property {Boolean} - Whether to include a clear button. */
+      set clearable(value) {
+        this.vue.clearable = value;
+      }
+      /***/
+      get clearable() {
+        return this.vue.clearable;
+      }
+    }
+hideInMenu: 'false'
+icon: ''
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: mainLabel
+      cls: w-title3
+      text: Use Vue Element UI
+    text: mainLabel
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: descLabel
+      text: This example demonstrates how to use third-party components, such as vue
+        element UI. We strongly recommend  that you use WebBuilder components, this
+        example is only for demonstration purposes.
+    text: descLabel
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: tplTitle
+      title: Element Select
+    text: tplTitle
+  - _icon: component
+    cls: Wb.Component
+    events:
+      ready: |-
+        let comp = this;
+
+        comp.vue = new Vue({
+          el: comp.el.addEl(),
+          template: `<el-select v-model="value" placeholder="Select">
+                        <el-option
+                          v-for="item in options"
+                          :key="item.value"
+                          :label="item.label"
+                          :value="item.value">
+                        </el-option>
+                     </el-select>`,
+          data() {
+            return {
+              options: [{
+                value: 'option1',
+                label: 'Golden Cake'
+              }, {
+                value: 'option2',
+                label: 'Chocolate'
+              }, {
+                value: 'option3',
+                label: 'Cookie'
+              }, {
+                value: 'option4',
+                label: 'Noodles'
+              }, {
+                value: 'option5',
+                label: 'Beef'
+              }],
+              value: ''
+            }
+          }
+        });
+    properties:
+      cid: selectComp
+      cls: w-fit
+    text: selectComp
+  - _icon: button
+    cls: Wb.Button
+    events:
+      click: app.selectComp.vue.value = 'option4';
+    properties:
+      cid: setValueBtn
+      justifySelf: start
+      text: Set Value
+    text: setValueBtn
+  - _expanded: true
+    _icon: button
+    cls: Wb.Button
+    events:
+      click: |-
+        let vue = app.selectComp.vue, value = vue.value;
+        Wb.tip('Select value is: ' + vue.options.find(opt => opt.value == value)?.label);
+    properties:
+      cid: getValueBtn
+      justifySelf: start
+      text: Get Value
+    text: getValueBtn
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: encapsulateToClassTitle
+      title: Encapsulate into a class as a WebBuilder control
+    text: encapsulateToClassTitle
+  - _expanded: true
+    _icon: button
+    cls: Wb.Button
+    events:
+      click: |-
+        let comp;
+
+        app.selectIndex ??= 1;
+        comp = app.selectContainer.add({
+          cname: 'mySelect',
+          text: 'Select ' + app.selectIndex,
+          value: 'value2',
+          clearable: true,
+          items: [{
+            value: 'value1',
+            text: 'Golden Cake'
+          }, {
+            value: 'value2',
+            text: 'Chocolate'
+          }, {
+            value: 'value3',
+            text: 'Cookie'
+          }]
+        });
+        comp.focus();
+        comp.highlight();
+        app.selectIndex++;
+    properties:
+      cid: addSelectBtn
+      justifySelf: start
+      text: Add Select Component
+    text: addSelectBtn
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    properties:
+      cid: selectContainer
+      height: 10em
+      layout: grid2
+    text: selectContainer
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: sourceLabel
+      text: Source code of the class
+    text: sourceLabel
+  - _expanded: true
+    _icon: edit
+    cls: Wb.CodeEditor
+    properties:
+      cid: codeEditor1
+      height: 25em
+      readonly: 'true'
+      value: |-
+        // Defined in module.initialize event
+        Cls['My.Select'] = class mySelect extends Wb.Control {
+          /** @property {Element} selectEl Select dom element. */
+          /** @property {Object} vue Vue object. */
+          /***/
+          init(configs) {
+            let me = this;
+            super.init(configs);
+            me.selectEl = me.addEl('w-flex w-fit').addEl();
+            me.vue = new Vue({
+              el: me.selectEl,
+              template: `<el-select v-model="value" ref="select" placeholder="Select" @visible-change="handleVisibleChange">
+                            <el-option
+                              v-for="item in items"
+                              :key="item.value"
+                              :label="item.text"
+                              :value="item.value">
+                            </el-option>
+                         </el-select>`,
+              data: {
+                multiple: false,
+                clearable: false,
+                items: [],
+                value: ''
+              },
+              methods: {
+                handleVisibleChange(visible) {
+                  if (visible) {
+                    // ElementUI PopupManager may read zindex from Globals.zIndex++
+                    setTimeout(f => this.$refs.select.popperElm.style.zIndex = Globals.zIndex++);
+                  }
+                }
+              }
+            });
+          }
+          /***/
+          destroy() {
+            super.destroy();
+            this.vue.$destroy();
+          }
+          /** @property {String} - The value of the select control. */
+          set value(value) {
+            this.vue.value = value;
+          }
+          /***/
+          get value() {
+            return this.vue.value;
+          }
+          /** @property {Array} - Dropdown option list. @key */
+          set items(value) {
+            this.vue.items = value;
+          }
+          /***/
+          get items() {
+            return this.vue.items;
+          }
+          /** @property {Boolean} - Whether to include a clear button. */
+          set clearable(value) {
+            this.vue.clearable = value;
+          }
+          /***/
+          get clearable() {
+            return this.vue.clearable;
+          }
+        }
+    text: codeEditor1
+  properties:
+    cid: viewport1
+    layout: grid1
+  text: viewport1
+properties:
+  cid: module
+  links: |-
+    [
+      'https://cdn.jsdelivr.net/npm/element-ui@2.15.14/lib/theme-chalk/index.css',
+      'https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.js',
+      'https://cdn.jsdelivr.net/npm/element-ui@2.15.14/lib/index.js'
+    ]
+tags: ''
+text: module
+title: ''

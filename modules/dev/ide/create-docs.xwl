@@ -1,0 +1,105 @@
+_icon: module
+cls: Wb.Module
+properties:
+  cid: module
+  remark: Create documents from the files
+  serverScript: |-
+    Wb.checkDemo();
+    /** @property {DocsCreator} creator Docs creator. @priv */
+    /** @property {Number} index Manual docs segment index. @priv */
+    let creator, index = 1;
+    function main() {
+      Wb.load('./ide-ss.js');
+      const DocsCreator = Wb.ide.DocsCreator;
+      creator = new DocsCreator();
+      processFile(new Wb.File(Wb.File.wbFolder, 'js/wb.js'));
+      processFile(new Wb.File(Wb.File.wbFolder, 'js/wb-client.js'));
+      ['js', 'ss', 'modules', 'docs'].forEach(folderName => {
+        new Wb.File(Wb.File.wbFolder, folderName).cascade(file => {
+          if (file.path.endsWith('/wb/js/wb.js') || file.path.endsWith('/wb/js/wb-client.js'))
+            return;
+          processFile(file);
+        }, true, false, true);
+      });
+      creator.build();
+    }
+    /**
+     * Create API docs @priv
+     * @param {Wb.File} file doc file.
+     */
+    function processFile(file) {
+      let script, clsName, object, name = file.name, relPath, pos;
+      switch (file.extension) {
+        case 'js':
+        case 'mjs':
+          if (name.endsWith('.min.js') || name.endsWith('.min.mjs'))
+            return;
+          script = file.text;
+          if (script.includes('/**')) {
+            relPath = file.relPath;
+            clsName = relPath.replaceAll('/', '.');
+            if (relPath.startsWith('wb/modules'))
+              clsName = 'Modules.' + clsName.substr(11).beforeItem('.');
+            else
+              clsName = clsName.beforeItem('.').capital;
+            script = script.replaceAll('@class $path', '@class ' + clsName);
+            creator.addScript(script, file.relPath);
+          }
+          break;
+        case 'xwl':
+          if (name.endsWith('.min.xwl'))
+            return;
+          clsName = file.relPath.replaceAll('/', '.');
+          //Get xxx of wb.module.xxx.xwl
+          clsName = clsName.substr(11).beforeItem('.');
+          object = file.object;
+          //serverScript
+          script = object.properties.serverScript;
+          if (script?.includes('/**')) {
+            script = script.replaceAll('@class $path', '@class Modules.' + clsName + '#server')
+            creator.addScript(script, file.relPath);
+          }
+          //clientScript
+          script = extractXwlClient(object);
+          if (script) {
+            script = script.replaceAll('@class $path', '@class Modules.' + clsName + '#client')
+            creator.addScript(script, file.relPath);
+          }
+          break;
+        case 'wd':
+          ("\n" + file.text).split('\n##').forEach((item, i) => {
+            if (i > 0) {
+              pos = item.indexOf('\n');
+              creator.addDoc({ cls: item.substr(0, pos), index: index++, title: item.substr(pos + 1) });
+            }
+          });
+          break;
+      }
+    }
+    /**
+     * Extract xwl script @priv
+     * @param {Object} object Module file object.
+     */
+    function extractXwlClient(object) {
+      let result = object.events?.initialize ?? '';
+      Wb.cascade([object], item => {
+        Wb.each(item.properties, (k, v) => {
+          if ((item != object || k != 'serverScript') && v.includes('/**')) {
+            if (result)
+              result += '\n';
+            result += v;
+          }
+        });
+        Wb.each(item.events, (k, v) => {
+          if ((item != object || k != 'initialize') && v.includes('/**')) {
+            if (result)
+              result += '\n';
+            result += v;
+          }
+        });
+      });
+      return result;
+    }
+    main();
+text: module
+title: ''

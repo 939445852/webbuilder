@@ -1,0 +1,20 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Add role
+  serverScript: |-
+    function main() {
+      let sid = Params.role_id_disp || Wb.getId();
+
+      Params.sid = sid;
+      Wb.sync({ tableName: 'wb_role', insert: Params });
+      Wb.send({ sid, role_id_disp: sid });
+    }
+    main();
+tags: ''
+text: module
+title: ''

@@ -1,0 +1,24 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  serverScript: |-
+    function main() {
+      const Util = Wb.load('./util.mjs');
+      let flowId = Params.$flow_id, title;
+
+      Params.flowId = flowId;
+      Wb.startTrans();
+      Util.checkProcess();
+      title = Params.title;
+      if (title)
+        Wb.sync({ tableName: 'wb_flow', update: { $sid: flowId, title } });
+      Wb.sync({ tableName: 'wb_leave', update: Params });
+    }
+    main();
+tags: ''
+text: module
+title: ''

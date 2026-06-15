@@ -1,0 +1,40 @@
+_icon: module
+cls: Wb.Module
+properties:
+  cid: module
+  remark: Select debug module list
+  serverScript: |-
+    function main() {
+      if (!Config.debug)
+        return;
+      let data, userid = Wb.userid, items = [],
+        map = DebugFiles.getDebugFiles(userid);
+
+      if (map) {
+        map.each((k, v) => {
+          data = { file: k };
+          if (v.context)
+            data.status = 2;
+          else
+            data.status = v.status;
+          items.push(data);
+        })
+        items.sort((a, b) => {
+          let x = 9, y = 9;
+
+          if (a.status == 2)
+            x -= 5;
+          if (b.status == 2)
+            y -= 5;
+          if (a.file < b.file)
+            x--;
+          else
+            y--;
+          return x - y;
+        });
+      }
+      Wb.send({ items });
+    }
+    main();
+text: module
+title: ''

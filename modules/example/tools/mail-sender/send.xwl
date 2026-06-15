@@ -1,0 +1,33 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  serverScript: |-
+    function main() {
+      let sender, attachFiles, submitFiles = [];
+
+      sender = new Wb.MailSender(
+        Params.smtp,
+        Params.username,
+        Params.password,
+        Params.authUsername,
+        Params.authPassword,
+        { 'mail.smtp.auth': true, 'mail.smtp.sendpartial': true }
+      );
+      attachFiles = Wb.getParams('attachFiles');
+      attachFiles.forEach(file => {
+        submitFiles.push({ name: file.name, data: file.stream });
+      });
+      try {
+        sender.send(Params.from, Params.to, Params.title, Params.content, submitFiles, Params.cc);
+      } finally {
+        sender.close();
+      }
+    }
+    main();
+tags: ''
+text: module
+title: ''

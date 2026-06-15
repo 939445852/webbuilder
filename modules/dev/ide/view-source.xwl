@@ -1,0 +1,68 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  finalize: 'app.codeEditor1.cursor = { lineNumber: _$line$_, column: 1 };'
+hideInMenu: 'false'
+icon: ''
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _expanded: true
+    _icon: edit
+    cls: Wb.CodeEditor
+    events:
+      cursorchange: 'app.cursorLabel.text = cursor ? (cursor.lineNumber + '' : ''
+        + cursor.column) : Wb.nbsp;'
+    properties:
+      cid: codeEditor1
+      readonly: 'true'
+      value: '@_$code$_'
+      wrapBorder: '0'
+    text: codeEditor1
+  - _expanded: true
+    _icon: toolbar
+    cls: Wb.Toolbar
+    items:
+    - _icon: label
+      cls: Wb.Label
+      properties:
+        cid: cursorLabel
+        text: '1 : 1'
+      text: cursorLabel
+    properties:
+      cid: bbar
+      isProperty: 'true'
+      justify: end
+    text: bbar
+  properties:
+    cid: viewport1
+    layout: fit
+  text: viewport1
+properties:
+  cid: module
+  remark: View file source code
+  serverScript: |-
+    function main() {
+      let items = Params.file.split(':'), path = items[0], line = parseInt(items[1]), code;
+
+      if (path.endsWith('.xwl'))
+        code = Xwl.get(path).getServerScript();
+      else {
+        //module path first
+        let modulePath = 'wb/modules/' + path
+        if ((new File(Base.path, modulePath)).exists())
+          path = modulePath;
+        code = SourceBuffer.get(path).getCharacters();
+      }
+      code = Wb.encode(code);
+      code = code.replaceAll('</script>', '<\\/script>');
+      Wb.set({ line, code });
+    }
+    main();
+tags: ''
+text: module
+title: ''

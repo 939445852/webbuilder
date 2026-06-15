@@ -1,0 +1,183 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Export accessible data
+  serverScript: |-
+    /**
+     * Export the specified data to the client file. @priv
+     * @param {Object} params The export params.
+     * @param {String} [.columns] The data columns.
+     * @param {String} [.filename] The filename.
+     * @param {String} [.format] The file format, such as "xls", "xlsx", "csv".
+     * @param {String} [.data] The local data to be exported.
+     * @param {String} [.url] URL used to get remote data.
+     * @param {String} [.itemsPath] The items path for the remote data. Default is "item".
+     * @param {String} [.params] Parameters submitted using URL.
+     * @param {String} [.allPages] Whether to export all pages.
+     * @param {String} [.freeze] Freeze column index.
+     * @param {String} [.localUrl] Access url in the current server.
+     * @param {String} [.tree] Whether is tree.
+     * @param {String} [.urlParams] The params for the localUrl.
+     * @param {String} [.title] The title of the grid.
+     * @param {String} [.pageSize] Page size of the grid.
+     * @param {String} [.pageIndex] Page index of the grid.
+     * @param {String} [.fromValue] From record index of the grid.
+     * @param {String} [.toValue] To record index of the grid.
+     * @param {String} [.summaryRow] Summary row data.
+     */
+    function doExport(params) {
+      let columns, data, format, gridLine, outputStream, isTree = Wb.parseBool(params.tree),
+        itemsName = Params.itemsName, itemsPath = params.itemsPath;
+
+      columns = new JSONArray(params.columns);
+      data = params.data;
+      if (data) {
+        data = new JSONArray(data);
+        data = isTree ? flattenItems(data, itemsName) : new JSONArray(data);
+      } else {
+        let p1, p2, allPages = Wb.parseBool(params.allPages), localUrl = params.localUrl, indexName = params.pageIndexName,
+          paramsValue = Wb.decode(params.params ?? null), maxRows = Wb.getConfig("sys.office.exportMaxRows"),
+          fromValue, toValue, pageSizeValue, indexValue, sortValue = params.sortValue;
+
+        if (allPages) {
+          fromValue = 0;
+          toValue = maxRows;
+          pageSizeValue = maxRows;
+          indexValue = 0;
+        } else {
+          fromValue = parseInt(params.fromValue);
+          toValue = Math.min(parseInt(params.toValue), maxRows);
+          pageSizeValue = Math.min(parseInt(params.pageSize), maxRows);
+          indexValue = parseInt(params.pageIndex);
+        }
+        paramsValue[params.fromName] = fromValue;
+        paramsValue[params.toName] = toValue;
+        paramsValue[params.pageSizeName] = pageSizeValue;
+        if (indexName)
+          paramsValue[indexName] = indexValue;
+        if (sortValue)
+          paramsValue[params.sortName] = sortValue;
+        if (localUrl) {
+          localUrl = Xwl.getXwlPath(localUrl);
+          if (localUrl) {
+            Wb.permitx(localUrl);
+            try {
+              if (allPages)
+                Context.maxRows = maxRows;
+              let allParams = Wb.apply({}, Wb.decode(params.urlParams ?? null), paramsValue);
+              Wb.each(allParams, (k, v) => {
+                if (v === null)
+                  allParams[k] = null;
+                else if (!Wb.isString(v))
+                  allParams[k] = Wb.encode(v);
+              });
+              data = Wb.execute(localUrl, allParams);
+            } finally {
+              if (allPages)
+                Context.maxRows = undefined;
+            }
+          }
+        }
+        if (!data) {
+          data = Wb.submit({ url: params.url, request, text: true, silent: true, all: true, params: paramsValue });
+          if (data.code != 200) {
+            if (data.code == 401) {
+              response.setStatus(401);
+              Wb.send(data.result);
+              return;
+            } else {
+              Wb.raise(data.result);
+            }
+          }
+          data = data.result;
+        }
+        p1 = data.indexOf("{");
+        p2 = data.indexOf("[");
+        if (p2 != -1 && (p2 < p1 || p1 == -1)) {
+          data = isTree ? flattenItems(data, itemsName) : new JSONArray(data);
+        } else {
+          data = isTree ? flattenItems(data, itemsName, itemsPath) : JsonUtil.findObject(new JSONObject(data), itemsPath);
+        }
+      }
+      format = params.format ?? 'xlsx';
+      Wb.setContentType((params.filename || 'data') + '.' + format, true);
+      gridLine = Wb.getConfig('sys.office.gridBorderLine');
+      if (gridLine == 'auto')
+        gridLine = params.gridLine;
+      if (params.summary)
+        data.put(new JSONObject(params.summary));
+      outputStream = response.getOutputStream();
+      format = format.toLowerCase();
+      if (format.startsWith('xls'))
+        Java.type('com.wb.office.SheetWriter').createExcel(outputStream, columns, data,
+          Wb.getInt('freeze') ?? 0, params.title, gridLine);
+      else
+        exportCSV(outputStream, columns, data);
+      response.flushBuffer();
+    }
+    /**
+     * Flatten all tree items. @priv
+     * @param {String} data The tree text data.
+     * @param {String} itemsName Items property name.
+     * @param {String} itemsPath Items data path.
+     * @return {JSONArray} Flattened items array;
+     */
+    function flattenItems(data, itemsName, itemsPath) {
+      data = Wb.decode(data);
+      if (itemsPath)
+        data = Wb.getNS(itemsPath, data);
+      return new JSONArray(Java.to(Wb.flatItems(data, true, itemsName)));
+    }
+
+    /**
+     * Export data to csv file.
+     * @param {OutputStream} os Output stream.
+     * @param {Array} columns Columns data.
+     * @param {Array} data Rows data.
+     */
+    function exportCSV(outputStream, columns, data) {
+      const encodeCSV = StringUtil.encodeCSV;
+      let i, j, row, val, pos, addComma, fields = [], isDate = [], writer;
+
+      writer = new java.io.BufferedWriter(
+        new java.io.OutputStreamWriter(outputStream, Wb.getConfig('sys.file.csvCharset') || Base.osCharset));
+      columns = Wb.toJs(columns);
+      Wb.cascade(columns, col => {
+        if (!col.items) {
+          if (addComma)
+            writer.write(',');
+          else
+            addComma = true;
+          writer.write(encodeCSV(col.text));
+          fields.push(col.fieldName + (col.keyValue ? '$' : ''));
+          isDate.push(col.fieldType == 0);
+        }
+      });
+      j = data.length();
+      for (i = 0; i < j; i++) {
+        writer.write('\n');
+        row = data.opt(i);
+        fields.forEach((field, k) => {
+          if (k > 0)
+            writer.write(',');
+          val = row.optString(field);
+          if (val && isDate[k]) {
+            pos = val.lastIndexOf('.');
+            if (pos != -1)
+              val = val.substr(0, pos);
+          }
+          writer.write(encodeCSV(val));
+        });
+      }
+      writer.close();
+    }
+
+    doExport(Params);
+tags: ''
+text: module
+title: ''

@@ -1,0 +1,29 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Import data to table
+  serverScript: |-
+    function main() {
+      const Util = Wb.load('./util.mjs'), fileExt = Wb.getFileExt(Params.file.name);
+      switch (fileExt) {
+        case 'wbt':
+          Util.importWbTable();
+          break;
+        case 'xls':
+        case 'xlsx':
+          Util.importExcel();
+          break;
+        case 'txt':
+        case 'csv':
+          Util.importText(fileExt);
+          break;
+      }
+    }
+    main();
+tags: ''
+text: module
+title: ''

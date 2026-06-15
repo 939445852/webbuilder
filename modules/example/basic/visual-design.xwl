@@ -1,0 +1,51 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _icon: text
+    cls: Wb.Text
+    properties:
+      cid: text1
+      text: text1
+    text: text1
+  - _icon: number-edit
+    cls: Wb.Number
+    properties:
+      cid: number1
+      text: number1
+    text: number1
+  - _expanded: false
+    _icon: button
+    cls: Wb.Button
+    properties:
+      cid: button1
+      text: button
+    text: button1
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: label1
+      html: |-
+        <ol>
+          <li>Select container control that requires visual design, such as click viewport1 node.</li>
+          <li>Click the [UI Designer] button on the toolbar to launch the visual layout designer.</li>
+          <li>Drag the control(or double click/Ctrl + double click) from the control tree to the designer.</li>
+          <li>Drag the control to adjust its position.</li>
+        </ol>
+    text: label1
+  properties:
+    cid: viewport1
+    layout: grid1
+  text: viewport1
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

@@ -1,0 +1,1225 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: |-
+    Wb.apply(app, {
+      //Define Share tip
+      myShareTip: new Wb.Tip({
+        cls: 'w-error-color', fontSize: '1.5em', padding: '.2em', events: {
+          beforetip(comp) {
+            this.text = 'My share tip: ' + comp.cid;
+          }
+        }
+      })
+    });
+hideInMenu: 'false'
+icon: window
+img: ''
+items:
+- _expanded: true
+  _icon: array
+  cls: Wb.Array
+  items:
+  - _expanded: false
+    _icon: window
+    cls: Wb.Window
+    items:
+    - _icon: text
+      cls: Wb.Text
+      properties:
+        cid: text1
+        text: Your name
+      text: text1
+    - _expanded: true
+      _icon: calendar
+      cls: Wb.Date
+      properties:
+        cid: date1
+        text: Birth date
+      text: date1
+    properties:
+      cid: dynamicNewWin
+      closeAction: destroy
+      instanced: 'false'
+      layout: grid1
+      title: Dynamic window
+    text: dynamicNewWin
+  - _expanded: false
+    _icon: window
+    cls: Wb.Window
+    items:
+    - _icon: text
+      cls: Wb.Text
+      properties:
+        cid: text1
+        text: Your name
+      text: text1
+    - _expanded: true
+      _icon: calendar
+      cls: Wb.Date
+      properties:
+        cid: date1
+        text: Birth date
+      text: date1
+    properties:
+      cid: modalWin
+      icon: bluetooth1
+      layout: grid1
+      modal: 'true'
+      title: Modal window
+    text: modalWin
+  - _expanded: false
+    _icon: window
+    cls: Wb.Window
+    items:
+    - _icon: label
+      cls: Wb.Label
+      properties:
+        cid: label1
+        text: The values of all controls will be automatically reset after the window
+          is hidden
+      text: label1
+    - _expanded: true
+      _icon: text
+      cls: Wb.Text
+      properties:
+        cid: text1
+        text: Your name
+      text: text1
+    - _icon: text
+      cls: Wb.Text
+      properties:
+        cid: text2
+        text: Default value
+        value: abc
+      text: text2
+    - _expanded: true
+      _icon: calendar
+      cls: Wb.Date
+      properties:
+        cid: date1
+        text: Birth date
+      text: date1
+    properties:
+      cid: autoResetWin
+      icon: bluetooth1
+      layout: grid1
+      resetDialog: 'true'
+      title: Auto reset window
+    text: autoResetWin
+  - _expanded: false
+    _icon: dialog
+    cls: Wb.Dialog
+    items:
+    - _expanded: true
+      _icon: options
+      cls: Wb.Option
+      events:
+        click: app.customDialog.show();
+      properties:
+        cid: showDialogOption
+        text: Show custom dialog
+      text: showDialogOption
+    properties:
+      cid: normalDialog
+      title: Normal Dialog
+    text: normalDialog
+  - _expanded: false
+    _icon: dialog
+    cls: Wb.Dialog
+    items:
+    - _icon: text
+      cls: Wb.Text
+      properties:
+        cid: text1
+        text: Your name
+      text: text1
+    - _expanded: true
+      _icon: calendar
+      cls: Wb.Date
+      properties:
+        cid: date1
+        text: Birth date
+      text: date1
+    - _icon: button
+      cls: Wb.Button
+      events:
+        click: app.newDialog.show();
+      properties:
+        cid: newDialog
+        text: New Dialog
+        type: primary
+      text: newDialog
+    - _expanded: true
+      _icon: array
+      cls: Wb.Array
+      items:
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        events:
+          click: Wb.tip(Str.set);
+        properties:
+          cid: item1
+          icon: gear
+        text: item1
+      properties:
+        cid: tools
+      text: tools
+    - _expanded: true
+      _icon: menu2
+      cls: Wb.Menu
+      items:
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        properties:
+          cid: item1
+          icon: add
+          text: '@Str.add'
+        text: item1
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        properties:
+          cid: item2
+          icon: edit
+          text: '@Str.edit'
+        text: item2
+      - _expanded: false
+        _icon: item
+        cls: Wb.Item
+        properties:
+          cid: item3
+          icon: delete
+          text: '@Str.del'
+        text: item3
+      properties:
+        cid: menu
+        isProperty: 'true'
+      text: menu
+    properties:
+      cid: customDialog
+      labelUp: 'true'
+      layout: grid1
+      plainTitle: 'false'
+      title: Custom Dialog
+      titleCenter: 'false'
+    text: customDialog
+  - _expanded: true
+    _icon: dialog
+    cls: Wb.Dialog
+    properties:
+      cid: newDialog
+      layout: grid1
+      title: New Dialog
+    text: newDialog
+  - _expanded: false
+    _icon: drawer
+    cls: Wb.Drawer
+    items:
+    - _expanded: true
+      _icon: toolbar
+      cls: Wb.Toolbar
+      items:
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        properties:
+          cid: item1
+          icon: add
+          iconAlign: top
+          iconSize: 2em
+          text: Item1
+        text: item1
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        properties:
+          cid: item2
+          icon: edit
+          iconAlign: top
+          iconSize: 2em
+          text: Item2
+        text: item2
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        properties:
+          cid: item3
+          icon: delete
+          iconAlign: top
+          iconSize: 2em
+          text: Item3
+        text: item3
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        properties:
+          cid: item4
+          icon: book1
+          iconAlign: top
+          iconSize: 2em
+          text: Item4
+        text: item4
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        properties:
+          cid: item5
+          icon: discovery
+          iconAlign: top
+          iconSize: 2em
+          text: Item5
+        text: item5
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        properties:
+          cid: item6
+          icon: comment2
+          iconAlign: top
+          iconSize: 2em
+          text: Item6
+        text: item6
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        properties:
+          cid: item7
+          icon: flow1
+          iconAlign: top
+          iconSize: 2em
+          text: Item7
+        text: item7
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        properties:
+          cid: item8
+          icon: dict
+          iconAlign: top
+          iconSize: 2em
+          text: Item8
+        text: item8
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        properties:
+          cid: item9
+          icon: grid
+          iconAlign: top
+          iconSize: 2em
+          text: Item9
+        text: item9
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        properties:
+          cid: item10
+          icon: layout
+          iconAlign: top
+          iconSize: 2em
+          text: Item10
+        text: item10
+      - _icon: line
+        cls: Wb.Line
+        properties:
+          cid: line1
+          title: My Title
+        text: line1
+      - _expanded: true
+        _icon: text
+        cls: Wb.Text
+        properties:
+          cid: text1
+          gridColumn: span 5
+          text: Input text
+        text: text1
+      - _icon: switcher-on
+        cls: Wb.Toggle
+        properties:
+          cid: toggle1
+          gridColumn: span 5
+          text: Toggle
+        text: toggle1
+      properties:
+        cid: toolbar1
+        layout: grid5
+        vertical: 'true'
+      text: toolbar1
+    - _expanded: true
+      _icon: array
+      cls: Wb.Array
+      items:
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        properties:
+          cid: item1
+          icon: gear
+        text: item1
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        properties:
+          cid: item2
+          icon: share
+        text: item2
+      properties:
+        cid: tools
+      text: tools
+    properties:
+      cid: defaultDrawer
+      closable: 'true'
+      focusControl: 'false'
+      icon: fieldset
+      layout: fit
+      title: Default Drawer
+    text: defaultDrawer
+  - _expanded: false
+    _icon: drawer
+    cls: Wb.Drawer
+    items:
+    - _expanded: true
+      _icon: toolbar
+      cls: Wb.Toolbar
+      events:
+        buttonclick: |-
+          Wb.tip(button.text + ' clicked');
+          this.parent.close();
+      items:
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        properties:
+          cid: item1
+          icon: favorite
+          text: Favorite Pages
+        text: item1
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        properties:
+          cid: item2
+          icon: gear
+          text: Setting
+        text: item2
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        properties:
+          cid: item3
+          icon: command
+          text: Command
+        text: item3
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        properties:
+          cid: item4
+          icon: word
+          text: Export to Word
+        text: item4
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        properties:
+          cid: item5
+          icon: excel
+          text: Export to Excel
+        text: item5
+      - _icon: divider
+        cls: Wb.Divider
+        properties:
+          cid: divider1
+        text: divider1
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        properties:
+          cid: item6
+          icon: print
+          text: Print
+        text: item6
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        properties:
+          cid: item7
+          icon: table
+          text: Show Table
+        text: item7
+      properties:
+        cid: toolbar1
+        type: menu
+      text: toolbar1
+    properties:
+      cid: rightDrawer
+      dockPosition: right
+      layout: fit
+      title: Right Drawer
+    text: rightDrawer
+  - _expanded: false
+    _icon: panel
+    cls: Wb.Panel
+    items:
+    - _expanded: true
+      _icon: text
+      cls: Wb.Text
+      properties:
+        cid: text1
+        text: User name
+      text: text1
+    - _expanded: true
+      _icon: calendar
+      cls: Wb.Date
+      properties:
+        cid: date1
+        text: Date
+      text: date1
+    - _expanded: true
+      _icon: array
+      cls: Wb.Array
+      items:
+      - _expanded: true
+        _icon: button
+        cls: Wb.Button
+        events:
+          click: |-
+            let panel = this.up('hoverPanel');
+            Wb.tip(Wb.encode(Wb.getValue(panel)));
+            panel.hide();
+        properties:
+          cid: button1
+          icon: ok
+          text: OK
+          type: primary
+        text: button1
+      - _expanded: true
+        _icon: button
+        cls: Wb.Button
+        events:
+          click: this.up('hoverPanel').hide();
+        properties:
+          cid: button2
+          icon: cancel
+          text: Cancel
+        text: button2
+      properties:
+        cid: buttons
+      text: buttons
+    properties:
+      cid: hoverPanel
+      layout: grid1
+      minButtonWidth: 8em
+      visible: 'false'
+    text: hoverPanel
+  - _expanded: false
+    _icon: panel
+    cls: Wb.Panel
+    items:
+    - _expanded: true
+      _icon: text
+      cls: Wb.Text
+      properties:
+        cid: text1
+        text: User name
+      text: text1
+    - _expanded: true
+      _icon: calendar
+      cls: Wb.Date
+      properties:
+        cid: date1
+        text: Date
+      text: date1
+    properties:
+      cid: hideGetValuePanel
+      layout: grid1
+      minButtonWidth: 8em
+      tagProperties: '({ closeOnEsc: false })'
+      visible: 'false'
+    text: hideGetValuePanel
+  properties:
+    cid: components
+  text: components
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _expanded: true
+    _icon: label
+    cls: Wb.Label
+    properties:
+      cid: mainLabel
+      cls: w-title3
+      text: Window and Tip
+    text: mainLabel
+  - _expanded: true
+    _icon: title
+    cls: Wb.Title
+    properties:
+      cid: winTitle
+      title: Window List
+    text: winTitle
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _icon: button
+      cls: Wb.Button
+      events:
+        click: |-
+          let win = app.dynamicNewWin;
+
+          delete win.cid; //Prevent conflicts with the instance cid
+          win.owner = parentContainer; //make the win automatically destroy when parentContainer is destroyed
+
+          //You can render the win to winCt by the following code:
+          //win.renderEl = app.winCt.el; //Render to winCt, default render to BodyEl
+
+          win.x = Wb.random(70) + 'vw';
+          win.y = Wb.random(70) + 'vh';
+          win = Wb.create(win);
+          win.show();
+      properties:
+        cid: dynamicNewWinBtn
+        text: Dynamic new window
+      text: dynamicNewWinBtn
+    - _icon: button
+      cls: Wb.Button
+      events:
+        click: app.modalWin.show();
+      properties:
+        cid: showModalWinBtn
+        text: Show modal window
+      text: showModalWinBtn
+    - _icon: button
+      cls: Wb.Button
+      events:
+        click: app.autoResetWin.show();
+      properties:
+        cid: showAutoResetWinBtn
+        text: Show auto reset window
+      text: showAutoResetWinBtn
+    - _expanded: true
+      _icon: window
+      cls: Wb.Window
+      events:
+        hide: |-
+          Wb.tip('Show again after 2 secs.')
+          setTimeout(f => app.normalWin.show().el.fadeIn(), 2000);
+      properties:
+        cid: normalWin
+        height: 10em
+        html: Hide on Close
+        icon: edit
+        layout: center
+        title: Normal window
+        visible: 'true'
+        width: 20em
+      text: normalWin
+    - _expanded: true
+      _icon: window
+      cls: Wb.Window
+      events:
+        destroy: Wb.tip(this.cid + ' is destroyed.');
+        ok: |-
+          Wb.tip('You click "' + Str.ok + '" button.');
+          // Close the window after performing asynchronous operation
+          // let me = this;
+          // Wb.ajax({
+          //   url,
+          //   success(resp) {
+          //     me.close();
+          //   }
+          // });
+      properties:
+        cid: dialogWin
+        closeAction: destroy
+        collapsible: 'true'
+        dialog: 'true'
+        height: 10em
+        html: Destroy on Close
+        layout: center
+        modal: 'false'
+        title: Dialog window without modal
+        visible: 'true'
+        width: 20em
+        x: 23em
+      text: dialogWin
+    - _expanded: false
+      _icon: window
+      cls: Wb.Window
+      items:
+      - _icon: line
+        cls: Wb.Line
+        properties:
+          cid: line1
+          dimTitle: 'true'
+          title: No title window
+        text: line1
+      - _icon: text
+        cls: Wb.Text
+        properties:
+          cid: text1
+          text: Your name
+        text: text1
+      properties:
+        cid: noTitleWin
+        labelUp: 'true'
+        layout: grid1
+        titleBar: 'false'
+        visible: 'true'
+        x: 45em
+      text: noTitleWin
+    properties:
+      cid: winCt
+      cls: w-rel
+      frame: 'true'
+      height: 20em
+      layout: form
+    text: winCt
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: messageTitle
+      title: Message
+    text: messageTitle
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _icon: button
+      cls: Wb.Button
+      events:
+        click: Wb.info('Some information', f => Wb.tip('do something after show message'));
+      properties:
+        cid: infoBtn
+        text: Info
+      text: infoBtn
+    - _icon: button
+      cls: Wb.Button
+      events:
+        click: Wb.info('<span class="w-error-color">HTML information</span>', null,
+          true);
+      properties:
+        cid: htmlInfoBtn
+        text: HTML Info
+      text: htmlInfoBtn
+    - _icon: button
+      cls: Wb.Button
+      events:
+        click: Wb.succ('Some information');
+      properties:
+        cid: succBtn
+        text: Succ
+      text: succBtn
+    - _icon: button
+      cls: Wb.Button
+      events:
+        click: Wb.warn('Some information');
+      properties:
+        cid: warnBtn
+        text: Warn
+      text: warnBtn
+    - _icon: button
+      cls: Wb.Button
+      events:
+        click: Wb.error('Some information');
+      properties:
+        cid: errorBtn
+        text: Error
+      text: errorBtn
+    - _icon: button
+      cls: Wb.Button
+      events:
+        click: Wb.confirm('Are you sure you want to delete?', f => Wb.tip('click OK'),
+          f => Wb.tip('click Cancel'));
+      properties:
+        cid: confirmBtn
+        text: Confirm
+      text: confirmBtn
+    - _icon: button
+      cls: Wb.Button
+      events:
+        click: Wb.choose('Are you sure you want to save?', button => Wb.tip(button));
+      properties:
+        cid: chooseBtn
+        text: Choose
+      text: chooseBtn
+    - _icon: button
+      cls: Wb.Button
+      events:
+        click: |-
+          Wb.Window.showMessage({
+            title: 'Customize', text: 'Some message', icon: 'share',
+            name: 'sys.dialog', //name for shareing one dialog,
+            buttons: [
+              // The first button is the default enter button (press Enter to do), for more details see enterButton docs.
+              { text: 'Primary', type: 'primary', cid: 'primary' },
+              // The last button is the default esc button (press ESC or close dialog to do), for more details see escButton docs.
+              { text: Str.cancel, cid: 'cancel' }
+            ], callback(btn) {
+              this.close();
+              Wb.tip(btn + ' clicked');
+            }
+          });
+      properties:
+        cid: customizeBtn
+        text: Customize
+      text: customizeBtn
+    - _expanded: true
+      _icon: button
+      cls: Wb.Button
+      events:
+        click: Wb.error('Some message').el.fadeIn();
+      properties:
+        cid: fadeAnimateBtn
+        text: Fade Animate
+      text: fadeAnimateBtn
+    - _expanded: true
+      _icon: button
+      cls: Wb.Button
+      events:
+        click: |-
+          Wb.info('Some message', function () {
+            this.show().el.slideOut({ callback: f => this.hide() });
+          }).el.slideIn();
+      properties:
+        cid: slideAnimateBtn
+        text: Slide Animate
+      text: slideAnimateBtn
+    properties:
+      cid: messageCt
+      frame: 'true'
+      layout: form
+    text: messageCt
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: tipTitle
+      title: Tip
+    text: tipTitle
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _icon: button
+      cls: Wb.Button
+      events:
+        click: Wb.tip('Some information');
+      properties:
+        cid: infoBtn
+        text: Info
+      text: infoBtn
+    - _icon: button
+      cls: Wb.Button
+      events:
+        click: Wb.tip('<span class="w-error-color">HTML information</span>', true);
+      properties:
+        cid: htmlInfoBtn
+        text: HTML tip
+      text: htmlInfoBtn
+    - _icon: button
+      cls: Wb.Button
+      events:
+        click: Wb.tipSucc('Some information');
+      properties:
+        cid: succBtn
+        text: Succ
+      text: succBtn
+    - _icon: button
+      cls: Wb.Button
+      events:
+        click: Wb.tipWarn('Some information');
+      properties:
+        cid: warnBtn
+        text: Warn
+      text: warnBtn
+    - _icon: button
+      cls: Wb.Button
+      events:
+        click: Wb.tipError('Some information');
+      properties:
+        cid: errorBtn
+        text: Error
+      text: errorBtn
+    - _icon: button
+      cls: Wb.Button
+      events:
+        click: Wb.tipSelect();
+      properties:
+        cid: tipSelectBtn
+        text: Tip Select
+      text: tipSelectBtn
+    - _icon: button
+      cls: Wb.Button
+      events:
+        click: Wb.tipDone(Str.save);
+      properties:
+        cid: tipDoneBtn
+        text: Tip Done
+      text: tipDoneBtn
+    properties:
+      cid: tipCt
+      frame: 'true'
+      layout: form
+    text: tipCt
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: toastTitle
+      title: Toast
+    text: toastTitle
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _icon: button
+      cls: Wb.Button
+      events:
+        click: Wb.toast('Some information');
+      properties:
+        cid: infoBtn
+        text: Info
+      text: infoBtn
+    - _icon: button
+      cls: Wb.Button
+      events:
+        click: Wb.toast('<span class="w-error-color">HTML information</span>', true);
+      properties:
+        cid: htmlInfoBtn
+        text: HTML tip
+      text: htmlInfoBtn
+    - _icon: button
+      cls: Wb.Button
+      events:
+        click: Wb.toastSucc('Some information');
+      properties:
+        cid: succBtn
+        text: Succ
+      text: succBtn
+    - _icon: button
+      cls: Wb.Button
+      events:
+        click: Wb.toastWarn('Some information');
+      properties:
+        cid: warnBtn
+        text: Warn
+      text: warnBtn
+    - _icon: button
+      cls: Wb.Button
+      events:
+        click: Wb.toastError('Some information');
+      properties:
+        cid: errorBtn
+        text: Error
+      text: errorBtn
+    properties:
+      cid: toastCt
+      frame: 'true'
+      layout: form
+    text: toastCt
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: dialogTitle
+      title: Dialog
+    text: dialogTitle
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _icon: button
+      cls: Wb.Button
+      events:
+        click: app.normalDialog.show();
+      properties:
+        cid: normalBtn
+        text: Normal dialog
+      text: normalBtn
+    - _icon: button
+      cls: Wb.Button
+      events:
+        click: app.customDialog.show();
+      properties:
+        cid: customBtn
+        text: Custom dialog
+      text: customBtn
+    properties:
+      cid: dialogCt
+      frame: 'true'
+      layout: form
+    text: dialogCt
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: drawerTitle
+      title: Drawer
+    text: drawerTitle
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _icon: button
+      cls: Wb.Button
+      events:
+        click: app.defaultDrawer.show();
+      properties:
+        cid: defaultBtn
+        text: Default drawer
+      text: defaultBtn
+    - _icon: button
+      cls: Wb.Button
+      events:
+        click: |-
+          app.topDrawer ??= new Wb.Drawer({ dockPosition: 'top', height: '40vh', title: 'Top Drawer', plainTitle: true });
+          app.topDrawer.show();
+      properties:
+        cid: topBtn
+        text: Top drawer
+      text: topBtn
+    - _icon: button
+      cls: Wb.Button
+      events:
+        click: app.rightDrawer.show();
+      properties:
+        cid: rightBtn
+        text: Right drawer
+      text: rightBtn
+    - _icon: button
+      cls: Wb.Button
+      events:
+        click: |-
+          app.leftDrawer ??= new Wb.Drawer({ dockPosition: 'left', width: '40vw', title: 'Left Drawer' });
+          app.leftDrawer.show();
+      properties:
+        cid: leftBtn
+        text: Left drawer
+      text: leftBtn
+    properties:
+      cid: drawerCt
+      frame: 'true'
+      layout: form
+    text: drawerCt
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: promptTitle
+      title: Prompt Window
+    text: promptTitle
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _icon: button
+      cls: Wb.Button
+      events:
+        click: |-
+          Wb.promptString('Enter String', (text, win) => {
+            Wb.tip('Enter "' + text + '".');
+            win.close();
+          }, 'old string');
+      properties:
+        cid: promptStringBtn
+        text: Prompt string
+      text: promptStringBtn
+    - _expanded: true
+      _icon: button
+      cls: Wb.Button
+      events:
+        click: |-
+          Wb.promptText('Enter Text', (text, win) => {
+            Wb.tip('Enter "' + text + '".');
+            win.close();
+          }, 'old text');
+      properties:
+        cid: promptTextBtn
+        text: Prompt text
+      text: promptTextBtn
+    - _icon: button
+      cls: Wb.Button
+      events:
+        click: |-
+          Wb.prompt('My Dialog', [
+            { text: 'Your Name', cid: 'name', value: 'old value' },
+            { text: 'Date', cid: 'date', cname: 'date' }
+          ], (values, win) => {
+            Wb.tip(Wb.encode(values));
+            win.close();
+          });
+      properties:
+        cid: customPromptBtn
+        text: Custom prompt
+      text: customPromptBtn
+    - _icon: button
+      cls: Wb.Button
+      events:
+        click: |-
+          let win = Wb.prompt({ title: 'My Single Dialog', icon: 'chart-bar'/*, resetDialog: true*/ }, [
+            { text: 'Your Name', cid: 'name', value: 'old value' },
+            { text: 'Date', cid: 'date', cname: 'date' }
+          ], (values, win) => {
+            Wb.tip(Wb.encode(values));
+            win.close();
+          }, 'my.win.id');
+          // Wb.reset(win);
+      properties:
+        cid: singleInstanceBtn
+        text: Single instance
+      text: singleInstanceBtn
+    - _icon: button
+      cls: Wb.Button
+      events:
+        click: Wb.hover(app.hoverPanel, this);
+      properties:
+        cid: hoverPanelBtn
+        text: Hover panel
+      text: hoverPanelBtn
+    - _icon: button
+      cls: Wb.Button
+      events:
+        click: |-
+          Wb.hover(app.hideGetValuePanel, this, panel => {
+            Wb.tip(Wb.encode(Wb.getValue(panel)));
+          });
+      properties:
+        cid: hideGetValueBtn
+        text: Hide to get value
+      text: hideGetValueBtn
+    properties:
+      cid: promptCt
+      frame: 'true'
+      layout: form
+    text: promptCt
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: tooltipTitle
+      title: Tooltip
+    text: tooltipTitle
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _icon: component
+      cls: Wb.Component
+      properties:
+        cid: tipComp
+        frame: 'true'
+        padding: 1em
+        text: Move the mouse here
+        tip: Common tip message
+      text: tipComp
+    - _icon: component
+      cls: Wb.Component
+      properties:
+        cid: retainTipComp
+        frame: 'true'
+        padding: 1em
+        text: Retain tip
+        tip: '{enterRetain: true, textSelectable: true, html: ''When the pointer is
+          in the Tip, it will not auto hide.''}'
+      text: retainTipComp
+    - _expanded: false
+      _icon: component
+      cls: Wb.Component
+      items:
+      - _expanded: true
+        _icon: info
+        cls: Wb.Tip
+        items:
+        - _icon: label
+          cls: Wb.Label
+          properties:
+            cid: label1
+            text: Some descriptions
+            titleType: title4
+          text: label1
+        - _icon: text
+          cls: Wb.Text
+          properties:
+            cid: text1
+            text: Text
+          text: text1
+        - _icon: number-edit
+          cls: Wb.Number
+          properties:
+            cid: number1
+            text: Number
+          text: number1
+        - _icon: label1
+          cls: Wb.DisplayField
+          properties:
+            cid: displayField1
+            text: Display Field
+            value: Some value
+          text: displayField1
+        - _icon: button
+          cls: Wb.Button
+          properties:
+            cid: button1
+            icon: button
+            text: Button
+          text: button1
+        properties:
+          cid: tip
+          enterRetain: 'true'
+          frame: 'true'
+          gap: 1em
+          isProperty: 'true'
+          layout: grid1
+          width: 40em
+        text: tip
+      properties:
+        cid: customTip
+        frame: 'true'
+        padding: 1em
+        text: Custom retain tip
+      text: customTip
+    - _expanded: true
+      _icon: component
+      cls: Wb.Component
+      properties:
+        cid: customShareTip1
+        frame: 'true'
+        padding: 1em
+        text: Custom share tip 1
+        tip: '@app.myShareTip'
+      text: customShareTip1
+    - _expanded: true
+      _icon: component
+      cls: Wb.Component
+      properties:
+        cid: customShareTip2
+        frame: 'true'
+        padding: 1em
+        text: Custom share tip 2
+        tip: '@app.myShareTip'
+      text: customShareTip2
+    - _icon: component
+      cls: Wb.Component
+      events:
+        click: Wb.tipAt('Some message', e.x, e.y);
+      properties:
+        cid: clickToTipComp
+        frame: 'true'
+        padding: 1em
+        text: Click to tip
+      text: clickToTipComp
+    properties:
+      cid: tooltipCt
+      frame: 'true'
+      layout: form
+    text: tooltipCt
+  properties:
+    cid: viewport1
+    layout: grid1
+  text: viewport1
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

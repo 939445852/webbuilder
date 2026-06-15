@@ -1,0 +1,17 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.apply(app,{autoShow:false,init(e,a,t){if(e){Wb.ajax({url:xpath+"/../actions&xaction=selectLeave",params:{flowId:e},json:true,success(e){Wb.setValue(app.main,e);app.main.show()}})}else{app.main.show()}}});Wb.make(app,{cname:"window",icon:"paper-plane",layout:"grid1",visible:true,title:"Leave
+    application",autoScroll:true,cid:"main",items:[{cname:"text",required:true,cid:"flowTitle",text:"Title"},{cname:"date",required:true,cid:"begin_date",text:"Begin
+    Date"},{cname:"date",required:true,cid:"end_date",text:"End Date"},{cname:"number",minValue:0,text:"Leave
+    days",decimalCount:0,maxLength:5,required:true,cid:"leave_days"},{cname:"text",required:true,cid:"leave_reason",text:"Reason"}]});
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  serverScript: Wb.apply(app,{afterAction(a,e){if(e.restarting){Params.$flow_id=e.flowId;Wb.sync({tableName:"wb_leave",update:Params,whereFields:"flow_id"})}else{Wb.apply(Params,{sid:Wb.getId(),flow_id:e.flowId,user_id:e.handleUser});Wb.sync({tableName:"wb_leave",insert:Params})}}});
+tags: '{container: false}'
+text: module
+title: ''

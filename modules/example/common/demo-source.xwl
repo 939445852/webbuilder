@@ -1,0 +1,163 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  serverScript: |-
+    let actions = {
+      // staff dict data
+      staffDict() {
+        Wb.sendDict('select code, full_name from wb_staff' + Wb.getOrderSql(), 'wb,');
+      },
+      // staff dict data desc
+      staffDictDesc() {
+        Wb.sendDict('select code, full_name from wb_staff order by code desc', 'wb,');
+      },
+      // staff dict all data
+      staffAllDict() {
+        if (!this.downloadBlob())
+          Wb.sendDict('select * from wb_staff' + Wb.getOrderSql(), 'wb,');
+      },
+      // staff rows
+      staffRows() {
+        Wb.sendRows('select code, full_name from wb_staff');
+      },
+      // staff row
+      staffFirstRow() {
+        Wb.sendRow("select * from wb_staff where code='10001'")
+      },
+      // search staff rows
+      staffSearch() {
+        let sql;
+
+        sql = 'select code, full_name, email from wb_staff';
+        if (Params.query) {
+          Wb.setLike('query');
+          sql += ' where full_name like {?query?}';
+        }
+        sql += ' order by code'
+        Wb.sendRows(sql);
+      },
+      // list continents
+      listRootArea() {
+        Wb.sendDict(`select * from wb_area where parent_id='0' order by area_name`);
+      },
+      // list areas
+      listArea() {
+        Wb.sendDict('select * from wb_area where parent_id={?parent_id?} order by area_name');
+      },
+      // list areas tree
+      listAreaTree() {
+        Params.sid ??= '0'; //"0" is root parent_id
+        Wb.sendDict(`
+        select area_name as text, sid as subtext, 0 as "_checked", area_name, sid, parent_id,
+          case when (select count(*) from wb_area b where b.parent_id=a.sid)>0 then 0 else 1 end as "_leaf"
+          from wb_area a where parent_id={?sid?} order by area_name
+        `);
+      },
+      // list areas tree without check box
+      listAreaTree1() {
+        let whereClause = '';
+
+        Params.sid ??= '0'; //"0" is root parent_id
+        if (Params.query) {
+          Wb.setLike('query');
+          whereClause = 'area_name like {?query?}';
+        } else {
+          whereClause = 'parent_id={?sid?}'
+        }
+        Wb.sendDict(`
+        select area_name as text, sid as subtext, area_name, sid, parent_id,
+          case when (select count(*) from wb_area b where b.parent_id=a.sid)>0 then 0 else 1 end as "_leaf"
+          from wb_area a where ${whereClause} order by area_name
+        `);
+      },
+      // search areas rows
+      areaSearch() {
+        let sql;
+
+        sql = 'select * from wb_area';
+        if (Params.query) {
+          Wb.setLike('query');
+          sql += ' where sid like {?query?}';
+        }
+        Wb.sendRows(sql);
+      },
+      // Database side pagination
+      staffDbPaging() {
+        if (this.downloadBlob())
+          return;
+
+        // auto database-side paging for simple sql
+        // Wb.sendDict({ sql: 'select * from wb_staff', paging: 'db', dict: 'wb' });
+
+        // For demonstration purposes, database-side pagination is implemented manually below
+        let db = Wb.getConn();
+
+        if (db.match('derby')) {
+          // For derby only, some paging parameter: _from, _to, _size
+          Wb.sendDict({
+            sql: 'select * from wb_staff offset {?bigint|_from?} rows fetch first {?bigint|_size?} rows only',
+            db, dict: 'wb', paging: false /* stop app serverside paging */, total: 'select count(*) from wb_staff'
+          });
+        } else {
+          // For other database pagination SQL, please refer to their respective manuals
+          // Other databases here do not use database pagination
+          Wb.sendDict({ sql: 'select * from wb_staff', db, dict: 'wb' })
+        }
+      },
+      // Perform download if necessary.
+      downloadBlob() {
+        let download = Wb.getObject('download');
+        if (download) {
+          //download blob
+          let row = Wb.getRow({
+            sql: 'select full_name, photo from wb_staff where sid={?$sid?}',
+            blob: true,
+            params: download
+          });
+          if (row?.photo)
+            Wb.exportData(row.photo, row.full_name + '.png');
+          else
+            Wb.raise('Photo not found.');
+          return true;
+        } else
+          return false;
+      },
+      // Check username
+      checkUser() {
+        Wb.send(Wb.getRow('select 1 from wb_user where user_name={?username?}') ? 'failed' : 'ok');
+      },
+      // Select admin from staff
+      selectAdminStaff() {
+        let sql;
+
+        sql = "select sid,full_name as text,code as subtext from wb_staff where user_id='admin'";
+        if (Params.search) {
+          Wb.setLike('search');
+          sql += ' and full_name like {?search?}';
+        }
+        Wb.sendRowx(sql);
+      },
+      // Select none admin from staff
+      selectNoneAdminStaff() {
+        let sql;
+
+        sql = "select sid,full_name as text,code as subtext from wb_staff where user_id<>'admin'";
+        if (Params.search) {
+          Wb.setLike('search');
+          sql += ' and full_name like {?search?}';
+        }
+        Wb.sendRowx(sql);
+      },
+      // Select report1
+      selectReport1() {
+        Wb.sendRowx('select * from wb_report_demo1')
+      }
+    };
+    actions[Params.xaction]();
+tags: ''
+text: module
+title: ''

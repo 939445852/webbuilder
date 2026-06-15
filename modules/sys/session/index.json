@@ -1,0 +1,13 @@
+{
+  "items": [
+    "login.xwl",
+    "logout.xwl",
+    "refresh.xwl",
+    "verify.xwl",
+    "service.xwl",
+    "set-value.xwl",
+    "set-value-all.xwl",
+    "set-resource.xwl",
+    "set-resource-all.xwl"
+  ]
+}

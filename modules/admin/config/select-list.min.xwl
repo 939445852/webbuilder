@@ -1,0 +1,13 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Select config items
+  serverScript: function main(){let e=[],t=Params.path+".",n=t.length,a,s,i,b=new
+    Wb.File(true,"wb/system/config.json").object;Wb.each(b,((c,l)=>{if(c.startsWith(t)){a=c.substr(n);if(!a.includes(".")){l=b[c];s=l.value;i=l.type;if(i=="object"||i=="array")s=Wb.encode(s);e.push({name:a,value:s,type:i,list:Wb.encode(l.list),desc:l?.[Str.lang]??l?.text})}}}));e.mixSort("name");Wb.send(e)}main();
+tags: ''
+text: module
+title: ''

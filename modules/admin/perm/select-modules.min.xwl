@@ -1,0 +1,13 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Select modules
+  serverScript: function main(){const e=Wb.load("wb/modules/sys/file/fs.mjs");let
+    l,s={},t;Wb.getRows("select module_path,role_id from wb_perm",(e=>{t=s[e.module_path]??=[];t.push(e.role_id)}));l=e.listPermModules();Wb.cascade(l,(e=>{if(e._leaf){e.roles=s[e.path]}}));Wb.send([{_checked:false,text:Str.all,_expanded:true,items:l}])}main();
+tags: ''
+text: module
+title: ''

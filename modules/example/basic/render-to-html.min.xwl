@@ -1,0 +1,28 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: 'Wb.make(app,[{cname:"text",instanced:false,cid:"text1"},{cname:"date",instanced:false,cid:"date1"},{cname:"button",instanced:false,cid:"makeBtn",text:"Make",events:{click(t,e){app.renderComp.make()}}}]);Wb.make(app,{cname:"viewport",layout:"grid1",autoScroll:true,cid:"viewport1",items:[{cname:"title",title:"Create
+    comps in HTML",cid:"title1"},{cname:"label",cid:"descLabel",text:"This example
+    demonstrates how to create comps in HTML."},{cname:"component",autoMake:true,html:"<table
+    class=\"w-table w-frame\">\n  <tr>\n    <td>text1</td>\n    <td>\n      <div obj=''text1''>\n    </td>\n  </tr>\n  <tr>\n    <td>number1</td>\n    <td>\n      <div
+    obj=''{cname: \"number\", cid: \"number1\"}''></div>\n    </td>\n  </tr>\n  <tr>\n    <td>date1</td>\n    <td>\n      <div
+    obj=''date1''></div>\n    </td>\n  </tr>\n  <tr>\n    <td>Manual make</td>\n    <td>\n      <div
+    obj=''makeBtn''></div>\n    </td>\n  </tr>\n  <tr>\n    <td>Set Value</td>\n    <td>\n      <div\n        obj=\"{
+    cname: ''button'', text: ''Set'', handler(){Wb.setValue(this.app.renderComp, {
+    text1: ''foo'', number1: 123, date1: new Date() }); }}\">\n      </div>\n    </td>\n  </tr>\n  <tr>\n    <td>Get
+    Value</td>\n    <td>\n      <div obj=\"{ cname: ''button'', text: ''Get'', handler(){Wb.tip(Wb.encode(Wb.getValue(this.app.renderComp)));
+    }}\">\n      </div>\n    </td>\n  </tr>\n</table>",cid:"renderComp"},{cname:"title",title:"Create
+    comp to the specified element",cid:"title2"},{cname:"component",html:''<div class="w-row-center
+    w-gap w-margin-bottom">\n  <div class="w-icon icon-info1"></div>\n  <div>Please
+    click "Create Date Comp" button to create a new Date component below.</div>\n</div>\n<div
+    class="my-date w-justifys-start" style="width:15em"></div>'',cid:"htmlComp"},{cname:"button",justifySelf:"start",cid:"button1",text:"Create
+    Date Comp",events:{click(t,e){app.myDate=new Wb.Date({owner:app.viewport1,text:"Date",el:app.viewport1.el.query(".my-date")});this.destroy()}}}]});'
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

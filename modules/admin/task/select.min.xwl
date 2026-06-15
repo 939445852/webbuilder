@@ -1,0 +1,14 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Select tasks
+  serverScript: function main(){const e=Wb.load("./util.mjs");let t,i,s={type:"date"};t="select
+    * from wb_job";if(Params.search){Wb.setLike("search");t+=" where job_name like
+    {?search?}"}t+=" order by status desc,"+Wb.getOrderSql(null,null,false);i=Wb.getRowx(t);Wb.apply(i.fields,{trigger_time:s,previous_time:s,next_time:s});i.items?.forEach((t=>{Wb.apply(t,e.getFireTime(t.sid))}));Wb.send(i)}main();
+tags: ''
+text: module
+title: ''

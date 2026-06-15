@@ -1,0 +1,13 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.make(app,{cname:"viewport",layout:"fit",cid:"viewport1",items:[{cname:"grid",url:xpath+"/../select-staff",cid:"grid1"}]});
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

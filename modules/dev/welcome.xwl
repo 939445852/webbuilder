@@ -1,0 +1,135 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: logo
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  events:
+    click: |-
+      let node;
+      switch (e.target.getAttribute('cid')) {
+        case 'ai':
+          Wb.openWin({ url: 'ide', params: { aiGen: 1 } });
+          break;
+        case 'docs':
+          Wb.open('m?xwl=dev/docs');
+          break;
+        case 'dbc':
+          Wb.open('m?xwl=admin/dbc');
+          break;
+        case 'user':
+          Wb.open('m?xwl=admin/user');
+          break;
+        case 'ide':
+          Wb.openWin({ url: 'ide', params: { openExample: 1 } });
+          break;
+        case 'demos':
+          if (parentApp?.inHome)
+            node = parentApp.moduleTree.find(node => node.text == Str.example);
+          else if (parentApp?.inIDE)
+            node = parentApp.moduleNode.find(node => node.text == 'example');
+          if (node) {
+            node.expand();
+            node.selected = true;
+            node.highlight();
+          } else {
+            Wb.openWin({ url: 'ide', params: { openExample: 1 } });
+          }
+          break;
+      }
+    ready: |-
+      let el = this.el, div;
+      if (Str.lang == 'zh-cn')
+        div = el.query('[cid=lang-zh-cn]');
+      else
+        div = el.query('[cid=lang-en]');
+      div.setStyle('display', 'block');
+      el = div.query('[cid=ai]');
+      el.highlight.delay(el, 600);
+  items:
+  - _expanded: true
+    _icon: toolbar
+    cls: Wb.Toolbar
+    items:
+    - _icon: right1
+      cls: Wb.Fill
+      properties:
+        cid: fill1
+      text: fill1
+    - _icon: label
+      cls: Wb.Label
+      properties:
+        cid: copyrightLabel
+        cls: w-sub-color
+        fontSize: .8em
+        text: Copyright © Geejing, All Rights Reserved.
+      text: copyrightLabel
+    properties:
+      cid: bbar
+      isProperty: 'true'
+      padding: 'true'
+    text: bbar
+  properties:
+    autoScroll: 'true'
+    cid: viewport1
+    html: "<div cid='lang-en' class='w-html' style='line-height:2;display:none;'>\n\
+      \  <p>\n  <div>Welcome to use WebBuilder!</div>\n  <div>WebBuilder is a powerful\
+      \ rapid Web application development and runtime platform. Leveraging its built-in\
+      \ AI\n    capabilities, you can build enterprise-grade application systems automatically,\
+      \ rapidly and accurately simply\n    through natural language or image-text\
+      \ descriptions.</div>\n  <div><span cid=\"ai\" class='w-key-color w-link w-padding'><span\
+      \ class=\"w-icon icon-wizard w-margin-r\"></span>Experience\n    the AI\n  \
+      \  generation capability of WebBuilder now.</span></div>\n  <div>Please follow\
+      \ these steps below to start WebBuilder:</div>\n  </p>\n  <ul>\n    <li>\n \
+      \     <span cid='demos' class='w-key-color w-link'>Open Examples</span><br>\n\
+      \      <span>Classic examples to help you get started quickly.</span>\n    </li>\n\
+      \    <li>\n      <span cid='docs' class='w-key-color w-link'>Open Docs For Help</span><br>\n\
+      \      <span>View development manuals and API documents.</span>\n    </li>\n\
+      \    <li>\n      <span cid='ide' class='w-key-color w-link'>Open Integrated\
+      \ Development Environment</span><br>\n      <span>A powerful development tool\
+      \ for developing awesome applications. You can quickly generate applications\
+      \ automatically via AI on the \"AI Gen\" tab at the bottom, \n        see <a\
+      \ href='ide?openModule=example/basic/ai-gen.xwl' target='_blank'>AI Examples</a>.</span>\n\
+      \    </li>\n    <li>\n      <span cid='dbc' class='w-key-color w-link'>Open\
+      \ Database Configuration</span><br>\n      <span>Add your databases and click\
+      \ the [Default] button to set it as the default database.</span>\n    </li>\n\
+      \    <li>\n      <span cid='user' class='w-key-color w-link'>Open User Management</span><br>\n\
+      \      <span>Add users and change your password in time.</span>\n    </li>\n\
+      \  </ul>\n  <p>\n  <div>If you have any questions please contact: <a class='w-key-color\
+      \ w-link'\n      href='mailto:contact@geejing.com'>contact@geejing.com</a></div>\n\
+      \  <div>Download update: <a class='w-key-color w-link' href=\"https://www.geejing.com/download\"\
+      \n      target=\"_blank\">https://www.geejing.com/download</a>\n  </div>\n \
+      \ <div>For more information please visit: <a class='w-key-color w-link' href=\"\
+      https://www.geejing.com\"\n      target=\"_blank\">https://www.geejing.com</a>\n\
+      \  </div>\n  </p>\n</div>\n<div cid='lang-zh-cn' class='w-html' style='line-height:2;display:none;'>\n\
+      \  <p>\n  <div>欢迎使用 WebBuilder！</div>\n  <div>WebBuilder 是一款强大的快速 Web 应用开发与运\
+      行平台，依托平台 AI 能力，只需通过自然语言或图文描述，就能自动、快速、精准搭建出企业级的应用系统。</div>\n  <div>\n    <span\
+      \ cid=\"ai\" class='w-key-color w-link w-padding'><span class=\"w-icon icon-wizard\
+      \ w-margin-r\"></span>点击试试\n    WebBuilder 的 AI\n    生成能力。</span>\n  </div>\n\
+      \  <div>请按下列步骤开始使用 WebBuilder：</div>\n  </p>\n  <ul>\n    <li>\n      <span\
+      \ cid='demos' class='w-key-color w-link'>打开示例</span><br>\n      <span>一些经典的示\
+      例帮助您快速学习和掌握。</span>\n    </li>\n    <li>\n      <span cid='docs' class='w-key-color\
+      \ w-link'>打开文档</span><br>\n      <span>查看开发手册和API文档。</span>\n    </li>\n   \
+      \ <li>\n      <span cid='ide' class='w-key-color w-link'>打开集成开发环境</span><br>\n\
+      \      <span>用于开发应用系统的强大开发工具。在底部 \"AI Gen\" 页可以通过 AI 快速自动生成应用，参见 <a href='ide?openModule=example/basic/ai-gen.xwl'\
+      \ target='_blank'>AI 示例</a>。</span>\n    </li>\n    <li>\n      <span cid='dbc'\
+      \ class='w-key-color w-link'>打开数据库配置</span><br>\n      <span>添加您的数据库，并点击[默认\
+      ]按钮，设置该数据库为默认数据库。</span>\n    </li>\n    <li>\n      <span cid='user' class='w-key-color\
+      \ w-link'>打开用户管理</span><br>\n      <span>添加用户并及时修改您的密码。</span>\n    </li>\n\
+      \  </ul>\n  <p>\n  <div>如果您有任何问题请联系：<a class='w-key-color w-link' href='mailto:contact@geejing.com'>contact@geejing.com</a></div>\n\
+      \  <div>下载更新：<a class='w-key-color w-link' href=\"https://www.geejing.com/download\"\
+      \n      target=\"_blank\">https://www.geejing.com/download</a>\n  </div>\n \
+      \ <div>更多信息请访问：<a class='w-key-color w-link' href=\"https://www.geejing.com\"\
+      \ target=\"_blank\">https://www.geejing.com</a>\n  </div>\n  </p>\n</div>"
+  text: viewport1
+properties:
+  cid: module
+  remark: Welcome page
+  serverScript: Wb.set('title', Wb.getConfig('sys.app.title'));
+tags: ''
+text: module
+title: '@welcome'

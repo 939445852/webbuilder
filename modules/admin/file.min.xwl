@@ -1,0 +1,18 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.make(app,{cname:"viewport",layout:"fit",border:false,cid:"viewport1",items:[_$004V7KE4QVEWY$_]});
+hideInMenu: 'false'
+icon: file-admin
+img: ''
+properties:
+  cid: module
+  remark: File management tool
+tags: ''
+text: module
+title: '@fileManager'
+xwlMap:
+  004V7KE4QVEWY:
+    cid: browserXwl
+    path: sys/file/browser.xwl

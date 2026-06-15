@@ -1,0 +1,458 @@
+##System Module.Management Tools.User Management
+{#%User Management|user} is used to manage the system users.
+#User Data
+User data consists of the following fields:
+-Username: Username used for login.
+-Display Name: Display name of the user.
+-Password: Password composed of any characters or digits. Passwords of different strengths have different requirements for characters.
+-Confirm Password: Same as the password. Used to verify the password to avoid mistakes.
+-Email: User's email address.
+-Mobile Phone: User's mobile phone number.
+-Language: System language used after login. Empty means default, i.e., use the language configured in the system.
+-Department Name: Department the user belongs to.
+-Enabled: Whether the user is enabled. Disabled users cannot log in.
+-User ID: Unique identifier of the user, usually generated automatically by the system.
+-Available Roles: List of roles available for the user.
+-Selected Roles: Roles already selected by the user. Entries in the [Available Roles] table can be added to the [Selected Roles] table, or the reverse operation can be performed to remove selected roles.
+#Function Operations
+-Add: Add a new user.
+-Edit: Edit the selected user.
+-Delete: Delete all selected users.
+-Search: Search by username, display name or user ID.
+#User Table Structure
+User information is stored in the [wb_user] table. The structure of the table is as follows:
+|Field Name|Description|
+|sid|Primary key|
+|user_name|Username|
+|password|Password|
+|display_name|Display name|
+|create_date|Creation date|
+|login_times|Login times|
+|dept_id|Department ID, related to the sid field of the department table [wb_dept]|
+|email|Email|
+|mobile_phone|Mobile phone|
+|use_lang|Language|
+|last_login|Last login time|
+|status|Status, 0: Disabled, 1: Enabled|
+Roles associated with the user are configured in the [wb_role] table. The roles owned by the user are defined by the user_id and role_id fields in the [wb_user_role] table.
+#User Role Table Structure
+The mapping between users and roles is stored in the [wb_user_role] table. The structure of the table is as follows:
+|Field Name|Description|
+|sid|Primary key|
+|user_id|User ID, related to the sid field of the user table [wb_user]|
+|role_id|Role ID, related to the sid field of the role table [wb_role]|
+##System Module.Management Tools.Role Configuration
+{#%Role Configuration|role} is used to configure user roles. The system can perform permission control through roles.
+#Role Data
+Role data consists of the following fields:
+-Role Name: Identifier used to distinguish different user types or functional permissions.
+-Remark: Supplementary explanatory text for the role.
+-Enabled: Whether the role is enabled. Disabled roles are invalid.
+-Role ID: Unique identifier of the role, usually generated automatically by the system.
+#Function Operations
+-Add: Add a new role.
+-Edit: Edit the selected role.
+-Delete: Delete all selected roles.
+-User: Configure user role mappings.
+-Module: Configure module role mappings.
+-Search: Search by role name or role ID.
+#Role Table Structure
+Role information is stored in the [wb_role] table. The structure of the table is as follows:
+|Field Name|Description|
+|sid|Primary key|
+|role_name|Role name|
+|remark|Remark|
+|status|Status, 0: Disabled, 1: Enabled|
+##System Module.Management Tools.Department Management
+{#%Department Management|dept} is used to configure departments. The department structure is organized in an infinite multi-level tree form.
+#Department Data
+Department data consists of the following fields:
+-Department Name: Specific name of the department.
+-Department Code: Unique identifier assigned to the department.
+-Manager: Person in charge of the department.
+-Enabled: Whether the department is enabled. Disabled departments are invalid.
+-Department ID: Unique identifier of the department, usually generated automatically by the system.
+#Function Operations
+-Add: Add a new department as a child of the currently selected node.
+-Add to Sibling: Add a new department at the same level as the currently selected node.
+-Edit: Edit the selected department.
+-Delete: Delete all selected departments.
+-Search: Search by department name, department code or department ID.
+#Department Table Structure
+Department information is stored in the [wb_dept] table. The structure of the table is as follows:
+|Field Name|Description|
+|sid|Primary key|
+|dept_code|Department code|
+|dept_name|Department name|
+|parent_id|Sid value of the parent department|
+|manager_id|Manager, related to the sid field of the [wb_user] table.|
+|status|Status, 0: Disabled, 1: Enabled|
+##System Module.Management Tools.Permission Management
+{#%Permission Management|dept} is used to configure access permissions for modules. Permissions are role-based, meaning a specified role is granted access to specified modules. When a non-admin user has access to this module, they can set permissions they own for roles they do not have, including allow and deny access settings.
+#Permission Settings
+The left side of the permission management module is the role list, and the middle is the module list. After selecting a role on the left, you can view the list of accessible modules. Accessible modules are indicated by checkmarks. A directory with a square checkmark means some modules under this directory are accessible.
+When you select different roles on the left, the accessible module list switches automatically.
+The roles on the right indicate which roles can access the specified module selected in the middle. Accessible roles are indicated by checkmarks. You can set access permissions for the selected module by checking roles on the right.
+#Function Operations
+The following describes the functions of the toolbar buttons at the top of the module list:
+-Permit: Allow the selected role on the left to access all selected modules.
+-Forbid: Deny the selected role on the left access to all selected modules.
+-Expand All: Expand all functional modules.
+-Collapse All: Collapse all functional modules.
+-Clean: Clear all invalid permission data in the database permission table. When you delete module files manually, you can click this button to remove invalid permission data. The system automatically cleans when files are deleted via IDE or file manager.
+#Permission Table Structure
+Permission information is stored in the [wb_perm] table. The structure of the table is as follows:
+|Field Name|Description|
+|sid|Primary key|
+|module_path|Module path|
+|role_id|Role ID, corresponding to the sid field of the role table [wb_role].|
+##System Module.Management Tools.System Configuration
+{#%System Config|config} is used to configure system parameters. Some parameters take effect immediately after modification; others require a system restart. See parameter descriptions for details.
+#Parameter Data
+Parameters, also known as configuration items, consist of the following properties:
+-Name: Identifier of the parameter, can be any name. Multi-level paths are separated by ".".
+-Type: Value type of the parameter.
+-Value: Value of the parameter.
+-List: Drop-down list data when the parameter type is enum. Described in array format, e.g.: ["item1", "item2", "item3"].
+-Description: Remarks for the parameter.
+#Function Operations
+-Add: Add a new parameter. Use "." to separate multi-level paths.
+-Edit: Set the value of the parameter.
+-Delete: Delete the selected parameter.
+-Refresh: Refresh the current parameter list.
+-Parameter Path: Display the full path of the currently selected parameter, which can be selected and copied.
+#Parameter Access
+Parameters can be set via the API method {#Wb.setConfig}, obtained via the API method {#Wb.getConfig}, and also accessed via the Java class com.wb.common.Config.
+#Parameter Storage
+Parameter files are stored in JSON format in [wb/system/config.json]. The key is the full name of the parameter, and the value is the configuration object. The configuration object consists of the following properties:
+-name: Parameter name.
+-type: Parameter type.
+-value: Parameter value.
+-description: Parameter description in the default language, usually English.
+-list: Drop-down list data when type is enum.
+-text: Parameter description in the default language, usually English.
+-zh-cn: Parameter description in Chinese. Descriptions for other languages can be added with the corresponding language code.
+##System Module.Management Tools.Database Explorer
+{#%Database Explorer|dbe} is a powerful database management tool suitable for any type of database. It can run any SQL and retrieve data, and edit database tables online. The left side of the Database Explorer
+shows the list of databases added in {#%Database Configuration|dbc}. The client area contains tab pages for running SQL or editing table data. Expand the database list to view its resources: such as tables, views,
+procedures, etc. Clicking a table or view opens it in a client tab. The Database Explorer provides SQL auto-completion; the system automatically suggests input when typing SQL statements.
+#Function Operations
+-New SQL: Add a new SQL execution tab using the currently selected database in the database list.
+-Run SQL: Run the SQL statement in the current SQL tab and get the returned result. Blob fields are not returned by default.
+-Run SQL and Get Blobs: Run SQL and retrieve any Blob field content to the client. You can click the download link to download Blob content.
+-Add: Add a new record in the current table. Only valid when the open tab is a table.
+-Delete: Delete selected records in the current table. Only valid when the open tab is a table.
+-Save: Save any changes to the current table. Only valid when the open tab is a table.
+-Save All: Save all modified but unsaved tables.
+-Filter: Filter the currently opened table or view. E.g. "field1='abc' and field2=123".
+-Property: View all field properties of the current tab result set, which can be a table, view or SQL result set.
+-Maximum Records: Maximum number of records the client can get from the server at one time. When opening a table or view, the system dynamically fetches the current page data asynchronously; when running SQL to get data, the system returns all records within the max record limit at once to avoid potential issues caused by re-running SQL during paging.
+-Rename: Put the selected node in the database list into edit mode for easy copying of its name, e.g., table name, field name, etc. Lowercase: Convert the name to lowercase and enter edit mode; Uppercase: Convert the name to uppercase and enter edit mode.
+-Database Paging: Whether to enable database-side paging (no return record limit) when opening tables. The default is application server-side paging (with a default max return record limit).
+-Export: Export data from the current single table or result set to a file in "wbt" format. This file can be imported into the database via the [Import] button. To export data in other formats, click the menu at the bottom of the table.
+-Import: Import files in "wbt", "xls", "xlsx", "csv", "txt" format into the currently opened database table. The first row of imported data is the field name. You can add remarks in "()" after the field name, e.g., "field1(Field1) field2(Field2)".
+-Back: Return to the previous tab.
+-Forward: Go forward to the tab before returning.
+#Table Editing
+After clicking a table in the database list, the table opens for editing. You can navigate up and down cells using the up and down arrow keys, and left and right cells using tab and shift+tab. Pressing the down arrow on the last row adds a new row. If a cell contains a trigger button such as a dropdown or date picker, press ctrl+down arrow to expand the associated control.
+#Run SQL
+You can run any SQL statement in the SQL tab, including CRUD or accessing stored procedures.
+Run normal SQL:
+
+     $sql: select * from wb_user
+
+Some databases support running multiple SQL statements and returning multiple results. For example, running the following 3 SQL statements in SQL Server will get 3 results at once:
+
+     $sql: select * from wb_user;
+     delete from wb_log where 1=0;
+     select * from wb_staff;
+
+Run the stored procedure test_proc, where returnValue is the return value and outParam is the output parameter:
+
+     $sql: {{*returnValue*}=call test_proc('inParam', {*outParam*})}
+
+Run an Oracle stored procedure that returns a cursor, where cursor indicates the cursor type and p_user is the output parameter:
+
+     $sql:{call user_proc({*cursor|p_user*}
+
+Refer to the development manual of the database you are using for more usage.
+#Legend
+The system uses multiple icons to identify database resources:
+-Field: Fields are displayed when expanding a table or view, where {[key]} indicates a primary key field, {[ok]} indicates a required field, and {[item]} indicates a normal field.
+-Index: Indexes are displayed when expanding a table, where {[check1]} indicates a normal index and {[check10]} indicates a unique index.
+##System Module.Management Tools.Database Configuration
+{#%Database Configuration|dbc} is used to add new database data sources or modify existing ones. The left side of the database configuration module shows the list of configured data sources, and the right side shows the detailed configuration information of the selected data source.
+#Data Source Properties
+-Name: Any data source name used to identify the data source. In the API, you can access the associated database by specifying this data source, e.g., "Wb.sql({sql: 'select * from table', db: 'test1'})", where test1 is the data source name.
+-Description: Remarks for the data source.
+-driverClassName: Database driver class name.
+-For more property descriptions, see: {#%http://commons.apache.org/proper/commons-dbcp/configuration.html}
+#Function Operations
+-Add: Add a new data source.
+-Copy: Copy the selected data source and create a new one. Copying allows quick configuration of a new data source based on an existing one.
+-Delete: Delete the selected data source.
+-Save: Save any changes to the current data source.
+-Test: Test whether the current data source is accessible.
+-Default: Set the current data source as the default one. After setting as default, this data source is used when no data source is specified, e.g., "Wb.sql('select * from table')", which uses this data source without specifying one.
+-Create Tables: Create tables in the default data source based on the system database table template file. A new table is created if it does not exist; if it exists and has the same structure, the system ignores creation; if the structure is different, the system throws an exception. See the following description for the database table template file.
+-Property: Show all connection properties. [Close] for closing the selected connection; [Clear] for clearing all idle connections; [Refresh] for refreshing the connections list.
+-Refresh: Refresh the current data source list.
+#Data Source Configuration File
+System data sources are stored in [wb/system/db/source.json]. You can edit this file to configure data sources, which takes effect after a system restart or clicking [Reload System] in the IDE.
+#Database Field Type Configuration File
+The database field type configuration file is stored in [wb/system/db/types.json]. This file provides different field adaptations for different databases, making the SQL in the database table template file universal for all databases. You can edit this file when adding a new database or field type. The file is saved in JSON format. The key is the database type name, which must match the database product name returned by JDBC; the value is the configuration object:
+-varchar: String type
+-nvarchar: Unicode string type
+-numeric: Numeric type
+-datetime: Date and time type
+-clob: Large text type
+-nclob: Unicode large text type
+-blob: Binary data type
+Note that after configuring this file, please add the database driver jar package matching the database to the system, usually to the lib directory of the application server, such as the lib directory of Tomcat.
+#Database Table Template File
+The system database table template file is stored in [wb/system/db/sqls.sql]. The system can automatically create tables suitable for all databases based on this file. When you need to add a new table to the database, you can edit this file and click the [Create Table] button to automatically create the database table.
+SQL statements in this file must be written in strict format: each create statement occupies one line; each field defined in the table occupies one line; comments are added using "/* */"; "_$type$_" is used to represent the field type; type is the field type defined in the database field type configuration file.
+##System Module.Management Tools.File Manager
+{#%File Manager|file} is used to manage the server-side file system. You can conveniently manage or export server-side files via the File Manager. The left side of the File Manager is the directory tree, and the right side shows the subdirectories and files under the currently selected directory in the directory tree.
+#Function Operations
+-Add File: Create a new file in the current directory.
+-Add Folder: Create a new directory in the current directory.
+-Rename: Rename the selected file/directory in the right file/directory list.
+-Cut: Cut the selected file/directory in the right file/directory list to the in-memory virtual clipboard of this page.
+-Copy: Copy the selected file/directory in the right file/directory list to the in-memory virtual clipboard of this page.
+-Paste: Paste the file/directory from the in-memory virtual clipboard of this page to the currently selected directory in the directory tree.
+-Delete: Delete the selected file/directory in the right file/directory list.
+-Export: Export the selected file/directory in the right file/directory list to the client. If a directory or multiple files are selected, they are automatically compressed into a zip file before export.
+-Export and Zip: Compress the selected file/directory in the right file/directory list into a zip file and export it to the client.
+-Import: Import client files to the currently selected directory in the directory tree.
+-Import and Unzip: Import client zip files to the currently selected directory in the directory tree and automatically extract the zip file.
+-Refresh: Refresh the directory and file list.
+-Back: Return to the previously selected directory.
+-Forward: Go forward to the directory before returning.
+-Up: Return to the parent directory.
+-Address Bar: The address bar displays the path of the currently selected directory in the directory tree. Its dropdown list contains multiple common paths, which can be selected to navigate to the corresponding directory. Press the [Go] button or Enter to navigate to the directory pointed to in the address bar edit box.
+#Import and Unzip
+Click the dropdown button of Import to show the dropdown menu. Click Import and Unzip in the dropdown menu to show the import dialog:
+-File: One or more files to import.
+-Charset: Encoding character set used for file names in the imported zip package.
+##System Module.Management Tools.Task Manager
+{#%Task Manager|task} is used to manage system scheduled tasks. You can conveniently add periodic scheduled tasks via the Task Manager.
+#Scheduled Task Data
+Scheduled task data consists of the following fields:
+-Name: Identifier of the scheduled task, can be any name.
+-Interval: Execution interval of the scheduled task, which can be second, minute, hour, day, week, month, year and Cron. Cron represents any Cron expression, which is used to flexibly set any interval.
+-Duration: Time period during which the scheduled task runs. If the start time or end time is missing, it means no start/end time is specified, i.e., unlimited.
+-Enabled: Whether the current task is enabled.
+-Concurrent: Whether concurrent access is allowed for the scheduled task. If concurrent is disabled, the next task will be canceled if the previous task is not completed.
+-One time task: Automatically delete the task after it is executed.
+-Description: Remarks for the task.
+-Script: Any server-side js script. These scripts are executed when the task starts, and can call js modules or Java classes. If the script starts with "$", it represents a task interface class, e.g., "$com.wb.job.DemoJob".
+#Function Operations
+-Add: Add a new task.
+-Edit: Edit the selected task.
+-Delete: Delete all selected tasks.
+-Pause: Pause the execution of all selected tasks.
+-Resume: Resume the execution of all selected tasks.
+-Stop: Stop the entire scheduled task engine; all tasks will stop executing.
+-Search: Search by task name.
+#Scheduled Task Table Structure
+Scheduled task information is stored in the [wb_job] table. The structure of the table is as follows:
+|Field Name|Description|
+|sid|Primary key|
+|job_name|Scheduled task name|
+|interval_type|Interval type|
+|interval_value|Interval value|
+|trigger_time|Trigger time|
+|trigger_weekday|Trigger weekday|
+|trigger_day|Trigger day|
+|trigger_month|Trigger month|
+|cron_express|Cron expression|
+|concurrent|Whether concurrent access is allowed|
+|auto_removed|Whether to automatically delete the task after execution|
+|begin_date|Start time|
+|end_date|End time|
+|status|Status, 0: Disabled, 1: Enabled|
+|server_script|Server-side JS script|
+|job_desc|Task description|
+##System Module.Management Tools.Workflow Manager
+{#%Workflow Manager|flow} is used to design and manage process templates.
+#Process Template File
+Process template files are stored in the server's file system. The root directory is [wb/WebContent/wb/system/resource/flow]. Process template files have the extension ".flw" and the content is stored in JSON.
+#Function Operations
+-New: Add a new process template.
+-Open: Open an existing process template.
+-Save: Save the currently edited process template.
+-Save All: Save all modified process templates.
+-Cut: Cut the selected process node/connection to the in-page virtual clipboard.
+-Copy: Copy the selected process node/connection to the in-page virtual clipboard.
+-Paste: Paste the node/connection from the in-page virtual clipboard to the current flowchart.
+-Delete: Delete the selected node/connection.
+-Undo: Undo any operation on the flowchart.
+-Redo: Redo the operation on the flowchart before undoing.
+-Select All: Select all nodes/connections.
+#Process Design
+The process template designer consists of 3 parts: the left property editor for viewing properties of the selected node, connection or process itself; the middle client area is the flowchart designer; the right side is the node list, including start, end and other nodes. Except for start and end nodes, other nodes only differ in shape and have the same function.
+When starting to design a process, you can drag nodes from the right to the client flowchart. Each process should usually include a start and end node. When hovering the mouse over a node, multiple anchors appear on the node. You can drag any anchor to another node to connect the nodes. Dragging a node adjusts its position. Clicking a node or connection selects it. Clicking on a blank area selects the entire process by default, and all properties are displayed in the left property editor. You can select multiple nodes by pressing Ctrl+click, or by drawing a box on the flowchart.
+#Process Properties
+Process properties consist of process properties, node properties and connection properties, where process properties represent default properties.
+-afterAction: Module executed after performing an action.
+-back: Whether rollback is allowed.
+-beforeAction: Module executed before performing an action.
+-comment: Long descriptive text.
+-dept: Processing department of the node.
+-deptCC: CC department of the node.
+-deptManager: Whether processed by the department manager.
+-deptManagerCC: Whether to CC the department manager.
+-description: Short remarks.
+-handleForm: Form module opened when the user processes the process. If omitted, look for "viewForm" and "startForm" in sequence as alternatives.
+-intersectDeptRole: Whether to take users who have an intersection of the department and role attributes, i.e., users who exist in both the department and role. Default is all.
+-name: Unique identifier.
+-onGetParams: Server-side script executed when getting parameters. Can return an object composed of multiple parameters. Available parameters: "params", "flow", "node" represent the parameter object, process object and current node object respectively.
+-onGetUsers: Server-side script executed when getting handlers. Can return one or more users, multiple users are represented as an array. Available parameters: "params", "flow", "node" represent the parameter object, process object and current node object respectively.
+-onGetUsersCC: Server-side script executed when getting CC users. Can return one or more users, multiple users are represented as an array. Available parameters: "params", "flow", "node" represent the parameter object, process object and current node object respectively.
+-onPass: Method executed when passing. Available parameters: "params", "flow", "node" represent the parameter object, process object and current node object respectively.
+-passUserCount: Number of users who pass. The process is considered passed when the specified number of users approve. A value ending with "%" represents a percentage. "100%" means all users must approve to pass.
+-reject: Whether rejection is allowed.
+-role: Processing role of the node.
+-roleCC: CC role of the node.
+-signAfter: Whether to allow adding a signature after.
+-signBefore: Whether to allow adding a signature before.
+-startForm: Form module opened when initiating a process. If omitted, look for "handleForm" and "viewForm" in sequence as alternatives.
+-text: Title text of the node.
+-transfer: Whether transfer is allowed.
+-user: Processing user of the node.
+-userCC: CC user of the node.
+-viewForm: Form module opened when the user views the process. If omitted, look for "handleForm" and "startForm" in sequence as alternatives.
+#Process Initiation and Flow
+A process can be initiated in the [{#%My Workflow|my-flow}] module by clicking the [New] button, or via the {#start|Wb.Workflow.start} method of the {#Wb.Workflow} class. After initiation, a dialog box is displayed. The priority of the dialog box module for initiation is determined by the attributes "startForm", "handleForm" and "viewForm" in descending order. Whether the dialog box is displayed automatically is determined by the "app.autoShow" attribute of the client in the module. Setting it to false means it is not displayed automatically by default.
+After the process is initiated, it goes to the first node according to the "onPass" attribute of the connection in the process template file. Users with view or processing permissions can view or process it in the [{#%My Workflow|my-flow}] module. The processing user of the node is specified by all users merged from the node attributes "user", "role", "dept", "deptManager" and "onGetUsers" in the process template, where "userCC", "roleCC", "deptCC", "deptManagerCC" and "onGetUsersCC" represent the viewing users.
+When a user processes or views a process in the [{#%My Workflow|my-flow}] module, the system displays a dialog box. The priority of the processing dialog box is determined by the attributes "handleForm", "viewForm" and "startForm" in descending order, and the priority of the viewing dialog box is determined by the attributes "viewForm", "handleForm" and "startForm" in descending order. When the dialog box
+is opened, the system first executes the "app.init" method in the client of the dialog box, which passes 3 parameters: flowId, type and record, representing the process id, window type ("start", "handle", "view") and the current process record object respectively. Before performing a process action (such as pass, reject, etc.), the system executes the "app.beforeAction" method in the client of the module,
+which passes parameters action and record, representing the name of the process action (such as pass, reject, etc.) and the process record object respectively. This method can return an object type representing the parameter object passed to the backend, and returning false cancels the execution of the action. After the process successfully submits the action from the client to the server, the system executes the "app.beforeAction" method in the server-side serverScript of the module, which passes 2 parameters: action and flow, representing the action name and {#Process Object|Wb.Workflow} respectively. The return value of this method can be obtained in the "before" attribute of the client return value, and the module specified by the "beforeAction" attribute in the process template is also executed. After the action is executed, the system executes the "app.afterAction" method in the server-side serverScript of the module, which passes 2 parameters: action and flow, representing the action name and {#Process Object|Wb.Workflow} respectively. The return value of this method can be obtained in the "after" attribute of the client return value, and the module specified by the "afterAction" attribute in the process template is also executed. After the process successfully executes the action on the server, the system executes the "app.afterAction" method in the client of the module, which passes 3
+parameters: action, response and record, representing the name of the process action, the content returned by the server and the process record object respectively.
+When a process is returned, it is judged whether it is a re-initiation at the start node. This can be judged via the {#restarting|Wb.Workflow.restarting} attribute of the process in the backend, and via the "app.restarting" attribute in the module in the frontend.
+See the following examples for processes: {#%workflow|ide?openModule=example/workflow} and {#%leave|ide?openModule=example/apps/oa/leave.xwl}
+##System Module.Management Tools.Console
+{#%Console|console} is used to display the Java program messages.
+#Function Operations
+-Pause: Pause displaying Java program messages.
+-Clear: Clear console messages.
+-Size: Set the maximum console buffer size.
+##System Module.Management Tools.System Log
+{#%System Log|log} is used to view log information recorded via the database table log API. These APIs include: {#Wb.recordInfox}, {#Wb.recordWarnx}, {#Wb.recordErrorx}, {#Wb.recordExceptx} and related API methods of the com.wb.util.LogxUtil class.
+#Log Content
+Log content includes the following fields:
+-Date: Date when the log was recorded.
+-Username: User associated with the log.
+-IP Address: IP address associated with the log.
+-Log Type: Classification identifier of the log.
+-Content: Detailed information of the log.
+#Function Operations
+-Start Time: Start time for querying logs. No limit by default.
+-End Time: End time for querying logs. No limit by default.
+-Log Level: Query log level.
+-Log Type: Query log type.
+-Username: Query the username or display name associated with the log.
+-Content: Query the content contained in the log.
+-IP Address: Query the IP address contained in the log.
+-Reset: Reset all query conditions.
+#Log Table Structure
+Log information is stored in the [wb_log] table. The structure of the table is as follows:
+|Field Name|Description|
+|sid|Primary key|
+|log_date|Log record date|
+|user_id|User ID, related to the sid field of the user table [wb_user]|
+|ip|IP address|
+|log_level|Log level|
+|log_type|Log type|
+|msg|Log content|
+##System Module.Management Tools.Online Users
+{#%Online Users|online-users} is used to view the list of online users logged into the current server. The online user list is displayed in two upper and lower tables. The upper table shows the list of all online users, and the lower table shows all sessions
+logged in under the same selected user.
+#User List Data
+Displays data of all logged-in users:
+-Username: Username of the logged-in user.
+-Display Name: Display name of the logged-in user.
+-IP Address: Client IP address of one of the logged-in sessions.
+-Creation Time: Creation time of one of the logged-in sessions.
+-Last Access Time: Last access time of one of the logged-in sessions.
+#Session List Data
+Displays data of all sessions of the selected user:
+-IP Address: Client IP address of the session.
+-Creation Time: Creation time of the session.
+-Last Access Time: Last access time of the session.
+#Function Operations
+-Logout: Force logout all sessions associated with the selected user.
+##System Module.Management Tools.Blocked IPs
+{#%Blocked IPs|m?xwl=admin/blocked-ip} is used to edit blocked IP list.
+#Function Operations
+-Save: Save the current IP list.
+-Refresh: Refresh the current IP list.
+-Clear: Reload IP lists from files.
+#Configuration File Path
+-The blocked IP list file is configured by the `sys.file.blockedIPs` config item.
+-The allowed headers file is configured by the `sys.file.allowedHeaders` config item.
+##System Module.Management Tools.System Information
+{#%System Information|sysinfo} is used to view the system's operating environment and parameters.
+##System Module.Management Tools.About
+{#%About|about} is used to view version, copyright and other declaration information about WebBuilder.
+##System Module.My Apps.My Workflow
+{#%My Workflow|my-flow} is used to view and process workflows I participate in or initiate new workflows.
+#Workflow List Data
+-Start Time: Time when the workflow was initiated.
+-Initiator: Initiator of the workflow.
+-Title: Title of the workflow.
+-Current Node: Current processing node of the workflow.
+-Type: Type of the workflow template used.
+#Function Operations
+-New: Initiate a new workflow.
+-View: View data related to the selected workflow.
+-Handle: Process the selected workflow, such as approving or returning to a specified node.
+-Progress: View the approval progress of the selected workflow, the status of each node and the associated flowchart.
+-Terminate: Terminate the flow of the selected workflow.
+-Search: Search for the title of the workflow.
+-Status Selection: Filter all workflows with the specified status.
+#Related Database Tables
+Process instances are stored in the [wb_flow] table. The structure of the table is as follows:
+|Field Name|Description|
+|sid|Primary key|
+|start_time|Workflow initiation time|
+|user_id|Initiator, related to the sid field of the user table [wb_user]|
+|title|Process title|
+|status|Process status. 0: Canceled, 1: In progress, 2: Completed, 3: Rejected|
+|node_name|Current node name|
+|node_text|Current node title|
+|tpl_file|Process template file path|
+Users associated with the process are stored in the [wb_flow_user] table. The structure of the table is as follows:
+|Field Name|Description|
+|sid|Primary key|
+|flow_id|Process instance ID, related to the sid field of the process instance table [wb_flow]|
+|user_id|Handler, related to the sid field of the user table [wb_user]|
+|accept_time|Acceptance time|
+|process_time|Processing time|
+|status|Node status. 0: Unread, 1: Read, 2: Completed, 3: Rejected, 4: Backward, 5: Transferred, 6: Pre-signature, 7: Post-signature, 8: Returned|
+|user_type|User type. 0: Initiator, 1: Handler, 2: CC user|
+|after_user|User ID of the post-signature, related to the sid field of the user table [wb_user]|
+|node_name|Node name|
+|node_text|Node title|
+##System Module.My Apps.Homepage
+{#%Homepage|m?xwl=my/home} is used to display multiple application modules simultaneously in a specific layout. In the system's {#%Home|home}, you can drag module nodes from the left function module tree to this page to add modules associated with the nodes. This page is divided into 12 rows and 12 columns by default. Each sub-module can independently adjust the row height and column width it occupies. Click the menu button on the title bar of the sub-module to display sliders for the row and column widths. Drag the sliders to adjust the row and column widths. Drag the title bar of the sub-module to adjust its position on the entire page. After adjustment, you can click the menu button in the upper right corner of the system's {#%Home|home} and click the [Save Desktop] menu to save all changes, which is only valid for the current user.
+##System Module.System.Home
+{#%Home|home} is the default page after logging into the system. Its module file is located at [sys/portal/home.xwl]. The Home page consists of 3 parts: the top menu toolbar, the left tree of all accessible function modules (including a search box at the bottom), and the client area with tabs for displaying multiple opened modules. Clicking a child node in the function module tree opens the associated module in the client area.
+#Function Operations
+-Back: Return to the previously opened module.
+-Forward: Go forward to the previously opened module before returning.
+-Refresh: Refresh the currently opened module. This button is invalid if the current module does not allow refreshing.
+-Homepage: Open the {#%Homepage|m?xwl=my/home} module. See the {#Homepage|System Module.My Apps.Homepage} description for details.
+-Module Link to Menu: Whether to automatically select the associated node in the left function module tree when opening or selecting a module in the tab.
+-My Account: Open my user account, where you can modify the display name or password, etc.
+-Save Desktop: Save the current desktop state of the system home page, which is only valid for the current user. The desktop state includes the width and node expansion status of the function module tree, the modules opened in the client area tabs and their order, and the sub-modules opened in {#%Homepage|m?xwl=my/home} and their row and column widths.
+-Save as Default Desktop: Perform the save desktop operation and set this desktop as the default desktop for all users who have not saved a desktop.
+-Reset Desktop: Clear the saved desktop and set the system's default desktop as the current user's desktop.
+-Interface Scheme: Select an available overall interface scheme.
+-Font Size: Set the size of the page and text.
+-Top Navigation Bar: Display the first-level menus of the left function menu tree at the top.
+-Refresh Menu List: Refresh the left function menu tree list.
+-Logout: Log out the current user.
+##System Module.System.Index Page
+{#%Index Page|index} is the system's default index page, i.e., the module displayed when accessing a URL without specifying any sub-page (such as only specifying the IP and port). Its module file is located at [sys/portal/index.xwl]. You can customize the default index page of the application system by modifying this module file.

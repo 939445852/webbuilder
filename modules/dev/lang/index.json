@@ -1,0 +1,9 @@
+{
+  "title": "@langMng",
+  "icon": "",
+  "img": "",
+  "hideInMenu": "true",
+  "items": [
+    "actions.xwl"
+  ]
+}

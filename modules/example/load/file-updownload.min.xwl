@@ -1,0 +1,28 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.make(app,{cname:"viewport",layout:"grid1",cid:"viewport1",items:[{cname:"label",cid:"mainLabel",cls:"w-title3",text:"File
+    upload & download"},{cname:"title",title:"Upload files",cid:"uploadTitle"},{cname:"container",layout:"grid1",labelUp:true,cid:"uploadCt",frame:true,items:[{cname:"fileInput",cid:"singleFileInput",text:"Please
+    select a file"},{cname:"fileInput",multiple:true,browseMode:true,browseHeight:"6em",text:"Please
+    select multiple files",accept:"image/*",cid:"multiFileInput"},{cname:"text",cid:"text1",text:"Other
+    control"},{cname:"button",type:"primary",cid:"uploadButton",text:"Upload all",events:{click(t,e){Wb.ajax({url:xpath+"/actions&xaction=upload",comps:app.uploadCt,params:{foo:"bar"},success(t){Wb.tipSucc('All
+    files have been saved to "'+t+'".')}})}}}]},{cname:"title",title:"Download files",cid:"downloadTitle"},{cname:"container",layout:"grid1",cid:"downloadCt",frame:true,items:[{cname:"button",type:"primary",cid:"commonDownloadWbJsButton",text:"Common
+    download wb.js",events:{click(t,e){Wb.download(xpath+"/actions&xaction=downloadWbJs",{foo:"bar"})}}},{cname:"button",type:"primary",cid:"ajaxDownloadWbJsButton",text:"Ajax
+    download wb.js",events:{click(t,e){Wb.ajax({url:xpath+"/actions&xaction=downloadWbJs",download:true,params:{foo:"bar"},onDownload(t){Wb.progress(t)}})}}},{cname:"button",type:"primary",cid:"downloadBlobButton",text:"Download
+    blob",events:{click(t,e){Wb.download(xpath+"/actions&xaction=downloadBlob")}}},{cname:"button",type:"primary",cid:"downloadZipButton",text:"Download
+    zip",events:{click(t,e){Wb.download(xpath+"/actions&xaction=downloadZip")}}},{cname:"button",type:"primary",cid:"downloadBase64BlobButton",text:"Download
+    base64/blob",events:{click(t,e){let o="iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAJlJREFUOE/FkjsOgzAQBWfLEOUIqbgInCrQmQpuFXMmFNpFJiTCfCIMSHG9nn1vtMLBJwf/0wNeJWYP6JpjekBb8QSSEIgqxXmApgzb/kl6y7GeRFclykhDqkwBGmVvsSM3izxVas+BCHdVYsC6Hy5JW6FraTyJo43TBKsAEczlQfGzwhYX51zi/w9pSLCl8ndGBDuTGEQYhjv9pkQRnIOeTgAAAABJRU5ErkJggg==";Wb.downloadBase64(o,"insert.png")}}}]},{cname:"title",title:"Download
+    after uploading",cid:"downloadAfterUploadingTitle"},{cname:"container",layout:"grid1",labelUp:true,cid:"downloadAfterUploadingCt",frame:true,items:[{cname:"fileInput",multiple:true,browseMode:true,browseHeight:"6em",text:"Please
+    select multiple files",accept:"image/*",cid:"multiFileInput"},{cname:"text",cid:"text1",text:"Other
+    control"},{cname:"button",type:"primary",cid:"downloadAfterUploadButton",text:"Download
+    after upload",events:{click(t,e){const o="Uploading now, please wait...";const
+    a="Downloading now, please wait...";Wb.ajax({url:xpath+"/actions&xaction=downloadAfterUpload",comps:app.downloadAfterUploadingCt,download:true,params:{foo:"bar"},mask:o,onUpload(t){Wb.progress(t,o)},onDownload(t){Wb.progress(t,a)},callback(){Wb.unmask(a)}})}}}]}]});
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

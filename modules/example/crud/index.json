@@ -1,0 +1,15 @@
+{
+  "title": "",
+  "icon": "",
+  "img": "",
+  "hideInMenu": "false",
+  "items": [
+    "staff.xwl",
+    "edit-grid.xwl",
+    "dict-edit-grid.xwl",
+    "edit-dialog.xwl",
+    "dict-edit-dialog.xwl",
+    "actions.xwl",
+    "select-staff.xwl"
+  ]
+}

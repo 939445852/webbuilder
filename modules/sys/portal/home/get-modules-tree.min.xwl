@@ -1,0 +1,12 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Get modules tree
+  serverScript: function main(){const n=Wb.load("./util.mjs");Wb.send(n.getModules())}main();
+tags: ''
+text: module
+title: ''

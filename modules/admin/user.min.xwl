@@ -1,0 +1,25 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.apply(app,{winConfigs:{tagName:"form",layout:"form1",height:"45em",width:"75em",autoScroll:true,manualShow:true,events:{ready(){let
+    e=this,t=new Wb.Container({layout:"grid2",padding:false,autoGrid:true});e.down("display_name").inputEl.autocomplete="off";e.el.autocomplete="off";t.add(e.items.copy());e.add(t);e.add({cid:"roleBox",cname:"dualBox",flex:1,minHeight:"10em",url:xpath+"/select-roles",getValue(){return
+    this.destData.pluck("sid")},sourceGridConfigs:{title:Str.availableRoles,tools:{icon:"refresh",tip:Str.refresh,handler(){let
+    e=this.up("roleBox");app.loadRoles((t=>{let a=e.destGrid.items;e.sourceData=t.sourceRoles.filter((e=>!a.some((t=>t.data.sid==e.sid))))}))}}},destGridConfigs:{title:Str.selectedRoles}})},beforeok(){let
+    e=this,t=e.down("password");if(t.value!=e.down("confirm_password").value){Wb.warn(Str.pwdNotSame,(e=>t.focus(false,true)));return
+    false}}}},onFailure(e){let t={wb_user_pk:"user_id_disp",wb_user_user_name:"user_name"};Wb.each(t,((t,a)=>{if(Wb.checkExists(e,t,app.grid1.dictWin.down(a)))return
+    false}))},loadRoles(e,t){Wb.ajax({url:xpath+"/select-roles",json:true,params:{userId:t},success(t){e?.(t)}})}});Wb.make(app,{cname:"viewport",autoContextMenu:true,layout:"fit",cid:"viewport1",tbar:{cname:"toolbar",items:[{icon:"add",text:Str.add,keys:"Ctrl+E",cid:"addBtn",events:{click(e,t){app.loadRoles((e=>{let
+    t,a;t=app.grid1.dictAdd({url:xpath+"/add",failure:app.onFailure},Str.username,null,null,app.winConfigs);a=t.down("roleBox");a.sourceData=e.sourceRoles;a.destData=[];t.show();t.down("user_id_disp").readonly=false}))}}},{icon:"edit",text:Str.edit,keys:"Ctrl+J",cid:"editBtn",events:{click(e,t){let
+    a=app.grid1,r=a.selectionData;if(!r){Wb.tipSelect();return}app.loadRoles((e=>{let
+    t,r;t=a.dictEdit({url:xpath+"/edit",failure:app.onFailure},"user_name",null,null,app.winConfigs);r=t.down("roleBox");r.sourceData=e.sourceRoles;r.destData=e.destRoles;t.show();t.down("user_id_disp").readonly=true}),r.sid)}}},{icon:"delete",text:Str.del,keys:"Ctrl+D",cid:"delBtn",events:{click(e,t){app.grid1.removeRecords(xpath+"/del","user_name")}}},{cname:"divider",cid:"divider1"},{cname:"text",minWidth:"5em",clearButton:true,placeholder:Str.search,flex:1,cid:"search",maxWidth:"20em",events:{change(e,t,a){app.grid1.delayLoad({comps:app.search})}}}]},items:[{cname:"grid",columnsSortable:true,keyFields:"sid,user_name",stateData:"_$004VCE8IUOWN9$_",stateId:"wb.user",sorters:"user_name",url:xpath+"/select",cid:"grid1",multiSelect:true,events:{itemdblclick(e,t,a){app.editBtn.fireEvent("click")}}}]});
+hideInMenu: 'false'
+icon: user2
+img: ''
+properties:
+  cid: module
+  remark: User account management tool
+stateMap:
+  wb.user: 004VCE8IUOWN9
+tags: ''
+text: module
+title: '@userMng'

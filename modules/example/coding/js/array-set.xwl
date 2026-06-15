@@ -1,0 +1,78 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+items:
+- _expanded: true
+  _icon: edit
+  cls: Wb.CodeEditor
+  properties:
+    cid: codeEditor1
+    full: 'true'
+    readonly: 'true'
+    value: |-
+      //This example demonstrates array and set. Only extended members are demonstrated, and native members are described at:
+      //Array: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array
+      //Set: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set
+
+      //Add, delete and modify
+      array = [1, 2];
+      array.push(3); //push new item
+      array.pushAll([1, 3, 5]); //All items are added to the array, output: [1, 2, 3, 1, 3, 5]
+      [1, 2, 3].merge(new Set([3, 4, 5])); //array merge array/set, output: [1, 2, 3, 3, 4, 5]
+      array.remove(2); //remove the first item
+      array.removeAll(3); //remove all items
+      array.removeFirst(item => item === 2); //remove the first item by function
+      array.removeBy(item => item === 2); //remove all items by function
+      array.erase(2); //remove item by item index
+      [1, 2, 3].insert(0, 'a', 'b'); //Insert items at the specified index, output: ["a", "b", 1, 2, 3]
+      array.pushIf(null, 'b'); //Push values without null/undefined value
+
+      //Traverse
+      [1, 2, 3].forEach((item, index) => console.log(item));
+      [1, 2, 3].each((item, index) => { //each is similar to foreach, each can be interrupted and reversed
+        console.log(item);
+        if (item == 2)
+          return false; //interrupted
+      }, scope, true); //true means reverse traversal
+      (new Set()).forEach(fn); //forEach set
+      (new Set()).each(item => { console.log(item) }); //each set
+
+      //Sort
+      [1, 2, 3].sort();
+      array = [123, 'abc', 'utf-string'];
+      array.normalSort(); //Local sort
+      array = [{ a: 3, b: 2 }, { a: 1, b: 4 }];
+      array.normalSort('a'); //Sort by the "a" property
+      array.normalSort(['a', 'b'], [false, true]); //Sort by the "a" property asc, "b" property desc.
+      array.lowerSort('a'); //Similar to normalSort, case insensitive.
+      array.mixSort('b'); //Similar to normalSort, Mix sort string, number and date locally in case-insensitive. Recommended sorting method.
+      (new Set()).sort(params);
+      (new Set()).normalSort(params);
+      (new Set()).lowerSort(params);
+      (new Set()).mixSort(params);
+
+      //Prototype function
+      [{ name: 'Allen' }, { name: 'Linda' }].pluck('name'); //Extracts the specified name attribute value, output: ["Allen", "Linda"]
+      [1, 3, 5].diff([3, 5]); //Get difference, output: [1]
+      [1, 3, 5].intersect([3, 5]); //Get intersect, output: [3,5]
+      [1, { foo: 'bar' }, 5].copy(); //Shallow copy
+      [1, 3, 5].equals([1, 3, 5]); //Determines whether the content is the same
+      [1, 2, 1, 3].unique(); //Distinct array, output: [1, 2, 3]
+      [1, 2, 3].unique([3, 4, 5]); //Distinct array, output:[1, 2, 3, 4, 5]
+      ['a', 'b', 'c'].unique(['d', 'b'], true); //Distinct array with subtract, output: ['a', 'c', 'd', 'b']
+      index = array.indexOf(2); //Get the index of item
+      includes = array.includes(2); //Determines whether the specified item is included
+
+      //Getter properties
+      [1, 2, 3].firstItem; //Return the first item
+      [1, 2, 3].lastItem; //Return the last item
+    wrapBorder: '0'
+  text: codeEditor1
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

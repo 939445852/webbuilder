@@ -1,0 +1,13 @@
+{
+  "title": "",
+  "icon": "",
+  "img": "",
+  "hideInMenu": "true",
+  "items": [
+    "execute.xwl",
+    "query.xwl",
+    "util.xwl",
+    "util.js",
+    "util.mjs"
+  ]
+}

@@ -1,0 +1,226 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _expanded: true
+    _icon: toolbar
+    cls: Wb.Toolbar
+    items:
+    - _expanded: false
+      _icon: item
+      cls: Wb.Item
+      properties:
+        cid: addBtn
+        icon: add
+        keys: Ctrl+E
+        text: '@Str.add'
+      text: addBtn
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      properties:
+        cid: editBtn
+        icon: edit
+        keys: Ctrl+J
+        text: '@Str.edit'
+      text: editBtn
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      properties:
+        cid: delBtn
+        icon: delete
+        keys: Ctrl+D
+        text: '@Str.del'
+      text: delBtn
+    properties:
+      border: bottom
+      cid: tbar
+      isProperty: 'true'
+    text: tbar
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: titleLabel
+      cls: w-title3
+      text: Employee onboarding
+    text: titleLabel
+  - _expanded: true
+    _icon: title
+    cls: Wb.Title
+    properties:
+      cid: basicInfoTitle
+      title: Basic information
+    text: basicInfoTitle
+  - _icon: text
+    cls: Wb.Text
+    properties:
+      cid: name
+      required: 'true'
+      text: Name
+    text: name
+  - _expanded: true
+    _icon: combo
+    cls: Wb.Select
+    properties:
+      cid: gender
+      keyName: gender
+      required: 'true'
+      text: Gender
+    text: gender
+  - _expanded: true
+    _icon: calendar
+    cls: Wb.Date
+    properties:
+      cid: birthdate
+      required: 'true'
+      text: Birthdate
+    text: birthdate
+  - _expanded: true
+    _icon: title
+    cls: Wb.Title
+    properties:
+      cid: eduInfoTitle
+      title: Education
+    text: eduInfoTitle
+  - _expanded: true
+    _icon: text
+    cls: Wb.Text
+    properties:
+      cid: degree
+      text: Degree
+    text: degree
+  - _expanded: true
+    _icon: text
+    cls: Wb.Text
+    properties:
+      cid: university
+      text: University
+    text: university
+  - _expanded: true
+    _icon: text
+    cls: Wb.Text
+    properties:
+      cid: major
+      text: Major
+    text: major
+  - _expanded: true
+    _icon: title
+    cls: Wb.Title
+    properties:
+      cid: deptTitle
+      title: Department
+    text: deptTitle
+  - _expanded: true
+    _icon: text
+    cls: Wb.Text
+    properties:
+      cid: department
+      text: Department
+    text: department
+  - _expanded: true
+    _icon: text
+    cls: Wb.Text
+    properties:
+      cid: duty
+      text: Duty
+    text: duty
+  - _expanded: true
+    _icon: text
+    cls: Wb.Text
+    properties:
+      cid: period
+      text: Probation period
+    text: period
+  - _icon: calendar
+    cls: Wb.Date
+    properties:
+      cid: entryDate
+      text: Entry Date
+    text: entryDate
+  - _expanded: true
+    _icon: text
+    cls: Wb.Text
+    properties:
+      cid: project
+      text: Project
+    text: project
+  - _icon: number-edit
+    cls: Wb.Number
+    properties:
+      cid: salary
+      minValue: '1000'
+      prefix: $
+      text: Salary
+    text: salary
+  - _expanded: true
+    _icon: text
+    cls: Wb.Text
+    properties:
+      cid: address
+      text: Address
+    text: address
+  - _expanded: true
+    _icon: title
+    cls: Wb.Title
+    properties:
+      cid: commentTitle
+      title: Comments
+    text: commentTitle
+  - _icon: textarea
+    cls: Wb.TextArea
+    properties:
+      cid: office
+      height: 5em
+      text: Office
+    text: office
+  - _icon: textarea
+    cls: Wb.TextArea
+    properties:
+      cid: manager
+      height: 5em
+      text: Manager
+    text: manager
+  - _icon: textarea
+    cls: Wb.TextArea
+    properties:
+      cid: ceo
+      height: 5em
+      text: CEO
+    text: ceo
+  - _expanded: true
+    _icon: button
+    cls: Wb.Button
+    events:
+      click: |-
+        if (Wb.verify(app.viewport1)) {
+          Wb.ajax({
+            url: xpath,
+            comps: app.viewport1,
+            success() {
+              Wb.tipDone();
+            }
+          });
+        }
+    properties:
+      cid: saveBtn
+      icon: save
+      text: Save Form
+      type: primary
+    text: saveBtn
+  properties:
+    cid: viewport1
+    layout: grid1
+  text: viewport1
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

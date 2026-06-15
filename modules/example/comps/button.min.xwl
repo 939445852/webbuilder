@@ -1,0 +1,67 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: 'Wb.make(app,{cname:"viewport",layout:"grid1",cid:"viewport1",items:[{cname:"label",cid:"mainLabel",cls:"w-title3",text:"Button"},{cname:"displayField",icon:"info",value:''For
+    a better learning experience, please review the examples in the <a href="ide?openExample=1"   target="_blank">WebBuilder
+    IDE</a>'',cid:"useIdeTipField",htmlValue:true,events:{ready(t,e){if(parentApp?.inIDE)this.hide()}}},{cname:"title",title:"Button
+    list",cid:"listTitle"},{cname:"container",layout:"form",cid:"listCt",frame:true,items:[{cname:"button",cid:"commonBtn",text:"Common
+    Button",events:{click(t,e){Wb.tip(this.cid+" clicked")}}},{cname:"button",icon:"gear",cid:"iconBtn",text:"Icon
+    Button"},{cname:"button",img:"cut",cid:"imgBtn",text:"Image Button"},{cname:"button",icon:"🌻",tip:"Any
+    char as icon",text:"Char Icon",cid:"charIconBtn"},{cname:"button",icon:"bell",tip:"Badge
+    text",text:"58",badgeText:true,cid:"badgeBtn"},{cname:"button",icon:"left4",iconAlign:"left",text:"Left",cid:"leftBtn"},{cname:"button",icon:"right4",iconAlign:"right",text:"Right",cid:"rightBtn"},{cname:"button",icon:"up4",iconAlign:"top",text:"Top",cid:"topBtn"},{cname:"button",icon:"down4",iconAlign:"bottom",text:"Bottom",cid:"bottomBtn"},{cname:"button",icon:"keyboard",tip:"Press
+    Ctrl+Shift+K to fire click event",text:"Ctrl+Shift+K",keys:"Ctrl+Shift+K",cid:"keyBtn",keysTextTip:false,events:{click(t,e){Wb.tip(this.cid+"
+    clicked")}}},{cname:"button",icon:"flower",focusable:false,tabIndex:undefined,text:"No
+    Focus",cid:"noFocusBtn"},{cname:"button",icon:"menu",cid:"menuBtn",text:"menu",menu:{cname:"menu",items:[{icon:"calendar",cid:"item1",text:"item
+    1"},{cid:"item2",text:"item 2"},{cid:"item3",text:"item 3"}]}},{cname:"splitButton",cid:"splitButton1",text:"Split
+    Button",menu:{cname:"menu",items:[{icon:"calendar",cid:"item1",text:"item 1"},{cid:"item2",text:"item
+    2"},{cid:"item3",text:"item 3"}]},events:{click(t,e){Wb.tip(this.cid+" clicked")}}},{cname:"button",cid:"tapBtn",tapClick:true,text:"MouseDown
+    Click",events:{click(t,e){Wb.tip(this.cid+" clicked")}}},{cname:"button",repeatInterval:true,cid:"repeatBtn",text:"Repeat
+    Click",events:{click(t,e){app.repeatCt??=0;Wb.toast(this.cid+" clicked "+app.repeatCt++)}}},{cname:"button",icon:"delete",disabled:true,text:"Disabled",cid:"button1"}]},{cname:"title",title:"Button
+    style",cid:"styleTitle"},{cname:"label",cid:"styleLabel",text:''Set the "type"
+    property to set the button style''},{cname:"container",layout:"form",cid:"styleCt",frame:true,items:[{cname:"button",icon:"address-book",text:"Primary",type:"primary",cid:"primary"},{cname:"button",icon:"delete",tip:"Plain
+    Button",type:"plain",cid:"plain"},{cname:"button",icon:"cut",tip:"Text Tool Button",text:"cut",type:"tool",cid:"tool1"},{cname:"tool",icon:"cut",tip:"Text
+    Tool Button no focus",text:"cut",cid:"noFocusTool1"},{cname:"button",icon:"add1",tip:"Tool
+    Button",type:"tool",cid:"tool2"},{cname:"tool",icon:"add1",tip:"Tool Button no
+    focus",cid:"noFocusTool2"},{cname:"iconButton",icon:"database",tip:"Icon Button
+    no focus",cid:"icon"},{cname:"lightButton",icon:"cube",tip:"Light Button no focus",cid:"light"}]},{cname:"title",title:"Button
+    shape",cid:"shapeTitle"},{cname:"label",cid:"shapeLabel",text:''Set the "shape"
+    property to set the button shape''},{cname:"container",layout:"form",cid:"shapeCt",frame:true,items:[{cname:"button",icon:"gear",tip:"Circle",shape:"circle",cid:"circleBtn"},{cname:"button",icon:"gear",text:"Rect",shape:"rect",cid:"rectBtn"},{cname:"button",icon:"gear",text:"Round",shape:"round",cid:"roundBtn"}]},{cname:"title",title:"Grouping
+    and toggle button",cid:"groupTitle"},{cname:"label",cid:"groupLabel",text:''Set
+    the "groupName" property for grouping and set the "active" property for toggle''},{cname:"container",layout:"form",cid:"groupCt",frame:true,events:{buttontoggle(t,e,n){Wb.tip(t.cid+"
+    is "+e)}},items:[{cname:"button",active:false,groupName:"group1",text:"Button
+    1",cid:"button1"},{cname:"button",active:false,groupName:"group1",text:"Button
+    2",cid:"button2"},{cname:"button",active:false,groupName:"group1",text:"Button
+    3",cid:"button3"},{cname:"divider",cid:"divider1"},{cname:"button",active:false,groupName:"group2",text:"Button
+    4",cid:"button4"},{cname:"button",active:true,groupName:"group2",text:"Button
+    5",cid:"button5"},{cname:"button",active:false,groupName:"group2",text:"Button
+    6",cid:"button6"},{cname:"space",cid:"space1"},{cname:"button",active:false,cid:"button7",text:"Toggle"},{cname:"space",cid:"space2"},{cname:"button",active:true,text:"No
+    Background",activeBgColor:false,cid:"button8"}]},{cname:"title",title:"Button
+    size",cid:"sizeTitle"},{cname:"label",cid:"sizeLabel",text:''Set "fontSize" property
+    to set whole button size, and set "iconSize" property to set icon size only.''},{cname:"container",layout:"form",cid:"sizeCt",frame:true,items:[{cname:"button",icon:"gift",fontSize:".8em",text:"Button
+    1",cid:"button1"},{cname:"button",icon:"gift",fontSize:"1.5em",text:"Button 2",cid:"button2"},{cname:"button",icon:"gift",iconAlign:"top",iconSize:"2em",text:"Big
+    icon only",cid:"button3"},{cname:"button",icon:"gift",iconAlign:"top",iconSize:"2.5em",text:"Big
+    icon only",cid:"button4"}]},{cname:"title",title:"Button layout",cid:"layoutTitle"},{cname:"label",cid:"layoutLabel",text:''Set
+    the "Layout" property to arrange buttons.''},{cname:"container",layout:"row",cid:"layoutCt",frame:true,items:[{cname:"tool",icon:"setup",iconAlign:"top",iconSize:"2.8em",text:"Setup",cid:"setupItem"},{cname:"divider",cid:"divider1"},{cname:"container",layout:"row",cid:"container1",items:[{cname:"tool",icon:"paste",iconAlign:"top",iconSize:"2.8em",text:"Paste",cid:"pasteItem"},{cname:"container",align:"start",layout:"column",cid:"container1",items:[{cname:"tool",icon:"cut",text:"Cut",cid:"cutItem"},{cname:"tool",icon:"copy",text:"Copy",cid:"copyItem"},{cname:"tool",icon:"delete",text:"Delete",cid:"deleteItem"}]}]},{cname:"divider",cid:"divider2"},{cname:"container",align:"center",layout:"column",cid:"container2",items:[{cname:"tool",icon:"add",text:"Add",cid:"addItem"},{cname:"tool",icon:"edit",text:"Edit",cid:"editItem"},{cname:"container",layout:"row",cid:"container1",items:[{cname:"tool",icon:"up4",shape:"circle",cid:"upItem"},{cname:"tool",icon:"right4",shape:"circle",cid:"rightItem"},{cname:"tool",icon:"down4",shape:"circle",cid:"downItem"},{cname:"tool",icon:"left4",shape:"circle",cid:"leftItem"}]}]},{cname:"splitButton",icon:"gear",iconSize:"2.8em",cid:"setItem",menu:{cname:"menu",items:[{cid:"item1",text:"Item
+    1"},{cid:"item2",text:"Item 2"},{cid:"item3",text:"Item 3"}]}}]},{cname:"title",title:"Events",cid:"eventTitle"},{cname:"container",layout:"form",cid:"eventCt",frame:true,items:[{cname:"button",cid:"button1",text:"Click",events:{click(t,e){Wb.tip("click")}}},{cname:"button",active:true,cid:"button2",text:"Toggle",events:{activate(t){Wb.tip("activate")},toggle(t,e){Wb.tip("toggle:
+    "+t)},deactivate(t){Wb.tip("deactivate")}}}]},{cname:"title",title:"Coding",cid:"codingTitle"},{cname:"container",layout:"grid1",cid:"codingCt",frame:true,items:[{cname:"container",layout:"form-compact",cid:"demoCt",items:[{cname:"button",cid:"demoButton",text:"Demo
+    Button"}]},{cname:"line",dashed:true,title:"Demonstrate",dimTitle:true,cid:"line1"},{cname:"container",layout:"form-compact",cid:"actionCt",items:[{cname:"button",cid:"addBtn",text:"Add
+    Button",events:{click(t,e){app.demoCt.add({cname:"button",icon:"gear",text:"New
+    Button"})}}},{cname:"button",cid:"setTextIconBtn",text:"Set Text Icon",events:{click(t,e){let
+    n=app.demoButton;if(n){n.text="Changed Text";n.icon="earth"}}}},{cname:"button",cid:"disableBtn",text:"Set
+    Disabled",events:{click(t,e){app.demoButton?.setter("disabled",true)}}},{cname:"button",cid:"destroyBtn",text:"Destroy",events:{click(t,e){app.demoButton?.destroy()}}},{cname:"button",cid:"addEventBtn",text:"Add
+    Event",events:{click(t,e){app.demoBtnOnClick??=t=>Wb.tip("clicked");app.demoButton?.on("click",app.demoBtnOnClick);Wb.tip("Please
+    click Demo Button")}}},{cname:"button",cid:"removeEventBtn",text:"Remove Event",events:{click(t,e){app.demoButton?.un("click",app.demoBtnOnClick);Wb.tip("Please
+    click Demo Button (Event removed)")}}},{cname:"button",cid:"addListenerBtn",text:"Add
+    Listener",events:{click(t,e){app.demoBtnOnMouseEnter??=t=>Wb.tip("entered");app.demoButton?.mon("mouseenter",app.demoBtnOnMouseEnter);Wb.tip("Please
+    move mouse to Demo Button")}}},{cname:"button",cid:"removeListenerBtn",text:"Remove
+    Listener",events:{click(t,e){app.demoButton?.mun("mouseenter",app.demoBtnOnMouseEnter);Wb.tip("Please
+    move mouse to Demo Button (Listener removed)")}}}]}]}]});app.useIdeTipField.highlight();'
+hideInMenu: 'false'
+icon: button
+img: ''
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

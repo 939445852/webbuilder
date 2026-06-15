@@ -1,0 +1,51 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: 'Wb.make(app,{cname:"codeEditor",readonly:true,wrapBorder:0,value:''//This
+    example demonstrates date. Only extended members are demonstrated, and native
+    members are described at:\n//https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date\n\nlet
+    date1 = new Date(), date2 = date1.addDay(3), date3 = date1.addDay(10);\n\n//Date
+    add/subtract\ndate1.addMilliSec(3); //add milliseconds\ndate1.addMilliSec(-3);
+    //Subtract milliseconds\ndate1.addSecond(3); //add seconds\ndate1.addMinute(3);
+    //add minutes\ndate1.addHour(3); //add hours\ndate1.addDay(3); //add days\ndate1.addMonth(3);
+    //add months\ndate1.addYear(3); //add years\n\n//Prototype functions\ndate1.equals(date2);
+    //Determines whether the current date is equal to the specified date.\ndate1.equalsDate(date2);
+    //Determines whether the current date is equal to the specified date, only compare
+    date part.\ndate1.equalsMonth(date2); //Determines whether the current date is
+    equal to the specified date, only compare year and month.\ndate2.between(date1,
+    date3); //Determines whether the current date is between the specified start and
+    end date.\ndate2.elapse(date1); //Gets the number of milliseconds from the current
+    date to the specified date\n\n//Formatting\n//output like: "2023-03-02 10:24:03.672"\ndate1.format(\''y-MM-dd
+    HH:mm:ss.S\'');\n//to date value in text, region independent.\ndate1.textValue;\n//equals
+    to textValue property\ndate1.toString();\n//to local date text in 4-digit year
+    and 2-digit month days, in some regions output: "2021/03/09"\ndate1.dateText;\n//to
+    local time text in 24-hour 2-digit hours, minutes, and seconds, in some regions
+    output: "15:03:23"\ndate1.timeText;\n//to local time text in 12-hour 2-digit hours,
+    minutes, and seconds, in some regions output: "PM 02:15:29"\ndate1.timeText12;\n//to
+    local date time text in 4-digit year and 2-digit month days, 24-hour 2-digit hours,
+    minutes, and seconds,\n//in some regions output: "2021/03/09 15:01:10"\ndate1.dateTimeText;\n//to
+    local date time text in 4-digit year and 2-digit month days, 14-hour 2-digit hours,
+    minutes, and seconds,\n//in some regions output: "2022/10/06 PM 02:17:06"\ndate1.dateTimeText12;\n//similar
+    to the dateTimeText property. If hours, minutes, seconds are 0, only the date
+    part is displayed.\ndate1.autoText;\n//similar to the dateTimeText property, with
+    3-digit millisecond, in some regions output: "2021/03/09 15:01:10.120"\ndate1.dateTimeMilliText;\n//similar
+    to the dateTimeText12 property, with 3-digit millisecond, in some regions output:
+    "2021/03/09 PM 02:17:06.120"\ndate1.dateTimeMilliText12;\n\n//Getter properties\ndate1.isLeapYear;
+    //Determines whether it is a leap year\ndate1.monthFirstDate; //Return the date
+    of the first day of the month\ndate1.monthLastDate; //Return the date of the last
+    day of the month\ndate1.monthDays; //Return the number of days in the month\ndate1.mondayDate;
+    //Return the date value of the Monday of the week. Monday as the first day of
+    the week.\ndate1.sundayDate; //Return the date value of the Sunday of the week.
+    Sunday as the first day of the week.\ndate1.datePart; //Return the date part,
+    the time part is set to 0.\ndate1.timePart; //Return the time part, the date part
+    is set to "1900-01-01".'',cid:"codeEditor1",full:true});'
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  links: '["wb/js/monaco.js"]'
+tags: ''
+text: module
+title: ''

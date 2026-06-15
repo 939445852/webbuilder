@@ -1,0 +1,1 @@
+class Util{static getData(t,e){let i,r=t.length,a,f,s="",l,u,h={},o=[];a=r<100;for(i=0;i<r;i++){l="p"+i;f=t[i];if(a){if(i>0)s+=",";s+="{?"+l+"?}";Params[l]=f}h[f]=true}if(a)e+=" where sid in ("+s+")";Wb.getRows(e,(t=>{f=t.sid;if(h[f])h[f]=t}));t.forEach((t=>{u=h[t];if(u!==true)o.push(u)}));return o}}export default Util;

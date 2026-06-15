@@ -1,0 +1,37 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+items:
+- _expanded: true
+  _icon: edit
+  cls: Wb.CodeEditor
+  properties:
+    cid: codeEditor1
+    full: 'true'
+    readonly: 'true'
+    value: |-
+      //This example demonstrates map. Only extended members are demonstrated, and native members are described at:
+      //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map
+
+      //Add, delete and modify
+      let map = new Map([['key1', 'Allen'], ['key2', 'Linda']]);
+      map.set('key', 'value'); //Add or modify
+      map.remove('key'); //Delete
+
+      //Traverse
+      map.forEach((v, k, map) => console.log(v));
+      map.each((k, v) => { console.log(k, v) }); //each is similar to foreach, each can be interrupted
+      map.some((k, v) => v === 'Linda'); //Like Array.some
+      map.every((k, v) => v.includes('e')); //Like Array.every
+      map.find(k => k == 'key2'); //Like Array.find
+      map.filter((k, v) => v.includes('e')); //Like Array.filter
+    wrapBorder: '0'
+  text: codeEditor1
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

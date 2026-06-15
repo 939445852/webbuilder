@@ -1,0 +1,306 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: |-
+    Wb.apply(app, {
+      /**
+       * Fires after insert or update fails.
+       */
+      onFailure(resp) {
+        let checkFields = { wb_role_pk: 'role_id_disp', wb_role_role_name: 'role_name' };
+
+        Wb.each(checkFields, (k, v) => {
+          if (Wb.checkExists(resp, k, app.grid1.dictWin.down(v)))
+            return false;
+        });
+      },
+      /** @property {Object} - The edit window configs object. */
+      winConfigs: {
+        width: '45em'
+      },
+      /**
+       * Load the specified box data. @priv
+       * @param {Wb.DualBox} box Dual box component.
+       */
+      loadBoxData(box) {
+        if (!box.visible)
+          return;
+        let data = app.selectedData, srcGrid, destGrid, configs;
+
+        box.disabled = !data || box == app.moduleBox && data?.sid == 'admin';
+        srcGrid = box.sourceGrid;
+        destGrid = box.destGrid;
+        srcGrid.subTitle = destGrid.subTitle = data ? data.role_name : Str.notSelected;
+        if (data) {
+          configs = { params: { role_id: data.sid } };
+          srcGrid.load(configs);
+          destGrid.load(configs);
+        } else {
+          srcGrid.destroyAll();
+          destGrid.destroyAll();
+        }
+      }
+    });
+hideInMenu: 'false'
+icon: role
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _expanded: true
+    _icon: toolbar
+    cls: Wb.Toolbar
+    items:
+    - _expanded: false
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: |-
+          let win = app.grid1.dictAdd({
+            url: xpath + '/add',
+            failure: app.onFailure
+          }, Str.role, null, null, app.winConfigs);
+          win.down('role_id_disp').readonly = false;
+      properties:
+        cid: addBtn
+        icon: add
+        keys: Ctrl+E
+        text: '@Str.add'
+      text: addBtn
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: |-
+          let win = app.grid1.dictEdit({
+            url: xpath + '/edit',
+            failure: app.onFailure
+          }, 'role_name', null, null, app.winConfigs);
+          win.down('role_id_disp').readonly = true;
+      properties:
+        cid: editBtn
+        icon: edit
+        keys: Ctrl+J
+        text: '@Str.edit'
+      text: editBtn
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: app.grid1.removeRecords(xpath + '/del', 'role_name');
+      properties:
+        cid: delBtn
+        icon: delete
+        keys: Ctrl+D
+        text: '@Str.del'
+      text: delBtn
+    - _icon: divider
+      cls: Wb.Divider
+      properties:
+        cid: divider
+      text: divider
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        toggle: |-
+          app.userSplitter.visible = app.userBox.visible = active;
+          app.loadBoxData(app.userBox);
+      properties:
+        active: 'false'
+        activeBgColor: 'false'
+        cid: userBoxBtn
+        icon: user2
+        text: '@Str.user'
+      text: userBoxBtn
+    - _icon: divider
+      cls: Wb.Divider
+      properties:
+        cid: divider1
+      text: divider1
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        toggle: |-
+          app.moduleSplitter.visible = app.moduleBox.visible = active;
+          app.loadBoxData(app.moduleBox);
+      properties:
+        active: 'false'
+        activeBgColor: 'false'
+        cid: moduleBoxBtn
+        icon: module
+        text: '@Str.module'
+      text: moduleBoxBtn
+    - _icon: divider
+      cls: Wb.Divider
+      properties:
+        cid: divider2
+      text: divider2
+    - _icon: text
+      cls: Wb.Text
+      events:
+        change: 'app.grid1.delayLoad({ comps: app.search });'
+      properties:
+        cid: search
+        clearButton: 'true'
+        flex: '1'
+        maxWidth: 20em
+        minWidth: 5em
+        placeholder: '@Str.search'
+      text: search
+    properties:
+      cid: tbar
+      isProperty: 'true'
+    text: tbar
+  - _expanded: true
+    _icon: grid
+    cls: Wb.Grid
+    events:
+      itemdblclick: app.editBtn.fireEvent('click');
+      selectionchange: |-
+        app.selectedData = app.grid1.selectionData;
+        app.loadBoxData(app.userBox);
+        app.loadBoxData(app.moduleBox);
+    properties:
+      cid: grid1
+      columnsSortable: 'true'
+      flex: '1'
+      keyFields: sid,role_name
+      multiSelect: 'true'
+      sorters: role_name
+      stateId: wb.role
+      url: '@xpath + ''/select'''
+    text: grid1
+  - _expanded: true
+    _icon: splitter
+    cls: Wb.Splitter
+    properties:
+      cid: userSplitter
+      visible: 'false'
+    text: userSplitter
+  - _expanded: true
+    _icon: dual-box
+    cls: Wb.DualBox
+    events:
+      beforemove: |-
+        Wb.ajax({
+          url: xpath + '/set-user-roles',
+          data: { items, include, role_id: app.selectedData.sid },
+          success: f => {
+            this.acceptMove();
+          }
+        });
+        return false;
+    items:
+    - _expanded: true
+      _icon: grid
+      cls: Wb.Grid
+      properties:
+        cid: sourceGridConfigs
+        isProperty: 'true'
+        title: '@Str.availableUsers'
+      text: sourceGridConfigs
+    - _expanded: true
+      _icon: grid
+      cls: Wb.Grid
+      properties:
+        cid: destGridConfigs
+        isProperty: 'true'
+        title: '@Str.selectedUsers'
+      text: destGridConfigs
+    - _expanded: true
+      _icon: array
+      cls: Wb.Array
+      items:
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: rowNumCol
+          rowNum: 'true'
+        text: rowNumCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: userNameCol
+          fieldName: user_name
+          width: '-1'
+        text: userNameCol
+      properties:
+        cid: columnsx
+      text: columnsx
+    properties:
+      autoLoad: 'false'
+      cid: userBox
+      destUrl: '@xpath + ''/get-users-by-role&inRole=1'''
+      height: 18em
+      searchBar: 'true'
+      sourceUrl: '@xpath + ''/get-users-by-role&inRole=0'''
+      subtextField: user_name
+      textField: display_name
+      visible: 'false'
+    text: userBox
+  - _expanded: true
+    _icon: splitter
+    cls: Wb.Splitter
+    properties:
+      cid: moduleSplitter
+      visible: 'false'
+    text: moduleSplitter
+  - _expanded: true
+    _icon: dual-box
+    cls: Wb.DualBox
+    events:
+      beforemove: |-
+        Wb.ajax({
+          url: xpath + '/set-module-roles',
+          data: { items, include, role_id: app.selectedData.sid },
+          success: f => {
+            this.acceptMove();
+          }
+        });
+        return false;
+    items:
+    - _expanded: true
+      _icon: grid
+      cls: Wb.Grid
+      properties:
+        cid: sourceGridConfigs
+        isProperty: 'true'
+        showIcon: 'true'
+        title: '@Str.availableModules'
+      text: sourceGridConfigs
+    - _expanded: true
+      _icon: grid
+      cls: Wb.Grid
+      properties:
+        cid: destGridConfigs
+        isProperty: 'true'
+        showIcon: 'true'
+        title: '@Str.selectedModules'
+      text: destGridConfigs
+    properties:
+      autoLoad: 'false'
+      cid: moduleBox
+      destUrl: '@xpath + ''/get-modules-by-role&inRole=1'''
+      height: 18em
+      searchBar: 'true'
+      sourceUrl: '@xpath + ''/get-modules-by-role&inRole=0'''
+      visible: 'false'
+    text: moduleBox
+  properties:
+    autoContextMenu: 'true'
+    cid: viewport1
+    layout: column
+  text: viewport1
+properties:
+  cid: module
+  remark: Add role
+tags: ''
+text: module
+title: '@roleConfig'

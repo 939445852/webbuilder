@@ -1,0 +1,421 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+items:
+- _expanded: true
+  _icon: window
+  cls: Wb.Window
+  items:
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: generalTitle
+      title: General Information
+    text: generalTitle
+  - _expanded: true
+    _icon: text
+    cls: Wb.Text
+    properties:
+      cid: code
+      maxLength: '5'
+      required: 'true'
+      text: Code
+    text: code
+  - _icon: search-file
+    cls: Wb.FileInput
+    properties:
+      accept: .png
+      browseHeight: 8em
+      browseMode: 'true'
+      cid: photo
+      gridRow: span 3
+      text: Photo
+    text: photo
+  - _expanded: true
+    _icon: text
+    cls: Wb.Text
+    properties:
+      cid: full_name
+      required: 'true'
+      text: Full name
+    text: full_name
+  - _icon: combo
+    cls: Wb.Select
+    properties:
+      bindField: user_id
+      cid: user_name
+      forceSelect: 'true'
+      required: 'true'
+      text: Username
+      textField: user_name
+      url: '@xpath + ''/../actions&xaction=selectUsers'''
+      valueField: sid
+    text: user_name
+  - _icon: combo
+    cls: Wb.Select
+    properties:
+      cid: dept_name
+      clearButton: 'true'
+      gridColumn: span 2
+      required: 'true'
+      subtextField: dept_code
+      text: Dept name
+      textField: dept_name
+      treePicker: 'true'
+      url: m?xwl=sys/dialog/dept-selector/select
+      valueMap: '{ sid: ''dept_id'', dept_name: ''dept_name'', dept_code: ''dept_code''
+        }'
+    text: dept_name
+  - _icon: calendar
+    cls: Wb.Date
+    properties:
+      cid: birth_date
+      text: Birth date
+    text: birth_date
+  - _icon: combo
+    cls: Wb.Select
+    properties:
+      cid: gender
+      keyName: gender
+      text: Gender
+    text: gender
+  - _icon: number-edit
+    cls: Wb.Number
+    properties:
+      cid: height
+      decimalCount: '0'
+      maxValue: '999'
+      minValue: '0'
+      text: Height
+    text: height
+  - _expanded: true
+    _icon: text
+    cls: Wb.Text
+    properties:
+      cid: email
+      text: Email
+      valueType: email
+    text: email
+  - _icon: number-edit
+    cls: Wb.Number
+    properties:
+      cid: salary
+      decimalCount: '2'
+      text: Salary
+    text: salary
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: cvTitle
+      title: Personal Resume
+    text: cvTitle
+  - _icon: textarea
+    cls: Wb.TextArea
+    properties:
+      cid: cv
+      gridColumn: span 2
+      height: 8em
+    text: cv
+  properties:
+    autoGrid: 'true'
+    cid: editWin
+    layout: grid2
+    resetDialog: 'true'
+  text: editWin
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _expanded: true
+    _icon: toolbar
+    cls: Wb.Toolbar
+    items:
+    - _expanded: false
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: |-
+          // Preferred way:
+          // app.grid1.insertRecord({
+          //   url: xpath + '/../actions&xaction=add',
+          //   failure(resp) {
+          //     Wb.checkExists(resp, 'wb_staff_code', app.editWin.down('code'));
+          //   }
+          // }, app.editWin);
+
+
+          // The following code demonstrates the detailed implementation
+          let win = app.editWin;
+
+          win.icon = 'add';
+          win.title = Str.add;
+          win.focusControl = null;
+          win.okHandler = (win, values) => {
+            Wb.ajax({
+              url: xpath + '/../actions&xaction=add',
+              params: values,
+              json: true,
+              success(resp) {
+                app.grid1.appendRecord(Wb.apply(values, resp));
+                win.hide();
+              },
+              failure(resp) {
+                Wb.checkExists(resp, 'wb_staff_code', app.editWin.down('code'));
+              }
+            });
+          };
+          win.show();
+          win.scrollEl.scrollTop = win.scrollEl.scrollLeft = 0;
+      properties:
+        cid: addBtn
+        icon: add
+        keys: Ctrl+E
+        text: '@Str.add'
+      text: addBtn
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: |-
+          // Preferred way:
+          // let rec = app.grid1.selection;
+          // app.grid1.editRecord({
+          //   url: xpath + '/../actions&xaction=edit',
+          //   failure(resp) {
+          //     Wb.checkExists(resp, 'wb_staff_code', app.editWin.down('code'));
+          //   }
+          // }, app.editWin);
+          // if (rec)
+          //   app.editWin.down('photo').preview(xpath + '/../actions&xaction=getPhoto&sid=' + data.sid + '&' + Wb.getId());
+
+
+          // The following code demonstrates the detailed implementation
+          let win = app.editWin, rec = app.grid1.selection, data;
+
+          if (!rec) {
+            Wb.tipSelect();
+            return;
+          }
+          data = rec.data;
+          win.icon = 'edit';
+          win.title = Str.edit + ' - ' + data.code;
+          win.focusControl = true;
+          Wb.setValue(win, data);
+          win.down('photo').preview(xpath + '/../actions&xaction=getPhoto&sid=' + data.sid + '&' + Wb.getId());
+          win.okHandler = (win, values) => {
+            Wb.ajax({
+              url: xpath + '/../actions&xaction=edit',
+              params: rec.getDiffer(values),
+              json: true,
+              success(resp) {
+                rec.update(Wb.apply(values, resp));
+                win.hide();
+              },
+              failure(resp) {
+                Wb.checkExists(resp, 'wb_staff_code', app.editWin.down('code'));
+              }
+            });
+          };
+          win.show();
+      properties:
+        cid: editBtn
+        icon: edit
+        keys: Ctrl+J
+        text: '@Str.edit'
+      text: editBtn
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: |-
+          // Preferred way:
+          // app.grid1.removeRecords( xpath + '/../actions&xaction=del', 'code');
+
+
+          // The following code demonstrates the detailed implementation
+          let grid = app.grid1, recs = grid.selections;
+          if (!recs.length) {
+            Wb.tipSelect();
+            return;
+          }
+          Wb.confirm(Wb.getActionHint(recs, 'code'), f => {
+            Wb.ajax({
+              url: xpath + '/../actions&xaction=del',
+              params: { del: grid.originData },
+              success() {
+                grid.delRecords();
+              }
+            });
+          });
+      properties:
+        cid: delBtn
+        icon: delete
+        keys: Ctrl+D
+        text: '@Str.del'
+      text: delBtn
+    - _icon: divider
+      cls: Wb.Divider
+      properties:
+        cid: divider1
+      text: divider1
+    - _icon: text
+      cls: Wb.Text
+      events:
+        change: 'app.grid1.delayLoad({ comps: app.search });'
+      properties:
+        cid: search
+        clearButton: 'true'
+        flex: '1'
+        maxWidth: 20em
+        minWidth: 5em
+        placeholder: '@Str.search'
+      text: search
+    properties:
+      cid: tbar
+      isProperty: 'true'
+    text: tbar
+  - _expanded: true
+    _icon: grid
+    cls: Wb.Grid
+    events:
+      itemdblclick: app.editBtn.fireEvent('click');
+    items:
+    - _expanded: true
+      _icon: array
+      cls: Wb.Array
+      items:
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: rowNumCol
+          rowNum: 'true'
+        text: rowNumCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: codeCol
+          fieldName: code
+          text: Code
+          width: 5em
+        text: codeCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: fullNameCol
+          fieldName: full_name
+          text: Full name
+          width: 13em
+        text: fullNameCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: usernameCol
+          fieldName: user_name
+          text: Username
+        text: usernameCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: deptCol
+          fieldName: dept_name
+          render: Wb.Column.addSubText(el, value, data.dept_code);
+          text: Department
+        text: deptCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: birthDateCol
+          fieldName: birth_date
+          text: Birth date
+        text: birthDateCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: genderCol
+          fieldName: gender
+          keyValue: 'true'
+          text: Gender
+          width: 6em
+        text: genderCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: heightCol
+          fieldName: height
+          text: Height
+          width: 6em
+        text: heightCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: emailCol
+          fieldName: email
+          text: Email
+          width: 18em
+        text: emailCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: salaryCol
+          fieldName: salary
+          text: Salary
+          type: usd
+          width: 9em
+        text: salaryCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: cvCol
+          fieldName: cv
+          sortable: 'false'
+          text: CV
+          width: 15em
+        text: cvCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: photoCol
+          fieldName: photo
+          render: |-
+            if (value)
+              Wb.Column.createDownload(el, column.fieldName, data.full_name + '.png');
+          sortable: 'false'
+          text: Photo
+          width: 15em
+        text: photoCol
+      properties:
+        cid: columns
+      text: columns
+    properties:
+      cid: grid1
+      columnsSortable: 'true'
+      multiSelect: 'true'
+      sorters: code
+      stateId: wb.crud-dialog
+      url: '@xpath + ''/../actions&xaction=select'''
+    text: grid1
+  properties:
+    autoContextMenu: 'true'
+    cid: viewport1
+    layout: fit
+  text: viewport1
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

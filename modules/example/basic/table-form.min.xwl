@@ -1,0 +1,23 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.make(app,{cname:"viewport",layout:"middle",autoScroll:true,cid:"viewport1",items:[{cname:"container",layout:"grid1",cid:"gridCt",frame:true,items:[{cname:"label",titleType:"title2",text:"Approval
+    Form",textAlign:"center",cid:"titleLabel"},{cname:"container",layout:"grid4",padding:false,defaults:{labelSeparator:false},background:"true",gridTplColumns:"auto
+    1fr 1fr 1fr",tableStyle:true,width:"70em",cid:"formCt",frame:true,items:[{cname:"boxLabel",padding:true,text:"General",gridRow:"span
+    6",cid:"generalLabel"},{cname:"text",required:true,cid:"name",text:"Name"},{cname:"select",keyName:"gender",text:"Gender",required:true,cid:"gender"},{cname:"date",required:true,cid:"birthdate",text:"Birthdate"},{cname:"text",cid:"degree",text:"Degree"},{cname:"text",cid:"university",text:"University"},{cname:"text",cid:"major",text:"Major"},{cname:"text",gridColumn:"span
+    2",cid:"department",text:"Department"},{cname:"text",cid:"duty",text:"Duty"},{cname:"text",gridColumn:"span
+    2",cid:"period",text:"Probation period"},{cname:"date",cid:"entryDate",text:"Entry
+    Date"},{cname:"text",gridColumn:"span 2",cid:"project",text:"Project"},{cname:"number",minValue:1e3,text:"Salary",prefix:"$",cid:"salary"},{cname:"text",gridColumn:"span
+    3",cid:"address",text:"Address"},{cname:"boxLabel",padding:true,text:"Comments",gridRow:"span
+    3",cid:"commentsLabel"},{cname:"textArea",gridColumn:"span 3",text:"Office",cid:"office",height:"5em"},{cname:"textArea",gridColumn:"span
+    3",text:"Manager",cid:"manager",height:"5em"},{cname:"textArea",gridColumn:"span
+    3",text:"CEO",cid:"ceo",height:"5em"}]}]}]});
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

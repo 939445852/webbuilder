@@ -1,0 +1,11 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  serverScript: let update=[],user_id;user_id=Wb.getBool("include")?"admin":"default";Wb.getObject("items").forEach((e=>{update.push({$sid:e.sid,user_id:user_id})}));Wb.sync({tableName:"wb_staff",update:update});
+tags: ''
+text: module
+title: ''

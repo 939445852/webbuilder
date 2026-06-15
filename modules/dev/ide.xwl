@@ -1,0 +1,50 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: |-
+    let obj = new Wb.ide.IDE(parentContainer, _$args$_);
+    if (parentContainer)
+      app.app = obj;
+    else
+      globalThis.app = obj;
+hideInMenu: 'false'
+icon: devtool
+img: ''
+properties:
+  cid: module
+  links: '[''wb/js/monaco.js'', ''wb/docs/data.js'', ''wb/docs/groups.js'', ''wb/js/ide.js'']'
+  remark: Integrated development environment
+  serverScript: |-
+    function main() {
+      Wb.load('./ide/ide-ss.js');
+      const Util = Wb.ide.Util, idePath = 'wb/modules/dev/ide/';
+      Wb.set('args', Wb.encode({
+        path: Base.pathText,
+        osCharset: Base.osCharset?.toUpperCase(),
+        charset: System.getProperty('file.encoding')?.toUpperCase(),
+        fileCharset: Wb.getConfig('sys.file.charset')?.toUpperCase(),
+        filenameCharset: Wb.getConfig('sys.locale.filenameCharset')?.toUpperCase(),
+        sysFilenameCharset: SysUtil.filenameCharset?.name()?.toUpperCase(),
+        createWbCss: new Wb.File(true, idePath + 'create-wb-css.xwl').exists,
+        createDocs: new Wb.File(true, idePath + 'create-docs.xwl').exists,
+        createRelease: new Wb.File(true, idePath + 'create-release.xwl').exists,
+        compressScript: new Wb.File(true, idePath + 'compress.xwl').exists,
+        releasePath: Wb.getConfig('sys.app.releasePath'),
+        version: Wb.getConfig('sys.app.version'),
+        heartbeat: Wb.getConfig('sys.session.heartbeatInterval'),
+        httpHeartbeat: Wb.getConfig('sys.session.httpHeartbeatInterval'),
+        aiEnabled: Wb.getConfig('sys.ai.model'),
+        username: Wb.username,
+        openExample: Params.openExample,
+        openModule: Params.openModule,
+        aiGen: Params.aiGen,
+        imgs: Util.getImgs(),
+        icons: Util.getIcons(),
+        globalsList: Util.getGlobalsList()
+      }));
+    }
+    main();
+tags: '{url: ''ide'', newWin: true}'
+text: module
+title: '@ide'

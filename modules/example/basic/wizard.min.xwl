@@ -1,0 +1,14 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.apply(app,{setButtons(){let t=app.cardCt1,e=t.activeIndex;app.prevBtn.disabled=e==0;app.nextBtn.disabled=e>=t.items.length-1}});Wb.make(app,{cname:"viewport",layout:"middle",autoScroll:true,background:"true",cid:"viewport1",items:[{cname:"cardCt",padding:true,buttonAlign:"center",minButtonWidth:"8em",icon:"database",width:"40em",cls:"w-limit-width",title:"Application
+    wizard",cid:"cardCt1",frame:true,height:"20em",buttons:[{cname:"button",icon:"left4",cid:"prevBtn",text:"Previous",events:{click(t,e){app.cardCt1.activeIndex--;app.setButtons()}}},{cname:"button",icon:"right4",iconAlign:"right",text:"Next",cid:"nextBtn",events:{click(t,e){app.cardCt1.activeIndex++;app.setButtons()}}}],events:{ready(t,e){app.setButtons()}},items:[{cname:"container",cid:"container1",text:"Step1"},{cname:"container",cid:"container2",text:"Step2"},{cname:"container",cid:"container3",text:"Step3"},{cname:"container",cid:"container4",text:"Step4"}]}]});
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

@@ -1,0 +1,14 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Add user
+  serverScript: function main(){const e=Wb.UserUtil;const s=e.protectedText;let a=Params.user_id_disp||Wb.getId(),r=new
+    Date,t=0;if(e.reservedName.includes(Params.user_name))Wb.raise(Str.cannotModify.format(Params.user_name));Wb.set({sid:a,create_date:r,login_times:t,password:e.encryptPassword(Params.password)});Wb.sync({tableName:"wb_user",insert:Params});addRoles(a);Wb.send({sid:a,user_id_disp:a,password:s,confirm_password:s,create_date:r,login_times:t})}function
+    addRoles(e){let s=Wb.getObject("roleBox"),a=[];s.forEach((s=>a.push({sid:Wb.getId(),user_id:e,role_id:s})));Wb.sync({tableName:"wb_user_role",insert:a})}main();
+tags: ''
+text: module
+title: ''

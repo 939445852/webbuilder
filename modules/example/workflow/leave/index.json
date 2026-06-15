@@ -1,0 +1,13 @@
+{
+  "title": "",
+  "icon": "",
+  "img": "",
+  "hideInMenu": "true",
+  "items": [
+    "start-form.xwl",
+    "handle-form.xwl",
+    "before-action.xwl",
+    "after-action.xwl",
+    "actions.xwl"
+  ]
+}

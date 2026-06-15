@@ -1,0 +1,14 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.make(app,{cname:"window",icon:"flow1",layout:"grid1",visible:true,title:"Starting
+    with fork",autoScroll:true,cid:"main",items:[{cname:"number",minValue:0,text:"Value",decimalCount:0,maxLength:5,required:true,cid:"startValue"}]});
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+tags: '{container: false}'
+text: module
+title: ''

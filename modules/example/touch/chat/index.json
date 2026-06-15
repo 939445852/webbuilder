@@ -1,0 +1,10 @@
+{
+  "title": "",
+  "icon": "",
+  "img": "",
+  "hideInMenu": "true",
+  "items": [
+    "user-detail.xwl",
+    "actions.xwl"
+  ]
+}

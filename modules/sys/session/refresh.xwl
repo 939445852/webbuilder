@@ -1,0 +1,13 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+items: [
+  ]
+properties:
+  cid: module
+  remark: Refresh current http session
+tags: ''
+text: module
+title: ''

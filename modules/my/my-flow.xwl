@@ -1,0 +1,779 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: |-
+    Wb.apply(app, {
+      /**
+       * Open file dialog and select a workflow file to start a new workflow instance. @priv
+       */
+      start() {
+        Wb.promptFile((a, win, file) => {
+          Wb.ajax({
+            url: xpath + '/get-start-form',
+            params: { file },
+            json: true,
+            success(resp) {
+              let url = resp.form;
+              if (!url) {
+                Wb.error(Str.noStartForm);
+                return;
+              }
+              win.close();
+              if (url.endsWith('.xwl'))
+                url = Wb.getModuleUrl(url);
+              Wb.run({
+                url,
+                success(scope) {
+                  let main = scope.main;
+                  scope.flowTplFile = file;
+                  if (main) {
+                    main.hide(); // for fire show event
+                    main.closeAction = 'destroy';
+                    main.modal = true;
+                    main.onEsc = main.onCancel;
+                    main.onEnter = f => app.doAction('start', scope, {});
+                    main.buttonsBar.add([
+                      { text: Str.ok, type: 'primary', icon: 'ok', cid: 'ok', handler: main.onEnter },
+                      { text: Str.cancel, icon: 'delete', handler() { main.close() } }
+                    ]);
+                    if (scope.autoShow ?? true) {
+                      main.show();
+                      main.center();
+                    }
+                  }
+                  scope.init?.(null, 'start', {});
+                }
+              });
+            }
+          });
+        }, '|wb/system/resource/flow', '.flw', Str.selectFile, false, 'm?xwl=sys/file/get-resource');
+      },
+      /**
+       * Check whether the given workflow can be handled.
+       * @param {Object} data Workflow instance data.
+       * @return {Boolean} Returns true means can be handled, otherwise not.
+       */
+      canHandle(data) {
+        return data.node_name == data.user_node_name && data.user_type <= 1 && data.user_status < 2 && data.status == 1;
+      },
+      /**
+       * View the form of current selected workflow. @priv
+       * @param {Boolean} handle Whether to handle the workflow.
+       */
+      view(handle) {
+        let rec = app.grid1.selection, data = rec?.data, recs = app.grid1.selections, flowId = data?.sid;
+
+        if (!flowId) {
+          Wb.tipSelect();
+          return;
+        }
+        if (handle && !app.canHandle(data)) {
+          Wb.tip(Str.notNeedHandle);
+          return;
+        }
+        Wb.ajax({
+          url: xpath + '/view',
+          params: { flowId, handle, allFlowId: app.grid1.selectionsData.pluck('sid') },
+          json: true,
+          success(resp) {
+            let url = resp.form;
+            recs.forEach(rec => rec.data.user_status == 0 && rec.set('user_status', 1));
+            if (url.endsWith('.xwl'))
+              url = Wb.getModuleUrl(url);
+            Wb.run({
+              url,
+              params: { flowId },
+              success(scope) {
+                let main = scope.main;
+                scope.flowId = flowId;
+                scope.restarting = resp.restarting;
+                if (main) {
+                  main.hide();
+                  main.closeAction = 'destroy';
+                  main.modal = true;
+                  main.onEsc = main.onCancel;
+                  if (handle) {
+                    let btns = [], isStart = data.user_type == 0;
+                    scope.doPass = (params, callback) => app.doAction('pass', scope, rec, params, callback);
+                    scope.doReject = (params, callback) => app.doAction('reject', scope, rec, params, callback);
+                    scope.doBack = (node, params, callback) => app.doAction('back', scope, rec,
+                      Wb.apply({ _backNode: node }, params), callback);
+                    scope.doTransfer = (user, params, callback) => app.doAction('transfer', scope, rec,
+                      Wb.apply({ _newUser: user }, params), callback);
+                    scope.doSignBefore = (user, params, callback) => app.doAction('signBefore', scope, rec,
+                      Wb.apply({ _newUser: user }, params), callback);
+                    scope.doSignAfter = (user, params, callback) => app.doAction('signAfter', scope, rec,
+                      Wb.apply({ _newUser: user }, params), callback);
+                    if (scope.hideActionButtons) {
+                      main.onEnter = scope.onAction;
+                      btns.push({ text: Str.ok, icon: 'ok', type: 'primary', handler: main.onEnter });
+                    } else {
+                      main.onEnter = f => scope.doPass();
+                      btns.push({ text: isStart ? Str.ok : Str.pass, icon: 'ok', type: 'primary', handler: main.onEnter });
+                      if (!isStart && resp.reject == 'true') {
+                        btns.push({
+                          text: Str.reject, icon: 'delete4', handler() {
+                            if (app.onBeforeAction('reject', scope, rec) === false)
+                              return;
+                            Wb.confirm(Str.doConfirm.format(Str.reject), f => scope.doReject());
+                          }
+                        });
+                      }
+                      if (!isStart && resp.back != 'false')
+                        btns.push({
+                          text: Str.back1, icon: 'right4', handler() {
+                            if (app.onBeforeAction('back', scope, rec) === false)
+                              return;
+                            Wb.ajax({
+                              url: xpath + '/get-his-nodes',
+                              params: { flowId },
+                              json: true,
+                              success(resp) {
+                                let select = app.backNodeSelect, win = app.backWin;
+                                select.data = resp;
+                                select.valueIndex = 0;
+                                win.okHandler = f => {
+                                  app.doAction('back', scope, rec, { _backNode: select.value }, f => win.close());
+                                };
+                                win.show();
+                              }
+                            });
+                          }
+                        });
+                      if (!isStart && resp.transfer != 'false') {
+                        btns.push({
+                          text: Str.transfer, icon: 'undo', handler() {
+                            app.doUserAction('transfer', scope, Str.transfer, rec);
+                          }
+                        });
+                      }
+                      if (!isStart && resp.signBefore != 'false') {
+                        btns.push({
+                          text: Str.signBefore, icon: 'column-before', handler() {
+                            app.doUserAction('signBefore', scope, Str.signBefore, rec);
+                          }
+                        });
+                      }
+                      if (!isStart && resp.signAfter != 'false') {
+                        btns.push({
+                          text: Str.signAfter, icon: 'column-after', handler() {
+                            app.doUserAction('signAfter', scope, Str.signAfter, rec);
+                          }
+                        });
+                      }
+                    }
+                    btns.push({ text: Str.cancel, icon: 'delete', handler() { main.close() } });
+                    main.buttonsBar.add(btns);
+
+                  } else {
+                    main.buttonsBar.add({ text: Str.close, type: 'primary', handler() { main.close() } });
+                  }
+                  if (scope.autoShow ?? true) {
+                    main.show();
+                    main.center();
+                  }
+                }
+                scope.init?.(flowId, handle ? 'handle' : 'view', rec);
+              }
+            });
+          }
+        });
+      },
+      /**
+       * Perform action related to user. @priv
+       * @param {String} action Action name.
+       * @param {Object} scope App scope.
+       * @param {String} title User dialog title.
+       * @param {Wb.GridItem} rec Current record.
+       */
+      doUserAction(action, scope, title, rec) {
+        if (app.onBeforeAction(action, scope, rec) !== false) {
+          Wb.run({
+            url: 'user-selector',
+            single: true,
+            success(userSel) {
+              userSel.getValue((data, win) => {
+                app.doAction(action, scope, rec, { _newUser: data.sid }, f => win.close());
+              }, null, title, true);
+            }
+          });
+        }
+      },
+      /**
+       * Fire before action execute. @priv
+       * @param {String} actionName The action name.
+       * @param {Object} scope Dialog window scope.
+       * @param {Wb.GridItem} record Current record.
+       * @return {Object/Boolean} Params, Boolean means whether to cancel execute.
+       */
+      onBeforeAction(actionName, scope, record) {
+        if (!Wb.verify(scope.main))
+          return false;
+        let params = scope.beforeAction?.(actionName, record);
+        if (params === false)
+          return false;
+        else
+          return params;
+      },
+      /**
+       * Do the specified action. @priv
+       * @param {String} actionName The action name.
+       * @param {Object} scope Dialog window scope.
+       * @param {Wb.ViewItem} rec Current selected record.
+       * @param {Object} [extraParams] Extra params to submit.
+       * @param {Function} [callback] Callback function after executed.
+       */
+      doAction(actionName, scope, rec, extraParams, callback) {
+        let params, win = scope.main, isStart = actionName == 'start';
+
+        params = app.onBeforeAction(actionName, scope, rec);
+        if (params === false)
+          return;
+        params = Wb.copy(params);
+        if (isStart)
+          params.flowTplFile = scope.flowTplFile;
+        else
+          params.flowId = scope.flowId;
+        if (extraParams)
+          Wb.apply(params, extraParams);
+        Wb.ajax({
+          url: xpath + '/' + actionName,
+          comps: win,
+          params,
+          json: true,
+          success(resp) {
+            let row = resp.result;
+            win.close();
+            if (isStart) {
+              rec = app.grid1.insertData(0, row);
+              rec.select();
+            } else {
+              if (row)
+                rec.update(row);
+              else
+                rec.destroy();
+            }
+            scope.afterAction?.(actionName, resp, rec);
+            callback?.();
+          }
+        });
+      },
+      /**
+       * Get processed node ids list from names. @priv
+       * @param {Array} cells Workflow graph cells.
+       * @param {Array} nodeNames Node names.
+       * @return {Array} Node id list.
+       */
+      getProcessedNodes(cells, nodeNames) {
+        let result = [];
+
+        cells.forEach(cell => {
+          if (nodeNames.includes(cell.data.name))
+            result.push(cell.id);
+        });
+        return result;
+      },
+      /**
+       * Get user status icon. @priv
+       * @param {Number} status User status.
+       * @param {Number} type User type.
+       * @return {String} Status icon.
+       */
+      getStatusIcon(status, type) {
+        let icon;
+        //0: unread, 1: read, 2: done, 3: reject, 4: back, 5: transfer, 6: sign before, 7: sign after, 8: backed
+        switch (status) {
+          case 0:
+            icon = type == 1 ? 'edit' : 'check1';
+            break;
+          case 1:
+          case 8:
+            icon = type == 1 ? 'check8' : 'check9';
+            break;
+          case 2:
+            icon = 'check9';
+            break;
+          case 3:
+            icon = 'delete4';
+            break;
+          case 4:
+            icon = 'right4';
+            break;
+          case 5:
+            icon = 'undo';
+            break;
+          case 6:
+            icon = 'column-before';
+            break;
+          case 7:
+            icon = 'column-after';
+            break;
+        }
+        return icon;
+      },
+      /**
+       * View the progress of current selected workflow. @priv
+       */
+      viewProgress() {
+        let data = app.grid1.selectionData, win = app.progressWin;
+
+        if (!data) {
+          Wb.tipSelect();
+          return;
+        }
+        Wb.ajax({
+          url: xpath + '/view-progress',
+          params: { flowId: data.sid },
+          json: true,
+          success(resp) {
+            let nodes = resp.nodes, activeNode = resp.activeNode, source, target, startId, cells, users = resp.users;
+
+            win.subTitle = data.title;
+            app.activeNode = activeNode;
+            app.userGrid.localData = users;
+            app.userGrid.load();
+            app.flowDesigner.flowData = resp.flow;
+            cells = app.flowDesigner.graph.getCells();
+            nodes = app.getProcessedNodes(cells, users.items.pluck('node_name'));
+            startId = cells.find(cell => cell.data.nodeType == 'start').id;
+            cells.forEach(cell => {
+              if (cell.isEdge()) {
+                source = cell.source.cell;
+                target = cell.target.cell;
+                if ((nodes.includes(source) || source == startId) && nodes.includes(target)) {
+                  cell.setAttrs({ line: { stroke: '#68e' } });
+                }
+              } else {
+                if (cell.data.name == activeNode) {
+                  cell.setAttrs({
+                    body: { fill: '#ff5' },
+                    label: { fill: '#000' }
+                  })
+                } else if (nodes.includes(cell.id)) {
+                  cell.setAttrs({
+                    body: { fill: '#68e' },
+                    label: { fill: '#fff' }
+                  })
+                }
+              }
+            });
+            win.show();
+          }
+        });
+      },
+      /**
+       * Load grid with search controls.
+       */
+      load() {
+        app.grid1.delayLoad({ comps: app.viewport1.tbar });
+      }
+    });
+hideInMenu: 'false'
+icon: flow
+img: ''
+items:
+- _expanded: false
+  _icon: window
+  cls: Wb.Window
+  events:
+    hide: |-
+      // free resource
+      app.flowDesigner.graph.clearCells();
+      app.userGrid.destroyAll();
+  items:
+  - _expanded: true
+    _icon: array
+    cls: Wb.Array
+    items:
+    - _expanded: true
+      _icon: button
+      cls: Wb.Button
+      events:
+        click: app.progressWin.close();
+      properties:
+        cid: closeBtn
+        text: '@Str.close'
+        type: primary
+      text: closeBtn
+    properties:
+      cid: buttons
+    text: buttons
+  - _icon: file-json
+    cls: Wb.Script
+    properties:
+      cid: graphScript
+      script: '({ cname: ''flowDesigner'', viewMode: true, cid: ''flowDesigner'',
+        flex: 1 })'
+    text: graphScript
+  - _icon: splitter
+    cls: Wb.Splitter
+    properties:
+      cid: splitter1
+    text: splitter1
+  - _expanded: true
+    _icon: grid
+    cls: Wb.Grid
+    items:
+    - _expanded: true
+      _icon: array
+      cls: Wb.Array
+      items:
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: rowCol
+          rowNum: 'true'
+        text: rowCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: acceptTimeCol
+          fieldName: accept_time
+          render: |-
+            function main() {
+              let icon, status = data.status, userType = data.user_type;
+              icon = app.getStatusIcon(status, userType);
+              el.insertCellIcon(icon, value.dateTimeText);
+              el.parentNode.setCls(data.node_name == app.activeNode && userType <= 1 && status < 2, 'w-bold');
+              el.parentNode.setCls(status == 8, 'w-line-through');
+            }
+            main();
+          text: '@Str.startTime'
+          width: 15em
+        text: acceptTimeCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: usernameCol
+          fieldName: display_name
+          text: '@Str.username'
+          width: 15em
+        text: usernameCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: nodeCol
+          fieldName: node_text
+          text: '@Str.node'
+          width: 15em
+        text: nodeCol
+      - _expanded: false
+        _icon: column
+        cls: Wb.Column
+        properties:
+          align: left
+          cid: statusCol
+          fieldName: status
+          minWidth: 8em
+          render: |-
+            function getText() {
+              const statusText = [Str.unread, Str.read, Str.pass, Str.reject, Str.back1, Str.transfer, Str.signBefore, Str.signAfter, Str.backed];
+              let text, status = data.status, userType = data.user_type, pendHandle = userType == 1 && status < 2,
+                pendRead = userType == 2 && status == 0;
+
+              if (data.node_name == app.activeNode && (pendHandle || pendRead)) {
+                text = pendHandle ? Str.pendHandle : Str.pendRead;
+              } else {
+                text = userType == 0 ? Str.initiator : statusText[value];
+              }
+              return text;
+            }
+            return getText();
+          text: '@Str.status'
+          width: '-1'
+        text: statusCol
+      - _expanded: false
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: processTimeCol
+          fieldName: process_time
+          text: '@Str.updateTime'
+          width: 13em
+        text: processTimeCol
+      properties:
+        cid: columns
+      text: columns
+    properties:
+      cid: userGrid
+      columnsSortable: 'true'
+      height: 15em
+      pagingBar: 'false'
+      sorters: accept_time
+    text: userGrid
+  properties:
+    cid: progressWin
+    closeOnEsc: 'true'
+    height: 45em
+    icon: flow1
+    layout: column
+    modal: 'true'
+    title: '@Str.progress'
+    width: 80em
+  text: progressWin
+- _expanded: false
+  _icon: window
+  cls: Wb.Window
+  items:
+  - _icon: combo
+    cls: Wb.Select
+    properties:
+      cid: backNodeSelect
+      forceSelect: 'true'
+      required: 'true'
+      text: '@Str.node'
+    text: backNodeSelect
+  properties:
+    cid: backWin
+    dialog: 'true'
+    icon: undo
+    layout: grid1
+    title: '@Str.back1'
+    width: 45em
+  text: backWin
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _expanded: true
+    _icon: toolbar
+    cls: Wb.Toolbar
+    items:
+    - _expanded: false
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: app.start();
+      properties:
+        cid: newItem
+        icon: add
+        keys: Ctrl+E
+        text: '@Str.new'
+      text: newItem
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: app.view();
+      properties:
+        cid: viewItem
+        icon: search
+        keys: Ctrl+Q
+        text: '@Str.view'
+      text: viewItem
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: app.view(true);
+      properties:
+        cid: handleItem
+        icon: edit
+        keys: Ctrl+J
+        text: '@Str.handle'
+      text: handleItem
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: app.viewProgress();
+      properties:
+        cid: progressItem
+        icon: flow1
+        keys: Ctrl+U
+        text: '@Str.progress'
+      text: progressItem
+    - _icon: divider
+      cls: Wb.Divider
+      properties:
+        cid: divider1
+      text: divider1
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: |-
+          let sels = app.grid1.selections;
+          if (!sels.length) {
+            Wb.tipSelect();
+            return;
+          }
+          if (sels.some(item => !item.data.initiate || item.data.status != 1)) {
+            Wb.tip(Str.terminateInitOnly);
+            return;
+          }
+          Wb.confirm(Wb.getActionHint(sels, 'title', Str.terminate), f => {
+            Wb.ajax({
+              url: xpath + '/terminate',
+              params: { ids: sels.map(item => item.data.sid) },
+              success() {
+                sels.forEach(item => item.data.status == 1 && item.set('status', 0));
+              }
+            });
+          });
+      properties:
+        cid: terminateItem
+        icon: delete
+        keys: Ctrl+D
+        text: '@Str.terminate'
+      text: terminateItem
+    - _icon: divider
+      cls: Wb.Divider
+      properties:
+        cid: divider2
+      text: divider2
+    - _icon: text
+      cls: Wb.Text
+      events:
+        change: app.load();
+      properties:
+        cid: search
+        clearButton: 'true'
+        flex: '1'
+        maxWidth: 20em
+        minWidth: 5em
+        placeholder: '@Str.search'
+      text: search
+    - _icon: divider
+      cls: Wb.Divider
+      properties:
+        cid: divider3
+      text: divider3
+    - _icon: combo
+      cls: Wb.Select
+      events:
+        select: app.load();
+      properties:
+        cid: typeSelect
+        data: |-
+          [
+            { text: Str.all, value: 'all', _icon: 'flow1' },
+            { text: Str.myInitiated, value: 'initiated', _icon: 'paper-plane' },
+            { text: Str.pendHandle, value: 'pendHandle', _icon: 'check1' },
+            { text: Str.handled, value: 'handled', _icon: 'check9' },
+            { text: Str.pass, value: 'pass', _icon: 'ok' },
+            { text: Str.reject, value: 'reject', _icon: 'delete4' },
+            { text: Str.back, value: 'back', _icon: 'right4' },
+            { text: Str.transfer, value: 'transfer', _icon: 'undo' },
+            { text: Str.signBefore, value: 'signBefore', _icon: 'column-before' },
+            { text: Str.signAfter, value: 'signAfter', _icon: 'column-after' },
+            { text: Str.backed, value: 'backed', _icon: 'right4' }
+          ]
+        editable: 'false'
+        valueIndex: '0'
+      text: typeSelect
+    properties:
+      cid: tbar
+      isProperty: 'true'
+    text: tbar
+  - _expanded: true
+    _icon: grid
+    cls: Wb.Grid
+    events:
+      beforeload: params.type = app.typeSelect?.value;
+      itemdblclick: app.view(app.canHandle(item.data));
+    items:
+    - _expanded: true
+      _icon: array
+      cls: Wb.Array
+      items:
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: rowCol
+          rowNum: 'true'
+        text: rowCol
+      - _icon: column
+        cls: Wb.Column
+        properties:
+          cid: startTimeCol
+          fieldName: start_time
+          render: |-
+            function main() {
+              let status = data.status, userStatus = data.user_status, userType = data.user_type, icon;
+
+              switch (status) {
+                case 0:
+                  icon = 'delete';
+                  break;
+                case 1:
+                  icon = app.getStatusIcon(userStatus, userType);
+                  break;
+                case 2:
+                  icon = 'ok';
+                  break;
+                case 3:
+                  icon = 'delete4';
+                  break;
+              }
+              el.insertCellIcon(icon, value.dateTimeText);
+              el.parentNode.setCls(data.node_name == data.user_node_name && status == 1 && (userType <= 1 && userStatus < 2 ||
+                userType == 2 && userStatus == 0), 'w-bold');
+            }
+            main();
+          text: '@Str.startTime'
+          width: 14em
+        text: startTimeCol
+      - _icon: column
+        cls: Wb.Column
+        properties:
+          cid: initiatorCol
+          fieldName: display_name
+          text: '@Str.initiator'
+          width: 10em
+        text: initiatorCol
+      - _icon: column
+        cls: Wb.Column
+        properties:
+          cid: titleCol
+          fieldName: title
+          text: '@Str.title'
+          width: '-1'
+        text: titleCol
+      - _icon: column
+        cls: Wb.Column
+        properties:
+          cid: nodeCol
+          fieldName: node_text
+          text: '@Str.currentNode'
+          width: 13em
+        text: nodeCol
+      - _icon: column
+        cls: Wb.Column
+        properties:
+          cid: typeCol
+          fieldName: tpl_file
+          text: '@Str.type'
+          width: 18em
+        text: typeCol
+      properties:
+        cid: columns
+      text: columns
+    properties:
+      cid: grid1
+      columnsSortable: 'true'
+      multiSelect: 'true'
+      sorters: '{name:''start_time'', desc:true}'
+      url: '@xpath + ''/select'''
+    text: grid1
+  properties:
+    cid: viewport1
+    layout: fit
+  text: viewport1
+properties:
+  cid: module
+  links: |-
+    [
+      "wb/libs/x6.js",
+      "wb/js/flow-designer.js"
+    ]
+  remark: My initiated or participated workflows
+tags: ''
+text: module
+title: '@myWorkflow'

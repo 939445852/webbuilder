@@ -1,0 +1,14 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.apply(app,{onLoad(){Wb.tip("Module is loaded")},onDestroy(){Wb.tip("Module
+    is destroyed")}});
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

@@ -1,0 +1,314 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: options
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: mainLabel
+      cls: w-title3
+      text: Option
+    text: mainLabel
+  - _expanded: true
+    _icon: title
+    cls: Wb.Title
+    properties:
+      cid: commonTitle
+      title: Common Options
+    text: commonTitle
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _expanded: true
+      _icon: options
+      cls: Wb.Option
+      events:
+        click: |-
+          app.dialog1 ??= new Wb.Dialog({
+            title: 'New dialog', border: 0, defaults: { cname: 'option' }, items: [
+              { cname: 'label', text: 'Group1', indent: true, titleType: 'title5' },
+              { text: 'Option1', handler() { Wb.tip('Option1 clicked') } },
+              { text: 'Option2', handler() { Wb.tip('Option2 clicked') } },
+              '-',
+              { cname: 'label', text: 'Group2', indent: true, titleType: 'title5' },
+              { text: 'Option3', editor: { cname: 'toggle' } },
+              { text: 'Option4', editor: { cname: 'toggle' } },
+            ]
+          });
+          app.dialog1.show();
+      properties:
+        border: bottom
+        cid: commonOption
+        text: Common options, click show dialog
+        valueText: Value text
+      text: commonOption
+    - _expanded: true
+      _icon: options
+      cls: Wb.Option
+      properties:
+        border: bottom
+        cid: checkedItemsOption
+        description: The default browser to be used
+        options: |-
+          [
+            { text: 'Chrome', value: 1, _icon: 'chrome' },
+            { text: 'Edge', value: 2, _icon: 'edge', _selected: true },
+            { text: 'Firefox', value: 3, _icon: 'firefox' },
+            { text: 'Safari', value: 4, _icon: 'safari' }
+          ]
+        optionsTitle: Select Browser
+        text: Web browser
+        value: '2'
+      text: checkedItemsOption
+    - _expanded: true
+      _icon: options
+      cls: Wb.Option
+      items:
+      - _expanded: true
+        _icon: switcher-on
+        cls: Wb.Toggle
+        properties:
+          cid: editor
+          isProperty: 'true'
+        text: editor
+      properties:
+        border: bottom
+        cid: toggleOption
+        text: Option with toggle
+      text: toggleOption
+    - _expanded: true
+      _icon: options
+      cls: Wb.Option
+      items:
+      - _expanded: true
+        _icon: switcher-on
+        cls: Wb.Toggle
+        properties:
+          cid: editor
+          isProperty: 'true'
+        text: editor
+      properties:
+        allowClick: 'false'
+        border: bottom
+        cid: toggleClickOnToggleOption
+        text: Option with toggle, only allow click on the toggle component
+      text: toggleClickOnToggleOption
+    - _expanded: true
+      _icon: options
+      cls: Wb.Option
+      events:
+        click: Wb.tip('clicked');
+      properties:
+        border: bottom
+        cid: iconOption
+        flagIcon: menu
+        icon: calendar
+        text: Option with icon
+      text: iconOption
+    - _expanded: true
+      _icon: options
+      cls: Wb.Option
+      events:
+        click: Wb.tip('clicked');
+        ready: |-
+          let imgEl = this.el.insertElBefore('w-unselect', 'img', this.flagEl);
+          imgEl.src = 'wb/images/order.png';
+          imgEl.draggable = false;
+      properties:
+        border: bottom
+        cid: customOption
+        flagIcon: share1
+        icon: message
+        text: Custom option
+        valueText: Some value
+      text: customOption
+    - _expanded: true
+      _icon: options
+      cls: Wb.Option
+      properties:
+        cid: disabledOption
+        disabled: 'true'
+        text: Disabled option
+      text: disabledOption
+    properties:
+      cid: optionCt
+      frame: 'true'
+    text: optionCt
+  - _expanded: true
+    _icon: title
+    cls: Wb.Title
+    properties:
+      cid: editorTitle
+      title: Editor Options
+    text: editorTitle
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _icon: line
+      cls: Wb.Line
+      properties:
+        cid: line1
+        title: Option style
+      text: line1
+    - _expanded: true
+      _icon: container
+      cls: Wb.Container
+      items:
+      - _expanded: true
+        _icon: options
+        cls: Wb.Option
+        items:
+        - _expanded: true
+          _icon: text
+          cls: Wb.Text
+          properties:
+            cid: editor
+            flat: 'true'
+            flex: '1'
+            isProperty: 'true'
+            placeholder: Your name
+          text: editor
+        properties:
+          border: bottom
+          cid: nameOption
+          text: Name
+        text: nameOption
+      - _expanded: true
+        _icon: options
+        cls: Wb.Option
+        items:
+        - _expanded: true
+          _icon: number-edit
+          cls: Wb.Number
+          properties:
+            cid: editor
+            flat: 'true'
+            flex: '1'
+            isProperty: 'true'
+            placeholder: Your height
+          text: editor
+        properties:
+          border: bottom
+          cid: heightOption
+          text: Height (cm)
+        text: heightOption
+      - _expanded: true
+        _icon: options
+        cls: Wb.Option
+        properties:
+          border: bottom
+          cid: genderOption
+          options: '[''Male'', ''Female'']'
+          optionsTitle: Select Gender
+          text: Gender
+        text: genderOption
+      - _expanded: true
+        _icon: options
+        cls: Wb.Option
+        items:
+        - _expanded: true
+          _icon: switcher-on
+          cls: Wb.Toggle
+          properties:
+            cid: editor
+            isProperty: 'true'
+          text: editor
+        properties:
+          cid: statusOption
+          text: Status
+        text: statusOption
+      properties:
+        background: 'false'
+        cid: optionCt1
+        defaults: '({ labelWidth: ''8em'' })'
+        roundBorder: 'true'
+      text: optionCt1
+    - _icon: line
+      cls: Wb.Line
+      properties:
+        cid: line2
+        title: Form style
+      text: line2
+    - _expanded: true
+      _icon: container
+      cls: Wb.Container
+      items:
+      - _icon: text
+        cls: Wb.Text
+        properties:
+          cid: defaults
+          isProperty: 'true'
+          labelSeparator: 'false'
+          labelWidth: 8em
+        text: defaults
+      - _expanded: true
+        _icon: text
+        cls: Wb.Text
+        properties:
+          cid: name
+          placeholder: Your name
+          text: Name
+        text: name
+      - _expanded: true
+        _icon: number-edit
+        cls: Wb.Number
+        properties:
+          cid: height
+          placeholder: Your height
+          text: Height (cm)
+        text: height
+      - _icon: combo
+        cls: Wb.Select
+        properties:
+          cid: gender
+          data: (['Male', 'Female'])
+          placeholder: Male / Female
+          text: Gender
+        text: gender
+      - _expanded: true
+        _icon: options
+        cls: Wb.Option
+        properties:
+          border: bottom
+          cid: genderOption
+          options: '[''Male'', ''Female'']'
+          optionsTitle: Select Gender
+          text: Gender Option
+        text: genderOption
+      - _expanded: true
+        _icon: switcher-on
+        cls: Wb.Toggle
+        properties:
+          cid: status
+          text: Status
+        text: status
+      properties:
+        background: 'false'
+        cid: optionCt2
+        roundBorder: 'true'
+        tableStyle: simple
+      text: optionCt2
+    properties:
+      background: 'true'
+      cid: editorCt
+      layout: grid1
+    text: editorCt
+  properties:
+    autoScroll: 'true'
+    cid: viewport1
+    layout: grid1
+  text: viewport1
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

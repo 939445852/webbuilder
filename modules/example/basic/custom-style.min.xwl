@@ -1,0 +1,21 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.make(app,{cname:"viewport",layout:"column",padding:"2em",cls:"d-tab1",cid:"viewport1",gap:"2em",items:[{cname:"tab",activeIndex:2,cls:"d-tab1",cid:"tab1",height:"10em",items:[{cname:"card",title:"Card
+    1",cid:"card1"},{cname:"card",title:"Card 2",cid:"card2"},{cname:"card",title:"Card
+    3",cid:"card3"},{cname:"card",title:"Card 4",cid:"card4"},{cname:"card",title:"Card
+    5",cid:"card5"}]},{cname:"viewer",flex:1,html:'This example demonstrates how to
+    use CSS to customize the style of a component.\n<ol>\n  <li>Set "links" property
+    of the "module" to ["wb/css/demo.css"].</li>\n  <li>Set "cls" property of the
+    "tab1" to "w-tab1".</li>\n  <li>Define the CSS style for "w-tab1" in the file
+    "wb/css/demo.css".</li>\n</ol>',cid:"viewer1"}]});
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  links: '["wb/css/demo.css"]'
+tags: ''
+text: module
+title: ''

@@ -1,0 +1,22 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Select roles
+  serverScript: |-
+    function main() {
+      let searchClause = '';
+
+      if (Params.query) {
+        Wb.setLike('query');
+        searchClause = 'and role_name like {?query?}'
+      }
+      Wb.sendRows(`select sid,role_name from wb_role where status=1 ${searchClause} order by role_name`);
+    }
+    main();
+tags: ''
+text: module
+title: ''

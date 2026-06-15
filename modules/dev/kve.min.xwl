@@ -1,0 +1,21 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.define(app,{onFailure(e){Wb.checkExists(e,"wb_key_type_key_name",app.typeGrid.dictWin.down("key_name"))},get$keyName(){return
+    app.typeGrid.selection?.data.key_name},get$keyId(){return app.typeGrid.selection?.data.sid},get$keyType(){return
+    app.typeGrid.selection?.data.key_type},onChange(){app.saveBtn.disabled=false},save(e){let
+    t=app.listGrid;t.sync({url:xpath+"/save-list",params:{keyId:app.keyId,keyName:app.keyName},success(){app.saveBtn.disabled=true;e?.()},failure(e){Wb.checkExists(e,"wb_key_unq1",Str.key)}})}});Wb.make(app,{cname:"viewport",layout:"row",cid:"viewport1",items:[{cname:"grid",columnsSortable:true,autoContextMenu:true,keyFields:"sid,key_name",width:"50vw",sorters:"key_name",title:Str.keyName,url:xpath+"/select-type",cid:"typeGrid",maxWidth:"30em",multiSelect:true,pagingBar:{cname:"pagingBar",showColumnsMenu:false},tbar:{cname:"toolbar",items:[{icon:"add",text:Str.add,keys:"Ctrl+E",cid:"addBtn",events:{click(e,t){app.typeGrid.dictAdd({url:xpath+"/add-type",failure:app.onFailure},Str.keyName)}}},{icon:"edit",text:Str.edit,keys:"Ctrl+J",cid:"editBtn",events:{click(e,t){app.typeGrid.dictEdit({url:xpath+"/edit-type",failure:app.onFailure},"key_name")}}},{icon:"delete",text:Str.del,keys:"Ctrl+D",cid:"delBtn",events:{click(e,t){app.typeGrid.removeRecords(xpath+"/del-types","key_name",null,(e=>app.saveBtn.disabled=true))}}},{cname:"divider",cid:"divider1"},{cname:"text",minWidth:"5em",clearButton:true,placeholder:Str.search,flex:1,cid:"searchType",maxWidth:"20em",events:{change(e,t,a){app.typeGrid.delayLoad({comps:app.searchType})}}}]},events:{itemdblclick(e,t,a){this.downWhole("editBtn").fireEvent("click")},beforeselect(e,t){if(!app.saveBtn.disabled){Wb.choose(Str.saveChanges.format(Str.list),(t=>{if(t=="yes"){app.save((t=>e.select()))}else
+    if(t=="no"){app.saveBtn.disabled=true;e.select()}}));return false}},selectionchange(e){let
+    t=app.typeGrid.selectionData,a=t?.key_name,i=app.listGrid,d=app.searchList;i.disabled=!a;i.subTitle=a;d.suspendEvent();d.clear();d.resumeEvent();if(a){i.load()}else{i.destroyAll();i.commit();app.saveBtn.disabled=true}}}},{cname:"splitter",cid:"splitter1"},{cname:"grid",autoContextMenu:true,keyFields:"sid",editable:true,flex:1,autoLoad:false,disabled:true,title:Str.list,url:xpath+"/select-list",cid:"listGrid",multiSelect:true,pagingBar:{cname:"pagingBar",showColumnsMenu:false},tbar:{cname:"toolbar",items:[{icon:"add",text:Str.add,keys:"Ctrl+E",cid:"addBtn",events:{click(e,t){app.listGrid.addRecord()}}},{icon:"delete",text:Str.del,keys:"Ctrl+D",cid:"delBtn",events:{click(e,t){app.listGrid.delRecords()}}},{icon:"save",disabled:true,text:Str.save,keys:"Ctrl+S",cid:"saveBtn",events:{click(e,t){app.save()}}},{cname:"divider",cid:"divider2"},{cname:"text",minWidth:"5em",clearButton:true,placeholder:Str.search,flex:1,cid:"searchList",maxWidth:"20em",events:{change(e,t,a){app.listGrid.delayLoad()}}}]},events:{itemdblclick(e,t,a){this.downWhole("editBtn").fireEvent("click")},itemchange(e,t){app.onChange()},beforeload(e,t,a){Wb.apply(t,{searchList:app.searchList.value,rid:app.keyId,keyType:app.keyType});return
+    this.saveConfirm(app.saveBtn,app.save)},editing(e,t,a){app.onChange()}}}]});Wb.onUnload(parentContainer,(()=>{if(!app.saveBtn.disabled)return
+    false}));
+hideInMenu: 'false'
+icon: list-view
+img: ''
+properties:
+  cid: module
+  remark: Key value mapping setting
+tags: ''
+text: module
+title: '@kve'

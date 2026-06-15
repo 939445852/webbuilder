@@ -1,0 +1,13 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  serverScript: let actions={get(){Wb.log(Wb.get("string"));Wb.log(Params.string);Wb.log(Wb.getInt("int"));Wb.log(Wb.getFloat("float"));Wb.log(Wb.getDate("date"));Wb.log(Wb.getBool("bool"));Wb.log(Wb.getObject("object"));Wb.log(Wb.getObject("array"));Wb.send("done")},post(){let
+    o=Wb.get("foo");Wb.send(o)},deserializeObject(){Wb.log(Wb.get("string"));Wb.log(Wb.get("int"));Wb.log(Params.float);Wb.log(Params.date);Wb.log(Params.bool);Wb.log(Params.object);Wb.log(Params.array)},postMultipleParams(){let
+    o=Wb.getParams("myParam");Wb.log(Wb.encode(o))},postPayload(){Wb.log(Wb.payload)},postPayloadJson(){Wb.log(Wb.get("foo")+","+Params.bar);Wb.log(Wb.payload);Wb.log(Wb.payloadParams)},postSubmit(){Wb.invoke("docs")}};actions[Params.xaction]();
+tags: ''
+text: module
+title: ''

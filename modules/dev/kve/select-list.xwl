@@ -1,0 +1,29 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Select key list
+  serverScript: |-
+    function main() {
+      let data, sql = 'select * from wb_key where rid={?rid?}';
+      if (Params.searchList) {
+        Wb.setLike('searchList');
+        sql += ' and (map_k like {?searchList?} or map_v like {?searchList?})';
+      }
+      sql += ' order by map_k';
+      data = Wb.getDict(sql, 'wb,');
+      //sort by number
+      if (Params.keyType == '1') {
+        data.items.sort((a, b) => {
+          return parseInt(a.map_k) - parseInt(b.map_k);
+        });
+      }
+      Wb.send(data);
+    }
+    main();
+tags: ''
+text: module
+title: ''

@@ -1,0 +1,12 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Remove sessions
+  serverScript: Wb.checkDemo();function main(){let e=Wb.getObject("del");e.forEach((e=>Sessions.invalidate(e.$userid)))}main();
+tags: ''
+text: module
+title: ''

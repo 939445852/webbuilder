@@ -1,0 +1,389 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: mainLabel
+      cls: w-title3
+      text: Drag and Drop
+    text: mainLabel
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: sortableTitle
+      title: Items sortable
+    text: sortableTitle
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _icon: label
+      cls: Wb.Label
+      properties:
+        cid: sortableLabel
+        text: Please drag a button to adjust it's position
+      text: sortableLabel
+    - _expanded: true
+      _icon: container
+      cls: Wb.Container
+      items:
+      - _expanded: true
+        _icon: button
+        cls: Wb.Button
+        properties:
+          cid: button1
+          text: Button1
+        text: button1
+      - _expanded: true
+        _icon: button
+        cls: Wb.Button
+        properties:
+          cid: button2
+          text: Button2
+        text: button2
+      - _expanded: true
+        _icon: button
+        cls: Wb.Button
+        properties:
+          cid: button3
+          text: Button3
+        text: button3
+      - _expanded: true
+        _icon: button
+        cls: Wb.Button
+        properties:
+          cid: button4
+          text: Button4
+        text: button4
+      - _expanded: true
+        _icon: button
+        cls: Wb.Button
+        properties:
+          cid: button5
+          text: Button5
+        text: button5
+      - _expanded: true
+        _icon: button
+        cls: Wb.Button
+        properties:
+          cid: button6
+          text: Button6
+        text: button6
+      - _expanded: true
+        _icon: button
+        cls: Wb.Button
+        properties:
+          cid: button7
+          text: Button7
+        text: button7
+      - _expanded: true
+        _icon: button
+        cls: Wb.Button
+        properties:
+          cid: button8
+          text: Button8
+        text: button8
+      - _expanded: true
+        _icon: button
+        cls: Wb.Button
+        properties:
+          cid: button9
+          text: Button9
+        text: button9
+      properties:
+        cid: itemsSortableCt
+        itemsSortable: 'true'
+        layout: form
+      text: itemsSortableCt
+    properties:
+      cid: sortableCt
+      frame: 'true'
+      layout: grid1
+    text: sortableCt
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: gridRowDragDropTitle
+      title: Grid row drag and drop
+    text: gridRowDragDropTitle
+  - _expanded: true
+    _icon: grid
+    cls: Wb.Grid
+    properties:
+      cid: commonRemoteGrid
+      draggable: 'true'
+      droppable: 'true'
+      height: 15em
+      url: demo-source?xaction=staffAllDict
+    text: commonRemoteGrid
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: dualDragDropTitle
+      title: Dual drag and drop
+    text: dualDragDropTitle
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _expanded: true
+      _icon: grid
+      cls: Wb.Grid
+      items:
+      - _expanded: true
+        _icon: array
+        cls: Wb.Array
+        items:
+        - _expanded: true
+          _icon: column
+          cls: Wb.Column
+          properties:
+            cid: column1
+            rowNum: 'true'
+          text: column1
+        - _expanded: true
+          _icon: column
+          cls: Wb.Column
+          properties:
+            cid: column2
+            fieldName: code
+            text: code
+            width: 6em
+          text: column2
+        - _expanded: true
+          _icon: column
+          cls: Wb.Column
+          properties:
+            cid: column3
+            fieldName: full_name
+            text: Full name
+            width: '-1'
+          text: column3
+        properties:
+          cid: columns
+        text: columns
+      properties:
+        cid: grid1
+        draggable: 'true'
+        droppable: dualGroup
+        flex: '1'
+        multiSelect: 'true'
+        title: Source Grid
+        url: demo-source?xaction=staffAllDict
+      text: grid1
+    - _expanded: true
+      _icon: grid
+      cls: Wb.Grid
+      items:
+      - _expanded: true
+        _icon: array
+        cls: Wb.Array
+        items:
+        - _expanded: true
+          _icon: column
+          cls: Wb.Column
+          properties:
+            cid: column1
+            rowNum: 'true'
+          text: column1
+        - _expanded: true
+          _icon: column
+          cls: Wb.Column
+          properties:
+            cid: column2
+            fieldName: code
+            text: code
+            width: 6em
+          text: column2
+        - _expanded: true
+          _icon: column
+          cls: Wb.Column
+          properties:
+            cid: column3
+            fieldName: full_name
+            text: Full name
+            width: '-1'
+          text: column3
+        properties:
+          cid: columns
+        text: columns
+      properties:
+        cid: grid2
+        draggable: 'true'
+        droppable: dualGroup
+        flex: '1'
+        multiSelect: 'true'
+        title: Drag source to here
+      text: grid2
+    properties:
+      cid: dualDragDropCt
+      gap: 'true'
+      height: 15em
+      layout: row
+    text: dualDragDropCt
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: dragGridToPanelTitle
+      title: Drag grid to panel
+    text: dragGridToPanelTitle
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _expanded: true
+      _icon: grid
+      cls: Wb.Grid
+      events:
+        itemdrag: |-
+          // only allow odd code rows
+          draggable.allowDrop = draggable.source.every(item => parseInt(item.data.code) % 2);
+          draggable.mode = 'append'; // show append drag icon
+          draggable.autoDrop = false; // prevent default drop behavior
+        itemdrop: |-
+          let items = [];
+          draggable.source.forEach(item => {
+            items.push({ cname: 'text', text: item.data.full_name });
+          })
+          items = app.dropPanel.add(items);
+          items[0].intoView();
+          items.each(item => item.highlight());
+          Wb.destroy(draggable.source); // remove source rows
+      items:
+      - _expanded: true
+        _icon: array
+        cls: Wb.Array
+        items:
+        - _expanded: true
+          _icon: column
+          cls: Wb.Column
+          properties:
+            cid: column1
+            rowNum: 'true'
+          text: column1
+        - _expanded: true
+          _icon: column
+          cls: Wb.Column
+          properties:
+            cid: column2
+            fieldName: code
+            text: code
+            width: 6em
+          text: column2
+        - _expanded: true
+          _icon: column
+          cls: Wb.Column
+          properties:
+            cid: column3
+            fieldName: full_name
+            text: Full name
+            width: '-1'
+          text: column3
+        properties:
+          cid: columns
+        text: columns
+      properties:
+        cid: grid1
+        draggable: 'true'
+        dropGroup: panelGroup
+        flex: '1'
+        multiSelect: 'true'
+        title: Source Grid
+        url: demo-source?xaction=staffAllDict
+      text: grid1
+    - _expanded: true
+      _icon: panel
+      cls: Wb.Panel
+      properties:
+        cid: dropPanel
+        droppable: panelGroup
+        flex: '1'
+        layout: grid1
+        title: Drag odd code rows to here
+      text: dropPanel
+    properties:
+      cid: dragGridToPanelCt
+      gap: 'true'
+      height: 15em
+      layout: row
+    text: dragGridToPanelCt
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: asyncDragDropTitle
+      title: Asynchronous drag and drop
+    text: asyncDragDropTitle
+  - _expanded: true
+    _icon: grid
+    cls: Wb.Grid
+    events:
+      itemdrop: |-
+        // do some server side operations
+        Wb.ajax({
+          url: 'demo-source?xaction=staffDict',
+          params: { code: draggable.source[0].data.code },
+          success(resp) {
+            if (resp.length)
+              draggable.acceptDrop();
+            else
+              Wb.tipWarn('Only allow dragging odd code row.')
+          }
+        });
+    items:
+    - _expanded: true
+      _icon: array
+      cls: Wb.Array
+      items:
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: column1
+          rowNum: 'true'
+        text: column1
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: column2
+          fieldName: code
+          text: code
+          width: 6em
+        text: column2
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: column3
+          fieldName: full_name
+          text: Full name
+          width: '-1'
+        text: column3
+      properties:
+        cid: columns
+      text: columns
+    properties:
+      cid: asyncDragDropGrid
+      draggable: '{ autoDrop: false }'
+      droppable: asyncGroup
+      height: 15em
+      url: demo-source?xaction=staffAllDict
+    text: asyncDragDropGrid
+  properties:
+    cid: viewport1
+    layout: grid1
+  text: viewport1
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

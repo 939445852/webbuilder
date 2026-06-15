@@ -1,0 +1,23 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.make(app,{cname:"viewport",layout:"grid1",cid:"viewport1",items:[{cname:"label",cid:"mainLabel",cls:"w-title3",text:"Server
+    side web request"},{cname:"title",title:"Get mozilla.org site html",cid:"getHtmlTitle"},{cname:"viewer",cid:"htmlSourceViewer",height:"8em"},{cname:"button",type:"primary",cid:"getHtmlBtn",text:"Get
+    html",events:{click(t,e){Wb.ajax({url:xpath+"/actions&xaction=getHtml",success(t){app.htmlSourceViewer.text=t}})}}},{cname:"title",title:"Send
+    post request with params",cid:"postParamsTitle"},{cname:"button",type:"primary",cid:"postParamsBtn",text:"Post
+    params",events:{click(t,e){Wb.ajax({url:xpath+"/actions&xaction=postParams",success(t){Wb.tipDone()}})}}},{cname:"title",title:"Send
+    post request with payload data",cid:"postPayloadDataTitle"},{cname:"button",type:"primary",cid:"postPayloadDataBtn",text:"Post
+    payload data",events:{click(t,e){Wb.ajax({url:xpath+"/actions&xaction=postPayload",success(t){Wb.tipDone()}})}}},{cname:"title",title:"Send
+    post request with files",cid:"postFileTitle"},{cname:"button",type:"primary",cid:"postFilesBtn",text:"Post
+    files",events:{click(t,e){Wb.ajax({url:xpath+"/actions&xaction=postFiles",success(t){Wb.tipDone()}})}}},{cname:"title",title:"Login
+    to the system, access modules and logout.",cid:"loginTitle"},{cname:"button",type:"primary",cid:"loginAccessBtn",text:"Login
+    and Access",events:{click(t,e){Wb.ajax({url:xpath+"/actions&xaction=loginAndLogout",success(t){Wb.tipDone()}})}}}]});
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

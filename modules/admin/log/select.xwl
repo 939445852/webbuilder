@@ -1,0 +1,46 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Select logs
+  serverScript: |-
+    function main() {
+      let sql, where = [];
+
+      sql = `select a.log_date, b.user_name as mix_user_name,b.display_name as mix_user_name_sub, a.ip, a.log_level, a.log_type, a.msg
+          from wb_log a left join wb_user b on a.user_id=b.sid`;
+      if (Params.beginDt)
+        where.push('log_date >= {?timestamp|beginDt?}');
+      if (Params.endDt)
+        where.push('log_date <= {?timestamp|endDt?}');
+      if (Params.username) {
+        Wb.setLike('username');
+        where.push('(b.user_name like {?username?} or b.display_name like {?username?})');
+      }
+      if (Params.msg) {
+        Wb.setLike('msg');
+        where.push('msg like {?msg?}');
+      }
+      if (Params.ip) {
+        Wb.setLike('ip');
+        where.push('ip like {?ip?}');
+      }
+      if (Params.logLevel)
+        where.push('log_level={?int|logLevel?}');
+      if (Params.logType) {
+        Wb.setLike('logType');
+        where.push('log_type like {?logType?}');
+      }
+      if (where.length) {
+        sql += ' where ' + where.join(' and ');
+      }
+      sql += Wb.getOrderSql();
+      Wb.sendDict(sql, 'wb,');
+    }
+    main();
+tags: ''
+text: module
+title: ''

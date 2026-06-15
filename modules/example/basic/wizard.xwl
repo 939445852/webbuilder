@@ -1,0 +1,109 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: |-
+    Wb.apply(app, {
+      /**
+       * Set buttons disabled.
+       */
+      setButtons() {
+        let ct = app.cardCt1, activeIndex = ct.activeIndex;
+
+        app.prevBtn.disabled = activeIndex == 0;
+        app.nextBtn.disabled = activeIndex >= ct.items.length - 1;
+      }
+    });
+hideInMenu: 'false'
+icon: ''
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _expanded: true
+    _icon: win-restore
+    cls: Wb.CardCt
+    events:
+      ready: app.setButtons();
+    items:
+    - _icon: container
+      cls: Wb.Container
+      properties:
+        cid: container1
+        text: Step1
+      text: container1
+    - _icon: container
+      cls: Wb.Container
+      properties:
+        cid: container2
+        text: Step2
+      text: container2
+    - _icon: container
+      cls: Wb.Container
+      properties:
+        cid: container3
+        text: Step3
+      text: container3
+    - _icon: container
+      cls: Wb.Container
+      properties:
+        cid: container4
+        text: Step4
+      text: container4
+    - _expanded: true
+      _icon: array
+      cls: Wb.Array
+      items:
+      - _expanded: true
+        _icon: button
+        cls: Wb.Button
+        events:
+          click: |-
+            app.cardCt1.activeIndex--;
+            app.setButtons();
+        properties:
+          cid: prevBtn
+          icon: left4
+          text: Previous
+        text: prevBtn
+      - _expanded: true
+        _icon: button
+        cls: Wb.Button
+        events:
+          click: |-
+            app.cardCt1.activeIndex++;
+            app.setButtons();
+        properties:
+          cid: nextBtn
+          icon: right4
+          iconAlign: right
+          text: Next
+        text: nextBtn
+      properties:
+        cid: buttons
+      text: buttons
+    properties:
+      buttonAlign: center
+      cid: cardCt1
+      cls: w-limit-width
+      frame: 'true'
+      height: 20em
+      icon: database
+      minButtonWidth: 8em
+      padding: 'true'
+      title: Application wizard
+      width: 40em
+    text: cardCt1
+  properties:
+    autoScroll: 'true'
+    background: 'true'
+    cid: viewport1
+    layout: middle
+  text: viewport1
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

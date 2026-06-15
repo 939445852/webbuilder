@@ -1,0 +1,48 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Check in files to the database
+  serverScript: |-
+    function main() {
+      let file, files = Wb.getObject('files');
+
+      Wb.startTrans();
+      files.forEach(name => {
+        file = new Wb.File(name);
+        if (file.isFile) {
+          importFile(file)
+        } else {
+          file.cascade(file => { file.isFile && importFile(file) });
+        }
+      })
+    }
+
+    /**
+     * Import file to the database. @priv
+     * @param {Wb.File} file Import file object.
+     */
+    function importFile(file) {
+      let params = {
+        sid: Wb.getId(), sdate: new Date(), file_path: file.relPath, file_version: Params.version,
+        version_remark: Params.remark, modify_date: file.lastModifiedDate, file_content: file.bytes
+      };
+
+      Wb.sql({
+        sql: 'delete from wb_version where file_path={?file_path?} and file_version={?file_version?}',
+        params
+      });
+      Wb.sql({
+        sql:
+          `insert into wb_version values({?sid?}, {?sdate?}, {?file_path?}, {?file_version?}, {?version_remark?},
+             {?modify_date?}, {?file_content?})`,
+        params
+      });
+    }
+    main();
+tags: ''
+text: module
+title: ''

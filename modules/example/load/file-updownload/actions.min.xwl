@@ -1,0 +1,20 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  serverScript: 'let actions={upload(){let e,t;e=Params.singleFileInput;if(e){Wb.log(e.name+"
+    file size is: "+e.size);new Wb.File(true,"temp/"+e.name).stream=e.stream}t=Wb.getParams("multiFileInput");t.forEach((e=>{Wb.log(e.name+"
+    file size is: "+e.size);new Wb.File(true,"temp/"+e.name).stream=e.stream}));Wb.log("text1
+    value is: "+Params.text1);Wb.send(Base.pathText+"temp")},downloadWbJs(){Wb.exportData(new
+    Wb.File(true,"wb/js/wb.js"))},downloadBlob(){let e=Wb.getRow({sql:"select full_name,
+    photo from wb_staff where sid=''0040CCVTQ71JG''",blob:true});Wb.exportData(e.photo,e.full_name+".png",e.photo.available())},downloadZip(){Wb.setContentType("css.zip");ZipUtil.zip([new
+    File(Base.path,"wb/css")],response.getOutputStream())},downloadAfterUpload(){let
+    e=Wb.getParams("multiFileInput");e.forEach((e=>{Wb.log(e.name+" file size is:
+    "+e.size);new Wb.File(true,"temp/"+e.name).stream=e.stream}));Wb.exportData(new
+    Wb.File(true,"wb/js/wb.js"))}};actions[Params.xaction]();'
+tags: ''
+text: module
+title: ''

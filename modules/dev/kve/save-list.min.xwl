@@ -1,0 +1,12 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Save key list
+  serverScript: function main(){const a=Wb.load("./util.mjs");let s,e=Params.keyId,m=[],r;Params.insert?.forEach((a=>{s=Wb.getId();r={sid:s,rid:e};Wb.apply(a,r);m.push(r)}));Params.tableName="wb_key";Params.db="";Wb.sync(Params);a.loadKey(Params.keyName);Wb.send({insert:m})}main();
+tags: ''
+text: module
+title: ''

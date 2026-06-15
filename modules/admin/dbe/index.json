@@ -1,0 +1,14 @@
+{
+  "title": "@dbe",
+  "icon": "",
+  "img": "",
+  "hideInMenu": "true",
+  "items": [
+    "select-tree.xwl",
+    "select-table.xwl",
+    "execute-sql.xwl",
+    "export.xwl",
+    "import.xwl",
+    "util.mjs"
+  ]
+}

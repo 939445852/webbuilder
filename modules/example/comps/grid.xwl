@@ -1,0 +1,810 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: grid
+img: ''
+items:
+- _expanded: true
+  _icon: menu2
+  cls: Wb.Menu
+  items:
+  - _expanded: true
+    _icon: item
+    cls: Wb.Item
+    events:
+      click: Wb.tip('Set ' + app.popupRecord.data.full_name);
+    properties:
+      cid: item1
+      text: Item1
+    text: item1
+  - _expanded: true
+    _icon: item
+    cls: Wb.Item
+    properties:
+      cid: item2
+      text: Item2
+    text: item2
+  - _expanded: false
+    _icon: item
+    cls: Wb.Item
+    properties:
+      cid: item3
+      text: Item3
+    text: item3
+  properties:
+    autoDestroy: 'false'
+    cid: shareMenu
+    isProperty: 'true'
+  text: shareMenu
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: mainLabel
+      cls: w-title3
+      text: Grid
+    text: mainLabel
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: commonRemoteGridTitle
+      title: Common remote grid
+    text: commonRemoteGridTitle
+  - _expanded: true
+    _icon: grid
+    cls: Wb.Grid
+    items:
+    - _expanded: true
+      _icon: pagenum
+      cls: Wb.PagingBar
+      properties:
+        cid: pagingBar
+        isProperty: 'true'
+        showPageEdit: 'false'
+      text: pagingBar
+    properties:
+      cid: commonRemoteGrid
+      height: 15em
+      pageSize: '10'
+      url: demo-source?xaction=staffAllDict
+    text: commonRemoteGrid
+  - _expanded: true
+    _icon: title
+    cls: Wb.Title
+    properties:
+      cid: miscGridTitle
+      title: Miscillaneous grid
+    text: miscGridTitle
+  - _expanded: true
+    _icon: grid
+    cls: Wb.Grid
+    events:
+      beforesort: |-
+        // Customize local sort
+        // data.sort((a, b) => Wb.mixCompare(a.full_name, b.full_name));
+        // return false;
+      click: |-
+        let link = e.target.closest('.my-link');
+        if (link) {
+          let row = this.findItemByEl(link);
+          Wb.tip(link.textContent + ' clicked at ' + row.data.full_name);
+        }
+      itemdblclick: Wb.tip(item.data.full_name + ' row double clicked');
+    items:
+    - _expanded: true
+      _icon: array
+      cls: Wb.Array
+      items:
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: rowNumCol
+          freeze: 'true'
+          rowNum: 'true'
+        text: rowNumCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: codeCol
+          fieldName: code
+          freeze: 'true'
+          summaryRender: return 'Total:';
+          text: Code
+          width: 8em
+        text: codeCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        items:
+        - _expanded: true
+          _icon: column
+          cls: Wb.Column
+          items:
+          - _expanded: true
+            _icon: column
+            cls: Wb.Column
+            properties:
+              align: center
+              autoWrap: normal
+              cid: fullNameCol
+              fieldName: full_name
+              html: <span class='w-error-color'>Full name</span>
+              render: |-
+                el.setStyle('background', 'linear-gradient(to right, rgb(142 36 159) ' + (data.salary / 1800) + '%, rgb(85, 85, 85) 0%)', 'important');
+                el.setStyle('color', '#fff');
+                return value;
+              summary: count
+              summaryRender: return value + ' P';
+              titleAlign: center
+              titleAutoWrap: normal
+              width: '-1'
+            text: fullNameCol
+          - _expanded: true
+            _icon: column
+            cls: Wb.Column
+            properties:
+              cid: genderCol
+              fieldName: gender
+              render: |-
+                let div = el.addEl('w-center').addEl('w-ta-center');
+
+                div.style = `color:#fff;width:5em;background:${value == 'Male' ? '#ff5d8d' : '#095c09'}`;
+                div.textContent = value;
+              text: Gender
+              width: 8em
+            text: genderCol
+          properties:
+            cid: commonCol
+            text: Common
+          text: commonCol
+        - _expanded: true
+          _icon: column
+          cls: Wb.Column
+          properties:
+            cid: birthDateCol
+            fieldName: birth_date
+            render: |-
+              if (value < '1974-1-1'.dateValue) {
+                // if (value < '1974-1-1'.dateValue) {
+                //   let div = el.parentNode;
+
+                //   //tip: Setting important classes or styles for elements has higher css priority and can override the default background/color
+                //   //Setting td classes/styles will override all default background/color
+                //   if (value < '1968-1-1'.dateValue) {
+                //     div.setStyle('background', '#1890ff');
+                //   } else {
+                //     div.setStyle('background', '#f90');
+                //   }
+                //   div.setStyle('color', 'white');
+                //   value = value + ' *';
+                // }
+                //w-succ-bgcolor-row, w-error-bgcolor-row etc
+                el.parentNode.cls = value < '1968-1-1'.dateValue ? 'w-succ-bgcolor-row' : 'w-warn-bgcolor-row';
+                value += ' *';
+              };
+
+              //add icon manually
+              el.insertCellIcon('time', value);
+              //el.insertCellImage('wb/images/sound.png');
+            text: Birth_date
+            width: 12em
+          text: birthDateCol
+        properties:
+          cid: personalCol
+          text: Personal
+        text: personalCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          align: right
+          cid: salaryCol
+          fieldName: salary
+          summary: sum
+          summaryRender: |-
+            let ct = data.full_name;// full_name column summary is "count"
+            if (ct == null)
+              return ''; // full_name column is hidden
+            else
+              return 'Avg: ' + column.formatValue(value / ct);
+          text: Salary
+          titleAlign: right
+          type: usd
+        text: salaryCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          checkBox: int
+          checkRefresh: 'true'
+          cid: checkCol1
+          fieldName: checked
+          menuText: Check
+        text: checkCol1
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          checkBox: roTrue
+          cid: checkCol2
+          fieldName: checked
+        text: checkCol2
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          checkBox: roAll
+          cid: checkCol3
+          fieldName: checked
+        text: checkCol3
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: toggleCol
+          render: |-
+            let row = this;
+            value = row.data.checked;
+            row.addFooter({
+              cname: 'toggle', returnType: 'int', value, toggleAlign: 'center', clickToggle: true,
+              events: {
+                change(value) {
+                  // If there is no need to synchronously update other fields, this is more efficient
+                  // row.data.checked = value; // only update checked field value
+                  row.set('checked', value); // update whole row
+                  app.checkCol1.syncHeaderCheck(); // manual sync header check of checkCol1
+                }
+              }
+            }, el);
+          text: Toggle
+          width: 5em
+        text: toggleCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: linkCol
+          render: |-
+            let a = el.addEl('my-link', 'a');
+            el.cls = 'w-ta-center';
+            a.textContent = 'Download';
+            // a.onclick = f => Wb.tip(data.full_name); // not recommended
+            // miscGrid.click mon the link click event  // recommended
+          text: Link
+          width: 8em
+        text: linkCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        items:
+        - _expanded: true
+          _icon: array
+          cls: Wb.Array
+          items:
+          - _expanded: false
+            _icon: item
+            cls: Wb.Item
+            events:
+              click: Wb.tip('Set ' + this.data.code + ', ' + this.gridItem.data.code);
+            properties:
+              cid: setItem
+              icon: gear
+              tip: Set
+            text: setItem
+          - _expanded: false
+            _icon: item
+            cls: Wb.Item
+            events:
+              click: Wb.tip('Share ' + this.data.code);
+            properties:
+              cid: shareItem
+              icon: share2
+              tip: Add
+            text: shareItem
+          - _expanded: true
+            _icon: item
+            cls: Wb.Item
+            events:
+              click: |-
+                app.popupRecord = this.parent.parent;
+                //app.popupRecord = app.miscGrid.selection; // same as above
+                //app.popupRecord = this.el.getClosestComp(Wb.ViewItem); // same as above
+                app.shareMenu.showBy(this);
+            properties:
+              cid: menuItem
+              icon: menu
+            text: menuItem
+          properties:
+            cid: buttons
+          text: buttons
+        properties:
+          cid: actionsCol
+          freeze: 'true'
+          text: Actions
+          width: 8em
+        text: actionsCol
+      properties:
+        cid: columns
+      text: columns
+    - _expanded: true
+      _icon: menu2
+      cls: Wb.Menu
+      items:
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        events:
+          click: |-
+            let el, row, col;
+
+            el = this.contextTarget; // clicked element
+            row = app.miscGrid.findItemByEl(el); // same as app.miscGrid.selection
+            col = app.miscGrid.findColumnByEl(el);
+            if (row && col)
+              Wb.tip('Row code is ' + row.data.code + ' and column field name is ' + col.fieldName);
+        properties:
+          cid: showRowColumnItem
+          icon: grid
+          text: Show row column
+        text: showRowColumnItem
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        properties:
+          cid: item2
+          text: Other item
+        text: item2
+      properties:
+        cid: contextMenu
+        isProperty: 'true'
+      text: contextMenu
+    properties:
+      captureClass: '@''.w-btn'' /* prevent select and focus row when click row buttons
+        */'
+      cid: miscGrid
+      columnsSortable: 'true'
+      exportFilename: staff-list
+      exportTitle: Staff List
+      frame: 'true'
+      height: 20em
+      localData: |-
+        [
+          { _icon: "user1", code: "10001", full_name: "Terri Duffy", gender: "Female", birth_date: "2002-07-01".dateValue, salary: 28743, checked: 1, email: "terri0@geejing.com" },
+          { _icon: "user", code: "10002", full_name: "Roberto Tamburello", gender: "Male", birth_date: "1986-12-13".dateValue, salary: 16453, checked: 0, email: "roberto0@geejing.com" },
+          { _icon: "user", code: "10003", full_name: "Michael Sullivan", gender: "Male", birth_date: "1991-07-17".dateValue, salary: 32893, checked: 1, email: "michael8@geejing.com" },
+          { _icon: "user1", code: "10004", full_name: "Sharon Salavaria", gender: "Female", birth_date: "1973-06-03".dateValue, salary: 63237, checked: 0, email: "sharon0@geejing.com" },
+          { _icon: "user1", code: "10005", full_name: "Gail Erickson", gender: "Female", birth_date: "1964-10-29".dateValue, salary: 63219.5, checked: 1, email: "gail0@geejing.com" },
+          { _icon: "user", code: "10006", full_name: "Jossef Goldberg", gender: "Male", birth_date: "1971-04-11".dateValue, salary: 23130, checked: 0, email: "jossef0@geejing.com" },
+          { _icon: "user", code: "10007", full_name: "Ovidiu Cracium", gender: "Male", birth_date: "1990-02-18".dateValue, salary: 83231, checked: 0, email: "ovidiu0@geejing.com" },
+          { _icon: "user1", code: "10008", full_name: "Janice Galvin", gender: "Female", birth_date: "2001-06-29".dateValue, salary: 152310, checked: 0, email: "janice0@geejing.com" },
+          { _icon: "user", code: "10009", full_name: "Thierry D'Hers", gender: "Male", birth_date: "1971-08-29".dateValue, salary: 2383, checked: 1, email: "thierry0@geejing.com" },
+          { _icon: "user", code: "10010", subtext: 'Sub text', full_name: "Brian Welcker", gender: "Male", birth_date: "1989-07-08".dateValue, salary: 98313, checked: 1, email: "brian3@geejing.com" },
+          { _icon: "user", code: "10011", full_name: "Stephen Jiang", gender: "Male", birth_date: "1963-11-17".dateValue, salary: 53231, checked: 0, email: "stephen0@geejing.com" },
+          { _icon: "user", code: "10012", full_name: "Syed Abbas", gender: "Male", birth_date: "1987-02-11".dateValue, salary: 38925.8, checked: 1, _disabled: true, email: "syed0@geejing.com" }
+        ]
+      pageSize: '10'
+      resizable: 'true'
+      showIcon: 'true'
+      sorters: full_name
+      stateId: wb.miscGrid
+    text: miscGrid
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _icon: button
+      cls: Wb.Button
+      events:
+        click: |-
+          app.fullNameCol.width = app.miscGrid.width;
+          Wb.toast('Now please scroll horizontally to test the left and right frozen columns.')
+      properties:
+        cid: testfrozenBtn
+        text: Test frozen columns
+      text: testfrozenBtn
+    - _icon: button
+      cls: Wb.Button
+      events:
+        click: 'app.miscGrid.sort({ name: ''code'', desc: true });'
+      properties:
+        cid: sortDataBtn
+        text: Sort Data
+      text: sortDataBtn
+    - _icon: button
+      cls: Wb.Button
+      events:
+        click: |-
+          // Sort view items only
+          app.miscGrid.sortItems((a, b) => Wb.mixCompare(a.data.code, b.data.code));
+      properties:
+        cid: sortItemsBtn
+        text: Sort Items
+      text: sortItemsBtn
+    properties:
+      cid: container1
+      layout: form
+      padding: 'false'
+    text: container1
+  - _icon: component
+    cls: Wb.Component
+    properties:
+      cid: miscDescComp
+      html: |-
+        <div>Feature List:</div>
+        <ul>
+          <li>Columns sortable, resizable, draggable and freezable.</li>
+          <li>Arbitrary multi-Level Headers.</li>
+          <li>Customize cell rendering.</li>
+          <li>Rows and columns highlighing.</li>
+          <li>Local data pagination.</li>
+          <li>Bind buttons or any controls to cells.</li>
+          <li>Multiple styles of check columns.</li>
+          <li>Customize columns and persistence to the database.</li>
+          <li>Summary row.</li>
+        </ul>
+      textSelectable: 'false'
+    text: miscDescComp
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: editableGridTitle
+      title: Editable grid
+    text: editableGridTitle
+  - _expanded: true
+    _icon: grid
+    cls: Wb.Grid
+    items:
+    - _expanded: true
+      _icon: toolbar
+      cls: Wb.Toolbar
+      items:
+      - _expanded: false
+        _icon: item
+        cls: Wb.Item
+        events:
+          click: |-
+            //Some related methods: grid.add()/grid.addData()/grid.insert()/grid.insertData()/grid.insertXXX()/grid.insertDataXXX() etc.
+            app.editableGrid.addRecord();
+        properties:
+          cid: addBtn
+          icon: add
+          keys: Ctrl+E
+          text: '@Str.add'
+        text: addBtn
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        events:
+          click: |-
+            let firstRec = app.editableGrid.firstItem;
+            if (firstRec) {
+              firstRec.set({ code: 'code', full_name: 'new name' });
+              app.editableGrid.startEdit(firstRec, 'code');
+              firstRec.highlight();
+            }
+        properties:
+          cid: editBtn
+          icon: edit
+          keys: Ctrl+J
+          text: '@Str.edit'
+        text: editBtn
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        events:
+          click: |-
+            //Some related methods: grid.destroySelection()/item.destroy()/Wb.destroy(items);
+            app.editableGrid.delRecords();
+        properties:
+          cid: delBtn
+          icon: delete
+          keys: Ctrl+D
+          text: '@Str.del'
+        text: delBtn
+      - _icon: divider
+        cls: Wb.Divider
+        properties:
+          cid: divider1
+        text: divider1
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        events:
+          click: |-
+            app.editableGrid.sync({
+              url: xpath, //Should be changed to a valid URL
+              success() {
+                Wb.tipDone(Str.save);
+              }
+            });
+        properties:
+          cid: saveBtn
+          icon: save
+          keys: Ctrl+S
+          text: '@Str.save'
+        text: saveBtn
+      properties:
+        cid: tbar
+        isProperty: 'true'
+      text: tbar
+    properties:
+      arrowDownAppend: 'true'
+      cid: editableGrid
+      columnsSortable: 'true'
+      editable: 'true'
+      enterAppend: 'true'
+      enterAsTab: 'true'
+      frame: 'true'
+      height: 15em
+      multiSelect: 'true'
+      pageSize: '10'
+      sorters: '[{name: ''gender'', desc: true}, ''salary'']'
+      url: demo-source?xaction=staffAllDict
+    text: editableGrid
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: dbPaginationTitle
+      title: Database side pagination
+    text: dbPaginationTitle
+  - _expanded: true
+    _icon: label
+    cls: Wb.Label
+    properties:
+      cid: dbPaginationLabel
+      text: This example demonstrates database side pagination.
+    text: dbPaginationLabel
+  - _expanded: true
+    _icon: grid
+    cls: Wb.Grid
+    properties:
+      cid: dbPaginationGrid
+      height: 15em
+      pageSize: '10'
+      pagingBar: pageNums
+      url: demo-source?xaction=staffDbPaging
+    text: dbPaginationGrid
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: noPagingTitle
+      title: No pagination
+    text: noPagingTitle
+  - _expanded: true
+    _icon: grid
+    cls: Wb.Grid
+    properties:
+      cid: noPagingGrid
+      height: 15em
+      pageSize: '-1'
+      url: demo-source?xaction=staffAllDict
+    text: noPagingGrid
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: mergeTitle
+      title: Merge rows and columns
+    text: mergeTitle
+  - _expanded: true
+    _icon: label
+    cls: Wb.Label
+    properties:
+      cid: mergeLabel
+      text: Merge f1 rows and merge f1, f2 columns, see f1Col and f2Col properties.
+    text: mergeLabel
+  - _expanded: true
+    _icon: grid
+    cls: Wb.Grid
+    items:
+    - _expanded: true
+      _icon: array
+      cls: Wb.Array
+      items:
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: rowCol
+          rowNum: 'true'
+        text: rowCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          autoWrap: normal
+          cid: f1Col
+          fieldName: f1
+          mergeColsGroup: mergeTotal
+          mergeRows: 'true'
+          text: f1
+          width: 12em
+        text: f1Col
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: f2Col
+          fieldName: f2
+          mergeColsGroup: mergeTotal
+          text: f2
+          width: 14em
+        text: f2Col
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: f3Col
+          fieldName: f3
+          text: f3
+        text: f3Col
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: f4Col
+          fieldName: f4
+          text: f4
+        text: f4Col
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: f5Col
+          fieldName: f5
+          text: f5
+        text: f5Col
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: f6Col
+          fieldName: f6
+          text: f6
+        text: f6Col
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: f7Col
+          fieldName: f7
+          text: f7
+        text: f7Col
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: f8Col
+          fieldName: f8
+          text: f8
+        text: f8Col
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: f9Col
+          fieldName: f9
+          text: f9
+        text: f9Col
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: f10Col
+          fieldName: f10
+          text: f10
+        text: f10Col
+      properties:
+        cid: columns
+      text: columns
+    properties:
+      cid: mergeGrid
+      url: demo-source?xaction=selectReport1
+    text: mergeGrid
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: dragDropTitle
+      title: Drag-drop rows
+    text: dragDropTitle
+  - _expanded: true
+    _icon: grid
+    cls: Wb.Grid
+    events:
+      itemdrag: |-
+        if (draggable.source.some(row => row.data.code == '10009') || draggable.dest.data.code == '10001') {
+          //Do not allow to drop when the source record code contains 10009 or dest record code is 10001
+          draggable.allowDrop = false;
+        }
+      itemdrop: |-
+        let n = draggable.source.length;
+        Wb.tip(draggable.source.length + ' ' + (n > 1 ? 'items' : 'item') + ' dropped.');
+    properties:
+      cid: dragDropGrid
+      draggable: 'true'
+      droppable: demo.dragDropGrid
+      height: 30em
+      multiSelect: 'true'
+      pageSize: '10'
+      url: demo-source?xaction=staffAllDict
+    text: dragDropGrid
+  - _expanded: true
+    _icon: title
+    cls: Wb.Title
+    properties:
+      cid: propertyGridTitle
+      title: Property grid
+    text: propertyGridTitle
+  - _expanded: true
+    _icon: grid
+    cls: Wb.Grid
+    events:
+      beforeedit: |-
+        if (column.fieldName == 'value') {
+          app.editors ??= {
+            String: new Wb.Text(),
+            Integer: new Wb.Number({ decimalCount: 0 }),
+            Float: new Wb.Number(),
+            Date: new Wb.Date(),
+            Boolean: new Wb.BoolSelect()
+          };
+          column.editor = app.editors[row.data.name] ?? app.editors.String;
+        }
+    items:
+    - _expanded: true
+      _icon: array
+      cls: Wb.Array
+      items:
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: nameCol
+          fieldName: name
+          render: |-
+            el.addCls('w-fixed-cell');
+            return value;
+          text: Name
+        text: nameCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          align: left
+          cid: valueCol
+          fieldName: value
+          text: Value
+          width: '-1'
+        text: valueCol
+      properties:
+        cid: columns
+      text: columns
+    properties:
+      cid: propertyGrid
+      editable: 'true'
+      frame: 'true'
+      localData: |-
+        [
+          { name: 'String', value: 'abc' },
+          { name: 'Integer', value: 123 },
+          { name: 'Float', value: 456.78 },
+          { name: 'Date', value: new Date().datePart },
+          { name: 'Boolean', value: true },
+        ]
+      pagingBar: 'false'
+    text: propertyGrid
+  properties:
+    cid: viewport1
+    layout: grid1
+  text: viewport1
+properties:
+  cid: module
+  description: demo-source=example/common/demo-source.xwl
+tags: ''
+text: module
+title: ''

@@ -1,0 +1,303 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: |-
+    /*
+     * Xwl comments.
+     * @class $path
+     */
+    Wb.apply(app, {
+      /** @property {Boolean} - Whether to hide default action buttons. */
+      hideActionButtons: true,
+      /** @property {Object} - Static leave data. @priv */
+      leaveData: _$leaveData$_,
+      /**
+       * Fires after displaying the window.
+       * @param {String} flowId The workflow instance id.
+       * @return {String} type Window type.
+       * -'start': Start window.
+       * -'handle': Handle window.
+       * -'view': View window.
+       * @param {Wb.GridItem} record The workflow record.
+       */
+      init(flowId, type, record) {
+        Wb.setValue(app.main, app.leaveData);
+        app.radioGroup1.visible = type == 'handle';
+        Wb.log(record.data.node_name);
+      },
+      /**
+       * Fires when the OK button is clicked.
+       */
+      onAction() {
+        let value;
+        switch (app.radioGroup1.value) {
+          /**
+           * Do pass action.
+           * @param {Object} params The parameters object.
+           * @param {Function} callback The callback  function after executed.
+           * @function doPass
+           */
+          case 0:
+            app.doPass();
+            break;
+          /**
+           * Do back action.
+           * @param {String} nodeName The back to node name.
+           * @param {Object} params The parameters object.
+           * @param {Function} callback The callback  function after executed.
+           * @function doBack
+           */
+          case 1:
+            value = app.nodeSelect.value;
+            if (value)
+              app.doBack(value);
+            else {
+              app.nodeSelect.focus();
+              Wb.tipSelect();
+            }
+            break;
+          /**
+           * Do transfer action.
+           * @param {String} user The user id.
+           * @param {Object} params The parameters object.
+           * @param {Function} callback The callback  function after executed.
+           * @function doTransfer
+           */
+          case 2:
+            value = app.userSelect.value;
+            if (value)
+              app.doTransfer(value);
+            else {
+              app.userSelect.focus();
+              Wb.tipSelect();
+            }
+            break;
+          /**
+           * Do reject action.
+           * @param {Object} params The parameters object.
+           * @param {Function} callback The callback  function after executed.
+           * @function doReject
+           */
+          case 3:
+            app.doReject();
+            break;
+          /**
+           * Do sign before action.
+           * @param {String} user The user id.
+           * @param {Object} params The parameters object.
+           * @param {Function} callback The callback  function after executed.
+           * @function doSignBefore
+           */
+          case 4:
+            value = app.userSelect.value;
+            if (value)
+              app.doSignBefore(value);
+            else {
+              app.userSelect.focus();
+              Wb.tipSelect();
+            }
+            break;
+          /**
+           * Do sign after action.
+           * @param {String} user The user id.
+           * @param {Object} params The parameters object.
+           * @param {Function} callback The callback  function after executed.
+           * @function doSignAfter
+           */
+          case 5:
+            value = app.userSelect.value;
+            if (value)
+              app.doSignAfter(value);
+            else {
+              app.userSelect.focus();
+              Wb.tipSelect();
+            }
+            break;
+        }
+      }
+    });
+hideInMenu: 'false'
+icon: ''
+img: ''
+items:
+- _expanded: true
+  _icon: window
+  cls: Wb.Window
+  items:
+  - _expanded: true
+    _icon: radios
+    cls: Wb.RadioGroup
+    events:
+      change: |-
+        let value = this.value;
+
+        if (value == 3)
+          value = 0;
+        else if (value == 4 || value == 5)
+          value = 2;
+        app.cardCt1.activeIndex = value;
+        if (value == 1 && !app.nodeSelect.value) {
+          app.nodeSelect.picker.load({ success() { this.parent.valueIndex = 0 } });
+        }
+    items:
+    - _icon: check2
+      cls: Wb.Radio
+      properties:
+        cid: passRadio
+        label: '@Str.pass'
+        value: 'true'
+      text: passRadio
+    - _icon: check2
+      cls: Wb.Radio
+      properties:
+        cid: backRadio
+        label: '@Str.back1'
+      text: backRadio
+    - _expanded: true
+      _icon: check2
+      cls: Wb.Radio
+      properties:
+        cid: transferRadio
+        label: '@Str.transfer'
+      text: transferRadio
+    - _expanded: true
+      _icon: check2
+      cls: Wb.Radio
+      properties:
+        cid: rejectRadio
+        label: '@Str.reject'
+      text: rejectRadio
+    - _expanded: true
+      _icon: check2
+      cls: Wb.Radio
+      properties:
+        cid: signBeforeRadio
+        label: '@Str.signBefore'
+      text: signBeforeRadio
+    - _expanded: true
+      _icon: check2
+      cls: Wb.Radio
+      properties:
+        cid: signAfterRadio
+        label: '@Str.signAfter'
+      text: signAfterRadio
+    properties:
+      cid: radioGroup1
+    text: radioGroup1
+  - _expanded: true
+    _icon: win-restore
+    cls: Wb.CardCt
+    items:
+    - _expanded: true
+      _icon: container
+      cls: Wb.Container
+      items:
+      - _expanded: true
+        _icon: text
+        cls: Wb.Text
+        properties:
+          cid: applicant
+          readonly: 'true'
+          text: Applicant
+        text: applicant
+      - _icon: calendar
+        cls: Wb.Date
+        properties:
+          cid: begin_date
+          readonly: 'true'
+          text: Begin Date
+        text: begin_date
+      - _icon: calendar
+        cls: Wb.Date
+        properties:
+          cid: end_date
+          readonly: 'true'
+          text: End Date
+        text: end_date
+      - _icon: number-edit
+        cls: Wb.Number
+        properties:
+          cid: leave_days
+          readonly: 'true'
+          text: Leave Days
+        text: leave_days
+      - _expanded: true
+        _icon: text
+        cls: Wb.Text
+        properties:
+          cid: leave_reason
+          readonly: 'true'
+          text: Leave Reason
+        text: leave_reason
+      properties:
+        cid: container1
+        layout: grid1
+      text: container1
+    - _expanded: true
+      _icon: container
+      cls: Wb.Container
+      items:
+      - _icon: combo
+        cls: Wb.Select
+        events:
+          beforeload: params.flowId = app.flowId;
+        properties:
+          cid: nodeSelect
+          forceSelect: 'true'
+          text: Select node
+          url: m?xwl=my/my-flow/get-his-nodes
+        text: nodeSelect
+      properties:
+        cid: container2
+        layout: grid1
+      text: container2
+    - _expanded: true
+      _icon: container
+      cls: Wb.Container
+      items:
+      - _icon: combo
+        cls: Wb.Select
+        properties:
+          cid: userSelect
+          forceSelect: 'true'
+          subtextField: user_name
+          text: Select user
+          textField: display_name
+          url: m?xwl=sys/dialog/user-selector/select
+          valueField: sid
+        text: userSelect
+      properties:
+        cid: container3
+        layout: grid1
+      text: container3
+    properties:
+      border: 'false'
+      cid: cardCt1
+    text: cardCt1
+  properties:
+    autoScroll: 'true'
+    cid: main
+    icon: paper-plane
+    layout: column
+    padding: 'true'
+    title: Leave application
+    visible: 'true'
+    width: 80em
+  text: main
+properties:
+  cid: module
+  serverScript: |-
+    function main() {
+      let flow, row;
+
+      flow = new Wb.Workflow({ flowId: Params.flowId });
+      Params.userid = flow.userid;
+      row = Wb.getRow('select * from wb_leave where flow_id={?flowId?} and user_id={?userid?}');
+      row.applicant = flow.getInitUser().displayName;
+      Params.leaveData = Wb.encode(row);
+    }
+    main();
+tags: ''
+text: module
+title: ''

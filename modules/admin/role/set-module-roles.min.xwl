@@ -1,0 +1,14 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Set module roles
+  serverScript: let insert=[],del=[],user_id,include=Wb.getBool("include"),role_id=Params.role_id;Params.items.forEach((e=>{if(include)insert.push({sid:Wb.getId(),module_path:e.path,role_id:role_id});else
+    del.push({$module_path:e.path,$role_id:role_id})}));if(include)Wb.sync({tableName:"wb_perm",insert:insert});else
+    Wb.sync({tableName:"wb_perm",del:del,whereFields:"module_path,role_id"});
+tags: ''
+text: module
+title: ''

@@ -1,0 +1,19 @@
+_icon: module
+cls: Wb.Module
+properties:
+  cid: module
+  remark: Replace text in app folder
+  serverScript: |-
+    Wb.checkDemo();
+    function main() {
+      Wb.load('./ide-ss.js');
+      let result, fileSearcher, FileSearcher = Wb.ide.FileSearcher;
+
+      fileSearcher = new FileSearcher(Wb.getObject('path'), Params.search, Params.fileType,
+        Wb.getObject('options'), null, Params.replaceTo);
+      result = fileSearcher.searchReplace();
+      Wb.send(result);
+    }
+    main();
+text: module
+title: ''

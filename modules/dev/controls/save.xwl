@@ -1,0 +1,16 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Save control data
+  serverScript: |-
+    function main() {
+      new Wb.File(true, 'wb/docs/groups.js').text = 'globalThis.WbControlsGroup=' + Wb.payload + ';';
+    }
+    main();
+tags: ''
+text: module
+title: ''

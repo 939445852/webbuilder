@@ -1,0 +1,15 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Get history nodes list
+  serverScript: function main(){let e,o,n=[];e=Wb.getRecord("select node_name from
+    wb_flow where sid={?flowId?}");Params.nodeName=e?.[0];e=Wb.getAllRecords(`select
+    node_text,node_name from wb_flow_user where flow_id={?flowId?}\n      and user_type<2
+    and node_name<>{?nodeName?} order by accept_time desc`);e.forEach((e=>{o=e[1];if(n.every((e=>e[1]!=o)))n.push(e)}));n.lastItem[0]=Str.initiator;Wb.send(n)}main();
+tags: ''
+text: module
+title: ''

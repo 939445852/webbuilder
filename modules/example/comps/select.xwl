@@ -1,0 +1,948 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: |-
+    Wb.apply(app, {
+      /**
+       * Add trigger button to fetch value. @priv
+       * @param {Wb.Select} select select control.
+       */
+      addFetchValueButton(select) {
+        select.addTrigger({
+          icon: 'share', tip: 'Show value', weight: 991, handler() {
+            Wb.tip(select.cid + ' value is: ' + select.value);
+          }
+        });
+      }
+    });
+hideInMenu: 'false'
+icon: combo
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: mainLabel
+      cls: w-title3
+      text: Select, Trigger and Picker
+    text: mainLabel
+  - _expanded: true
+    _icon: title
+    cls: Wb.Title
+    properties:
+      cid: selectTitle
+      title: Select
+    text: selectTitle
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _icon: combo
+      cls: Wb.Select
+      properties:
+        cid: commonSelect
+        data: '[''item1'', ''item2'', ''item3'']'
+        text: Common Select
+      text: commonSelect
+    - _icon: combo
+      cls: Wb.Select
+      properties:
+        cid: noEditableSelect
+        data: '[''item1'', ''item2'', ''item3'']'
+        editable: 'false'
+        text: No Editable
+      text: noEditableSelect
+    - _icon: combo
+      cls: Wb.Select
+      events:
+        ready: app.addFetchValueButton(this);
+      properties:
+        cid: nameValueSelect
+        data: '[[''name1'', ''value1''], [''name2'', ''value2''], [''name3'', ''value3'']]'
+        text: Name Value
+      text: nameValueSelect
+    - _icon: combo
+      cls: Wb.Select
+      events:
+        ready: app.addFetchValueButton(this);
+      properties:
+        cid: remoteSelect
+        loadOnce: 'true'
+        noWrap: 'true'
+        text: Remote Select No Wrap
+        textField: full_name
+        url: demo-source?xaction=staffRows
+        valueField: code
+      text: remoteSelect
+    - _icon: combo
+      cls: Wb.Select
+      properties:
+        autoLoad: all
+        cid: autoLoadSelect
+        noWrap: 'true'
+        subtextField: code
+        text: Auto Load
+        textField: full_name
+        url: demo-source?xaction=staffRows
+        value: '''10003'''
+        valueField: code
+      text: autoLoadSelect
+    - _expanded: true
+      _icon: combo
+      cls: Wb.Select
+      properties:
+        cid: liveSearchSelect
+        text: Live Seach
+        textField: full_name
+        url: demo-source?xaction=staffSearch
+        valueField: code
+      text: liveSearchSelect
+    - _icon: combo
+      cls: Wb.Select
+      events:
+        ready: app.addFetchValueButton(this);
+      properties:
+        cid: templateSelect
+        cls: w-rownum-reset
+        itemTpl: |-
+          <div class="w-row w-align-center">
+            <div style="width: 3em" class="w-cell w-rownum"></div>
+            <div class="w-icon icon-user2"></div>
+            <div class="w-cell w-flex">{code}</div>
+            <div class="w-cell w-flex3">{full_name}</div>
+          </div>
+        loadOnce: 'true'
+        pickerMinWidth: 20em
+        text: Template Select
+        textField: full_name
+        url: demo-source?xaction=staffRows
+        valueField: code
+      text: templateSelect
+    - _icon: combo
+      cls: Wb.Select
+      events:
+        ready: app.addFetchValueButton(this);
+      properties:
+        cid: templateFnSelect
+        cls: w-rownum-reset
+        itemTplFn: |-
+          return `<div class="w-row w-align-center">
+            <div style="width: 3em" class="w-cell w-rownum"></div>
+            <div class="w-icon icon-user2"></div>
+            <div class="w-cell w-flex">${data.code}</div>
+            <div class="w-cell w-flex3">${data.full_name}</div>
+          </div>`;
+        loadOnce: 'true'
+        pickerMinWidth: 20em
+        text: Template Function
+        textField: full_name
+        url: demo-source?xaction=staffRows
+        valueField: code
+      text: templateFnSelect
+    - _expanded: true
+      _icon: combo
+      cls: Wb.Select
+      events:
+        ready: app.addFetchValueButton(this);
+      properties:
+        cid: keyNameSelect
+        keyName: status
+        text: Key Name
+      text: keyNameSelect
+    - _expanded: true
+      _icon: combo
+      cls: Wb.Select
+      events:
+        ready: app.addFetchValueButton(this);
+      items:
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        events:
+          click: |-
+            //When the remote drop-down list data has not yet been loaded, we can specify both the value and text
+            this.parent.value = ['10003', 'Michael Sullivan'];
+        properties:
+          cid: triggers
+          icon: data-provider
+          tip: Set value
+        text: triggers
+      properties:
+        cid: forceSelect
+        forceSelect: 'true'
+        text: Force Select
+        textField: full_name
+        url: demo-source?xaction=staffSearch
+        valueField: code
+      text: forceSelect
+    - _expanded: true
+      _icon: combo
+      cls: Wb.Select
+      properties:
+        cid: customMatchSelect
+        data: '[''item1 abc item1'', ''item2 abc item2'', ''item3 def item3'']'
+        matchMode: includesIC
+        selectMode: startsWithIC
+        text: Custom Match
+      text: customMatchSelect
+    - _expanded: true
+      _icon: combo
+      cls: Wb.Select
+      properties:
+        cid: miscSelect
+        data: |-
+          [
+            { text: 'With icon', _icon: 'user2' },
+            { text: 'With image', _img: 'add' },
+            { text: 'With tip', _tip: 'Item tip' },
+            { text: 'Nowrap line with overflow text', _cls: 'w-nowrap' },
+            { text: 'Fixed item', _fixed: true },
+            { text: 'Disabled Item', _disabled: true }
+          ]
+        text: Miscellaneous
+      text: miscSelect
+    - _expanded: true
+      _icon: combo
+      cls: Wb.Select
+      events:
+        ready: |-
+          let select = this;
+          select.addTrigger({
+            icon: 'share', tip: 'Show values', weight: 991, handler() {
+              Wb.tip(Wb.encode(Wb.getValue(select)));
+            }
+          });
+      items:
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        events:
+          click: 'Wb.setValue(app.viewport1, { myValueField: ''10003'', bindFieldSelect:
+            ''Michael Sullivan'' });'
+        properties:
+          cid: triggers
+          icon: data-provider
+          tip: Set value
+        text: triggers
+      properties:
+        bindField: myValueField
+        cid: bindFieldSelect
+        text: Bind Field
+        textField: full_name
+        url: demo-source?xaction=staffSearch
+        valueField: code
+      text: bindFieldSelect
+    - _expanded: true
+      _icon: combo
+      cls: Wb.Select
+      events:
+        ready: |-
+          let select = this;
+          select.addTrigger({
+            icon: 'share', tip: 'Show values', weight: 991, handler() {
+              Wb.tip(Wb.encode(Wb.getValue(select)));
+            }
+          });
+      items:
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        events:
+          click: |-
+            // valueFieldSelect$ is text
+            Wb.setValue(app.viewport1, { valueFieldSelect: '10003', valueFieldSelect$: 'Michael Sullivan' });
+        properties:
+          cid: triggers
+          icon: data-provider
+          tip: Set value
+        text: triggers
+      properties:
+        cid: valueFieldSelect
+        text: Value Field
+        textField: full_name
+        url: demo-source?xaction=staffSearch
+        valueField: code
+      text: valueFieldSelect
+    - _expanded: true
+      _icon: combo
+      cls: Wb.Select
+      events:
+        ready: |-
+          let select = this;
+          select.addTrigger({
+            icon: 'share', tip: 'Show values', weight: 991, handler() {
+              Wb.tip(Wb.encode(Wb.getValue(select)));
+            }
+          });
+      items:
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        events:
+          click: 'Wb.setValue(app.valueMapSelect, { my_code: ''10003'', my_email:
+            ''michael8@geejing.com'', valueMapSelect: ''Michael Sullivan'' });'
+        properties:
+          cid: triggers
+          icon: data-provider
+          tip: Set value
+        text: triggers
+      properties:
+        cid: valueMapSelect
+        gridColumn: 1 / -1
+        subtextField: code
+        text: Value Map
+        textField: full_name
+        url: demo-source?xaction=staffSearch
+        valueMap: '{code: ''my_code'', email: ''my_email'', full_name: ''valueMapSelect''
+          }'
+      text: valueMapSelect
+    - _expanded: true
+      _icon: combo
+      cls: Wb.Select
+      items:
+      - _expanded: true
+        _icon: array
+        cls: Wb.Array
+        items:
+        - _expanded: false
+          _icon: item
+          cls: Wb.Item
+          events:
+            click: |-
+              this.parent.value = [{ code: '10001', full_name: 'Terri Duffy' }, { code: '10005', full_name: 'Gail Erickson' },
+              { code: '10008', full_name: 'Janice Galvin' }];
+          properties:
+            cid: setBtn
+            icon: data-provider
+            tip: Set values
+          text: setBtn
+        - _expanded: true
+          _icon: item
+          cls: Wb.Item
+          events:
+            click: Wb.tip(Wb.encode(this.parent.value));
+          properties:
+            cid: getBtn
+            icon: share
+            tip: Get values
+          text: getBtn
+        - _expanded: true
+          _icon: item
+          cls: Wb.Item
+          events:
+            click: |-
+              let select = this.parent;
+              select.picker.load({
+                success() {
+                  select.value = this.data.firstItem;
+                }
+              });
+          properties:
+            cid: manualSelect
+            icon: setup
+            tip: Manual select the first item
+          text: manualSelect
+        properties:
+          cid: triggers
+        text: triggers
+      properties:
+        cid: multiSelect
+        clearButton: 'true'
+        gridColumn: 1 / -1
+        multiSelect: 'true'
+        noWrap: 'true'
+        text: Multi Select
+        textField: full_name
+        url: demo-source?xaction=staffRows
+        valueField: code
+      text: multiSelect
+    - _expanded: true
+      _icon: combo
+      cls: Wb.Select
+      properties:
+        cid: multiSelectWrap
+        clearButton: 'true'
+        gridColumn: 1 / -1
+        maxHeight: 10em
+        multiSelect: 'true'
+        noWrap: 'true'
+        subtextField: code
+        tagSortable: 'true'
+        tagTipField: email
+        tagWidth: calc(100% - 8em)
+        tagWrap: 'true'
+        text: Multi Select Wrap
+        textField: full_name
+        url: demo-source?xaction=staffSearch
+        valueField: code
+      text: multiSelectWrap
+    - _icon: combo
+      cls: Wb.Select
+      events:
+        beforeselect: |-
+          if (!item.leaf) {
+            Wb.tip('Please select a leaf node');
+            return false;
+          }
+      properties:
+        cid: treeSelect
+        data: |-
+          [
+            {
+              text: 'Asia', _icon: 'flag1', myCheck: 1, sid: 'a',
+              remark: 'Asia is the largest continent in the world', area: 44579000, percentage: 0.3, items: [
+                { text: 'China', _leaf: true, myCheck: 0, sid: 'a1' },
+                { text: 'Japan', _leaf: true, myCheck: 1, sid: 'a2' },
+                { text: 'Korea', _leaf: true, myCheck: 0, sid: 'a3' }
+              ]
+            },
+            {
+              text: 'Europe', _icon: 'flag1', myCheck: 1, sid: 'b',
+              remark: 'Europe is between Asia and Africa', area: 9938000, percentage: 0.067, items: [
+                { text: 'France', _leaf: true, sid: 'b1' },
+                { text: 'Germany', _leaf: true, sid: 'b2' },
+                { text: 'UK', _leaf: true, sid: 'b3' }
+              ]
+            },
+            {
+              text: 'North America', _icon: 'flag1', _selected: true, _expanded: true, sid: 'c',
+              remark: "North America is the third largest of the world's continents", area: 24256000, percentage: 0.165, items: [
+                { text: 'Canada', _leaf: true, sid: 'c1' },
+                { text: 'Mexico', _leaf: true, sid: 'c2' },
+                { text: 'USA', _leaf: true, sid: 'c3' }
+              ]
+            },
+            {
+              text: 'South America', _icon: 'flag1', _disabled: true, sid: 'd',
+              remark: "Sorth America is the fourth largest of the world's continents", area: 17819000, percentage: 0.12, items: [
+                { text: 'Argentina', _leaf: true, sid: 'd1' },
+                { text: 'Brazil', _leaf: true, sid: 'd2' }
+              ]
+            }
+          ]
+        gridColumn: 1 / -1
+        text: Tree Select
+        textField: text
+        treePicker: 'true'
+        valueField: sid
+      text: treeSelect
+    - _expanded: true
+      _icon: combo
+      cls: Wb.Select
+      events:
+        change: // Wb.tip(Wb.encode(value));
+      items:
+      - _expanded: true
+        _icon: array
+        cls: Wb.Array
+        items:
+        - _expanded: false
+          _icon: item
+          cls: Wb.Item
+          events:
+            click: 'this.parent.value = { text: ''Paris'', subtext: ''004LMY1FA9D40'',
+              sid: ''004LMY1FA9D40'' };'
+          properties:
+            cid: setBtn
+            icon: data-provider
+            tip: Set values
+          text: setBtn
+        - _expanded: true
+          _icon: item
+          cls: Wb.Item
+          events:
+            click: Wb.tip(Wb.encode(this.parent.value));
+          properties:
+            cid: getBtn
+            icon: share
+            tip: Get values
+          text: getBtn
+        properties:
+          cid: triggers
+        text: triggers
+      properties:
+        cid: singleTagTreeSelect
+        clearButton: 'true'
+        gridColumn: 1 / -1
+        text: Single Tag Tree
+        textField: text
+        treePicker: 'true'
+        url: demo-source?xaction=listAreaTree1
+        useTag: 'true'
+        valueField: sid
+      text: singleTagTreeSelect
+    - _expanded: true
+      _icon: combo
+      cls: Wb.Select
+      events:
+        change: // Wb.tip(Wb.encode(value));
+      items:
+      - _expanded: true
+        _icon: array
+        cls: Wb.Array
+        items:
+        - _expanded: false
+          _icon: item
+          cls: Wb.Item
+          events:
+            click: |-
+              this.parent.value = [
+                { text: 'Lyon', subtext: '004LMY1FA9D41', sid: '004LMY1FA9D41' },
+                { text: 'Paris', subtext: '004LMY1FA9D40', sid: '004LMY1FA9D40' }
+              ];
+          properties:
+            cid: setBtn
+            icon: data-provider
+            tip: Set values
+          text: setBtn
+        - _expanded: true
+          _icon: item
+          cls: Wb.Item
+          events:
+            click: Wb.tip(Wb.encode(this.parent.value));
+          properties:
+            cid: getBtn
+            icon: share
+            tip: Get values
+          text: getBtn
+        properties:
+          cid: triggers
+        text: triggers
+      properties:
+        cid: multiTreeSelect
+        clearButton: 'true'
+        gridColumn: 1 / -1
+        maxHeight: 10em
+        multiSelect: 'true'
+        tagSortable: 'true'
+        tagWidth: 70%
+        tagWrap: 'true'
+        text: Multi Select Tree
+        textField: text
+        treePicker: 'true'
+        url: demo-source?xaction=listAreaTree1
+        valueField: sid
+      text: multiTreeSelect
+    properties:
+      cid: selectCt
+      frame: 'true'
+      gridTplColumns: repeat(auto-fill, 22em)
+      layout: grid
+    text: selectCt
+  - _expanded: true
+    _icon: title
+    cls: Wb.Title
+    properties:
+      cid: linkedSelectTitle
+      title: Linked Select
+    text: linkedSelectTitle
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _icon: combo
+      cls: Wb.Select
+      events:
+        ready: |-
+          let me = this;
+          //Pick up the first item
+          me.picker.load({ success() { me.valueIndex = 0; } });
+      properties:
+        cid: continentSelect
+        forceSelect: 'true'
+        placeholder: Continent
+        required: 'true'
+        textField: area_name
+        url: demo-source?xaction=listRootArea
+        valueField: sid
+      text: continentSelect
+    - _icon: combo
+      cls: Wb.Select
+      events:
+        beforeload: |-
+          let select = app.continentSelect;
+          if (select.verify())
+            params.parent_id = select.value;
+          else {
+            select.focus();
+            return false;
+          }
+      properties:
+        cid: countrySelect
+        forceSelect: 'true'
+        placeholder: Country
+        required: 'true'
+        textField: area_name
+        url: demo-source?xaction=listArea
+        valueField: sid
+      text: countrySelect
+    - _expanded: true
+      _icon: combo
+      cls: Wb.Select
+      events:
+        beforeload: |-
+          let select = app.countrySelect;
+          if (select.verify())
+            params.parent_id = select.value;
+          else {
+            select.focus();
+            return false;
+          }
+      properties:
+        cid: citySelect
+        forceSelect: 'true'
+        placeholder: City
+        required: 'true'
+        textField: area_name
+        url: demo-source?xaction=listArea
+        valueField: sid
+      text: citySelect
+    properties:
+      cid: linkedSelectCt
+      frame: 'true'
+      layout: grid
+    text: linkedSelectCt
+  - _expanded: true
+    _icon: title
+    cls: Wb.Title
+    properties:
+      cid: triggerTitle
+      title: Trigger
+    text: triggerTitle
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _icon: trigger
+      cls: Wb.Trigger
+      events:
+        triggerclick: Wb.tip(this.cid + ' triggered');
+      properties:
+        cid: commonTrigger
+        text: Common Trigger
+      text: commonTrigger
+    - _icon: trigger
+      cls: Wb.Trigger
+      events:
+        triggerclick: Wb.tip(this.cid + ' triggered');
+      properties:
+        cid: readonlyTrigger
+        editable: 'false'
+        enterTriggerClick: 'true'
+        placeholder: Press enter
+        text: Readonly Trigger
+        triggerIcon: location
+      text: readonlyTrigger
+    - _expanded: true
+      _icon: trigger
+      cls: Wb.Trigger
+      events:
+        triggerclick: Wb.tip('Default trigger clicked');
+      items:
+      - _expanded: true
+        _icon: array
+        cls: Wb.Array
+        items:
+        - _expanded: true
+          _icon: item
+          cls: Wb.Item
+          events:
+            click: Wb.tip('Set trigger clicked');
+          properties:
+            cid: setItem
+            icon: gear
+            tip: '@Str.set'
+          text: setItem
+        - _expanded: true
+          _icon: item
+          cls: Wb.Item
+          properties:
+            cid: copyItem
+            icon: copy
+            tip: '@Str.copy'
+          text: copyItem
+        properties:
+          cid: triggers
+        text: triggers
+      properties:
+        cid: extraTrigger
+        text: Extra Triggers
+      text: extraTrigger
+    properties:
+      cid: triggerCt
+      frame: 'true'
+      layout: grid
+    text: triggerCt
+  - _expanded: true
+    _icon: title
+    cls: Wb.Title
+    properties:
+      cid: pickerTitle
+      title: Picker
+    text: pickerTitle
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _expanded: true
+      _icon: picker
+      cls: Wb.Picker
+      events:
+        collapse: this.value = Wb.encode(Wb.getValue(this.picker));
+        expand: 'Wb.setValue(this.picker, this.value ? Wb.decode(this.value) : {});'
+      items:
+      - _expanded: true
+        _icon: container
+        cls: Wb.Container
+        items:
+        - _icon: text
+          cls: Wb.Text
+          properties:
+            cid: nameText
+            text: name
+          text: nameText
+        - _icon: text
+          cls: Wb.Text
+          properties:
+            cid: typeText
+            text: type
+          text: typeText
+        - _icon: number-edit
+          cls: Wb.Number
+          properties:
+            cid: countNumber
+            text: Count
+          text: countNumber
+        properties:
+          cid: picker
+          defaults: '({ labelWidth: ''5em'' })'
+          isProperty: 'true'
+          layout: grid1
+        text: picker
+      properties:
+        cid: commonPicker
+        editable: 'false'
+        text: Common Picker
+      text: commonPicker
+    - _expanded: true
+      _icon: picker
+      cls: Wb.Picker
+      items:
+      - _icon: grid
+        cls: Wb.Grid
+        properties:
+          cid: picker
+          isProperty: 'true'
+          url: demo-source?xaction=staffDict
+        text: picker
+      properties:
+        cid: gridPicker
+        text: Grid Picker
+      text: gridPicker
+    - _expanded: true
+      _icon: picker
+      cls: Wb.Picker
+      events:
+        collapse: this.value = this.picker.checkedNodes.pluck('text').join(', ');
+      items:
+      - _expanded: true
+        _icon: tree-view
+        cls: Wb.Tree
+        events:
+          itemclick: |-
+            let picker = this.parent;
+            if (item.leaf) {
+              picker.setValue(item.data.area_name);
+              picker.collapse();
+              picker.focus();
+            }
+        properties:
+          cid: picker
+          isProperty: 'true'
+          url: demo-source?xaction=listAreaTree
+        text: picker
+      properties:
+        cid: treePicker
+        editable: 'false'
+        text: Tree Picker
+      text: treePicker
+    - _expanded: true
+      _icon: picker
+      cls: Wb.Picker
+      items:
+      - _icon: container
+        cls: Wb.Container
+        properties:
+          cid: picker
+          frame: 'true'
+          isProperty: 'true'
+          padding: 'true'
+          text: Load large data asynchronously
+        text: picker
+      properties:
+        cid: lazyPicker
+        lazyPicker: 'true'
+        text: Lazy Picker
+      text: lazyPicker
+    - _expanded: true
+      _icon: calendar
+      cls: Wb.Date
+      properties:
+        cid: dockedPicker
+        dockedPicker: 'true'
+        shareView: 'false'
+        text: Picker docked bottom
+      text: dockedPicker
+    properties:
+      cid: pickerCt
+      frame: 'true'
+      layout: grid
+    text: pickerCt
+  - _expanded: true
+    _icon: title
+    cls: Wb.Title
+    properties:
+      cid: othersTitle
+      title: Others
+    text: othersTitle
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _expanded: true
+      _icon: color
+      cls: Wb.Color
+      properties:
+        cid: color1
+        placeholder: Color
+      text: color1
+    - _icon: brush
+      cls: Wb.ColorSelect
+      properties:
+        cid: colorSelect1
+      text: colorSelect1
+    - _icon: check8
+      cls: Wb.BoolSelect
+      properties:
+        cid: boolSelect1
+        placeholder: Bool selector
+      text: boolSelect1
+    properties:
+      cid: othersCt
+      frame: 'true'
+      layout: grid
+    text: othersCt
+  - _expanded: true
+    _icon: title
+    cls: Wb.Title
+    properties:
+      cid: codingTitle
+      title: Coding
+    text: codingTitle
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _expanded: true
+      _icon: container
+      cls: Wb.Container
+      items:
+      - _icon: combo
+        cls: Wb.Select
+        properties:
+          cid: localSelect
+          data: '[''item1'', ''item2'', ''item3'']'
+          text: Local Select
+        text: localSelect
+      - _icon: combo
+        cls: Wb.Select
+        events:
+          beforeload: params.foo = 'bar';
+        properties:
+          cid: remoteSelect1
+          loadOnce: 'true'
+          text: Remote Select
+          textField: full_name
+          url: demo-source?xaction=staffRows
+          valueField: code
+        text: remoteSelect1
+      properties:
+        cid: demoCt
+        layout: form-compact
+      text: demoCt
+    - _expanded: false
+      _icon: line
+      cls: Wb.Line
+      properties:
+        cid: line1
+        dashed: 'true'
+        dimTitle: 'true'
+        title: Demonstrate
+      text: line1
+    - _expanded: true
+      _icon: container
+      cls: Wb.Container
+      items:
+      - _expanded: true
+        _icon: button
+        cls: Wb.Button
+        events:
+          click: |-
+            app.localSelect.data.push({ text: 'New Item' }); //add permanently
+            //app.localSelect.picker.addData({ text: 'New Item' }); //add transiently because the picker data will be reloaded when expand it
+        properties:
+          cid: addBtn
+          text: Insert Item
+        text: addBtn
+      - _expanded: true
+        _icon: button
+        cls: Wb.Button
+        events:
+          click: app.localSelect.data.erase(0); //erase is a function ofArray, see
+            Array functions
+        properties:
+          cid: removeBtn
+          text: Remove Item
+        text: removeBtn
+      - _expanded: true
+        _icon: button
+        cls: Wb.Button
+        events:
+          click: app.localSelect.expand();
+        properties:
+          cid: expandLocalBtn
+          text: Expand Local Select
+        text: expandLocalBtn
+      - _expanded: true
+        _icon: button
+        cls: Wb.Button
+        events:
+          click: app.remoteSelect1.query(); //expand function has no effect because
+            the picker's data has not been loaded yet
+        properties:
+          cid: expandRemoteBtn
+          text: Expand Remote Select
+        text: expandRemoteBtn
+      properties:
+        cid: actionCt
+        layout: form-compact
+      text: actionCt
+    properties:
+      cid: codingCt
+      frame: 'true'
+      layout: grid1
+    text: codingCt
+  properties:
+    cid: viewport1
+    layout: grid1
+  text: viewport1
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

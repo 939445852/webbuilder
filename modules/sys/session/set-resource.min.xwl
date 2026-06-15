@@ -1,0 +1,13 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Set current user resource
+  serverScript: function setResource(){let{name:e,value:s,type:t}=Params;if(s){if(s.stream
+    instanceof InputStream)s=s.stream;else if(t=="object")t=1}else{s=null}Wb.setResource(e,s,app.userid,t)}setResource();
+tags: ''
+text: module
+title: ''

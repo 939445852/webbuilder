@@ -1,0 +1,18 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.apply(app,{onChange(){app.saveBtn.disabled=false},save(e){app.grid1.sync({url:xpath+"/actions&xaction=save",success(){app.saveBtn.disabled=true;e?.()}})}});Wb.make(app,{cname:"viewport",layout:"fit",cid:"viewport1",tbar:{cname:"toolbar",items:[{icon:"add",text:Str.add,keys:"Ctrl+E",cid:"addBtn",events:{click(e,a){app.grid1.addRecord({type:"string"})}}},{icon:"delete",text:Str.del,keys:"Ctrl+D",cid:"delBtn",events:{click(e,a){app.grid1.delRecords()}}},{cname:"divider",cid:"divider2"},{icon:"save",disabled:true,text:Str.save,keys:"Ctrl+S",cid:"saveBtn",events:{click(e,a){app.save()}}},{cname:"divider",cid:"divider1"},{cname:"text",minWidth:"5em",clearButton:true,placeholder:Str.search,flex:1,cid:"search",maxWidth:"20em",events:{change(e,a,t){app.grid1.delayLoad({comps:app.search})}}}]},items:[{cname:"grid",keyFields:"name,type",editable:true,url:xpath+"/actions&xaction=select",cid:"grid1",multiSelect:true,stateData:"_$004V7KE4QVEXE$_",stateId:"wb.lang",events:{itemchange(e,a){app.onChange()},beforeload(e,a,t){return
+    this.saveConfirm(app.saveBtn,app.save)},editing(e,a,t){app.onChange()}}}]});Wb.onUnload(parentContainer,(()=>{if(!app.saveBtn.disabled)return
+    false}));
+hideInMenu: 'false'
+icon: book
+img: ''
+properties:
+  cid: module
+  remark: Multilingual editor
+stateMap:
+  wb.lang: 004V7KE4QVEXE
+tags: ''
+text: module
+title: '@langMng'

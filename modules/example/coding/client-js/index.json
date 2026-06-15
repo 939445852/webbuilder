@@ -1,0 +1,11 @@
+{
+  "title": "",
+  "icon": "",
+  "img": "",
+  "hideInMenu": "false",
+  "items": [
+    "common-usage.xwl",
+    "dom-element.xwl",
+    "control.xwl"
+  ]
+}

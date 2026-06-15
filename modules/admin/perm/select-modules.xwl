@@ -1,0 +1,29 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Select modules
+  serverScript: |-
+    function main() {
+      const fs = Wb.load('wb/modules/sys/file/fs.mjs');
+      let items, rolesMap = {}, roles;
+
+      Wb.getRows('select module_path,role_id from wb_perm', row => {
+        roles = rolesMap[row.module_path] ??= [];
+        roles.push(row.role_id);
+      });
+      items = fs.listPermModules();
+      Wb.cascade(items, item => {
+        if (item._leaf) {
+          item.roles = rolesMap[item.path];
+        }
+      });
+      Wb.send([{ _checked: false, text: Str.all, _expanded: true, items }]);
+    }
+    main();
+tags: ''
+text: module
+title: ''

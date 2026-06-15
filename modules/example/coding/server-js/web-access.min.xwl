@@ -1,0 +1,59 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: 'Wb.make(app,{cname:"codeEditor",readonly:true,wrapBorder:0,value:"//Gets
+    the parameters submitted by the client. It is commonly used in application/x-www-form-urlencoded,\n//multipart/form-data
+    and application/json\nlet val = Wb.get(''paramName''); //Gets session attribute,
+    request attribute and request parameters\nval = Wb.getString(''paramName''); //Gets
+    the parameter and converts it to string\nval = Wb.getBool(''paramName''); //Gets
+    the parameter and converts it to boolean\nval = Wb.getInt(''paramName''); //Gets
+    the parameter and converts it to int\nval = Wb.getFloat(''paramName''); //Gets
+    the parameter and converts it to float\nval = Wb.getDate(''paramName''); //Gets
+    the parameter and converts it to date\nval = Wb.getObject(''paramName''); //Gets
+    the parameter and converts it to Object/Array\n//Gets multiple parameters with
+    the same name, always returning array or Java List. Example: Get multiple uploaded
+    files\nval = Wb.getParams(''paramName'');\nval = Params.paramName; //Get the value
+    through the proxy, same as Wb.get\nval = Params[name];\nlet hasParam = Wb.has(''paramName'');
+    //Determines whether the parameter exists\nlet payload = Wb.payload; //Gets the
+    payload content of the request\nlet payloadParams = Wb.payloadParams; //Gets the
+    application/json payload object\n\n//Set attribute values\nWb.set(''paramName'',
+    ''abc''); //set \"abc\" to request attribute \"paramName\", same as request.setAttribute(''paramName'',
+    ''abc'');\nParams.paramName = ''abc''; //Set attribute by Proxy, same as above\nParams[name]
+    = ''abc''; //Same as above\n\n//Send object to the client\nWb.send(''text'');
+    //Send text\nWb.send(123); //Send after converting the number to text\nWb.send(new
+    Date()); //Send after converting the date to text\nWb.send({ foo: ''bar'' });
+    //Send after encoding the object to text\nWb.send([1, 2, 3]); //Send after encoding
+    the array to text\nWb.send(inputStream); //Send inputstream\nWb.send(bytes); //Send
+    byte array\nWb.send(''text'', ''mySocket''); //Send text to the current user webSocket
+    with the name \"mySocket\"\nWb.send(inputStream, ''mySocket'', ''admin''); ///Send
+    inputStream to all \"admin\" users webSocket with the name \"mySocket\"\nWb.send({
+    type: ''log'', style: 3, data: ''msg'' }, ''$ide'', true); //Send content to the
+    webSocket of the IDE\n\n//Gets the uploaded file\nlet file = Wb.getParams(''fileInput'');
+    //Gets single file\nfilename = file.name; //Gets filename\nstream = file.stream;
+    //Gets file inputstream\nsize = file.size; //Gets file size\nlet files = Wb.getParams(''fileInput'');
+    //Gets single or multiple files\nfiles.forEach(file => {\n  new Wb.File(true,
+    ''upload/'' + filename).stream = file.stream; //Save the uploaded file to the
+    specified directory\n  //Set the stream to a parameter named \"myStream\". Note
+    that the inputstream is unidirectional,\n  //and if the stream is already in use,
+    the stream pointer will point to the end of the stream.\n  Params.myStream = file.stream;\n  Wb.sql(''insert
+    into table values({?blob|myStream?})''); //Insert the uploaded file into the database
+    table blob field\n});\n\n//Send HTTP requests\nlet html = Wb.submit(''https://developer.mozilla.org'');
+    //Sends a GET request to the specified URL and gets the returned content\n//Sends
+    with parameters\nWb.submit({ url: ''http://localhost:8080/wb/m?xwl=test2'', params:
+    { foo: ''bar'' } });\n//Sends with payload data\nWb.submit({ url: ''http://localhost:8080/wb/m?xwl=test2'',
+    data: payloadObject });\n//Login to the system, verify the username and password,
+    and get the cookie token\nlet cookie = Wb.submit({\n  url: ''http://localhost:8080/wb/verify'',
+    all: true, params: { username: ''admin'', password: ''admin'' }\n}).cookie;\n//Access
+    module1 with login cookie token\nlet result = Wb.submit({ url: ''http://localhost:8080/wb/m?xwl=module1'',
+    cookie }, { foo: ''bar'' });\n//Logout\nWb.submit({ url: ''http://localhost:8080/wb/logout'',
+    cookie });",cid:"codeEditor1",full:true});'
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  links: '["wb/js/monaco.js"]'
+tags: ''
+text: module
+title: ''

@@ -1,0 +1,42 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.make(app,{cname:"viewport",layout:"grid1",cid:"viewport1",items:[{cname:"label",cid:"mainLabel",cls:"w-title3",text:"AI
+    Automatically Generates"},{cname:"label",html:'In the [<span class="w-link" sid="aiGen">AI-Gen</span>]
+    tab at the bottom of the IDE, you can automatically generate\napplications via
+    AI. First select a target directory in the file tree, then enter a prompt similar
+    to the example below\nin the [Prompt] text box on the right, and the system will
+    generate the application automatically.',cid:"descLabel",events:{click(e,t){if(e.target.getAttribute("sid")=="aiGen"){if(parentApp?.inIDE){parentApp.aiTab.show();parentApp.aiTextArea.focus();parentApp.aiTextArea.highlight()}else{Wb.openWin("ide?aiGen=1")}}}}},{cname:"title",title:"Create
+    a calculator",cid:"calculatorTitle"},{cname:"codeEditor",language:"txt",readonly:true,value:"Create
+    a calculator",minimap:false,cid:"calculatorEditor",height:"3em"},{cname:"title",title:"Create
+    CRUD application",cid:"crudTitle"},{cname:"codeEditor",language:"sql",readonly:true,value:"Create
+    a CRUD application based on the following table:\ncreate table wb_staff\n(\n  sid
+    varchar(13) not null,\n  code varchar(5) not null,\n  full_name varchar(50) not
+    null,\n  user_id varchar(13) not null,\n  dept_id varchar(13) not null,\n  birth_date
+    timestamp,\n  gender numeric(1),\n  height numeric(3),\n  email varchar(50),\n  salary
+    numeric(8,2),\n  cv clob,\n  photo blob\n)",minimap:false,cid:"crudEditor",height:"23em"},{cname:"title",title:"Create
+    application from screenshot",cid:"imageTitle"},{cname:"codeEditor",language:"txt",readonly:true,value:"Create
+    an application based on the interface shown in the screenshot.\n(Need to upload
+    the screenshot)",minimap:false,cid:"imageEditor",height:"4em"},{cname:"title",title:"Check
+    file code issues",cid:"checkTitle"},{cname:"codeEditor",language:"txt",readonly:true,value:"Check
+    the code of these files and report any existing issues.\n(Upload the list of xwl/js/mjs/css/sql
+    and other files)",minimap:false,cid:"checkEditor",height:"4em"},{cname:"title",title:"Modify
+    XWL module",cid:"modifyTitle"},{cname:"codeEditor",language:"txt",readonly:true,value:"Remove
+    the delete button and move the search box to the right, and create a new user.xwl.\n(Upload
+    the user.xwl module)",minimap:false,cid:"modifyEditor",height:"4em"},{cname:"title",title:"Describe
+    XWL",cid:"descTitle"},{cname:"codeEditor",language:"txt",readonly:true,value:"Describe
+    the functions of the role.xwl and user.xwl modules respectively.\n(Upload the
+    role.xwl and user.xwl module)",minimap:false,cid:"descEditor",height:"4em"},{cname:"title",title:"Create
+    React UI",cid:"reactTitle"},{cname:"codeEditor",language:"txt",readonly:true,value:"Build
+    a beautiful login page module with React UI; toolbar buttons need to retrieve
+    form data inside the login page.",minimap:false,cid:"reactEditor",height:"4em"}]});
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  links: '["wb/js/monaco.js"]'
+tags: ''
+text: module
+title: ''

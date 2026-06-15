@@ -1,0 +1,195 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  beforeunload: |-
+    if (!app.saveBtn.disabled)
+      return false;
+  finalize: app.loadControls();
+  initialize: |-
+    /**
+     * Controls manager.
+     */
+    Wb.apply(app, {
+      /**
+       * Add new folder.
+       */
+      addFolder() {
+        let tree = app.controlTree, node = tree.selection ?? tree.lastItem;
+
+        Wb.prompt(Str.addFolder, { text: Str.name, cid: 'name', required: true }, (values, win) => {
+          let text = values.name;
+
+          if (text == 'Ungrouped') {
+            Wb.tipWarn(Str.nameCannotBe.format(text));
+            return;
+          }
+          node.parent.insertDataAfter({ text, items: [] }, node).select();
+          app.modified();
+          win.close();
+        });
+      },
+      /**
+       * Remove the selected nodes.
+       */
+      remove() {
+        app.controlTree.delRecords();
+        app.modified();
+      },
+      /**
+       * Edit the selected node.
+       */
+      edit() {
+        let node = app.controlTree.selection, text = node.text;
+
+        Wb.prompt(Str.edit + ' - ' + text, { text: Str.name, cid: 'name', required: true, value: text },
+          (values, win) => {
+            node.proxy.text = values.name;
+            app.modified();
+            win.close();
+          });
+      },
+      /**
+       * Set modified status. @priv
+       */
+      modified() {
+        app.saveBtn.disabled = false;
+      },
+      /**
+       * Save current data.
+       */
+      save() {
+        let allData = app.controlTree.data;
+        Wb.cascade(allData, data => {
+          data.sort = undefined;
+          if (data.cls) {
+            data.items = undefined;
+            data._leaf = true;
+          }
+        });
+        Wb.ajax({
+          url: xpath + '/save',
+          data: allData,
+          success() {
+            app.saveBtn.disabled = true;
+          }
+        });
+      },
+      /**
+       * Load controls to the tree. @priv
+       */
+      loadControls() {
+        let tree = app.controlTree, grouped = {}, ungrouped = [], data, cls;
+
+        tree.data = WbControlsGroup;
+        tree.cascade(node => {
+          data = node.data;
+          grouped[data.cls] = true;
+        });
+        Wb.each(WbDocsData, (k, v) => {
+          cls = v.cls;
+          if (v.icon && !grouped[cls] && cls != 'Wb.Module') {
+            ungrouped.push({
+              _icon: v.icon, text: v.cname, cls: k, _leaf: true,
+            });
+          }
+        });
+        tree.downBy(node => node.text == 'Ungrouped').addData(ungrouped);
+      }
+    });
+hideInMenu: 'false'
+icon: container
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _expanded: true
+    _icon: toolbar
+    cls: Wb.Toolbar
+    items:
+    - _icon: item
+      cls: Wb.Item
+      properties:
+        cid: addFolderBtn
+        handler: app.addFolder
+        icon: folder1
+        keys: Ctrl+E
+        text: '@Str.addFolder'
+      text: addFolderBtn
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      properties:
+        cid: editBtn
+        disabled: 'true'
+        handler: app.edit
+        icon: edit
+        keys: Ctrl+J
+        text: '@Str.edit'
+      text: editBtn
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      properties:
+        cid: removeBtn
+        disabled: 'true'
+        handler: app.remove
+        icon: delete
+        keys: Ctrl+D
+        text: '@Str.del'
+      text: removeBtn
+    - _icon: divider
+      _leaf: true
+      cls: Wb.Divider
+      items: [
+        ]
+      properties:
+        cid: divider1
+      text: divider1
+    - _icon: item
+      cls: Wb.Item
+      properties:
+        cid: saveBtn
+        disabled: 'true'
+        handler: app.save
+        icon: save
+        keys: Ctrl+S
+        text: '@Str.save'
+      text: saveBtn
+    properties:
+      cid: tbar
+      isProperty: 'true'
+    text: tbar
+  - _expanded: true
+    _icon: tree-view
+    cls: Wb.Tree
+    events:
+      itemdrop: app.modified();
+      selectionchange: |-
+        let nodes = this.selections, node = nodes[0];
+        app.editBtn.disabled = nodes.length != 1 || node.leaf || node.text == 'Ungrouped';
+        app.removeBtn.disabled = !nodes.length;
+    properties:
+      cid: controlTree
+      draggable: 'true'
+      droppable: wb.controls
+      keyWalking: 'true'
+      multiSelect: 'true'
+    text: controlTree
+  properties:
+    cid: viewport1
+    layout: fit
+  text: viewport1
+properties:
+  cid: module
+  links: |-
+    [
+      "wb/docs/data.js",
+      "wb/docs/groups.js"
+    ]
+  remark: Controls management tool
+tags: ''
+text: module
+title: '@controlsMng'

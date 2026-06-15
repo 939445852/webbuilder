@@ -1,0 +1,408 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: info
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  events:
+    ready: |-
+      let el = this.el, mainDiv, teamDiv, updateLink, newVersion;
+
+      if (Str.lang == 'zh-cn')
+        mainDiv = el.query('[cid=lang-zh-cn]');
+      else
+        mainDiv = el.query('[cid=lang-en]');
+      mainDiv.setStyle('display', 'block');
+      teamDiv = mainDiv.query('[cid=team-list]')
+      teamDiv.addEventListener('animationend', f => {
+        teamDiv.parentNode.cls = 'w-scroll-true';
+      }, {
+        once: true
+      });
+      teamDiv.className = 'w-vscroll';
+      new Wb.Button({
+        el: mainDiv.query('[cid=buy]'), icon: 'cart', text: Str.buy, type: 'primary', owner: this, handler() {
+          window.open('https://www.geejing.com/buy');
+        }
+      });
+      newVersion = mainDiv.query('[cid=newVersion]');
+      Wb.ajax({
+        url: xpath + '/get-new-version', mask: false, showError: false,
+        failure(resp) {
+          newVersion.textContent = Str.unableDetectNew;
+        },
+        success(resp) {
+          if (parseFloat(resp) != _$version$_) {
+            newVersion.textContent = '';
+            updateLink = newVersion.addTag('a');
+            updateLink.href = 'https://www.geejing.com/download';
+            updateLink.target = '_blank';
+            updateLink.textContent = Str.foundNewVersion.format(resp);
+            updateLink.highlight();
+          } else {
+            newVersion.textContent = Str.alreadyLatestVersion;
+          }
+        }
+      });
+  properties:
+    autoScroll: 'true'
+    cid: viewport1
+    html: |-
+      <div cid='lang-en' class='w-html' style='line-height:2;display:none;'>
+        <h2>About WebBuilder</h2>
+        <hr class="w-hr">
+        <table>
+          <tr>
+            <td rowspan="6">
+              <div class="w-icon icon-geejing" style="margin:.3em;font-size:3em;"></div>
+            </td>
+            <td>WebBuilder _$type$_, Date: _$date$_</td>
+          </tr>
+          <tr>
+            <td>Version:
+              _$version$_
+              (<span cid="newVersion"><div class="w-icon w-spin icon-loading w-block"></div> Detecting new version...</span>)
+            </td>
+          </tr>
+          <tr>
+            <td>_$lic$_</td>
+          </tr>
+          <tr>
+            <td>Powerful rapid application development and runtime platform</td>
+          </tr>
+          <tr>
+            <td>Server Code: _$serverCode$_</td>
+          </tr>
+          <tr>
+            <td class='w-padding-tb'>
+              <div cid='buy'></div>
+            </td>
+          </tr>
+        </table>
+        <hr class="w-hr">
+        <h3>Buy WebBuilder</h3>
+        <p>
+          WebBuilder is released under commercial license, and unauthorized commercial use is illegal.<br>
+          Buy Now: <a href="https://www.geejing.com/buy" target="_blank">https://www.geejing.com/buy</a><br>
+          If you have any question please contact our sales team: <a href="mailto:contact@geejing.com">contact@geejing.com</a>
+        </p>
+        <hr class="w-hr">
+        <h3>Development Team</h3>
+        <div style="height:8em;overflow:hidden;">
+          <div cid="team-list">
+            <p>Amy Liu</p>
+            <p>Andy Williams</p>
+            <p>Bing Xia</p>
+            <p>Brian Galvin</p>
+            <p>Changxing Chen</p>
+            <p>Duncan Soman</p>
+            <p>Eric Kane</p>
+            <p>Fred Gibson</p>
+            <p>Fuming Guo</p>
+            <p>Hongyu Zhang</p>
+            <p>Jiadong Wu</p>
+            <p>Jie Chen</p>
+            <p>Kevin Zhao</p>
+            <p>Lindsey Su</p>
+            <p>Ming Zhao</p>
+            <p>Muran Xiao</p>
+            <p>Olinda Ray</p>
+            <p>Owen Wang</p>
+            <p>Rena Jiang</p>
+            <p>Ruiyang Li</p>
+            <p>Sariya Diamond</p>
+            <p>Terry Sam</p>
+            <p>Tianen Wang</p>
+            <p>Wenhao Jin</p>
+            <p>Wilt Austin</p>
+          </div>
+        </div>
+        <hr class="w-hr">
+        <h3>System Requirements</h3>
+        <table class="w-table">
+          <tr>
+            <th>Items</th>
+            <th>Requirements</th>
+          </tr>
+          <tr>
+            <td>Operating System</td>
+            <td>Windows, Linux, MacOS</td>
+          </tr>
+          <tr>
+            <td>Web Application Servers</td>
+            <td>Any Standard Server(Tomcat, Jetty, Resin, WebLogic etc.)</td>
+          </tr>
+          <tr>
+            <td>Memory</td>
+            <td>800 MB</td>
+          </tr>
+          <tr>
+            <td>Disk Space</td>
+            <td>1 GB(Contains JRE and Tomcat)</td>
+          </tr>
+          <tr>
+            <td>Desktop & Mobile Browser</td>
+            <td>Modern Browsers(Chrome, Edge, Firefox, WebView etc.)</td>
+          </tr>
+        </table>
+        <hr class="w-hr">
+        <h3>The Third Party Software</h3>
+        <p>WebBuilder requires these third-party software, all of which use friendly licenses and are open source and free.
+        </p>
+        <table class="w-table">
+          <tr>
+            <th>Software Name</th>
+            <th>License</th>
+          </tr>
+          <tr>
+            <td>Apache Softwares</td>
+            <td>Apache</td>
+          </tr>
+          <tr>
+            <td>GraalVM</td>
+            <td>UPL</td>
+          </tr>
+          <tr>
+            <td>JSON.org</td>
+            <td>Public</td>
+          </tr>
+          <tr>
+            <td>SLF4J</td>
+            <td>MIT</td>
+          </tr>
+          <tr>
+            <td>Quartz</td>
+            <td>Apache</td>
+          </tr>
+          <tr>
+            <td>Terser</td>
+            <td>BSD</td>
+          </tr>
+          <tr>
+            <td>Javascript Obfuscator</td>
+            <td>BSD 2-Clause</td>
+          </tr>
+          <tr>
+            <td>CSSO</td>
+            <td>MIT</td>
+          </tr>
+          <tr>
+            <td>Monaco Editor</td>
+            <td>MIT</td>
+          </tr>
+          <tr>
+            <td>X6</td>
+            <td>MIT</td>
+          </tr>
+          <tr>
+            <td>Quill</td>
+            <td>BSD 3-Clause</td>
+          </tr>
+          <tr>
+            <td>Marked</td>
+            <td>MIT</td>
+          </tr>
+          <tr>
+            <td>DevTools</td>
+            <td>BSD 3-Clause</td>
+          </tr>
+        </table>
+        <hr class="w-hr">
+        <div>Warning: WebBuilder has legal copyright registrations in the world. Unauthorized use will result in severe civil
+          and criminal penalties and will be prosecuted to the maximum extent possible under the law.</div>
+        <div>For more information please visit: <a href="https://www.geejing.com" target="_blank">https://www.geejing.com</a>
+        </div>
+        <div>Copyright © Geejing, All Rights Reserved.</div>
+        <div>Contact us: <a href="mailto:contact@geejing.com">contact@geejing.com</a></div>
+      </div>
+      <div cid='lang-zh-cn' class='w-html' style='line-height:2;display:none;'>
+        <h2>关于 WebBuilder</h2>
+        <hr class="w-hr">
+        <table>
+          <tr>
+            <td rowspan="6">
+              <div class="w-icon icon-geejing" style="margin:.3em;font-size:3em;"></div>
+            </td>
+            <td>WebBuilder _$type$_，发布日期：_$date$_</td>
+          </tr>
+          <tr>
+            <td>
+              版本：_$version$_
+              （<span cid="newVersion"><div class="w-icon w-spin icon-loading w-block"></div> 正在检测新版本...</span>）
+            </td>
+          </tr>
+          <tr>
+            <td>_$lic$_</td>
+          </tr>
+          <tr>
+            <td>强大的快速应用开发和运行平台</td>
+          </tr>
+          <tr>
+            <td>服务器编号：_$serverCode$_</td>
+          </tr>
+          <tr>
+            <td class='w-padding-tb'>
+              <div cid='buy'></div>
+            </td>
+          </tr>
+        </table>
+        <hr class="w-hr">
+        <h3>购买 WebBuilder</h3>
+        <p>
+          WebBuilder 在商业许可证下发布，未授权的商用是违法的。<br>
+          立即购买：<a href="https://www.geejing.com/buy" target="_blank">https://www.geejing.com/buy</a><br>
+          如果您有任何问题请联系我们的销售团队：<a href="mailto:contact@geejing.com">contact@geejing.com</a>
+        </p>
+        <hr class="w-hr">
+        <h3>开发人员</h3>
+        <div style="height:8em;overflow:hidden;">
+          <div cid="team-list">
+            <p>Amy Liu</p>
+            <p>Andy Williams</p>
+            <p>Bing Xia</p>
+            <p>Brian Galvin</p>
+            <p>Changxing Chen</p>
+            <p>Duncan Soman</p>
+            <p>Eric Kane</p>
+            <p>Fred Gibson</p>
+            <p>Fuming Guo</p>
+            <p>Hongyu Zhang</p>
+            <p>Jiadong Wu</p>
+            <p>Jie Chen</p>
+            <p>Kevin Zhao</p>
+            <p>Lindsey Su</p>
+            <p>Ming Zhao</p>
+            <p>Muran Xiao</p>
+            <p>Olinda Ray</p>
+            <p>Owen Wang</p>
+            <p>Rena Jiang</p>
+            <p>Ruiyang Li</p>
+            <p>Sariya Diamond</p>
+            <p>Terry Sam</p>
+            <p>Tianen Wang</p>
+            <p>Wenhao Jin</p>
+            <p>Wilt Austin</p>
+          </div>
+        </div>
+        <hr class="w-hr">
+        <h3>系统运行要求</h3>
+        <table class="w-table">
+          <tr>
+            <th>条目</th>
+            <th>需求</th>
+          </tr>
+          <tr>
+            <td>操作系统</td>
+            <td>Windows, Linux, MacOS</td>
+          </tr>
+          <tr>
+            <td>Web 应用服务器</td>
+            <td>任何符合工业标准的服务器(Tomcat，Jetty，Resin，WebLogic 等)</td>
+          </tr>
+          <tr>
+            <td>内存</td>
+            <td>800 MB</td>
+          </tr>
+          <tr>
+            <td>磁盘空间</td>
+            <td>1 GB(包含 JRE and Tomcat)</td>
+          </tr>
+          <tr>
+            <td>桌面和移动端浏览器</td>
+            <td>现代浏览器(Chrome, Edge, Firefox, WebView 等)</td>
+          </tr>
+        </table>
+        <hr class="w-hr">
+        <h3>第三方软件</h3>
+        <p>WebBuilder 是自主研发的软件，完全符合信创要求。运行 WebBuilder 需要这些第三方软件，这些软件都使用了友好的授权并且是开源和免费的。</p>
+        <table class="w-table">
+          <tr>
+            <th>软件名称</th>
+            <th>授权协议</th>
+          </tr>
+          <tr>
+            <td>Apache Softwares</td>
+            <td>Apache</td>
+          </tr>
+          <tr>
+            <td>GraalVM</td>
+            <td>UPL</td>
+          </tr>
+          <tr>
+            <td>JSON.org</td>
+            <td>Public</td>
+          </tr>
+          <tr>
+            <td>SLF4J</td>
+            <td>MIT</td>
+          </tr>
+          <tr>
+            <td>Quartz</td>
+            <td>Apache</td>
+          </tr>
+          <tr>
+            <td>Terser</td>
+            <td>BSD</td>
+          </tr>
+          <tr>
+            <td>Javascript Obfuscator</td>
+            <td>BSD 2-Clause</td>
+          </tr>
+          <tr>
+            <td>CSSO</td>
+            <td>MIT</td>
+          </tr>
+          <tr>
+            <td>Monaco Editor</td>
+            <td>MIT</td>
+          </tr>
+          <tr>
+            <td>X6</td>
+            <td>MIT</td>
+          </tr>
+          <tr>
+            <td>Quill</td>
+            <td>BSD 3-Clause</td>
+          </tr>
+          <tr>
+            <td>Marked</td>
+            <td>MIT</td>
+          </tr>
+          <tr>
+            <td>DevTools</td>
+            <td>BSD 3-Clause</td>
+          </tr>
+        </table>
+        <hr class="w-hr">
+        <div>警告：WebBuilder 拥有合法的版权注册，未经授权使用将导致严重的民事后果以及刑事处罚，并将在法律允许的最大范围内受到起诉。</div>
+        <div>更多信息请访问：<a href="https://www.geejing.com" target="_blank">https://www.geejing.com</a>
+        </div>
+        <div>版权所有 © 北京技景科技有限公司，保留所有权利。</div>
+        <div>联系我们：<a href="mailto:contact@geejing.com">contact@geejing.com</a></div>
+      </div>
+  text: viewport1
+properties:
+  cid: module
+  obfuscate: 'true'
+  remark: View about WebBuilder
+  serverScript: |-
+    function main() {
+      const Util = Wb.load('wb/modules/sys/portal/home/util.mjs');
+      let lic = Util.getLicensee();
+
+      Wb.set({
+        version: Wb.getConfig('sys.app.version'),
+        type: Wb.getConfig('sys.app.type'),
+        date: Wb.getConfig('sys.app.date').dateText,
+        serverCode: Config.serverCode,
+        lic: (lic ? ('Authorized to ' + lic) : 'Unlicensed')
+      });
+    }
+    main();
+tags: ''
+text: module
+title: '@about'

@@ -1,0 +1,69 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+items:
+- _expanded: true
+  _icon: card
+  cls: Wb.Card
+  items:
+  - _icon: text
+    cls: Wb.Text
+    properties:
+      cid: text1
+      text: Text
+    text: text1
+  - _icon: number-edit
+    cls: Wb.Number
+    properties:
+      cid: number1
+      text: Number
+    text: number1
+  properties:
+    cid: cardTpl
+    instanced: 'false'
+    layout: grid1
+  text: cardTpl
+- _expanded: true
+  _icon: tab
+  cls: Wb.Tab
+  items:
+  - _expanded: true
+    _icon: toolbar
+    cls: Wb.Toolbar
+    items:
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: |-
+          let newCard = app.cardTpl;
+
+          //app.cardObject ??= app.cardTpl;
+          newCard.cid = Wb.getId(); // let card cid unique
+          app.cardIndex ??= 0;
+          app.cardIndex++;
+          newCard.title = 'Card ' + app.cardIndex;
+          newCard = app.tab1.add(app.cardTpl);
+          newCard.down('text1').value = 'text ' + app.cardIndex;
+          newCard.show();
+      properties:
+        cid: addNewCardItem
+        icon: card
+        text: Add New Card
+      text: addNewCardItem
+    properties:
+      cid: tbar
+      isProperty: 'true'
+    text: tbar
+  properties:
+    cid: tab1
+    full: 'true'
+  text: tab1
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

@@ -1,0 +1,9 @@
+{
+  "title": "@console",
+  "icon": "",
+  "img": "",
+  "hideInMenu": "true",
+  "items": [
+    "socket.xwl"
+  ]
+}

@@ -1,0 +1,288 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  beforeunload: |-
+    if (!app.saveBtn.disabled)
+      return false;
+  initialize: |-
+    Wb.define(app, {
+      /**
+       * Method to execute when adding or updating key type fails.
+       * @param {String} resp Response text.
+       */
+      onFailure(resp) {
+        Wb.checkExists(resp, 'wb_key_type_key_name', app.typeGrid.dictWin.down('key_name'));
+      },
+      /** @property {String} - The currently selected key name. */
+      get$keyName() {
+        return app.typeGrid.selection?.data.key_name;
+      },
+      /** @property {String} - The currently selected key name ID. */
+      get$keyId() {
+        return app.typeGrid.selection?.data.sid;
+      },
+      /** @property {String} - The currently selected key category. */
+      get$keyType() {
+        return app.typeGrid.selection?.data.key_type;
+      },
+      /**
+       * Fires after the list table data is changed. @priv
+       */
+      onChange() {
+        app.saveBtn.disabled = false;
+      },
+      /**
+       * Save the list data. @priv
+       * @param {Function} [success] The callback function after save successfully.
+       */
+      save(success) {
+        let grid = app.listGrid;
+        grid.sync({
+          url: xpath + '/save-list',
+          params: { keyId: app.keyId, keyName: app.keyName },
+          success() {
+            app.saveBtn.disabled = true;
+            success?.();
+          },
+          failure(resp) {
+            Wb.checkExists(resp, 'wb_key_unq1', Str.key);
+          }
+        });
+      }
+    });
+hideInMenu: 'false'
+icon: list-view
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _expanded: true
+    _icon: grid
+    cls: Wb.Grid
+    events:
+      beforeselect: |-
+        if (!app.saveBtn.disabled) {
+          Wb.choose(Str.saveChanges.format(Str.list), btn => {
+            if (btn == 'yes') {
+              app.save(f => item.select());
+            } else if (btn == 'no') {
+              app.saveBtn.disabled = true;
+              item.select()
+            }
+          });
+          return false;
+        }
+      itemdblclick: this.downWhole('editBtn').fireEvent('click');
+      selectionchange: |-
+        let data = app.typeGrid.selectionData, keyName = data?.key_name, listGrid = app.listGrid, searchList = app.searchList;
+
+        listGrid.disabled = !keyName;
+        listGrid.subTitle = keyName;
+        searchList.suspendEvent();
+        searchList.clear();
+        searchList.resumeEvent();
+        if (keyName) {
+          listGrid.load();
+        } else {
+          listGrid.destroyAll();
+          listGrid.commit();
+          app.saveBtn.disabled = true;
+        }
+    items:
+    - _expanded: true
+      _icon: pagenum
+      cls: Wb.PagingBar
+      properties:
+        cid: pagingBar
+        isProperty: 'true'
+        showColumnsMenu: 'false'
+      text: pagingBar
+    - _expanded: true
+      _icon: toolbar
+      cls: Wb.Toolbar
+      items:
+      - _expanded: false
+        _icon: item
+        cls: Wb.Item
+        events:
+          click: |-
+            app.typeGrid.dictAdd({
+              url: xpath + '/add-type',
+              failure: app.onFailure
+            }, Str.keyName);
+        properties:
+          cid: addBtn
+          icon: add
+          keys: Ctrl+E
+          text: '@Str.add'
+        text: addBtn
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        events:
+          click: |-
+            app.typeGrid.dictEdit({
+              url: xpath + '/edit-type',
+              failure: app.onFailure
+            }, 'key_name');
+        properties:
+          cid: editBtn
+          icon: edit
+          keys: Ctrl+J
+          text: '@Str.edit'
+        text: editBtn
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        events:
+          click: app.typeGrid.removeRecords(xpath + '/del-types', 'key_name', null,
+            f => app.saveBtn.disabled = true);
+        properties:
+          cid: delBtn
+          icon: delete
+          keys: Ctrl+D
+          text: '@Str.del'
+        text: delBtn
+      - _icon: divider
+        cls: Wb.Divider
+        properties:
+          cid: divider1
+        text: divider1
+      - _icon: text
+        cls: Wb.Text
+        events:
+          change: 'app.typeGrid.delayLoad({ comps: app.searchType });'
+        properties:
+          cid: searchType
+          clearButton: 'true'
+          flex: '1'
+          maxWidth: 20em
+          minWidth: 5em
+          placeholder: '@Str.search'
+        text: searchType
+      properties:
+        cid: tbar
+        isProperty: 'true'
+      text: tbar
+    properties:
+      autoContextMenu: 'true'
+      cid: typeGrid
+      columnsSortable: 'true'
+      keyFields: sid,key_name
+      maxWidth: 30em
+      multiSelect: 'true'
+      sorters: key_name
+      title: '@Str.keyName'
+      url: '@xpath + ''/select-type'''
+      width: 50vw
+    text: typeGrid
+  - _expanded: true
+    _icon: splitter
+    cls: Wb.Splitter
+    properties:
+      cid: splitter1
+    text: splitter1
+  - _expanded: true
+    _icon: grid
+    cls: Wb.Grid
+    events:
+      beforeload: |-
+        Wb.apply(params, { searchList: app.searchList.value, rid: app.keyId, keyType: app.keyType });
+        return this.saveConfirm(app.saveBtn, app.save);
+      editing: app.onChange();
+      itemchange: app.onChange();
+      itemdblclick: this.downWhole('editBtn').fireEvent('click');
+    items:
+    - _expanded: true
+      _icon: pagenum
+      cls: Wb.PagingBar
+      properties:
+        cid: pagingBar
+        isProperty: 'true'
+        showColumnsMenu: 'false'
+      text: pagingBar
+    - _expanded: true
+      _icon: toolbar
+      cls: Wb.Toolbar
+      items:
+      - _expanded: false
+        _icon: item
+        cls: Wb.Item
+        events:
+          click: app.listGrid.addRecord();
+        properties:
+          cid: addBtn
+          icon: add
+          keys: Ctrl+E
+          text: '@Str.add'
+        text: addBtn
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        events:
+          click: app.listGrid.delRecords();
+        properties:
+          cid: delBtn
+          icon: delete
+          keys: Ctrl+D
+          text: '@Str.del'
+        text: delBtn
+      - _expanded: false
+        _icon: item
+        cls: Wb.Item
+        events:
+          click: app.save();
+        properties:
+          cid: saveBtn
+          disabled: 'true'
+          icon: save
+          keys: Ctrl+S
+          text: '@Str.save'
+        text: saveBtn
+      - _expanded: true
+        _icon: divider
+        cls: Wb.Divider
+        properties:
+          cid: divider2
+        text: divider2
+      - _icon: text
+        cls: Wb.Text
+        events:
+          change: app.listGrid.delayLoad();
+        properties:
+          cid: searchList
+          clearButton: 'true'
+          flex: '1'
+          maxWidth: 20em
+          minWidth: 5em
+          placeholder: '@Str.search'
+        text: searchList
+      properties:
+        cid: tbar
+        isProperty: 'true'
+      text: tbar
+    properties:
+      autoContextMenu: 'true'
+      autoLoad: 'false'
+      cid: listGrid
+      disabled: 'true'
+      editable: 'true'
+      flex: '1'
+      keyFields: sid
+      multiSelect: 'true'
+      title: '@Str.list'
+      url: '@xpath + ''/select-list'''
+    text: listGrid
+  properties:
+    cid: viewport1
+    layout: row
+  text: viewport1
+properties:
+  cid: module
+  remark: Key value mapping setting
+tags: ''
+text: module
+title: '@kve'

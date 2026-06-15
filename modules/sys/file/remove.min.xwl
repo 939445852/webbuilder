@@ -1,0 +1,8 @@
+_icon: module
+cls: Wb.Module
+properties:
+  cid: module
+  remark: Remove file in any path
+  serverScript: let fs=Wb.load("./fs.mjs");fs.removeFiles(Wb.getObject("files"));
+text: module
+title: ''

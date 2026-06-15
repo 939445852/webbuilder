@@ -1,0 +1,185 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Set default database
+  serverScript: |-
+    function main() {
+      /**
+       * Sets the specified database as the default database. @priv
+       */
+      function setDefaultDb() {
+        let defaultSource = Config.defaultSource, destName = Params.name, destSource, script;
+
+        if (defaultSource == Params.name)
+          Wb.raise('The destination is the same as the source database.');
+        script = Wb.Query.removeComments(new Wb.File(true, 'wb/system/db/sqls.sql').text);
+        script = replaceTypes(script, Params.dbType);
+        defaultSource = Wb.getConn(defaultSource);
+        destSource = Wb.getConn(destName);
+        createTables(script, defaultSource, destSource, Wb.getBool('overwrite'));
+        Wb.setConfig('sys.db.defaultSource', destName);
+        //Explicit commit
+        destSource.commit();
+        DataSource.defaultDataSource = DataSource.getSource(destName);
+        SysUtil.reloadSystem(true);
+      }
+
+      /**
+       * Replace the type variable in the script. @priv
+       * @param {String} script The script.
+       * @param {String} dbType The db type.
+       */
+      function replaceTypes(script, dbType) {
+        let types = new Wb.File(true, 'wb/system/db/types.json').object;
+
+        return script.replaceParams(types[dbType]);
+      }
+
+      /**
+       * Check whether the system tables of the specified database are consistent with the script. @priv
+       */
+      function checkTables() {
+        let script, db, tableName, needCreate = false;
+
+        db = Wb.getConn();
+        script = Wb.Query.removeComments(new Wb.File(true, 'wb/system/db/sqls.sql').text);
+        script = replaceTypes(script, Params.dbType);
+        script.split(';').forEach(sql => {
+          sql = sql.trim();
+          if (!sql) return;
+          if (sql.startsWith('create table')) {
+            tableName = sql.substring(sql.indexOf('table') + 5, sql.indexOf('(') - 1).trim();
+            needCreate = !checkConsistent(db, tableName, sql);
+            if (needCreate)
+              Wb.sql(sql, db);
+          } else {
+            if (needCreate)
+              Wb.sql(sql, db);
+          }
+        });
+      }
+
+      /**
+       * Create system tables. @priv
+       * @param {String} script SQL script.
+       * @param {Wb.Connection} source The source connection.
+       * @param {Wb.Connection} dest The dest connection.
+       * @param {Boolean} overwrite Whether to overwrite tables that already exist.
+       */
+      function createTables(script, source, dest, overwrite) {
+        const emptyTables = ['wb_debug_files', 'wb_log'];
+        let tables = script.split(';'), tableName, rs, needCreate = false, len;
+        len = tables.length;
+        tables.forEach((sql, index) => {
+          sql = sql.trim();
+          if (!sql) return;
+          if (!sql.startsWith('create table')) {
+            if (needCreate)
+              Wb.sql(sql, dest);
+            return;
+          }
+          tableName = sql.substring(sql.indexOf('table') + 5, sql.indexOf('(') - 1).trim();
+          Wb.send([index / len * 100, Str.process.format(tableName)], 'sys.dbc');
+          needCreate = false;
+          if (overwrite) {
+            try {
+              Wb.sql('drop table ' + tableName, dest);
+            } catch (e) {
+              dest.rollback();
+            }
+            needCreate = true;
+          } else {
+            needCreate = !checkConsistent(dest, tableName, sql);
+          }
+          if (needCreate) {
+            Wb.sql(sql, dest);
+            if (!emptyTables.includes(tableName)) {
+              try {
+                try {
+                  rs = Wb.sqlRS('select * from ' + tableName, source);
+                } catch (ex) {
+                  source.rollback();
+                  return;
+                }
+                // start trans in copyTo by default
+                rs.copyTo(tableName, dest);
+                rs.close();
+                dest.commit();
+              } catch (e) {
+                Wb.sql('drop table ' + tableName, dest);
+                Wb.raise(e);
+              }
+            }
+          }
+        });
+      }
+
+      /**
+       * Check whether the target table is consistent with the source table, and an exception is thrown
+       * if it is inconsistent.
+       * @param {Wb.Connection} db Database connection.
+       * @param {String} tableName Table name.
+       * @param {String} sql SQL script.
+       * @return {Boolean} Whether the table exists.
+       */
+      function checkConsistent(db, tableName, sql) {
+        let rs, meta, colCount, oldFields, realCount = 0;
+
+        try {
+          rs = Wb.sqlRS('select * from ' + tableName + ' where 1=0', db);
+        } catch (e) {
+          db.rollback();
+          //ignored if the table does not exist
+          return false;
+        }
+        meta = rs.metaData;
+        colCount = meta.getColumnCount();
+        oldFields = sql.substring(sql.indexOf('(') + 1, sql.lastIndexOf(')') - 1).trim().split('\n');
+        oldFields.forEach(fieldName => {
+          fieldName = fieldName.trimLeft();
+          if (!fieldName.toLowerCase().startsWith('constraint ')) {
+            realCount++;
+            if (realCount <= colCount) {
+              fieldName = fieldName.substr(0, fieldName.indexOf(' '));
+              if (!fieldName.equalsIC(meta.getColumnLabel(realCount)))
+                Wb.raise(Str.tableInconsistent.format(tableName, fieldName));
+            }
+          }
+        });
+        if (colCount != realCount)
+          Wb.raise(Str.tableInconsistent.format(tableName, `${colCount} / ${realCount}`));
+        rs.close();
+        return true;
+      }
+
+      /**
+       * Gets the database type. @priv
+       */
+      function getDbType() {
+        Wb.send(Wb.getConn(Params.name).metaData.getDatabaseProductName());
+      }
+      switch (Params.type) {
+        case 'get-db':
+          getDbType();
+          break;
+        case 'create':
+          checkTables();
+          break;
+        case 'set-default':
+          let lock = new Wb.Lock('dbc.setDefault');
+          try {
+            setDefaultDb();
+          } finally {
+            lock.unlock();
+          }
+          break;
+      }
+    }
+    main();
+tags: ''
+text: module
+title: ''

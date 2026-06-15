@@ -1,0 +1,23 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  serverScript: |-
+    Wb.apply(app, {
+      /**
+       * Perform add.
+       * @param {Number} value1 Value 1
+       * @param {Number} value2 Value 2
+       * @return {Number} The result
+       */
+      add(value1, value2) {
+        return value1 + value2;
+      }
+    });
+    Wb.log('Util.xwl runs every time.');
+tags: ''
+text: module
+title: ''

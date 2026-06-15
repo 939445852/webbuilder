@@ -1,0 +1,16 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.make(app,{cname:"viewport",layout:"grid1",cid:"viewport1",tbar:{cname:"toolbar",border:"bottom",items:[{icon:"add",text:Str.add,keys:"Ctrl+E",cid:"addBtn"},{icon:"edit",text:Str.edit,keys:"Ctrl+J",cid:"editBtn"},{icon:"delete",text:Str.del,keys:"Ctrl+D",cid:"delBtn"}]},items:[{cname:"label",cid:"titleLabel",cls:"w-title3",text:"Employee
+    onboarding"},{cname:"title",title:"Basic information",cid:"basicInfoTitle"},{cname:"text",required:true,cid:"name",text:"Name"},{cname:"select",keyName:"gender",text:"Gender",required:true,cid:"gender"},{cname:"date",required:true,cid:"birthdate",text:"Birthdate"},{cname:"title",title:"Education",cid:"eduInfoTitle"},{cname:"text",cid:"degree",text:"Degree"},{cname:"text",cid:"university",text:"University"},{cname:"text",cid:"major",text:"Major"},{cname:"title",title:"Department",cid:"deptTitle"},{cname:"text",cid:"department",text:"Department"},{cname:"text",cid:"duty",text:"Duty"},{cname:"text",cid:"period",text:"Probation
+    period"},{cname:"date",cid:"entryDate",text:"Entry Date"},{cname:"text",cid:"project",text:"Project"},{cname:"number",minValue:1e3,text:"Salary",prefix:"$",cid:"salary"},{cname:"text",cid:"address",text:"Address"},{cname:"title",title:"Comments",cid:"commentTitle"},{cname:"textArea",cid:"office",height:"5em",text:"Office"},{cname:"textArea",cid:"manager",height:"5em",text:"Manager"},{cname:"textArea",cid:"ceo",height:"5em",text:"CEO"},{cname:"button",icon:"save",text:"Save
+    Form",type:"primary",cid:"saveBtn",events:{click(e,t){if(Wb.verify(app.viewport1)){Wb.ajax({url:xpath,comps:app.viewport1,success(){Wb.tipDone()}})}}}}]});
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

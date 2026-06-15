@@ -1,0 +1,194 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Select system information
+  serverScript: |-
+    Wb.checkDemo();
+    let actions = {
+      /**
+       * Get modules information.
+       */
+      moduleInfo() {
+        let items = [], duration, times, sorter = Wb.getObject('_sort')?.[0];
+        Classes.Executor.dataMap.forEach((k, v) => {
+          duration = v.duration.get();
+          times = v.times.get();
+          items.push({
+            module: k.slice(0, -4), duration: duration / 1000, times, lastAccess: new Date(v.lastAccess),
+            avgDuration: Math.round(duration / times)
+          });
+        });
+        if (sorter) {
+          items.mixSort(sorter.name, sorter.desc);
+        }
+        Wb.send({ items: items.slice(Wb.getInt('_from'), Wb.getInt('_to') + 1), total: items.length });
+      },
+      /**
+       * Clear all module runtime data.
+       */
+      clear() {
+        Classes.Executor.dataMap.clear();
+      },
+      /**
+       * Get system information.
+       */
+      sysInfo() {
+        let items = [], rt = Runtime.getRuntime(), props = System.getProperties(), env = System.getenv(),
+          addr = Java.type('java.net.InetAddress').getLocalHost(), total = rt.totalMemory(), free = rt.freeMemory(),
+          cpu = getCpuUsage();
+
+        items = [{
+          name: 'Current Time',
+          value: new Date().format(Str.dateTimeFormat)
+        }, {
+          name: 'System startup time',
+          value: new Date(Base.startTime.getTime()).format(Str.dateTimeFormat)
+        }, {
+          name: 'Available Processors',
+          value: rt.availableProcessors().intText
+        }, {
+          name: 'CPU Usage',
+          numValue: cpu,
+          value: cpu.percentAuto
+        }, {
+          name: 'JVM CPU Usage',
+          value: getCpuUsage(true).percentAuto
+        }, {
+          name: 'Total Memory',
+          numValue: total,
+          value: total.mb
+        }, {
+          name: 'Used Memory',
+          numValue: total - free,
+          value: (total - free).mb
+        }, {
+          name: 'Free Memory',
+          value: free.mb
+        }, {
+          name: 'Max Memory',
+          value: rt.maxMemory().mb
+        }, {
+          name: 'Username',
+          value: env?.get('USERNAME')
+        }, {
+          name: 'Computer Name',
+          value: env?.get('COMPUTERNAME')
+        }, {
+          name: 'User Domain',
+          value: env?.get('USERDOMAIN')
+        }, {
+          name: 'Host Address',
+          value: addr.getHostAddress()
+        }, {
+          name: 'Host Name',
+          value: addr.getHostName()
+        }, {
+          name: 'OS Name',
+          value: props.getProperty('os.name')
+        }, {
+          name: 'OS Architecture',
+          value: props.getProperty('os.arch')
+        }, {
+          name: 'OS Version',
+          value: props.getProperty('os.version')
+        }, {
+          name: 'Java Version',
+          value: props.getProperty('java.version')
+        }, {
+          name: 'Java Vendor',
+          value: props.getProperty('java.vendor')
+        }, {
+          name: 'Java Vendor URL',
+          value: props.getProperty('java.vendor.url')
+        }, {
+          name: 'Java Home',
+          value: props.getProperty('java.home')
+        }, {
+          name: 'Java VM Specification Version',
+          value: props.getProperty('java.vm.specification.version')
+        }, {
+          name: 'Java VM Specification Vendor',
+          value: props.getProperty('java.vm.specification.vendor')
+        }, {
+          name: 'Java VM Specification Name',
+          value: props.getProperty('java.vm.specification.name')
+        }, {
+          name: 'Java VM Version',
+          value: props.getProperty('java.vm.version')
+        }, {
+          name: 'Java VM Vendor',
+          value: props.getProperty('java.vm.vendor')
+        }, {
+          name: 'Java VM Name',
+          value: props.getProperty('java.vm.name')
+        }, {
+          name: 'Polyglot Version',
+          value: Classes.ContextPool.getEngineVersion()
+        }, {
+          name: 'Java Specification Version',
+          value: props.getProperty('java.specification.version')
+        }, {
+          name: 'Java Specification Vendor',
+          value: props.getProperty('java.specification.vendor')
+        }, {
+          name: 'Java Specification Name',
+          value: props.getProperty('java.specification.name')
+        }, {
+          name: 'Java Class Version',
+          value: props.getProperty('java.class.version')
+        }, {
+          name: 'Java Class Path',
+          value: props.getProperty('java.class.path')
+        }, {
+          name: 'Java Library Path',
+          value: props.getProperty('java.library.path')
+        }, {
+          name: 'File Separator',
+          value: Wb.encode(props.getProperty('file.separator'))
+        }, {
+          name: 'Path Separator',
+          value: Wb.encode(props.getProperty('path.separator'))
+        }, {
+          name: 'Line Separator',
+          value: Wb.encode(props.getProperty('line.separator'))
+        }, {
+          name: 'User Account Name',
+          value: props.getProperty('user.name')
+        }, {
+          name: 'User Home Directory',
+          value: props.getProperty('user.home')
+        }, {
+          name: 'User Directory',
+          value: props.getProperty('user.dir')
+        }, {
+          name: 'Java Extension Directories',
+          value: props.getProperty('java.ext.dirs')
+        }, {
+          name: 'Java Temp Directory',
+          value: props.getProperty('java.io.tmpdir')
+        }];
+        if (Params.chart) {
+          items = items.filter(item => item.numValue != null);
+        }
+        Wb.send(items);
+      }
+    };
+    actions[Params.xaction]();
+    // get cpu usage
+    function getCpuUsage(process) {
+      try {
+        const SunOSBean = Java.type("com.sun.management.OperatingSystemMXBean");
+        const os = java.lang.management.ManagementFactory.getPlatformMXBean(SunOSBean);
+        const load = process ? os.getProcessCpuLoad() : os.getSystemCpuLoad();
+        return load >= 0 ? load : 0;
+      } catch (e) {
+        return 0;
+      }
+    }
+tags: ''
+text: module
+title: ''

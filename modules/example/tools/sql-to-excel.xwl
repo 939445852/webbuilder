@@ -1,0 +1,42 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: mainLabel
+      cls: w-title3
+      text: SQL to Excel
+    text: mainLabel
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: textTitle
+      title: Export to Excel
+    text: textTitle
+  - _icon: button
+    cls: Wb.Button
+    events:
+      click: Wb.download(xpath + '/create');
+    properties:
+      cid: downloadBtn
+      text: Download
+      type: primary
+    text: downloadBtn
+  properties:
+    cid: viewport1
+    layout: grid1
+  text: viewport1
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

@@ -1,0 +1,32 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.define(app,{get$path(){return app.tree1.getPath("text",".")},fixValue(e,t){if(t=="object"||t=="array")return
+    Wb.encode(Wb.parse(e));else if(t=="date")return e.textValue;else return e},verifyValue(){let
+    e=app.typeEditor.value,t=app.valueEditor.value,a,i;a=e=="array";if(a||e=="object"){try{i=a?Wb.isArray(Wb.parse(t)):Wb.isObject(Wb.parse(t))}catch(e){i=false}if(!i){Wb.warn(Str.invalidValue.format(t),(e=>app.valueEditor.focus()));return
+    false}}return true},createValueEditor(e,t){let a;switch(e){case"string":a={cname:"text"};break;case"int":case"long":a={cname:"number",decimalCount:0};break;case"double":a={cname:"number"};break;case"date":a={cname:"datetime"};break;case"bool":a={cname:"toggle"};break;case"enum":if(t)a={cname:"select",forceSelect:true,data:t};else
+    a={cname:"text"};break;default:a={cname:"textArea",minHeight:"8em"}}if(e!="string"&&e!="text")a.required=true;Wb.apply(a,{text:Str.value,cid:"valueEditor",app:app});return
+    Wb.create(a)}});Wb.make(app,{cname:"window",icon:"add",layout:"grid1",width:"60em",dialog:true,title:Str.add,cid:"addWin",events:{ok(e){let
+    t=this,a=Wb.getValue(t),i=a.nameEditor,r=app.tree1,d,l,c,n=a.listEditor,s=a.typeEditor,p;if(n){try{c=Wb.isArray(Wb.parse(n))}catch(e){c=false}if(!c){Wb.warn(Str.invalidValue.format(n),(e=>app.listEditor.focus()));return}}if(!app.verifyValue())return;p=Wb.encode(Wb.parse(n));a.listEditor=p;if(i.startsWith("."))i=app.path+i;else
+    if(!i.includes("."))i=app.path+"."+i;a.nameEditor=i;Wb.ajax({url:xpath+"/add",params:a,success(){d=i.beforeItem(".");i=i.lastItem(".");d.split(".").forEach((e=>{r=r.find((t=>t.text==e))??r.addData({text:e,items:[]})}));if(r.selected){let
+    e=a.descEditor,t=e.trim();if(t.startsWith("{")&&t.endsWith("}")){try{t=Wb.parse(t);e=t[Str.lang]??t.text}catch(e){}}app.grid1.addData({name:i,value:app.fixValue(a.valueEditor,s),type:s,desc:e,list:p}).select()}else{app.selConfigName=i;r.select()}t.hide()}})}},items:[{cname:"text",required:true,cid:"nameEditor",text:Str.name},{cname:"select",valueIndex:0,text:Str.type,data:["string","int","long","double","date","bool","enum","array","object","text"],editable:false,required:true,cid:"typeEditor",events:{select(e,t,a,i){let
+    r=app.addWin,d=e.text,l;r.down("valueEditor")?.destroy();l=app.createValueEditor(d);r.gridTplRows=l.cname=="textArea"?"auto
+    auto 1fr auto":null;r.insertAfter(l,this);if(d=="enum"){if(!app.listEditor)r.insertAfter({cname:"text",text:Str.list,cid:"listEditor",required:true,app:app},app.valueEditor)}else{app.listEditor?.destroy()}r.show()}}},{cname:"text",cid:"valueEditor",text:Str.value},{cname:"text",required:true,cid:"descEditor",text:Str.desc}]});Wb.make(app,{cname:"window",icon:"edit",layout:"grid1",width:"60em",dialog:true,title:Str.edit,cid:"editWin",events:{ok(e){let
+    t=this,a=Wb.getValue(t),i=app.grid1.selection;if(!app.verifyValue())return;a.nameEditor=app.path+"."+i.data.name;Wb.ajax({url:xpath+"/edit",params:a,success(){let
+    e;try{e=app.fixValue(a.valueEditor,i.data.type)}catch(e){Wb.error(Str.invalidExpress);return}i.set("value",e);t.hide()}})}}});Wb.make(app,{cname:"viewport",layout:"row",cid:"viewport1",tbar:{cname:"toolbar",items:[{icon:"add",text:Str.add,keys:"Ctrl+E",cid:"addBtn",events:{click(e,t){let
+    a=app.addWin;Wb.reset(Wb.pluck(a.children,["nameEditor","valueEditor","listEditor","descEditor"]));a.show()}}},{icon:"edit",text:Str.edit,keys:"Ctrl+J",cid:"editBtn",events:{click(e,t){let
+    a=app.grid1.selection?.data;if(!a){Wb.tipSelect();return}let i=app.editWin,r=i.children,d=a.list,l;r.valueEditor?.destroy();l=app.createValueEditor(a.type,d?Wb.decode(d):null);i.add(l);i.gridTplRows=l.cname=="textArea"?"1fr":null;i.subTitle=a.name;r.valueEditor.value=a.value;i.show()}}},{icon:"delete",text:Str.del,keys:"Ctrl+D",cid:"delBtn",events:{click(e,t){let
+    a=app.grid1.selection;if(!a){Wb.tipSelect();return}Wb.confirm(Wb.getActionHint(a,"name"),(e=>{Wb.ajax({url:xpath+"/del",params:{nameEditor:app.path+"."+a.data.name},success(){app.grid1.delRecords()}})}))}}},{cname:"divider",cid:"divider1"},{icon:"refresh",cid:"refreshBtn",text:Str.refresh,events:{click(e,t){app.tree1.loadSelect()}}},{cname:"divider",cid:"divider2"},{cname:"label",textSelectable:true,cid:"pathLabel"}]},items:[{cname:"tree",width:"17em",autoSelect:true,url:xpath+"/select-tree",cid:"tree1",events:{selectionchange(e){let
+    t=app.path;app.grid1.load({params:{path:t}});app.pathLabel.text=t}}},{cname:"splitter",cid:"splitter1"},{cname:"grid",autoLoad:false,pagingBar:false,flex:1,url:xpath+"/select-list",cid:"grid1",columns:[{cname:"column",cid:"rowCol",rowNum:true},{cname:"column",width:"14em",fieldName:"name",text:Str.name,cid:"nameCol"},{cname:"column",width:"23em",fieldName:"value",text:Str.value,align:"left",render(e,t,a,i){if(t.type=="date")return
+    e.dateValue.dateTimeText;else return e},cid:"valueCol"},{cname:"column",width:-1,fieldName:"desc",text:Str.desc,cid:"descCol"}],events:{itemdblclick(e,t,a){app.editBtn.fireEvent("click")},success(e,t,a,i,r,d){if(app.selConfigName){this.find((e=>e.data.name==app.selConfigName))?.select();app.selConfigName=null}},selectionchange(e){let
+    t=this.selection,a=app.tree1.selection;app.pathLabel.text=a.getPath("text",".")+(t?"."+t.data.name:"")}}}]});
+hideInMenu: 'false'
+icon: gear
+img: ''
+properties:
+  cid: module
+  remark: System configuration tool
+tags: ''
+text: module
+title: '@systemConfig'

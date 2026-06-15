@@ -1,0 +1,12 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Set all users value
+  serverScript: app.userid=Params.userid;Wb.run("set-value");
+tags: ''
+text: module
+title: ''

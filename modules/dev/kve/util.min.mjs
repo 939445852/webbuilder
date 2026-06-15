@@ -1,0 +1,1 @@
+class Util{static loadKey(e){let a,t;t=new HashMap;Wb.getRows({sql:"select a.map_k,a.map_v,b.key_type from wb_key a, wb_key_type b where a.rid=b.sid and b.key_name={?keyName?}",params:{keyName:e},fn(e){a=e.map_k;t.put(e.key_type?parseInt(a)||0:a,e.map_v)}});if(t.isEmpty())KVBuffer.buffer.remove(e);else KVBuffer.buffer.put(e,t)}}export default Util;

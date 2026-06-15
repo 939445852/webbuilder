@@ -1,0 +1,12 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  serverScript: function main(){let e;e="select a.*,b.title,b.node_text from wb_leave
+    a, wb_flow b where a.flow_id=b.sid and a.user_id={?sys.userid?}";e+=Wb.getOrderSql({title:"b.title",node_text:"b.node_text"});Wb.sendRowx(e)}main();
+tags: ''
+text: module
+title: ''

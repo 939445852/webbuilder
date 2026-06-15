@@ -1,0 +1,159 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: slots
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: mainLabel
+      cls: w-title3
+      text: Slot
+    text: mainLabel
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: slotListTitle
+      title: Slot list
+    text: slotListTitle
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _icon: label
+      cls: Wb.Label
+      properties:
+        cid: commonSlotLabel
+        text: Common slot
+      text: commonSlotLabel
+    - _expanded: true
+      _icon: slots
+      cls: Wb.Slot
+      events:
+        itemselect: Wb.tip(Wb.encode(this.value) + ' selected');
+      items:
+      - _expanded: true
+        _icon: array
+        cls: Wb.Array
+        items:
+        - _expanded: true
+          _icon: button
+          cls: Wb.Button
+          events:
+            click: app.commonSlot.value = ['a2', 'b2'];
+          properties:
+            cid: setValueBtn
+            text: Set value
+          text: setValueBtn
+        - _expanded: true
+          _icon: button
+          cls: Wb.Button
+          events:
+            click: 'Wb.tip(this.cid + '' values is: '' + Wb.encode(app.commonSlot.value));'
+          properties:
+            cid: getValueBtn
+            text: Get value
+          text: getValueBtn
+        properties:
+          cid: buttons
+        text: buttons
+      properties:
+        buttonAlign: center
+        cid: commonSlot
+        data: |-
+          [
+            [{ text: 'a1' }, { text: 'a2' }, { text: 'a3' }, { text: 'a4' }, { text: 'a5' }, { text: 'a6' }],
+            [{ text: 'b1' }, { text: 'b2' }, { text: 'b3' }, { text: 'b4' }, { text: 'b5' }, { text: 'b6' }]
+          ]
+      text: commonSlot
+    - _icon: label
+      cls: Wb.Label
+      properties:
+        cid: customSlotLabel
+        text: Custom slot
+      text: customSlotLabel
+    - _expanded: true
+      _icon: slots
+      cls: Wb.Slot
+      items:
+      - _icon: list
+        cls: Wb.SlotView
+        properties:
+          cid: slotView1
+          textField: full_name
+          topTitle: Staff list
+          url: demo-source?xaction=staffDict
+          valueField: code
+        text: slotView1
+      properties:
+        cid: customSlot
+        height: 15em
+      text: customSlot
+    properties:
+      cid: slotListCt
+      frame: 'true'
+      layout: grid1
+    text: slotListCt
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: linkedSlotTitle
+      title: Linked slot without scrollbar
+    text: linkedSlotTitle
+  - _expanded: true
+    _icon: slots
+    cls: Wb.Slot
+    items:
+    - _expanded: true
+      _icon: list
+      cls: Wb.SlotView
+      events:
+        selectionchange: 'app.countryView.load({ params: { parent_id: this.selection.data.sid
+          } });'
+      properties:
+        cid: continentView
+        textField: area_name
+        topTitle: Continent
+        url: demo-source?xaction=listRootArea
+      text: continentView
+    - _icon: list
+      cls: Wb.SlotView
+      events:
+        selectionchange: 'app.cityView.load({ params: { parent_id: this.selection?.data.sid
+          } });'
+      properties:
+        cid: countryView
+        textField: area_name
+        topTitle: Country
+        url: demo-source?xaction=listArea
+      text: countryView
+    - _icon: list
+      cls: Wb.SlotView
+      properties:
+        cid: cityView
+        textField: area_name
+        topTitle: City
+        url: demo-source?xaction=listArea
+      text: cityView
+    properties:
+      border: 'false'
+      cid: linkedSlot
+      defaults: '({ autoScroll: ''hide'' })'
+      height: 10em
+    text: linkedSlot
+  properties:
+    cid: viewport1
+    layout: grid1
+  text: viewport1
+properties:
+  cid: module
+  description: demo-source=example/common/demo-source.xwl
+tags: ''
+text: module
+title: ''

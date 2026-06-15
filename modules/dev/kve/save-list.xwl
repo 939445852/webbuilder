@@ -1,0 +1,29 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Save key list
+  serverScript: |-
+    function main() {
+      const Util = Wb.load('./util.mjs');
+      let sid, rid = Params.keyId, insert = [], rec;
+
+      Params.insert?.forEach(item => {
+        sid = Wb.getId();
+        rec = { sid, rid };
+        Wb.apply(item, rec);
+        insert.push(rec);
+      });
+      Params.tableName = 'wb_key';
+      Params.db = '';//prevent inject db from params
+      Wb.sync(Params);
+      Util.loadKey(Params.keyName);
+      Wb.send({ insert });
+    }
+    main();
+tags: ''
+text: module
+title: ''

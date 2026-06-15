@@ -1,0 +1,305 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: IDE server side actions
+  serverScript: |-
+    Wb.load('./ide-ss.js');
+    let actions = {
+      /**
+       * Get AI dialog list.
+       */
+      aiDialog() {
+        let result, search, filename;
+
+        search = Params.search || '';
+        if (search) {
+          Wb.setLike('search');
+          search = 'and a.msg like {?varchar|search?}';
+        }
+        result = Wb.getRowx(`select a.group_id,a.msg,a.file_name from wb_ai a,
+    (select group_id,min(sdate) as sdate,min(order_index) as order_index from wb_ai group by group_id) b
+    where a.group_id=b.group_id and a.sdate=b.sdate and a.order_index=b.order_index and a.user_id={?sys.userid?} ${search}
+    order by a.sdate desc,a.msg_type,a.order_index`);
+        result.items.forEach(item => {
+          filename = item.file_name;
+          if (filename)
+            item.msg = filename;
+          else
+            item.msg = item.msg?.ellipsis() || 'Unknow dialog';
+          delete item.file_name;
+        });
+        Wb.send(result);
+      },
+      /**
+       * Create files or result from AI prompt.
+       */
+      aiCreate() {
+        const parseFile = '(Parse file)';
+        const AIGenerator = Wb.ide.AIGenerator;
+        let rows, sid, group_id = Params.group_id || Wb.getId(), baseFolder = Params.baseFolder, msg = Params.msg, fileContent,
+          overwrite = Wb.getBool('overwrite'), uploadAnswers = Wb.getBool('uploadAnswers'), result, uploadFiles, insert, sdate,
+          aiClear = Wb.getBool('aiClear'), user_id, fileName, orderIndex = 0;
+
+        baseFolder = new Wb.File(baseFolder);
+        if (!Wb.File.moduleFolder.contains(baseFolder))
+          Wb.accessDenied(baseFolder.path);
+        rows = Wb.getRows({
+          sql: 'select msg,msg_type,is_bin,file_name from wb_ai where user_id={?sys.userid?} and group_id={?group_id?} and ' +
+            'order_index<>99990' + (uploadAnswers ? '' : ' and msg_type<6') + ' order by sdate,order_index',
+          params: { group_id },
+          rs: Wb.getConfig('sys.ai.maxHistory') - 1
+        });
+        uploadFiles = Params.uploadFiles;
+        if (aiClear) {
+          result = Params.oldFiles;
+          if (result) {
+            let len, folders = [];
+            result.each(file => {
+              file = new Wb.File(Wb.File.moduleFolder, file);
+              if (file.exists) {
+                file.removeIndex();
+                file.clearBuffer();
+                file.remove();
+                folders.push(file.parent);
+              }
+            });
+            // clear empty folder
+            folders.each(folder => {
+              if (folder.exists) {
+                len = folder.file.list()?.length || 0;
+                if (len == 0 || len == 1 && (new Wb.File(folder, 'index.json')).exists) {
+                  folder.removeIndex();
+                  folder.remove();
+                }
+              }
+            });
+          }
+        }
+        user_id = Wb.userid;
+        sdate = new Date();
+        result = AIGenerator.create(rows, msg, uploadFiles, baseFolder, overwrite);
+        insert = [];
+        sid = Wb.getId();
+        msg ||= parseFile;
+        insert.push({ sid, sdate, user_id, group_id, msg_type: 0, msg, order_index: msg == parseFile ? 99990 : orderIndex++ });
+        uploadFiles?.each(file => {
+          sid = Wb.getId();
+          fileName = file.name;
+          insert.push({
+            sid, sdate, user_id, group_id, msg_type: 1, file_name: fileName, is_bin: 1,
+            order_index: orderIndex++, msg: file.content, file_size: AIGenerator.getBase64(file.content, true).length
+          });
+        });
+        if (result.answer) {
+          // answer
+          insert.push({
+            sid: Wb.getId(), sdate, user_id, group_id, msg_type: 6, msg: result.answer, order_index: orderIndex++
+          });
+        }
+        result.files?.each(file => {
+          // files
+          fileContent = file.content;
+          insert.push({
+            sid: Wb.getId(), sdate, user_id, group_id, msg_type: 7, file_name: file.path, is_bin: file.isBin ? 1 : null,
+            msg: fileContent, order_index: orderIndex++,
+            file_size: file.isBin ? AIGenerator.getBase64(fileContent, true).length : fileContent.getBytes().length
+          })
+        });
+        Wb.sync({ tableName: 'wb_ai', insert });
+        insert.each(item => {
+          delete item.user_id;
+          delete item.group_id;
+          delete item.is_bin;
+          delete item.order_index;
+          if (item.msg_type != 0 && item.msg_type != 6)
+            delete item.msg;
+        });
+        Wb.send({ group_id, msg, items: insert, files: result.files?.map(file => file.path) });
+      },
+      /**
+       * Remove AI history.
+       */
+      aiRemoveHis() {
+        let del = Wb.getObject('del');
+
+        Params.$user_id = Wb.userid; // for permission
+        Wb.syncFree({ tableName: 'wb_ai', del, contextParams: true, whereFields: 'group_id,user_id' });
+      },
+      /**
+       * Create and overwrite file.
+       */
+      aiCreateFile() {
+        let filename, row, file;
+
+        row = Wb.getRow('select file_name,is_bin,msg from wb_ai where sid={?sid?} and user_id={?sys.userid?}');
+        if (!row)
+          Wb.raise('File not found.');
+        filename = row.file_name;
+        file = new Wb.File(Wb.File.moduleFolder, filename);
+        if (row.is_bin)
+          file.bytes = Wb.ide.AIGenerator.getBase64(row.msg, true);
+        else
+          file.text = row.msg;
+        file.clearBuffer();
+        Wb.send(filename);
+      },
+      /**
+       * Remove AI item.
+       */
+      aiRemoveItem() {
+        Wb.sql('delete from wb_ai where sid={?sid?} and user_id={?sys.userid?}');
+      },
+      /**
+       * Get AI details list.
+       */
+      aiDetails() {
+        Wb.sendRows("select sid,msg_type,file_name,file_size,sdate,case when msg_type=0 or msg_type=6 then msg else null end as msg from wb_ai" +
+          " where user_id={?sys.userid?} and group_id={?groupId?} and order_index >=0 order by sdate,order_index");
+      },
+      /**
+       * Download AI file.
+       */
+      aiDownload() {
+        let row, data;
+
+        row = Wb.getRow('select is_bin,file_name,msg from wb_ai where sid={?sid?} and user_id={?sys.userid?}');
+        if (!row)
+          Wb.raise('The file not found.');
+        data = row.msg || '';
+        if (row.is_bin) {
+          data = Wb.ide.AIGenerator.getBase64(data, true);
+        } else {
+          data = data.getBytes();
+        }
+        Wb.exportData(data, Wb.getFilename(row.file_name));
+      },
+      /**
+       * Export files base64.
+       */
+      exportFiles() {
+        let files = Wb.getObject('files'), result;
+
+        result = files.map(file => {
+          file = new Wb.File(file);
+          if (file.isFolder)
+            Wb.raise('"' + file.name + '" is not a file.');
+          return { name: file.name, data: file.base64 };
+        });
+        Wb.send(result);
+      },
+      /**
+       * Create query modules.
+       */
+      createQuery() {
+        let generator = new Wb.ide.Generator(Params);
+
+        generator.buildQuery();
+      },
+      /**
+       * Create crud modules.
+       */
+      createCRUD() {
+        let generator = new Wb.ide.Generator(Params);
+
+        generator.buildCRUD();
+      },
+      /**
+       * Create source data.
+       */
+      createSource() {
+        let generator = new Wb.ide.Generator(Params), modulePath = Params.modulePath, params = Params.params;
+
+        if (modulePath) {
+          params &&= Wb.parse(params);
+          Wb.invoke(new Wb.File(modulePath).modulePath, params);
+        } else {
+          Wb.send(generator.getSourceData());
+        }
+      },
+      /**
+       * Provide JS completion.
+       */
+      jsProvider() {
+        const predefinedCls = ['com', 'edu', 'java', 'javax', 'javafx', 'org', 'jakarta'];
+        let result, searcher, isPack;
+
+        try {
+          let cls = Params.cls;
+          if ((cls + '.').startsWith('Packages.')) {
+            cls = cls.substr(9);
+            isPack = true;
+          } else if (cls.startsWith('Classes.'))
+            cls = Classes[cls.substr(8)].class.getName();
+          else if (!cls.includes('.') && Java.isJavaObject(globalThis[cls]))
+            cls = globalThis[cls].class.getName()
+          searcher = new Wb.ide.ClassSearcher(cls);
+          if (!Java.isJavaObject(Wb.getNS(cls)) && !isPack && !predefinedCls.includes(cls.firstItem('.')))
+            result = searcher.getJSMembers(cls)
+          else
+            result = searcher.getJavaMembers(cls) || searcher.getClassMembers(cls + '.');
+        } catch (e) {
+          result = [];
+        }
+        Wb.send(result);
+      },
+      /**
+       * Get all threads.
+       */
+      getThreads() {
+        const Thread = Java.type("java.lang.Thread");
+        const Threads = Java.type("java.lang.Thread[]");
+        let threads = [], thread, rootGroup, threadArray, i, actualSize, stackTraceToString, sorter;
+
+        stackTraceToString = stackTrace => {
+          if (!stackTrace?.length)
+            return '';
+          let str = [], i, j, frame;
+          j = stackTrace.length;
+          for (i = 0; i < j; i++) {
+            frame = stackTrace[i];
+            str.push(`    at ${frame.getClassName()}.${frame.getMethodName()}` +
+              `(${frame.getFileName() || 'Unknown'}:${frame.getLineNumber() >= 0 ? frame.getLineNumber() : '?'})`);
+          }
+          return str.join('\n');
+        };
+        rootGroup = Thread.currentThread().getThreadGroup();
+        while (rootGroup.getParent()) {
+          rootGroup = rootGroup.getParent();
+        }
+        threadArray = new Threads(rootGroup.activeCount() * 3);
+        actualSize = rootGroup.enumerate(threadArray, true);
+        for (i = 0; i < actualSize; i++) {
+          thread = threadArray[i];
+          threads.push({
+            name: thread.getName(), id: thread.getId(), state: thread.getState().toString(), priority: thread.getPriority(),
+            daemon: thread.isDaemon(), groupName: thread.getThreadGroup()?.getName(), live: thread.isAlive(),
+            stack: stackTraceToString(thread.getStackTrace())
+          });
+        }
+        sorter = Wb.getObject('_sort')?.[0];
+        if (sorter) {
+          threads.mixSort(sorter.name, sorter.desc);
+        }
+        Wb.send({
+          items: threads, columns: [
+            { rowNum: true },
+            { fieldName: 'name', text: 'Name', width: '-1', minWidth: '10em', maxWidth: '25em' },
+            { fieldName: 'id', text: 'ID', width: '4em' },
+            { fieldName: 'state', text: 'State' },
+            { fieldName: 'priority', text: 'Priority', width: '6em' },
+            { fieldName: 'daemon', text: 'Daemon', width: '6em' },
+            { fieldName: 'live', text: 'Live', width: '5em' },
+            { fieldName: 'groupName', text: 'Group Name', width: '-1', minWidth: '10em', maxWidth: '25em' }
+
+          ]
+        });
+      }
+    };
+    actions[Params.xaction]();
+tags: ''
+text: module
+title: ''

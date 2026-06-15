@@ -1,0 +1,18 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Select logs
+  serverScript: function main(){let e,a=[];e=`select a.log_date, b.user_name as mix_user_name,b.display_name
+    as mix_user_name_sub, a.ip, a.log_level, a.log_type, a.msg\n      from wb_log
+    a left join wb_user b on a.user_id=b.sid`;if(Params.beginDt)a.push("log_date >=
+    {?timestamp|beginDt?}");if(Params.endDt)a.push("log_date <= {?timestamp|endDt?}");if(Params.username){Wb.setLike("username");a.push("(b.user_name
+    like {?username?} or b.display_name like {?username?})")}if(Params.msg){Wb.setLike("msg");a.push("msg
+    like {?msg?}")}if(Params.ip){Wb.setLike("ip");a.push("ip like {?ip?}")}if(Params.logLevel)a.push("log_level={?int|logLevel?}");if(Params.logType){Wb.setLike("logType");a.push("log_type
+    like {?logType?}")}if(a.length){e+=" where "+a.join(" and ")}e+=Wb.getOrderSql();Wb.sendDict(e,"wb,")}main();
+tags: ''
+text: module
+title: ''

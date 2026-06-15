@@ -1,0 +1,551 @@
+##Server-Side Development.Interoperability between JavaScript, Java and Others
+Server-side JavaScript can directly access Java classes, as well as other languages such as Python and R.
+#Accessing Java from JavaScript
+The system provides a set of features to enable interoperability from JavaScript to Java. Java classes can be accessed via the {{Java.type(typeName)}} function, for example:
+
+     let HashMap = Java.type('java.util.HashMap');
+     let map = new HashMap();
+     map.put('foo', 'bar');
+     var file = new (Java.type('java.io.File'))("test.md");
+     var fileName = file.getName();
+
+Classes starting with package names "com", "edu", "java", "javax", "javafx", "org", "jakarta" can be accessed directly, for example:
+
+     let map = new java.util.HashMap();
+     map.put('foo', 'bar');
+
+Classes starting with other package names can be accessed using the "Packages" keyword prefix, for example:
+
+     let cls = Packages.my.pack.SomeClass;
+     cls.someStaticMethod();
+
+It is recommended to use the Java.type method to access classes. This method not only allows accessing classes starting with any package name, but also provides higher-performance access and retrieval of classes.
+#Method Parameter Conversion
+JavaScript is defined to operate on double-precision numeric types. For performance reasons, the system may internally use other Java data types (e.g., int type).
+Value conversion may be required when calling Java methods. This occurs when a Java method expects a long parameter and the system provides an int. A TypeError is thrown if this conversion results in a lossy conversion:
+
+     $java://Java
+     void longArg   (long arg1);
+     void doubleArg (double arg2);
+     void intArg    (int arg3);
+
+
+     //JavaScript
+     javaObject.longArg(1);     //widening, OK
+     javaObject.doubleArg(1);   //widening, OK
+     javaObject.intArg(1);      //match, OK
+     javaObject.longArg(1.1);   //lossy conversion, TypeError!
+     javaObject.doubleArg(1.1); //match, OK
+     javaObject.intArg(1.1);    //lossy conversion, TypeError!
+
+Note that parameter values must be compatible with parameter types. This behavior can be overridden using custom target type mappings.
+#Method Selection
+Java allows method overloading by parameter type. When calling Java from JavaScript, the method with the narrowest available type to which the actual arguments can be converted without loss is selected:
+
+     $java://Java
+     void foo(int arg);
+     void foo(short arg);
+     void foo(double arg);
+     void foo(long arg);
+
+
+     //JavaScript
+     javaObject.foo(1);              // will call foo(short);
+     javaObject.foo(Math.pow(2,16)); // will call foo(int);
+     javaObject.foo(1.1);            // will call foo(double);
+     javaObject.foo(Math.pow(2,32)); // will call foo(long);
+
+To override this behavior, explicit method overloads can be selected using the {{javaObject['methodName(paramTypes)']}} syntax. Parameter types must be comma-separated without spaces, and object types must be fully qualified (e.g., {{get(java.lang.String,java.lang.String[])}}).
+
+     javaObject['foo(int)'](1);
+     javaObject['foo(long)'](1);
+     javaObject['foo(double)'](1);
+
+Explicit method selection is also useful when method overloading is ambiguous and cannot be resolved automatically, and when you wish to override the default selection:
+
+     $java://Java
+     void sort(List<Object> array, Comparator<Object> callback);
+     void sort(List<Integer> array, IntBinaryOperator callback);
+     void consumeArray(List<Object> array);
+     void consumeArray(Object[] array);
+
+
+     //JavaScript
+     var array = [3, 13, 3, 7];
+     var compare = (x, y) => (x < y) ? -1 : ((x == y) ? 0 : 1);
+     // throws TypeError: Multiple applicable overloads found
+     javaObject.sort(array, compare);
+     // explicitly select sort(List, Comparator)
+     javaObject['sort(java.util.List,java.util.Comparator)'](array, compare);
+     // will call consumeArray(List)
+     javaObject.consumeArray(array);
+     // explicitly select consumeArray(Object[])
+     javaObject['consumeArray(java.lang.Object[])'](array);
+
+#Array Access
+The system supports creating Java arrays from JavaScript code.
+
+     var JArray = Java.type('java.lang.reflect.Array');
+     var JString = Java.type('java.lang.String');
+     var sarr = JArray.newInstance(JString, 5);
+     var IntArray = Java.type("int[]");
+     var iarr = new IntArray(5);
+
+The created arrays are of Java type but can be used in JavaScript code:
+
+     iarr[0] = iarr[iarr.length] * 2;
+
+#Map Access
+In the system, you can create and access Java Maps, such as {{java.util.HashMap}}:
+
+     var HashMap = Java.type('java.util.HashMap');
+     var map = new HashMap();
+     map.put(1, "a");
+     map.get(1);
+
+The system supports iteration over such maps:
+
+     for (var key in map) {
+         print(key);
+         print(map.get(key));
+     }
+
+#List Access
+In the system, you can create and access Java Lists, such as {{java.util.ArrayList}}:
+
+     var ArrayList = Java.type('java.util.ArrayList');
+     var list = new ArrayList();
+     list.add(42);
+     list.add("23");
+     list.add({});
+     for (var idx in list) {
+         print(idx);
+         print(list.get(idx));
+     }
+
+#String Access
+The system can create Java strings with Java interoperability. The length of a string can be queried using the length property (note that length is a value property and cannot be called as a function):
+
+     var javaString = new (Java.type('java.lang.String'))("Java");
+     javaString.length === 4;
+
+Note that the system internally uses Java strings to represent JavaScript strings, so the code above and the JavaScript string literal "Java" are effectively indistinguishable.
+#Iterating Over Properties
+Properties (fields and methods) of Java classes and Java objects can be iterated using {{for in}}:
+
+     var m = Java.type('java.lang.Math')
+     for (var i in m) { print(i); }
+
+#Multithreading
+JS supports multithreading when used with Java. The system creates an independent execution context for each thread by default, so you don't need to worry about concurrent access to JS variables within JS. To create a thread in JS, you can
+use the {#Wb.poolStart} and {#Wb.startThread} methods. It is recommended to use the {#Wb.poolStart} method, as it uses a thread pool for management, allowing queued execution and controlling the number of concurrent threads.
+
+     Wb.poolStart(params => {
+       Wb.log(params.date);
+     }, { foo: 'bar', abc: 123, date: new Date() });
+
+If multiple execution contexts need to share global variables, this can be achieved by accessing `Base.map`.
+
+     Base.map.put('app.my.var', 'value'); // Add a global shared variable value
+     sharedValue = Base.map.get('app.my.var'); // Read the global variable
+
+Note that shared variable values can only be strings, numbers, booleans, null, or Java objects; otherwise, concurrent access exceptions will occur.
+#Accessing Other Languages
+Accessing other languages such as Python and R is allowed in JS. Note that before running other languages, their corresponding language packs need to be deployed. For example, using Python requires deploying the Python language pack.
+
+     let pyArray = Polyglot.eval('python', '[1,2,42,4]'); // Call Python code directly
+     let result = Polyglot.evalFile('python', 'wb/modules/example/coding/server-js/demo.py');
+     Wb.send(result);
+
+For related examples, see: {#%common-usage|ide?openModule=example/coding/server-js/common-usage.xwl}
+##Server-Side Development.Interaction with Clients and Request Initiation
+After a client submits a request to the server, the server can send data to the client synchronously after completing the operation. If the client establishes a WebSocket connection, the server can actively send messages to the client. In addition, the system provides API methods for initiating Web requests on the server side.
+#Sending Data to Clients Synchronously Using Conventional Methods
+In ServerScript, the request and response objects can be accessed directly, representing the web request and response objects. Data can be sent to the client through the response object.
+Send text using the following code:
+
+     response.getWriter().print('msg');
+     response.flushBuffer();
+
+Send binary data using the following code:
+
+     os = response.getOutputStream());
+     try {
+       IOUtils.copy(fis, os);
+     } finally {
+       inputStream.close();
+     }
+
+#Sending Data to Clients Synchronously Using System-Provided APIs
+The system provides the {#Wb.send} method to send arbitrary data such as text, numbers, objects, arrays, byte arrays, and input streams. The buffer is flushed immediately after this method is executed.
+For example, the following code:
+
+     Wb.send('msg'); // Send a string and flush the buffer immediately
+     Wb.send({foo: 'bar', abc:123}); // Send an object and flush the buffer immediately
+     Wb.send([123, 'abc', new Date()]); // Send an array and flush the buffer immediately
+     Wb.send(inputStream); // Send an input stream and flush the buffer immediately
+
+#Sending Data to Clients Using WebSocket
+After the client establishes a WebSocket connection, the server can actively push data to the client using the {#Wb.send} method.
+For example, the following code:
+
+     Wb.send('text', 'mySocket'); // Send content to the current user's WebSocket with the socket name mySocket
+     Wb.send('text', 'mySocket', 'admin'); // Send content to all admin users' WebSockets with the socket name mySocket
+     Wb.send({ type: 'log', style: 3, data: 'msg' }, '$ide', true); // Send content to the IDE's WebSocket
+
+#Exporting Data to Clients
+In addition to sending data to the client synchronously using the {#Wb.send} method, you can also use the {#Wb.exportData} method. This method not only sends data but also sets the content type of the sent data, making it suitable for scenarios such as file export.
+For example, the following code:
+
+      Wb.exportData(photoInputStream, 'photo.png'); // Export the file input stream and specify the exported file name as "photo.png"
+
+#Sending Web Requests
+The system provides the {#Wb.submit} method to conveniently initiate web requests.
+For example, to initiate a request to a web service on another server and obtain the result:
+
+     let result = Wb.submit({ url: 'https://www.geejing.com/app', params: { foo: 'bar' }, all: true });
+
+The above code initiates a request to {{https://www.geejing.com/app}}, submits parameters, and finally obtains the result.
+##Server-Side Development.Database Access
+Database access is an important part of developing application systems. In addition to using traditional methods to access databases, WebBuilder also provides simple, efficient, and feature-rich APIs for database access.
+#Accessing Databases via JDBC
+This is a relatively primitive database access method. First, obtain a database connection through the {{com.wb.tool.DataSource.getConnection}} method, then create a {{Statement}} object to execute SQL, and finally obtain the result.
+The following code queries a user with a specified ID in the user table and displays the user name in the IDE console.
+
+     let conn, statement, resultSet;
+     try {
+       conn = DataSource.getConnection('wb-sqlserver');
+       statement = conn.prepareStatement('select user_name from wb_user where sid=?');
+       statement.setString(1, 'admin');
+       resultSet = statement.executeQuery();
+       while (resultSet.next()) {
+         Wb.log(resultSet.getString(1));
+       }
+     } finally {
+       //Note that the closing order is resultSet, statement, conn
+       //SysUtil.close performs the close without throwing any exception
+       SysUtil.close(resultSet);
+       SysUtil.close(statement);
+       SysUtil.close(conn);
+     }
+
+#Accessing Databases via WebBuilder-Encapsulated Classes and APIs
+The system provides a set of convenient class libraries and APIs for database access based on JDBC. A primary API method is {#Wb.sql}, which is used to execute arbitrary SQL statements and obtain all returned results.
+For example, the following code will query user table data:
+
+     let result = Wb.sql('select * from wb_user');
+
+After executing the above code, the return result of "result" is a JSON object, where the "items" property is a list of all returned record data, "columns" is a list of all returned field metadata, "fields" is a list of fields requiring type conversion (such as date fields), and "total" is the accessible total number of records (used for frontend pagination).
+Complex results may be returned when accessing complex SQL or stored procedures. For example, execute the following SQL statements at once using SQL Server:
+
+     let result = Wb.sql(`
+         select * from wb_user;
+         delete from wb_log where 1=0;
+         select * from wb_staff;
+       `
+     });
+
+After executing the above code, the result of "result" is an array. The first item represents the result returned by "select * from wb_user", the second item represents the number of affected records returned by "delete from wb_log where 1=0", and so on. Note that different databases return different results for SQL execution. Some databases do not support the execution of multiple SQL statements, in which case stored procedures can be used to execute multiple SQL statements.
+When executing a stored procedure that returns complex results, the result of "result" will be an object type, where the property name is the output parameter name and the value is the output parameter value. The property named "$return" represents an array of results obtained by executing SQL sequentially. For details on stored procedure access, see subsequent documents. For the data type returned by "result", refer to {#Wb.Query.result}
+#Commonly Used Database Access API Methods
+The following API methods are commonly used for database access, and all of these methods are based on {#Wb.sql} at their core.
+-{#Wb.getRow}
+-{#Wb.getRows}
+-{#Wb.getRowx}
+-{#Wb.getAllRows}
+-{#Wb.sendRow}
+-{#Wb.sendRows}
+-{#Wb.sendRowx}
+-{#Wb.getRecord}
+-{#Wb.getRecords}
+-{#Wb.getRecordx}
+-{#Wb.getAllRecords}
+-{#Wb.sendRecord}
+-{#Wb.sendRecords}
+-{#Wb.sendRecordx}
+-{#Wb.getDict}
+-{#Wb.sendDict}
+-{#Wb.getDictRecords}
+-{#Wb.sendDictRecords}
+-{#Wb.sqlRS}
+-{#Wb.sqlAll}
+-{#Wb.sendSql}
+#Specifying the Database to Access
+When accessing databases using the above APIs, if the db parameter is not set in the API method to specify the database, the system will use the default database shared connection. When you need to access a specified database, you can do so by setting the db parameter. If db is a string, the system will use the shared database connection with that name; if db is a {#Wb.Connection} object, that connection will be used.
+For example, the following code:
+
+     Wb.sql({sql: 'select * from wb_user', db: 'mydb'});
+
+The above code specifies the use of the shared database connection named "mydb" through the db property. The name "mydb" is configured in {#%Database Configuration|dbc}.
+If you need to use an independent database connection, you can set the db property to a database connection {#Wb.Connection} object.
+For example, the following code:
+
+     let db1 = new Wb.Connection('db1');
+     Wb.sql({sql: 'select * from wb_user', db: db1});
+     db1.close(); // This method does not need to be placed in a finally block; the system will automatically close the db1 connection when an exception occurs
+
+If you need to obtain a shared database connection object, you can use the following code:
+
+     let defaultConn = Wb.getConn(); // Obtain the default shared connection
+     let db1Conn = Wb.getConn('db1'); // Obtain the shared connection with the specified name
+
+#Release of Database Connections and Related Resources
+When accessing databases using the above APIs, you do not need to worry about releasing database connections and related resources. The system will release database-related resources immediately after the method is executed, and the used database connection will be automatically closed after the execution context is completed.
+If you need to close the database connection immediately, you can use the following code:
+
+     Wb.getConn().close();  // Close the default shared database connection
+     Wb.getConn('mydb').close(); // Close the shared database connection named "mydb"
+     let conn = new Wb.Connection('mydb'); // Create an independent connection
+     Wb.sql({sql: 'select * from wb_user', db: conn}); // Execute SQL
+     conn.close(); // Explicitly close the connection; if not closed, it will be automatically closed after the execution context is completed.
+
+#Using SQL Parameters
+Specific syntax can be used in SQL statements to represent input and output parameters. Input parameters are represented by {?type|scale|name?}, and output parameters are represented by {*type|scale|name*}, where type is the parameter type, scale is the parameter precision, and name is the parameter name. Both type and scale can be omitted. If type is omitted, the parameter value will be processed according to the object type; it is recommended to add type. When an input parameter has scale (scale can be empty, but the placeholder "|" must be retained), it will be forced to be processed as an object type parameter.
+In SQL performance-sensitive scenarios, it is recommended to explicitly add type to improve SQL execution performance, such as the following SQL:
+
+     $sql:select * from wb_user where user_name={?name?} -- No parameter type added, processed as object type
+     select * from wb_user where user_name={?varchar|name?} -- Parameter type varchar added, explicitly processed as string type parameter; specifying the type usually provides higher SQL execution performance
+
+Valid type values in SQL parameters:
+-BIT
+-TINYINT
+-SMALLINT
+-INTEGER
+-INT: Same as INTEGER
+-BIGINT
+-FLOAT
+-REAL
+-DOUBLE
+-NUMERIC
+-DECIMAL
+-CHAR
+-VARCHAR
+-LONGVARCHAR
+-DATE
+-TIME
+-TIMESTAMP
+-BINARY
+-VARBINARY
+-LONGVARBINARY
+-NULL
+-OTHER
+-JAVA_OBJECT
+-OBJECT
+-DISTINCT
+-STRUCT
+-ARRAY
+-BLOB
+-CLOB
+-REF
+-DATALINK
+-BOOLEAN
+-ROWID
+-NCHAR
+-NVARCHAR
+-LONGNVARCHAR
+-NCLOB
+-SQLXML
+-REF_CURSOR
+-CURSOR: Same as REF_CURSOR
+-TWT: Same as TIME_WITH_TIMEZONE
+-TSWT: Same as TIMESTAMP_WITH_TIMEZONE
+For specific type meanings, refer to the definitions in {{java.sql.Types}}.
+The values of SQL parameters are obtained from the context by default, i.e., from session attributes, request attributes, and request parameters. This can be disabled by setting the contextParams property of APIs such as {#Wb.sql} to false. In addition, you can
+set the params property to specify parameters. If the parameters specified by this property have the same names as those in the context, the parameters specified by this property have higher priority.
+Such as the following code:
+
+     // Disable obtaining parameters from the context and specify params parameters
+     let rows = Wb.getAllRows({sql: 'select * from wb_user where user_name={?admin?}', contextParams: false, params: {name: 'admin'}});
+
+#Accessing Stored Procedures
+Accessing stored procedures is essentially no different from executing ordinary SQL. The following demonstrates how to access a stored procedure on an Oracle database and obtain output parameters of the cursor type (result set).
+First, create a stored procedure on Oracle:
+
+     $sql:CREATE OR REPLACE NONEDITIONABLE PROCEDURE USER_PROC
+     (
+     P_USER OUT TYPES.X_CURSOR,
+     P_NAME IN VARCHAR
+     )
+     AS
+     BEGIN
+     OPEN P_USER FOR SELECT * FROM WB_USER WHERE USER_NAME = P_NAME;
+     END USER_PROC;
+
+Obtain the result set of the output parameter P_USER from the stored procedure through code, and return the data to the client after retrieval:
+
+     let object = Wb.sql(`{call user_proc({*cursor|p_user*}, 'admin')}`);
+     Wb.send(object.p_user);
+
+In the above example, the entire SQL for calling the stored procedure is enclosed in "{}", the "call" keyword is used to invoke the stored procedure, the first output parameter is specified as the "cursor" type, and the second input parameter "admin" is a constant. After execution, an object composed of all returned results of the stored procedure will be returned, and the result set data of the p_user output parameter in the object will be sent to the client.
+#Limiting the Number of Retrieved Records
+When accessing databases using the above APIs, except for the {#Wb.getAllRows} and {#Wb.getAllRecords} methods, the number of records returned by default is limited. The limited number of records is set by the "rs" parameter in the API, and the default value of rs is specified by "sys.db.maxRows" in {#%System Config|config}.
+Retrieving too many records at once may cause memory overflow. If you need to traverse all returned records, you can do so through the method specified by the "fn" property in the API.
+For example, the following code:
+
+     let total = 0;
+     Wb.sql({
+       sql: 'select salary from wb_staff', fn(row) {
+         total += row.salary;
+       }
+     });
+     Wb.send(total);
+
+The above {#Wb.sql} method does not return any value by default due to the presence of the fn parameter, so even if the number of returned records is large, it will not cause memory overflow.
+#Obtaining the Raw ResultSet
+When you need to obtain a ResultSet object instead of a record list, you can use the {#Wb.sqlRS} method.
+For example, the following code:
+
+     let rs;
+     rs = Wb.sqlRS('select * from wb_staff').resultSet; // Execute SQL and obtain the ResultSet object
+     while (rs.next()) {
+       Wb.log(rs.getString(1));
+     }
+     rs.close(); // Explicitly close the result set and release resources immediately; if not closed, it will be automatically closed after the execution context is completed. Immediate release is recommended for use within loops
+
+#Database-Side Pagination
+Database-side pagination is usually implemented through SQL statements, such as the following SQL statement based on the Derby database:
+
+     $sql:select * from wb_staff offset {?bigint|_from?} rows fetch first {?bigint|_size?} rows only
+
+Where "_from" and "_size" are parameters passed from the context for pagination, which are automatically passed by default when table pagination is used.
+When using APIs to perform database-side pagination, the "paging" property must be set to false, as pagination is already completed on the database side, to avoid pagination errors caused by secondary pagination on the application server side. Such as the following code:
+
+     Wb.sendRowx({
+        sql: 'select * from wb_staff offset {?bigint|_from?} rows fetch first {?bigint|_size?} rows only',
+        paging: false, // Stop secondary pagination on the application server side. This parameter defaults to true when pagination parameters exist
+        total: 'select count(*) from wb_staff' // Return the total number of records; the value can be a numeric constant, used for frontend pagination
+     });
+
+#Preventing SQL Injection Vulnerabilities
+SQL injection vulnerabilities are usually caused by SQL statement concatenation. Therefore, avoid generating SQL statements by concatenating strings as much as possible. If you need to pass parameters, use SQL parameters to prevent SQL injection.
+
+     sql = "select * from wb_user where user_name='" + userName + "'"; // Not recommended: Generating SQL by concatenating strings has SQL injection risks
+     sql = "select * from wb_user where user_name={?userName?}"; // Recommended: Using parameters to avoid SQL injection risks
+
+For related examples, see: {#%database-access|ide?openModule=example/coding/server-js/database-access.xwl}
+##Server-Side Development.File Access
+In addition to using traditional Java file classes (java.io and java.nio-related classes) for server-side file system access, you can also use the {#Wb.File} class provided by WebBuilder, which is encapsulated based on Java file classes, to access the server-side file system.
+#Static Members
+The following static members of the {#Wb.File} class can quickly obtain specified file paths:
+-{#Wb.File.appFolder}: Application directory
+-{#Wb.File.wbFolder}: wb directory
+-{#Wb.File.moduleFolder}: Module directory, i.e., wb/modules directory
+#File Traversal
+Use the {#Wb.File.each} method to traverse the direct subordinate files/directories of a directory, and use {#Wb.File.cascade} to deeply traverse all subordinate files/directories.
+For example, the following code:
+
+     new Wb.File('/my/folder').each(file => Wb.log(file.name)); // Traverse the direct subordinate files/directories of the specified directory
+     new Wb.File(true, 'wb/docs').cascade(file => Wb.log(file.name)); // Deeply traverse all subordinate file/directory names of the "wb/docs" directory
+
+#File Access
+The following properties and methods can be used to access file contents:
+-{#Wb.File.readString}
+-{#Wb.File.text}
+-{#Wb.File.object}
+-{#Wb.File.bytes}
+-{#Wb.File.byteStream}
+-{#Wb.File.stream}
+-{#Wb.File.base64}
+#Obtaining a java.io.File Object from Wb.File
+You can access the {#Wb.File.file} property to obtain a java.io.File object, for example, the following code:
+
+     let javaFile = new Wb.File(true, 'wb/docs').file; // Obtain the java.io.File object pointing to the system's docs directory
+
+For related examples, see: {#%file-access|ide?openModule=example/coding/server-js/file-access.xwl}
+##Server-Side Development.Modular Development
+When developing complex applications on the server side using JavaScript (ServerScript), modular development can be used. Modular development includes the following methods:
+-Using js files
+-Using mjs files
+-Using xwl files
+#Using js Files
+This method is suitable for placing commonly used code in js files, which can be loaded globally statically through the "sys.ss.files" property of {#%Configuration|config} or dynamically loaded using the {#Wb.load|Wb-Server.load} method.
+The following demonstrates how to write and use js files.
+First, create a js file test.js:
+
+     Cls['My.Util'] = class myUtil {
+       /**
+        * Perform add.
+        * @param {Number} value1 Value 1
+        * @param {Number} value2 Value 2
+        * @return {Number} The result
+        */
+        static add(value1, value2) {
+          return value1 + value2;
+        }
+     }
+
+When you need to call this js:
+
+     Wb.load('test.js'); // If configured for global static loading, you can use it directly without Wb.load
+     let result;
+     result = My.Util.add(1, 3);
+
+#Using mjs Files
+mjs files are standard JavaScript module files, which can place a set of code for specific functions. This method is suitable for placing infrequently used code in mjs files and loading them using the {#Wb.load|Wb-Server.load} method when needed.
+The following demonstrates how to write and use mjs files.
+First, create an mjs file test.mjs:
+
+     class Util {
+       /**
+        * Perform add.
+        * @param {Number} value1 Value 1
+        * @param {Number} value2 Value 2
+        * @return {Number} The result
+        */
+       static add(value1, value2) {
+          return value1 + value2;
+       }
+     }
+     export default Util;
+
+When you need to call this mjs:
+
+     const Util = Wb.load('test.mjs');
+     let result;
+     result = Util.add(1, 3);
+
+#Using xwl Files
+This method is mainly used to call ServerScript code in xwl. There are several methods to call xwl:
+-{#Wb.run|Wb-Server.run}: Runs the ServerScript code of the module.
+-{#Wb.invoke|Wb-Server.invoke}: Runs the ServerScript code of the module and outputs client-side scripts.
+-{#Wb.execute|Wb-Server.execute}: Runs the ServerScript code of the module and returns client-side scripts.
+The following demonstrates how to write and use xwl files.
+First, create an xwl file test.xwl and add scripts in serverScript:
+
+     app.myVar = 'abc'; // Define the myVar property value as "abc" on the global variable app
+     Wb.log('test.xwl'); // Output logs to the IDE console
+     Wb.send('result'); // Send "result" to the client
+
+When you need to call this xwl:
+
+     let p = app.myVar; // Obtain the myVar property value "abc" in the global variable app
+     Wb.run('test.xwl'); // Only call the ServerScript of test.xwl, will not output the script "result" to the client
+     p = Wb.execute('test.xwl'); // Call the ServerScript of test.xwl and obtain the returned client script "result" for variable p
+     Wb.invoke('test.xwl'); // Call the ServerScript of test.xwl and directly output the client script "result" to the client
+
+For related examples, see: {#%server-load-module|ide?openModule=example/load/server-load-module.xwl}
+##Server-Side Development.Permission Handling
+The system's default permissions are role-based. Each user can be assigned multiple roles, and each role can be configured with allowed modules in the {#%Permission Management|perm} or {#%Role Management|role} modules. The system only allows access to
+modules with permissions or modules that do not require {#Login|Wb.Module.loginRequired}.
+If you need to customize login and permission handling, such as implementing personalized single sign-on, you can do so by configuring the "sys/session/login.xwl" module and the client-side "Wb.login" method. The former is the module that runs when not logged in, and the latter is the method executed after the client page session expires.
+#Permission Judgment
+On the server side, you can determine whether a user or role has permission to access a specified module through the permission-related API method {#Wb.permit} or the permit method of Java's Perm class.
+
+     result = Wb.permit('admin/dbe.xwl'); // Determine whether the current user can access admin/dbe.xwl
+     result = Perm.permit('admin/dbe.xwl', ['roleId1', 'roleId2']); // Determine whether the role with the specified ID can access admin/dbe.xwl
+
+#Hiding Unauthorized Page Components
+To hide unauthorized components in a page, such as hiding the "Add" button in the user management module when there is no permission to access the "add.xwl" module, you can achieve this through the following method.
+First, set variables in the server-side code {#serverScript|Wb.Module.serverScript} property of the module:
+
+     let addVisible = Wb.permit('admin/user/add.xwl'); // The addVisible variable indicates whether the current user can access add.xwl
+     Wb.set('addVisible', addVisible); // Add the addVisible variable to the "addVisible" parameter
+
+Then set "_$addVisible$_" in the visible property of the client-side "addBtn" to associate the button's visibility with permissions.
+In addition, you can dynamically reference this variable in client-side JavaScript scripts to set values:
+
+     let addVisible = _$addVisible$_;
+     app.addBtn.visible = addVisible;
+
+Each component has a {#bindModule|Wb.Component.bindModule} property. You can set this property to a module address to quickly set component visibility: the component is visible if the module is accessible, otherwise it is hidden.
+For related examples, see: {#%module-bind-ui|ide?openModule=example/basic/module-bind-ui.xwl}

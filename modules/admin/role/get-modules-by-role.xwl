@@ -1,0 +1,56 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Get modules by role
+  serverScript: |-
+    function main() {
+      let permItems, module, path, fullPath, inRole, text, curText, normalName, scan, icon, img, indexFile, total = 0,
+        rows = [], search = Params.search;
+
+      scan = (folder, pathText) => {
+        folder.each(file => {
+          if (file.isModuleFile && !file.isMinFile) {
+            fullPath = file.modulePath;
+            path = fullPath.slice(0, -4);
+            if (inRole && permItems.includes(path) || !inRole && !permItems.includes(path)) {
+              module = Xwl.get(fullPath);
+              if (module.loginRequired) {
+                text = Wb.optText(module.title);
+                normalName = file.normalName;
+                if (search && !text.includes(search) && !normalName.includes(search))
+                  return;
+                total++;
+                icon = module.icon;
+                img = module.img;
+                if (img)
+                  img = 'wb/images/' + img + '.png';
+                if (!img && !icon)
+                  icon = 'module';
+                rows.push({
+                  text: pathText + (text || normalName), subtext: module.remark, path, _icon: icon, _img: img,
+                });
+              }
+            }
+          } else if (file.isFolder) {
+            indexFile = new Wb.File(file, 'index.json');
+            curText = (indexFile.exists ? Wb.optText(indexFile.object.title) : null) || file.name;
+            if (pathText)
+              curText = pathText + curText;
+            scan(file, curText + '/');
+          }
+        });
+      }
+      inRole = Wb.getBool('inRole');
+      permItems = Wb.getAllRecords('select module_path from wb_perm where role_id={?role_id?}')?.pluck(0);
+      scan(Wb.File.moduleFolder, '');
+      rows.mixSort('text');
+      Wb.send({ items: rows.slice(Wb.getInt('_from'), Wb.getInt('_to') + 1), total });
+    }
+    main();
+tags: ''
+text: module
+title: ''

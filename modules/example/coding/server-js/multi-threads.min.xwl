@@ -1,0 +1,43 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: 'Wb.make(app,{cname:"codeEditor",readonly:true,wrapBorder:0,value:"//Multithreaded
+    programming\n\n//Create a new thread and get the result returned by the thread\nlet
+    map = Wb.startThread(params => {\n  Wb.log(params.date);\n  Wb.sleep(100);\n  return
+    { result: ''ok'' };\n}, { foo: ''bar'', abc: 123, date: new Date() });\nmap.thread.join();
+    //Wait for the thread\nWb.log(map.result); //Displays the results: {result: ''ok''}\n\nlet
+    future = Wb.poolStart(params => {\n  Wb.log(params.date);\n  Wb.sleep(100);\n  return
+    { result: ''ok'' };\n}, { foo: ''bar'', abc: 123, date: new Date() });\nfuture.get();
+    //Wait for executing\nWb.log(''ok'');\n\n//Each thread has an exclusive execution-context,
+    and the JS objects can only be accessed by the\n//current execution-context, so
+    no concurrency control is required.\n//Concurrency control still needs to be handled
+    when accessing Java objects, such as when accessing\n//a globally shared Java
+    static object.\nBase.map.put(''foo'', ''bar''); //Add variables to the global
+    static Java ConcurrentHashMap object\n//Add \"myVar\" to the global JS object
+    app in the execution-context, which is visible only to the current execution-context\napp.myVar
+    = ''value'';\nWb.run(''my/file1''); //Call the file1 module to safely access app.myVar\n\n//Sync
+    lock\n//Create a lock named my.lock1, and when executed again, the code will be
+    blocked until the lock is released\nlet lock = new Wb.Lock(''my.lock1'');\ntry
+    {\n  let myJavaObject = BaseMap.get(''myJavaObject''); //Access BaseMap\n  myJavaObject.doSomeThing();
+    //Execution is safe in locking\n} finally {\n  lock.unlock(); //Release the lock.
+    The block will auto unlock when execution-context finished.\n}\n\n//Execute function
+    after the specified delay\n//Since the delayed execution method is in an independent
+    thread and context, external variables cannot be referenced, only parameters in
+    \"params\" can be referenced\nlet future = Wb.setTimeout(params => {\n  Wb.log(params.date);\n  return
+    { result: ''ok'' };\n}, 1000, { foo: ''bar'', abc: 123, date: new Date() });\n//
+    future.cancel(false); // cancel setTimeout\n\n//Execute function periodically\n//Since
+    the execution method periodically is in an independent thread and context, external
+    variables cannot be referenced, only parameters in \"params\" can be referenced\nlet
+    future = Wb.setInterval(params => {\n  Wb.log(params.date);\n  return { result:
+    ''ok'' };\n}, 1000, { foo: ''bar'', abc: 123, date: new Date() });\nWb.sleep(3000);\nfuture.cancel(false);
+    // cancel interval",cid:"codeEditor1",full:true});'
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  links: '["wb/js/monaco.js"]'
+tags: ''
+text: module
+title: ''

@@ -1,0 +1,13 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Get department data
+  serverScript: function main(){let e=Wb.load("../dialog-util.mjs");Wb.send(e.getData(Wb.getObject("ids"),"select
+    sid,dept_code,dept_name from wb_dept"))}main();
+tags: ''
+text: module
+title: ''

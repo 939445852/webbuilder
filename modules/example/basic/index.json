@@ -1,0 +1,32 @@
+{
+  "title": "",
+  "icon": "",
+  "img": "",
+  "hideInMenu": "false",
+  "items": [
+    "ai-gen.xwl",
+    "layout.xwl",
+    "grid1-form.xwl",
+    "grid3-form.xwl",
+    "table-form.xwl",
+    "search-form.xwl",
+    "add-tab-card.xwl",
+    "load-destroy.xwl",
+    "create-page.xwl",
+    "render-to-html.xwl",
+    "visual-design.xwl",
+    "custom-style.xwl",
+    "scrollbar.xwl",
+    "dashboard.xwl",
+    "wizard.xwl",
+    "module-bind-ui.xwl",
+    "drag-drop.xwl",
+    "template.xwl",
+    "vue-el.xwl",
+    "react-shadow.xwl",
+    "geejing-link.xwl",
+    "no-container.xwl",
+    "performance.xwl",
+    "portlets"
+  ]
+}

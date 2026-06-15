@@ -1,0 +1,25 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.apply(app,{hideActionButtons:true,leaveData:_$leaveData$_,init(e,a,t){Wb.setValue(app.main,app.leaveData);app.radioGroup1.visible=a=="handle";Wb.log(t.data.node_name)},onAction(){let
+    e;switch(app.radioGroup1.value){case 0:app.doPass();break;case 1:e=app.nodeSelect.value;if(e)app.doBack(e);else{app.nodeSelect.focus();Wb.tipSelect()}break;case
+    2:e=app.userSelect.value;if(e)app.doTransfer(e);else{app.userSelect.focus();Wb.tipSelect()}break;case
+    3:app.doReject();break;case 4:e=app.userSelect.value;if(e)app.doSignBefore(e);else{app.userSelect.focus();Wb.tipSelect()}break;case
+    5:e=app.userSelect.value;if(e)app.doSignAfter(e);else{app.userSelect.focus();Wb.tipSelect()}break}}});Wb.make(app,{cname:"window",layout:"column",padding:true,visible:true,icon:"paper-plane",width:"80em",title:"Leave
+    application",autoScroll:true,cid:"main",items:[{cname:"radioGroup",cid:"radioGroup1",events:{change(e){let
+    a=this.value;if(a==3)a=0;else if(a==4||a==5)a=2;app.cardCt1.activeIndex=a;if(a==1&&!app.nodeSelect.value){app.nodeSelect.picker.load({success(){this.parent.valueIndex=0}})}}},items:[{cname:"radio",value:true,cid:"passRadio",label:Str.pass},{cname:"radio",cid:"backRadio",label:Str.back1},{cname:"radio",cid:"transferRadio",label:Str.transfer},{cname:"radio",cid:"rejectRadio",label:Str.reject},{cname:"radio",cid:"signBeforeRadio",label:Str.signBefore},{cname:"radio",cid:"signAfterRadio",label:Str.signAfter}]},{cname:"cardCt",border:false,cid:"cardCt1",items:[{cname:"container",layout:"grid1",cid:"container1",items:[{cname:"text",readonly:true,cid:"applicant",text:"Applicant"},{cname:"date",readonly:true,cid:"begin_date",text:"Begin
+    Date"},{cname:"date",readonly:true,cid:"end_date",text:"End Date"},{cname:"number",readonly:true,cid:"leave_days",text:"Leave
+    Days"},{cname:"text",readonly:true,cid:"leave_reason",text:"Leave Reason"}]},{cname:"container",layout:"grid1",cid:"container2",items:[{cname:"select",forceSelect:true,text:"Select
+    node",url:"m?xwl=my/my-flow/get-his-nodes",cid:"nodeSelect",events:{beforeload(e,a,t){a.flowId=app.flowId}}}]},{cname:"container",layout:"grid1",cid:"container3",items:[{cname:"select",forceSelect:true,text:"Select
+    user",valueField:"sid",url:"m?xwl=sys/dialog/user-selector/select",cid:"userSelect",subtextField:"user_name",textField:"display_name"}]}]}]});
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  serverScript: function main(){let e,a;e=new Wb.Workflow({flowId:Params.flowId});Params.userid=e.userid;a=Wb.getRow("select
+    * from wb_leave where flow_id={?flowId?} and user_id={?userid?}");a.applicant=e.getInitUser().displayName;Params.leaveData=Wb.encode(a)}main();
+tags: ''
+text: module
+title: ''

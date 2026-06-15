@@ -1,0 +1,50 @@
+/* item class */
+.d-tag > .w-body > .w-item {
+  color: #000;
+  border: thin solid #888;
+  border-radius: 0.5em;
+  background: #ddd;
+}
+/* item hover */
+.d-tag > .w-body > .w-item:hover {
+  color: #000;
+  background: #aaa;
+}
+/* item selected */
+.w-x .d-tag > .w-body > .w-item-sel {
+  /* color: #fff; */
+  background: #cce8ff
+}
+/* item selected focused */
+/* .d-tag.w-view:focus-within .w-item-sel {
+  color: #fff;
+  background: #37e;
+} */
+/* we chat tab icon & label */
+.d-we-chat > .w-tabbar > .w-sc-body > .w-btn-active > .w-icon,
+.d-we-chat > .w-tabbar > .w-sc-body > .w-btn-active > .w-label {
+  color: #22b428;
+}
+/* tab1 style */
+.d-tab1 > .w-tabbar > .w-sc-body {
+  gap: .2em;
+  border-bottom: thin solid #ccc;
+}
+/* tab1 style tab button color */
+.d-tab1 > .w-tabbar > .w-sc-body > .w-btn {
+  background-color: #a1c6d6;
+  color: #fff;
+  padding: .5em;
+  border-top-left-radius: .5em;
+  border-top-right-radius: .5em;
+}
+/* tab1 style tab button hover color */
+.d-tab1 > .w-tabbar > .w-sc-body > .w-btn:hover {
+  background-color: #b3dcec;
+}
+/* tab1 style tab active button color */
+.w-x .d-tab1 > .w-tabbar > .w-sc-body > .w-btn-active {
+  background-color: #ebebeb;
+  color: #000;
+  border-bottom-color: transparent;
+}

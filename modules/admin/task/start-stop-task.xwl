@@ -1,0 +1,22 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Start or stop tasks
+  serverScript: |-
+    function main() {
+      let status = Wb.getBool('status');
+
+      if (status)
+        JobUtil.startEngine();
+      else
+        JobUtil.shutdownEngine();
+      Wb.setConfig("sys.task.enabled", status);
+    }
+    main();
+tags: ''
+text: module
+title: ''

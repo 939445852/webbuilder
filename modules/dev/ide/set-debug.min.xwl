@@ -1,0 +1,8 @@
+_icon: module
+cls: Wb.Module
+properties:
+  cid: module
+  remark: Set module debug status
+  serverScript: Wb.checkDemo();function main(){let e=Wb.getObject("files"),a=Params.type,s=Wb.userid,b=Wb.has("types")?Wb.getObject("types"):null;e.forEach(((e,t)=>{switch(b?b[t]:a){case"add":DebugFiles.addDebugFile(s,e);break;case"remove":DebugFiles.removeDebugFile(s,e);break;case"disable":DebugFiles.setDebugStatus(s,e,0);break;case"enable":DebugFiles.setDebugStatus(s,e,1);break;case"terminate":DebugFiles.terminate(s,e,true);break;case"resume":DebugFiles.terminate(s,e,false);break}}))}main();
+text: module
+title: ''

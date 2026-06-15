@@ -1,0 +1,95 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: 'Wb.apply(app,{myShareTip:new Wb.Tip({cls:"w-error-color",fontSize:"1.5em",padding:".2em",events:{beforetip(t){this.text="My
+    share tip: "+t.cid}}})});Wb.make(app,[{cname:"window",layout:"grid1",instanced:false,title:"Dynamic
+    window",cid:"dynamicNewWin",closeAction:"destroy",items:[{cname:"text",cid:"text1",text:"Your
+    name"},{cname:"date",cid:"date1",text:"Birth date"}]},{cname:"window",icon:"bluetooth1",layout:"grid1",title:"Modal
+    window",modal:true,cid:"modalWin",items:[{cname:"text",cid:"text1",text:"Your
+    name"},{cname:"date",cid:"date1",text:"Birth date"}]},{cname:"window",icon:"bluetooth1",layout:"grid1",resetDialog:true,title:"Auto
+    reset window",cid:"autoResetWin",items:[{cname:"label",cid:"label1",text:"The
+    values of all controls will be automatically reset after the window is hidden"},{cname:"text",cid:"text1",text:"Your
+    name"},{cname:"text",value:"abc",cid:"text2",text:"Default value"},{cname:"date",cid:"date1",text:"Birth
+    date"}]},{cname:"dialog",title:"Normal Dialog",cid:"normalDialog",items:[{cname:"option",cid:"showDialogOption",text:"Show
+    custom dialog",events:{click(t,e){app.customDialog.show()}}}]},{cname:"dialog",layout:"grid1",plainTitle:false,titleCenter:false,labelUp:true,title:"Custom
+    Dialog",cid:"customDialog",tools:[{icon:"gear",cid:"item1",events:{click(t,e){Wb.tip(Str.set)}}}],menu:{cname:"menu",items:[{icon:"add",cid:"item1",text:Str.add},{icon:"edit",cid:"item2",text:Str.edit},{icon:"delete",cid:"item3",text:Str.del}]},items:[{cname:"text",cid:"text1",text:"Your
+    name"},{cname:"date",cid:"date1",text:"Birth date"},{cname:"button",type:"primary",cid:"newDialog",text:"New
+    Dialog",events:{click(t,e){app.newDialog.show()}}}]},{cname:"dialog",layout:"grid1",title:"New
+    Dialog",cid:"newDialog"},{cname:"drawer",icon:"fieldset",layout:"fit",focusControl:false,title:"Default
+    Drawer",closable:true,cid:"defaultDrawer",tools:[{icon:"gear",cid:"item1"},{icon:"share",cid:"item2"}],items:[{cname:"toolbar",layout:"grid5",vertical:true,cid:"toolbar1",items:[{icon:"add",iconAlign:"top",iconSize:"2em",text:"Item1",cid:"item1"},{icon:"edit",iconAlign:"top",iconSize:"2em",text:"Item2",cid:"item2"},{icon:"delete",iconAlign:"top",iconSize:"2em",text:"Item3",cid:"item3"},{icon:"book1",iconAlign:"top",iconSize:"2em",text:"Item4",cid:"item4"},{icon:"discovery",iconAlign:"top",iconSize:"2em",text:"Item5",cid:"item5"},{icon:"comment2",iconAlign:"top",iconSize:"2em",text:"Item6",cid:"item6"},{icon:"flow1",iconAlign:"top",iconSize:"2em",text:"Item7",cid:"item7"},{icon:"dict",iconAlign:"top",iconSize:"2em",text:"Item8",cid:"item8"},{icon:"grid",iconAlign:"top",iconSize:"2em",text:"Item9",cid:"item9"},{icon:"layout",iconAlign:"top",iconSize:"2em",text:"Item10",cid:"item10"},{cname:"line",title:"My
+    Title",cid:"line1"},{cname:"text",gridColumn:"span 5",cid:"text1",text:"Input
+    text"},{cname:"toggle",gridColumn:"span 5",cid:"toggle1",text:"Toggle"}]}]},{cname:"drawer",dockPosition:"right",layout:"fit",title:"Right
+    Drawer",cid:"rightDrawer",items:[{cname:"toolbar",type:"menu",cid:"toolbar1",events:{buttonclick(t,e,i){Wb.tip(t.text+"
+    clicked");this.parent.close()}},items:[{icon:"favorite",cid:"item1",text:"Favorite
+    Pages"},{icon:"gear",cid:"item2",text:"Setting"},{icon:"command",cid:"item3",text:"Command"},{icon:"word",cid:"item4",text:"Export
+    to Word"},{icon:"excel",cid:"item5",text:"Export to Excel"},{cname:"divider",cid:"divider1"},{icon:"print",cid:"item6",text:"Print"},{icon:"table",cid:"item7",text:"Show
+    Table"}]}]},{cname:"panel",layout:"grid1",visible:false,minButtonWidth:"8em",cid:"hoverPanel",buttons:[{cname:"button",icon:"ok",text:"OK",type:"primary",cid:"button1",events:{click(t,e){let
+    i=this.up("hoverPanel");Wb.tip(Wb.encode(Wb.getValue(i)));i.hide()}}},{cname:"button",icon:"cancel",cid:"button2",text:"Cancel",events:{click(t,e){this.up("hoverPanel").hide()}}}],items:[{cname:"text",cid:"text1",text:"User
+    name"},{cname:"date",cid:"date1",text:"Date"}]},{cname:"panel",layout:"grid1",visible:false,minButtonWidth:"8em",cid:"hideGetValuePanel",closeOnEsc:false,items:[{cname:"text",cid:"text1",text:"User
+    name"},{cname:"date",cid:"date1",text:"Date"}]}]);Wb.make(app,{cname:"viewport",layout:"grid1",cid:"viewport1",items:[{cname:"label",cid:"mainLabel",cls:"w-title3",text:"Window
+    and Tip"},{cname:"title",title:"Window List",cid:"winTitle"},{cname:"container",layout:"form",cls:"w-rel",cid:"winCt",frame:true,height:"20em",items:[{cname:"button",cid:"dynamicNewWinBtn",text:"Dynamic
+    new window",events:{click(t,e){let i=app.dynamicNewWin;delete i.cid;i.owner=parentContainer;i.x=Wb.random(70)+"vw";i.y=Wb.random(70)+"vh";i=Wb.create(i);i.show()}}},{cname:"button",cid:"showModalWinBtn",text:"Show
+    modal window",events:{click(t,e){app.modalWin.show()}}},{cname:"button",cid:"showAutoResetWinBtn",text:"Show
+    auto reset window",events:{click(t,e){app.autoResetWin.show()}}},{cname:"window",layout:"center",visible:true,icon:"edit",width:"20em",html:"Hide
+    on Close",title:"Normal window",cid:"normalWin",height:"10em",events:{hide(t){Wb.tip("Show
+    again after 2 secs.");setTimeout((t=>app.normalWin.show().el.fadeIn()),2e3)}}},{cname:"window",layout:"center",dialog:true,visible:true,closeAction:"destroy",width:"20em",x:"23em",html:"Destroy
+    on Close",title:"Dialog window without modal",collapsible:true,modal:false,cid:"dialogWin",height:"10em",events:{ok(t){Wb.tip(''You
+    click "''+Str.ok+''" button.'')},destroy(t){Wb.tip(this.cid+" is destroyed.")}}},{cname:"window",layout:"grid1",x:"45em",titleBar:false,visible:true,labelUp:true,cid:"noTitleWin",items:[{cname:"line",title:"No
+    title window",dimTitle:true,cid:"line1"},{cname:"text",cid:"text1",text:"Your
+    name"}]}]},{cname:"title",title:"Message",cid:"messageTitle"},{cname:"container",layout:"form",cid:"messageCt",frame:true,items:[{cname:"button",cid:"infoBtn",text:"Info",events:{click(t,e){Wb.info("Some
+    information",(t=>Wb.tip("do something after show message")))}}},{cname:"button",cid:"htmlInfoBtn",text:"HTML
+    Info",events:{click(t,e){Wb.info(''<span class="w-error-color">HTML information</span>'',null,true)}}},{cname:"button",cid:"succBtn",text:"Succ",events:{click(t,e){Wb.succ("Some
+    information")}}},{cname:"button",cid:"warnBtn",text:"Warn",events:{click(t,e){Wb.warn("Some
+    information")}}},{cname:"button",cid:"errorBtn",text:"Error",events:{click(t,e){Wb.error("Some
+    information")}}},{cname:"button",cid:"confirmBtn",text:"Confirm",events:{click(t,e){Wb.confirm("Are
+    you sure you want to delete?",(t=>Wb.tip("click OK")),(t=>Wb.tip("click Cancel")))}}},{cname:"button",cid:"chooseBtn",text:"Choose",events:{click(t,e){Wb.choose("Are
+    you sure you want to save?",(t=>Wb.tip(t)))}}},{cname:"button",cid:"customizeBtn",text:"Customize",events:{click(t,e){Wb.Window.showMessage({title:"Customize",text:"Some
+    message",icon:"share",name:"sys.dialog",buttons:[{text:"Primary",type:"primary",cid:"primary"},{text:Str.cancel,cid:"cancel"}],callback(t){this.close();Wb.tip(t+"
+    clicked")}})}}},{cname:"button",cid:"fadeAnimateBtn",text:"Fade Animate",events:{click(t,e){Wb.error("Some
+    message").el.fadeIn()}}},{cname:"button",cid:"slideAnimateBtn",text:"Slide Animate",events:{click(t,e){Wb.info("Some
+    message",(function(){this.show().el.slideOut({callback:t=>this.hide()})})).el.slideIn()}}}]},{cname:"title",title:"Tip",cid:"tipTitle"},{cname:"container",layout:"form",cid:"tipCt",frame:true,items:[{cname:"button",cid:"infoBtn",text:"Info",events:{click(t,e){Wb.tip("Some
+    information")}}},{cname:"button",cid:"htmlInfoBtn",text:"HTML tip",events:{click(t,e){Wb.tip(''<span
+    class="w-error-color">HTML information</span>'',true)}}},{cname:"button",cid:"succBtn",text:"Succ",events:{click(t,e){Wb.tipSucc("Some
+    information")}}},{cname:"button",cid:"warnBtn",text:"Warn",events:{click(t,e){Wb.tipWarn("Some
+    information")}}},{cname:"button",cid:"errorBtn",text:"Error",events:{click(t,e){Wb.tipError("Some
+    information")}}},{cname:"button",cid:"tipSelectBtn",text:"Tip Select",events:{click(t,e){Wb.tipSelect()}}},{cname:"button",cid:"tipDoneBtn",text:"Tip
+    Done",events:{click(t,e){Wb.tipDone(Str.save)}}}]},{cname:"title",title:"Toast",cid:"toastTitle"},{cname:"container",layout:"form",cid:"toastCt",frame:true,items:[{cname:"button",cid:"infoBtn",text:"Info",events:{click(t,e){Wb.toast("Some
+    information")}}},{cname:"button",cid:"htmlInfoBtn",text:"HTML tip",events:{click(t,e){Wb.toast(''<span
+    class="w-error-color">HTML information</span>'',true)}}},{cname:"button",cid:"succBtn",text:"Succ",events:{click(t,e){Wb.toastSucc("Some
+    information")}}},{cname:"button",cid:"warnBtn",text:"Warn",events:{click(t,e){Wb.toastWarn("Some
+    information")}}},{cname:"button",cid:"errorBtn",text:"Error",events:{click(t,e){Wb.toastError("Some
+    information")}}}]},{cname:"title",title:"Dialog",cid:"dialogTitle"},{cname:"container",layout:"form",cid:"dialogCt",frame:true,items:[{cname:"button",cid:"normalBtn",text:"Normal
+    dialog",events:{click(t,e){app.normalDialog.show()}}},{cname:"button",cid:"customBtn",text:"Custom
+    dialog",events:{click(t,e){app.customDialog.show()}}}]},{cname:"title",title:"Drawer",cid:"drawerTitle"},{cname:"container",layout:"form",cid:"drawerCt",frame:true,items:[{cname:"button",cid:"defaultBtn",text:"Default
+    drawer",events:{click(t,e){app.defaultDrawer.show()}}},{cname:"button",cid:"topBtn",text:"Top
+    drawer",events:{click(t,e){app.topDrawer??=new Wb.Drawer({dockPosition:"top",height:"40vh",title:"Top
+    Drawer",plainTitle:true});app.topDrawer.show()}}},{cname:"button",cid:"rightBtn",text:"Right
+    drawer",events:{click(t,e){app.rightDrawer.show()}}},{cname:"button",cid:"leftBtn",text:"Left
+    drawer",events:{click(t,e){app.leftDrawer??=new Wb.Drawer({dockPosition:"left",width:"40vw",title:"Left
+    Drawer"});app.leftDrawer.show()}}}]},{cname:"title",title:"Prompt Window",cid:"promptTitle"},{cname:"container",layout:"form",cid:"promptCt",frame:true,items:[{cname:"button",cid:"promptStringBtn",text:"Prompt
+    string",events:{click(t,e){Wb.promptString("Enter String",((t,e)=>{Wb.tip(''Enter
+    "''+t+''".'');e.close()}),"old string")}}},{cname:"button",cid:"promptTextBtn",text:"Prompt
+    text",events:{click(t,e){Wb.promptText("Enter Text",((t,e)=>{Wb.tip(''Enter "''+t+''".'');e.close()}),"old
+    text")}}},{cname:"button",cid:"customPromptBtn",text:"Custom prompt",events:{click(t,e){Wb.prompt("My
+    Dialog",[{text:"Your Name",cid:"name",value:"old value"},{text:"Date",cid:"date",cname:"date"}],((t,e)=>{Wb.tip(Wb.encode(t));e.close()}))}}},{cname:"button",cid:"singleInstanceBtn",text:"Single
+    instance",events:{click(t,e){let i=Wb.prompt({title:"My Single Dialog",icon:"chart-bar"},[{text:"Your
+    Name",cid:"name",value:"old value"},{text:"Date",cid:"date",cname:"date"}],((t,e)=>{Wb.tip(Wb.encode(t));e.close()}),"my.win.id")}}},{cname:"button",cid:"hoverPanelBtn",text:"Hover
+    panel",events:{click(t,e){Wb.hover(app.hoverPanel,this)}}},{cname:"button",cid:"hideGetValueBtn",text:"Hide
+    to get value",events:{click(t,e){Wb.hover(app.hideGetValuePanel,this,(t=>{Wb.tip(Wb.encode(Wb.getValue(t)))}))}}}]},{cname:"title",title:"Tooltip",cid:"tooltipTitle"},{cname:"container",layout:"form",cid:"tooltipCt",frame:true,items:[{cname:"component",padding:"1em",tip:"Common
+    tip message",text:"Move the mouse here",cid:"tipComp",frame:true},{cname:"component",padding:"1em",tip:{enterRetain:true,textSelectable:true,html:"When
+    the pointer is in the Tip, it will not auto hide."},text:"Retain tip",cid:"retainTipComp",frame:true},{cname:"component",padding:"1em",text:"Custom
+    retain tip",cid:"customTip",frame:true,tip:{cname:"tip",layout:"grid1",enterRetain:true,gap:"1em",width:"40em",frame:true,items:[{cname:"label",titleType:"title4",cid:"label1",text:"Some
+    descriptions"},{cname:"text",cid:"text1",text:"Text"},{cname:"number",cid:"number1",text:"Number"},{cname:"displayField",value:"Some
+    value",cid:"displayField1",text:"Display Field"},{cname:"button",icon:"button",cid:"button1",text:"Button"}]}},{cname:"component",padding:"1em",tip:app.myShareTip,text:"Custom
+    share tip 1",cid:"customShareTip1",frame:true},{cname:"component",padding:"1em",tip:app.myShareTip,text:"Custom
+    share tip 2",cid:"customShareTip2",frame:true},{cname:"component",padding:"1em",text:"Click
+    to tip",cid:"clickToTipComp",frame:true,events:{click(t,e){Wb.tipAt("Some message",t.x,t.y)}}}]}]});'
+hideInMenu: 'false'
+icon: window
+img: ''
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

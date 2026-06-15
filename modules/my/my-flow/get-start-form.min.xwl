@@ -1,0 +1,12 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Get starting form
+  serverScript: function main(){const n=Wb.load("./util.mjs");let o=new Wb.Workflow({file:Params.file});Wb.send({form:n.getForm(o,"start")})}main();
+tags: ''
+text: module
+title: ''

@@ -1,0 +1,29 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.make(app,{cname:"viewport",layout:"grid1",cid:"viewport1",items:[{cname:"label",cid:"mainLabel",cls:"w-title3",text:"Server
+    load module, js and mjs"},{cname:"title",title:"Run module",cid:"runModuleTitle"},{cname:"label",cid:"runModuleLabel",text:"Run
+    the module at serverside and call function of the module."},{cname:"button",type:"primary",cid:"runModuleBtn",text:"Run
+    module",events:{click(e,t){Wb.ajax({url:xpath+"/execute&xaction=runXwl",params:{value1:12,value2:34},success(e){Wb.tip("The
+    result is "+e)}})}}},{cname:"title",title:"Invoke module",cid:"invokeModuleTitle"},{cname:"label",cid:"InvokeModuleLabel",text:"Call
+    the module and obtain the HTML or script returned by the module."},{cname:"button",type:"primary",cid:"invokeModuleBtn",text:"Invoke
+    module",events:{click(e,t){Wb.ajax({url:xpath+"/execute&xaction=invokeXwl",success(e){app.invokeModuleViewer.text=e;console.table(Wb.decode(e))}})}}},{cname:"viewer",cid:"invokeModuleViewer",height:"10em"},{cname:"title",title:"Load
+    Javascript",cid:"loadJSTitle"},{cname:"label",cid:"loadJSLabel",text:"Load Javascript
+    library at serverside."},{cname:"button",type:"primary",cid:"loadJSBtn",text:"Load
+    js",events:{click(e,t){Wb.ajax({url:xpath+"/execute&xaction=loadJs",params:{value1:12,value2:34},success(e){Wb.tip("The
+    result is "+e)}})}}},{cname:"title",title:"Load mjs",cid:"loadMJSTitle"},{cname:"label",cid:"loadMJSLabel",text:"Load
+    Javascript module at serverside by Wb.load(recommended)."},{cname:"button",type:"primary",cid:"loadMJSBtn",text:"Load
+    mjs",events:{click(e,t){Wb.ajax({url:xpath+"/execute&xaction=loadMjs",params:{value1:12,value2:34},success(e){Wb.tip("The
+    result is "+e)}})}}},{cname:"label",cid:"importMJSLabel",text:"Import Javascript
+    module at serverside by import(not recommended)."},{cname:"button",type:"primary",cid:"importMJSBtn",text:"Import
+    mjs",events:{click(e,t){Wb.ajax({url:xpath+"/execute&xaction=importMjs",params:{value1:12,value2:34},success(e){Wb.tip("The
+    result is "+e)}})}}}]});
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

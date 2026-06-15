@@ -1,0 +1,60 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  serverScript: |-
+    function main() {
+      Wb.load('wb/libs/echarts.js');
+      let i, theta, r, chart, data = [];
+
+      //Please remove the theme when only used in the serverside
+      chart = echarts.init(null, Wb.get('sys.theme') == 'dark' ? 'dark' : null, {
+        renderer: 'svg',
+        locale: Str.lang == 'zh-cn' ? 'ZH' : 'EN',
+        ssr: true,
+        width: 500,
+        height: 400
+      });
+      for (i = 0; i <= 100; i++) {
+        theta = (i / 100) * 360;
+        r = 5 * (1 + Math.sin((theta / 180) * Math.PI));
+        data.push([r, theta]);
+      }
+      chart.setOption({
+        title: {
+          text: 'Server render'
+        },
+        legend: {
+          data: ['line']
+        },
+        polar: {},
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'cross'
+          }
+        },
+        angleAxis: {
+          type: 'value',
+          startAngle: 0
+        },
+        radiusAxis: {},
+        series: [
+          {
+            coordinateSystem: 'polar',
+            name: 'line',
+            type: 'line',
+            data: data
+          }
+        ]
+      });
+      // response.setHeader('Content-Type', 'application/xml');
+      Wb.send(chart.renderToSVGString());
+    }
+    main();
+tags: ''
+text: module
+title: ''

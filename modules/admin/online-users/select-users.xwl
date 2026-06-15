@@ -1,0 +1,18 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Select online users
+  serverScript: |-
+    Wb.checkDemo();
+    function main() {
+      let fromIndex = Wb.getInt('_from'), toIndex = Wb.getInt('_to');
+      Wb.send(Wb.UserUtil.getOnlineUsers(fromIndex, toIndex));
+    }
+    main();
+tags: ''
+text: module
+title: ''

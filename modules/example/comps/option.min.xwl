@@ -1,0 +1,33 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.make(app,{cname:"viewport",layout:"grid1",autoScroll:true,cid:"viewport1",items:[{cname:"label",cid:"mainLabel",cls:"w-title3",text:"Option"},{cname:"title",title:"Common
+    Options",cid:"commonTitle"},{cname:"container",cid:"optionCt",frame:true,items:[{cname:"option",border:"bottom",valueText:"Value
+    text",text:"Common options, click show dialog",cid:"commonOption",events:{click(e,t){app.dialog1??=new
+    Wb.Dialog({title:"New dialog",border:0,defaults:{cname:"option"},items:[{cname:"label",text:"Group1",indent:true,titleType:"title5"},{text:"Option1",handler(){Wb.tip("Option1
+    clicked")}},{text:"Option2",handler(){Wb.tip("Option2 clicked")}},"-",{cname:"label",text:"Group2",indent:true,titleType:"title5"},{text:"Option3",editor:{cname:"toggle"}},{text:"Option4",editor:{cname:"toggle"}}]});app.dialog1.show()}}},{cname:"option",border:"bottom",optionsTitle:"Select
+    Browser",options:[{text:"Chrome",value:1,_icon:"chrome"},{text:"Edge",value:2,_icon:"edge",_selected:true},{text:"Firefox",value:3,_icon:"firefox"},{text:"Safari",value:4,_icon:"safari"}],description:"The
+    default browser to be used",text:"Web browser",value:2,cid:"checkedItemsOption"},{cname:"option",border:"bottom",cid:"toggleOption",text:"Option
+    with toggle",editor:{cname:"toggle"}},{cname:"option",border:"bottom",text:"Option
+    with toggle, only allow click on the toggle component",allowClick:false,cid:"toggleClickOnToggleOption",editor:{cname:"toggle"}},{cname:"option",border:"bottom",flagIcon:"menu",icon:"calendar",text:"Option
+    with icon",cid:"iconOption",events:{click(e,t){Wb.tip("clicked")}}},{cname:"option",border:"bottom",flagIcon:"share1",icon:"message",valueText:"Some
+    value",text:"Custom option",cid:"customOption",events:{click(e,t){Wb.tip("clicked")},ready(e,t){let
+    o=this.el.insertElBefore("w-unselect","img",this.flagEl);o.src="wb/images/order.png";o.draggable=false}}},{cname:"option",disabled:true,cid:"disabledOption",text:"Disabled
+    option"}]},{cname:"title",title:"Editor Options",cid:"editorTitle"},{cname:"container",layout:"grid1",background:"true",cid:"editorCt",items:[{cname:"line",title:"Option
+    style",cid:"line1"},{cname:"container",roundBorder:true,defaults:{labelWidth:"8em"},background:"false",cid:"optionCt1",items:[{cname:"option",border:"bottom",cid:"nameOption",text:"Name",editor:{cname:"text",placeholder:"Your
+    name",flat:true,flex:1}},{cname:"option",border:"bottom",cid:"heightOption",text:"Height
+    (cm)",editor:{cname:"number",placeholder:"Your height",flat:true,flex:1}},{cname:"option",border:"bottom",options:["Male","Female"],text:"Gender",optionsTitle:"Select
+    Gender",cid:"genderOption"},{cname:"option",cid:"statusOption",text:"Status",editor:{cname:"toggle"}}]},{cname:"line",title:"Form
+    style",cid:"line2"},{cname:"container",tableStyle:"simple",roundBorder:true,background:"false",cid:"optionCt2",defaults:{cname:"text",labelSeparator:false,labelWidth:"8em"},items:[{cname:"text",cid:"name",placeholder:"Your
+    name",text:"Name"},{cname:"number",cid:"height",placeholder:"Your height",text:"Height
+    (cm)"},{cname:"select",placeholder:"Male / Female",text:"Gender",data:["Male","Female"],cid:"gender"},{cname:"option",border:"bottom",options:["Male","Female"],text:"Gender
+    Option",optionsTitle:"Select Gender",cid:"genderOption"},{cname:"toggle",cid:"status",text:"Status"}]}]}]});
+hideInMenu: 'false'
+icon: options
+img: ''
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

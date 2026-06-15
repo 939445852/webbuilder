@@ -1,0 +1,21 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Delete dictionary items
+  serverScript: |-
+    function main() {
+      const Util = Wb.load('./util.mjs');
+      let del = Wb.getObject('del'), rows = Wb.getAllRows('select name,alias,group_name from wb_dict where ' +
+        Wb.Query.make('sid', del.pluck('$sid')));
+
+      Wb.sync({ tableName: 'wb_dict', del });
+      Util.clearBuffer(rows);
+    }
+    main();
+tags: ''
+text: module
+title: ''

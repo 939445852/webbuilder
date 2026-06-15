@@ -1,0 +1,15 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: View the progress of workflow
+  serverScript: function main(){let e=new Wb.Workflow({flowId:Params.flowId});Wb.send({flow:e.flow,activeNode:e.activeNode.data.name,users:Wb.getRowx(`select
+    a.accept_time,a.process_time,b.display_name,a.node_name,a.node_text,a.status,a.user_type\n        from
+    wb_flow_user a, wb_user b where a.flow_id={?flowId?} and a.user_id=b.sid order
+    by a.accept_time`)})}main();
+tags: ''
+text: module
+title: ''

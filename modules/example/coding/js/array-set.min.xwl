@@ -1,0 +1,49 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: 'Wb.make(app,{cname:"codeEditor",readonly:true,wrapBorder:0,value:"//This
+    example demonstrates array and set. Only extended members are demonstrated, and
+    native members are described at:\n//Array: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array\n//Set:
+    https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set\n\n//Add,
+    delete and modify\narray = [1, 2];\narray.push(3); //push new item\narray.pushAll([1,
+    3, 5]); //All items are added to the array, output: [1, 2, 3, 1, 3, 5]\n[1, 2,
+    3].merge(new Set([3, 4, 5])); //array merge array/set, output: [1, 2, 3, 3, 4,
+    5]\narray.remove(2); //remove the first item\narray.removeAll(3); //remove all
+    items\narray.removeFirst(item => item === 2); //remove the first item by function\narray.removeBy(item
+    => item === 2); //remove all items by function\narray.erase(2); //remove item
+    by item index\n[1, 2, 3].insert(0, ''a'', ''b''); //Insert items at the specified
+    index, output: [\"a\", \"b\", 1, 2, 3]\narray.pushIf(null, ''b''); //Push values
+    without null/undefined value\n\n//Traverse\n[1, 2, 3].forEach((item, index) =>
+    console.log(item));\n[1, 2, 3].each((item, index) => { //each is similar to foreach,
+    each can be interrupted and reversed\n  console.log(item);\n  if (item == 2)\n    return
+    false; //interrupted\n}, scope, true); //true means reverse traversal\n(new Set()).forEach(fn);
+    //forEach set\n(new Set()).each(item => { console.log(item) }); //each set\n\n//Sort\n[1,
+    2, 3].sort();\narray = [123, ''abc'', ''utf-string''];\narray.normalSort(); //Local
+    sort\narray = [{ a: 3, b: 2 }, { a: 1, b: 4 }];\narray.normalSort(''a''); //Sort
+    by the \"a\" property\narray.normalSort([''a'', ''b''], [false, true]); //Sort
+    by the \"a\" property asc, \"b\" property desc.\narray.lowerSort(''a''); //Similar
+    to normalSort, case insensitive.\narray.mixSort(''b''); //Similar to normalSort,
+    Mix sort string, number and date locally in case-insensitive. Recommended sorting
+    method.\n(new Set()).sort(params);\n(new Set()).normalSort(params);\n(new Set()).lowerSort(params);\n(new
+    Set()).mixSort(params);\n\n//Prototype function\n[{ name: ''Allen'' }, { name:
+    ''Linda'' }].pluck(''name''); //Extracts the specified name attribute value, output:
+    [\"Allen\", \"Linda\"]\n[1, 3, 5].diff([3, 5]); //Get difference, output: [1]\n[1,
+    3, 5].intersect([3, 5]); //Get intersect, output: [3,5]\n[1, { foo: ''bar'' },
+    5].copy(); //Shallow copy\n[1, 3, 5].equals([1, 3, 5]); //Determines whether the
+    content is the same\n[1, 2, 1, 3].unique(); //Distinct array, output: [1, 2, 3]\n[1,
+    2, 3].unique([3, 4, 5]); //Distinct array, output:[1, 2, 3, 4, 5]\n[''a'', ''b'',
+    ''c''].unique([''d'', ''b''], true); //Distinct array with subtract, output: [''a'',
+    ''c'', ''d'', ''b'']\nindex = array.indexOf(2); //Get the index of item\nincludes
+    = array.includes(2); //Determines whether the specified item is included\n\n//Getter
+    properties\n[1, 2, 3].firstItem; //Return the first item\n[1, 2, 3].lastItem;
+    //Return the last item",cid:"codeEditor1",full:true});'
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  links: '["wb/js/monaco.js"]'
+tags: ''
+text: module
+title: ''

@@ -1,0 +1,18 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.make(app,{cname:"viewport",textSelectable:false,html:'<ul>\n  <li>Drag
+    the left tree node to here to create a new module panel.</li>\n  <li>Drag the
+    panel to adjust its position.</li>\n  <li>Set [app.noTitlebar = true] in module
+    to auto hide title bar.</li>\n  <li>Click panel "menu button" to set panel row
+    and column span.</li>\n  <li>Click panel "maximize button" to maximize panel.</li>\n  <li>Click
+    home menu "save desktop" to save these panels.</li>\n</ul>',cls:"w-lh",autoScroll:true,cid:"viewport1"});
+hideInMenu: 'false'
+icon: info1
+img: ''
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

@@ -1,0 +1,14 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.apply(app,{onLoad(){Wb.ajax({url:xpath+"/actions&xaction=getForm",success(e){app.container1.html=e;Wb.setValue(app.container1,{name:"Your
+    name",code:"10000"})}})}});Wb.make(app,[{cname:"text",instanced:false,required:true,cid:"name"},{cname:"text",instanced:false,cid:"nation"},{cname:"select",instanced:false,keyName:"gender",cid:"gender"},{cname:"date",instanced:false,cid:"birthdate"},{cname:"number",instanced:false,decimalCount:1,cid:"height"},{cname:"number",instanced:false,cid:"weight"},{cname:"number",instanced:false,cid:"salary"},{cname:"text",instanced:false,cid:"marry"},{cname:"text",instanced:false,cid:"mobile"},{cname:"text",instanced:false,cid:"email"},{cname:"text",instanced:false,cid:"address"},{cname:"text",instanced:false,cid:"contact"},{cname:"image",instanced:false,src:"wb/images/app/logo.png",cid:"photo",height:140},{cname:"text",instanced:false,cid:"university"},{cname:"text",instanced:false,cid:"grade"},{cname:"text",instanced:false,cid:"speciality"},{cname:"text",instanced:false,cid:"class"},{cname:"grid",instanced:false,url:xpath+"/actions&xaction=select",cid:"grid",height:169},{cname:"textArea",instanced:false,cid:"resume",height:186}]);Wb.make(app,{cname:"viewport",layout:"fit",autoScroll:true,cid:"viewport1",tbar:{cname:"toolbar",items:[{icon:"export",cid:"exportItem",text:"Export",events:{click(e,a){Wb.download(xpath+"/actions&xaction=export",{data:Wb.getValue(app.container1)})}}}]},items:[{cname:"container",autoMake:true,layout:"middle",cid:"container1"}]});
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

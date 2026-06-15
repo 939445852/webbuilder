@@ -1,0 +1,12 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Add signature after approval
+  serverScript: function main(){const n=Wb.load("./util.mjs");n.doAction("signAfter")}main();
+tags: ''
+text: module
+title: ''

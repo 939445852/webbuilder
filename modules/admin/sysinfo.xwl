@@ -1,0 +1,331 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: |-
+    const points = 200;
+    Wb.apply(app, {
+      /** @property {Number} - Failure count. */
+      failCount: 0,
+      /**
+       * Viewport ready event handler.
+       */
+      onReady() {
+        app.autoRefreshTimer ??= setInterval(f => {
+          if (app.isLoading)
+            return;
+          app.isLoading = true;
+          Wb.ajax({
+            url: xpath + '/select&xaction=sysInfo&chart=1',
+            showError: false,
+            showMask: false,
+            json: true,
+            callback(resp, xhr) {
+              app.isLoading = false;
+              if (xhr.ok) {
+                app.failCount = 0;
+                app.addToChart(resp);
+              } else {
+                app.failCount++;
+                if (app.failCount > 30)
+                  clearInterval(app.autoRefreshTimer);
+              }
+            }
+          });
+        }, 1000)
+      },
+      /**
+       * Viewport destroy event handler.
+       */
+      onDestroy() {
+        clearInterval(app.autoRefreshTimer);
+        app.autoRefreshTimer = null;
+      },
+      /**
+       * Add CPU and memory to chart.
+       * @param {Array} data System information data.
+       */
+      addToChart(data) {
+        const VIEW_LIMIT = points - 7;
+        let cpu = data[0].numValue * 100, totalMemory = data[1].numValue / 1048576, memory = data[2].numValue / 1048576,
+          option = app.chart1.option, cpuSeries = option.series[0], memorySeries = option.series[1], index;
+
+        if (app.currentIndex == null) {
+          app.currentIndex = 0;
+        }
+        index = app.fixedIndex ?? app.currentIndex;
+        if (app.currentIndex >= VIEW_LIMIT) {
+          index = app.fixedIndex = VIEW_LIMIT - 1;
+          cpuSeries.data.shift();
+          cpuSeries.data.push(null);
+          memorySeries.data.shift();
+          memorySeries.data.push(null);
+        } else {
+          app.currentIndex++;
+        }
+        if (cpu !== null) {
+          cpuSeries.data[index] = cpu;
+        }
+        if (memory !== null) {
+          memorySeries.data[index] = memory;
+        }
+        option.yAxis[1].max = totalMemory;
+        option.yAxis[1].interval = Math.ceil(totalMemory / 5);
+        app.chart1.option = option;
+      }
+    });
+hideInMenu: 'false'
+icon: system
+img: ''
+items:
+- _icon: plug
+  cls: Wb.Socket
+  events:
+    close: app.onDestroy();
+    open: app.onReady();
+  properties:
+    cid: socket1
+  text: socket1
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  events:
+    destroy: app.onDestroy();
+  items:
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _expanded: true
+      _icon: grid
+      cls: Wb.Grid
+      items:
+      - _expanded: true
+        _icon: array
+        cls: Wb.Array
+        items:
+        - _expanded: true
+          _icon: column
+          cls: Wb.Column
+          properties:
+            cid: rowNumCol
+            rowNum: 'true'
+          text: rowNumCol
+        - _expanded: true
+          _icon: column
+          cls: Wb.Column
+          properties:
+            cid: nameCol
+            fieldName: name
+            text: Name
+            width: 16em
+          text: nameCol
+        - _expanded: true
+          _icon: column
+          cls: Wb.Column
+          properties:
+            autoWrap: break-all
+            cid: valueCol
+            fieldName: value
+            minWidth: 10em
+            text: Value
+            width: '-1'
+          text: valueCol
+        properties:
+          cid: columns
+        text: columns
+      properties:
+        cid: grid1
+        flex: '1'
+        pageSize: '-1'
+        reserveScrollbar: 'true'
+        textSelectable: 'true'
+        url: '@xpath + ''/select&xaction=sysInfo'''
+      text: grid1
+    - _icon: splitter
+      cls: Wb.Splitter
+      properties:
+        cid: splitter1
+      text: splitter1
+    - _expanded: true
+      _icon: grid
+      cls: Wb.Grid
+      events:
+        ready: |-
+          let bar = this.pagingBar;
+          bar.insertAfter({
+            icon: 'trash', tip: 'Clear data', handler() {
+              Wb.ajax({
+                url: xpath + '/select&xaction=clear',
+                success() {
+                  app.grid2.destroyAll();
+                }
+              });
+            }
+          }, bar.menuItem);
+      items:
+      - _expanded: true
+        _icon: array
+        cls: Wb.Array
+        items:
+        - _expanded: true
+          _icon: column
+          cls: Wb.Column
+          properties:
+            cid: rowNumCol
+            rowNum: 'true'
+          text: rowNumCol
+        - _expanded: true
+          _icon: column
+          cls: Wb.Column
+          properties:
+            cid: moduleCol
+            fieldName: module
+            minWidth: 10em
+            text: Module
+            width: '-1'
+          text: moduleCol
+        - _expanded: true
+          _icon: column
+          cls: Wb.Column
+          properties:
+            cid: durationCol
+            fieldName: duration
+            text: CPU (s)
+            type: intText
+            width: 7em
+          text: durationCol
+        - _expanded: true
+          _icon: column
+          cls: Wb.Column
+          properties:
+            cid: timesCol
+            fieldName: times
+            text: Times
+            width: 7em
+          text: timesCol
+        - _expanded: true
+          _icon: column
+          cls: Wb.Column
+          properties:
+            cid: avgDurationCol
+            fieldName: avgDuration
+            text: Avg (ms)
+            width: 7em
+          text: avgDurationCol
+        - _expanded: true
+          _icon: column
+          cls: Wb.Column
+          properties:
+            cid: lastAccessCol
+            fieldName: lastAccess
+            text: Last Access
+            type: dateTimeTextHM
+            width: 12em
+          text: lastAccessCol
+        properties:
+          cid: columns
+        text: columns
+      properties:
+        cid: grid2
+        columnsSortable: 'true'
+        defaultFields: '({ lastAccess: { type: ''date'' } })'
+        reserveScrollbar: 'true'
+        sorters: '{name:''avgDuration'',desc:true}'
+        textSelectable: 'true'
+        url: '@xpath + ''/select&xaction=moduleInfo'''
+        width: 50%
+      text: grid2
+    properties:
+      cid: container1
+      flex: '1'
+      layout: row
+    text: container1
+  - _icon: splitter
+    cls: Wb.Splitter
+    properties:
+      cid: splitter1
+    text: splitter1
+  - _icon: chart-bar
+    cls: Wb.Chart
+    properties:
+      cid: chart1
+      height: 20em
+      option: |-
+        ({
+          tooltip: {
+            trigger: 'axis',
+            formatter: function (params) {
+              const result = [];
+              params.forEach(function (param) {
+                let value = param.value;
+                if (value == null)
+                  return '';
+                if (param.seriesName === 'CPU Usage') {
+                  value = (value / points).percent;
+                } else if (param.seriesName === 'Used Memory') {
+                  value = value.intText + ' MB';
+                }
+                result.push(`${param.seriesName}: ${value}`);
+              });
+              return result.join('<br>');
+            }
+          },
+          animation: false,
+          legend: { data: ['CPU Usage', 'Used Memory'] },
+          xAxis: {
+            type: 'category',
+            boundaryGap: false,
+            show: false,
+            data: new Array(points).fill(Wb.getId()),
+          },
+          yAxis: [
+            {
+              type: 'value',
+              name: 'CPU (%)',
+              position: 'left',
+              min: 0,
+              max: 100,
+              interval: 20
+            },
+            {
+              type: 'value',
+              splitLine: { show: false },
+              name: 'Memory (MB)',
+              position: 'right',
+              min: 0,
+              max: 1000
+            }
+          ],
+          series: [
+            {
+              name: 'CPU Usage',
+              type: 'line',
+              yAxisIndex: 0,
+              lineStyle: {
+                color: '#ff4d4f'
+              },
+              itemStyle: {
+                color: '#e74c3c'
+              },
+              data: new Array(points).fill(null)
+            },
+            {
+              name: 'Used Memory',
+              type: 'line',
+              yAxisIndex: 1,
+              data: new Array(points).fill(null)
+            }
+          ]
+        })
+    text: chart1
+  properties:
+    cid: viewport1
+    layout: column
+  text: viewport1
+properties:
+  cid: module
+  remark: View system information
+tags: ''
+text: module
+title: '@sysinfo'

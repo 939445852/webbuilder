@@ -1,0 +1,105 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: 'Wb.make(app,{cname:"codeEditor",readonly:true,wrapBorder:0,value:"//This
+    example demonstrates dom elements. Only extended members are demonstrated, and
+    native members are described at:\n//https://developer.mozilla.org/en-US/docs/Web/API/Element\n\n//Associations
+    between DOM elements and components\nlet buttonEl = button1.el; //Gets the DOM
+    element associated with the button1\nlet windowEl = window1.el; //Gets the DOM
+    element associated with the window1\nlet button1 = buttonEl.citem; //Gets the
+    button component associated with the button element\nlet window1 = windowEl.citem;
+    //Gets the window component associated with the window element\nlet grid = div.getClosestComp(Wb.Grid);
+    //Get the closest Wb.Grid component that contains div\n\n//Add, delete and modify\nnewEl
+    = parentEl.insertEl(3, ''my-class'', ''span''); //Creates a new element and inserts
+    it before the specified index element\nnewEl = parentEl.addEl(''my-class''); ///Creates
+    a new element and adds it to the last\nnewEl = parentEl.addTag(''span''); //Creates
+    a new element with specific tag and adds it to the last\nnewEl = parentEl.insertAfter(el,
+    refEl); //Inserts a node after the specified node\nnewEl = parentEl.insertElBefore(''my-class'',
+    ''span'', refNode); //Creates a new element and inserts it before the specified
+    node\nnewEl = parentEl.insertElAfter(''my-class'', ''span'', refNode); //Creates
+    a new element and inserts it after the specified node\ndiv.insertHtml(''afterend'',
+    ''<div>abc</div>'') //insert HTML, alias for insertAdjacentHTML\ndiv.clearChildren();
+    //Empty all child nodes in the div\n\n//Element class name\nlet cls = div.cls;
+    //Gets class name of div\ndiv.cls = ''cls1''; //Add new class name cls1 to div.
+    Keep the old classNames.\ndiv.cls = ''cls1 cls2 cls3''; //Add new classNames cls1,
+    cls2, cls3 to div. Keep the old classNames.\nel.addCls(''my-cls''); //Add a single
+    class name to el\nel.removeCls(''my-cls''); //Remove a single class name from
+    el\nel.removeClasses(''cls1 cls2 cls3''); ///Remove multiple class names from
+    el\nel.setCls(true, ''my-cls''); //Add or remove a single class name\nel.toggleCls(''my-cls'');
+    //Toggle a single class name\nel.containsCls(''my-cls''); //Determines whether
+    to include a class name\nel.plainIcon = true; //All icons in this element use
+    a uniform icon color\nel.layout = ''grid3''; //Setting the layout, unlike setting
+    the class, setting a new layout will remove the original layout\n\n//Element style\nel.setStyle(''color:
+    red''); //Set element style\nel.getStyle(''color''); //Gets element style\nel.removeStyle(''color'');
+    //Remove element style\nel.computeStyle(); //Returns a list of calculated styles\nel.styleText
+    = ''color: red; width: 10em''; //Add styles separated by semicolons to an element.
+    Keep the old styles.\n\n//Traverse elements\ndiv.each((el, index) => console.log(el,
+    index)); //Iterate direct child elements\ndiv.bubble(el => console.log(el)); //Bubble
+    traverse\ndiv.bubbleParent(fn); //Bubble traverse without div self\ndiv.cascade(el
+    => console.log(el)); //Cascade traverse\ndiv.cascadeSelf(fn); //Cascade traverse
+    with div self\ndiv.some(el => el.cls.includes(''w-disp-none'')); //Determines
+    whether there is a specific direct child element\ndiv.every(el => el.cls.includes(''w-disp-none''));
+    //Determines whether all direct child elements pass the test function\ndiv.cascadeSome(el
+    => el.cls.includes(''w-disp-none'')); //Determines whether there is a specific
+    child element\ndiv.cascadeEvery(el => el.cls.includes(''w-disp-none'')); //Determines
+    whether all child elements pass the test function\ndiv.bubbleSome(el => el.cls.includes(''w-disp-none''));
+    //Determines whether there is a specific parent element\ndiv.bubbleEvery(el =>
+    el.cls.includes(''w-disp-none'')); //Determines whether all parent elements pass
+    the test function\n\n//Find elements\nel = div.query(''div.w-row''); //Down query
+    the first element, alias for querySelector\nelList = div.queryAll(''div.w-row'');
+    //Down query all elements, alias for querySelectorAll\nel = div.closest(''div.w-row'');
+    //Match the closest parent element\nel = div.find(''w-row''); //Down query the
+    first child element with the specific class name\nel = div.findParent(''w-row'');
+    //Up query the first parent element with the specific class name\nelList = div.findParents(''w-row'');
+    //Up query all parent elements with the specific class name\nelList = div.filter(''w-row'');
+    //Down query all child elements with the specific class name, alias for getElementsByClassName.\nel
+    = div.down(''div.w-row''); //Down query the first element, similar to query\nelList
+    = div.downAll(selectors); //Down query all elements, similar to queryAll\nel.downBy(fn,
+    scope); //Down query the first element by function\nel.downAllBy(fn, scope); //Down
+    query all elements by function\nel = div.up(''div.w-row''); //Up query the first
+    element, similar to closest\nelList = div.upAll(selectors); //Up query all elements\nel.upBy(fn,
+    scope); //Up query the first element by function\nel.upAllBy(fn, scope); //Up
+    query all elements by function\n\n//Animation effects\ndiv.fadeIn(); //Displays
+    a fade-in effect\ndiv.fadeIn(e => fn(), 300); //Displays a fade-in effect for
+    the specified duration. Execute the callback function when finished.\nWb.info(''ok'').el.fadeIn();
+    //Displays a info dialog with the fade-in effect\ndiv.fadeOut(); //Displays a
+    fade-out effect\nwindow1.el.fadeOut(e => window1.close()); //Close the window
+    after displaying the fade-out effect\ndiv.slideIn(); //Slide in from the left\ndiv.slideIn(true);
+    //Slide in from the top\n//Slide in from {x: ''10px'', y: ''5em''} for 2 seconds,
+    and finally remove div\ndiv.slideIn({ x: 10, y: ''5em'', callback() { div.remove()
+    }, duration: 2000, easing: ''ease-in-out'' });\nWb.error(''error'').el.slideIn();
+    //Displays an error dialog with the slide-in effect\nel.slideOut(); //Slide out
+    from the right side\nel.slideOut(true); //Slide out from the bottom\nSlide to
+    {x: ''10px'', y: ''5em''} for 2 seconds, and finally remove div\ndiv.slideOut({
+    x: 10, y: ''5em'', callback() { div.remove() }, duration: 2000, easing: ''ease-in-out''
+    });\nwindow1.el.slideOut({ callback() { window1.close() } }) //Close the window
+    after displaying the slide-out effect\ndiv.slideTo({ x: 10, y: ''2em'' }) //The
+    element slides from the current position to the specified position\ndiv.rippleEffect(100,
+    200); //Generates a ripple effect at a specific location\ndiv.highlight(); //Highlight
+    effect\ndiv.highlight(''#f00''); //Highlight effect with the specific color\n\n//Size,
+    location, appearance etc.\nrect = div.getRect(); //Gets the rect of the element,
+    alias for getBoundingClientRect\ndiv.setRect({ x, y, width, height }); //Set the
+    rect of the element\nel.alignTo(destEl, \"tl-bl?\"); // Aligns the element\nel.alignTo(destEl,
+    \"bl-c\", [-8, 0]);// Aligns the element with offsets\ndiv.visible = false; //Turns
+    off the display of an element so that it has no effect on layout.\ndiv.setVisible(false);
+    //Same as above\ndiv.appeared = false; //The element is invisible (not drawn),
+    but still affects layout as normal.\ndiv.setAppeared(false); //Same as above\nisVisible
+    = div.isVisible(); //Determines whether the element is visible deeply\ndiv.show();
+    //Show element, same as visible = true\ndiv.hide(); //Hide element, same as visible
+    = false\ndiv.width = ''8em''; //Set width\ndiv.setWidth(''8em''); //Same as above\ndiv.height
+    = 90; //Set height\ndiv.setHeight(90); //Same as above\ndiv.x = ''8em''; //Set
+    left\ndiv.setX(''8em''); //Same as above\ndiv.y = 90; //Set top\ndiv.setY(90);
+    //Same as above\ndiv.xy = [''8em'', 90]; //Set left and top\ndiv.intoView(); //Scroll
+    div into view\ndiv.intoViewCenter(); ///Scroll div into view center\ndiv.focusOnly();
+    //Sets the focus on div without adjusting the scroll bar\ndiv.autoScroll = true;
+    //Whether scrolling is allowed",cid:"codeEditor1",full:true});'
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  links: '["wb/js/monaco.js"]'
+tags: ''
+text: module
+title: ''

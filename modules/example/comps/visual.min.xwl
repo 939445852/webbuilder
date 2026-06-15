@@ -1,0 +1,20 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.make(app,{cname:"viewport",layout:"grid1",cid:"viewport1",items:[{cname:"label",cid:"mainLabel",cls:"w-title3",text:"Image,
+    Video and Icon"},{cname:"title",title:"Image, video and icon list",cid:"imageVideoIconListTitle"},{cname:"container",layout:"grid1",cid:"imageVideoIconListCt",frame:true,items:[{cname:"label",cid:"commonImageLabel",text:"Common
+    image with click preview feature"},{cname:"image",width:"6em",clickPreview:true,src:"wb/images/app/logo.png",cid:"commonImage",height:"6em"},{cname:"label",cid:"commonPictureLabel",text:"Common
+    picture with click preview feature"},{cname:"picture",src:"wb/images/app/logo.png",cid:"commonPicture",clickPreview:true},{cname:"label",cid:"originalSizeLabel",text:"Original
+    size image"},{cname:"image",width:"6em",size:"auto",src:"wb/images/support.png",cid:"originalSizeImage",height:"5em"},{cname:"label",cid:"videoLabel",text:"Video"},{cname:"video",controls:true,src:"https://59b5fe18-b640-4ed9-a7d0-5867d0563fe4.mdnplay.dev/shared-assets/videos/flower.mp4",cid:"demoVideo",height:"20em"},{cname:"label",cid:"commonIconLabel",text:"Common
+    icon"},{cname:"icon",icon:"gear",cid:"commonIcon"},{cname:"label",cid:"commonImageIconLabel",text:"Image
+    icon"},{cname:"icon",img:"support",cid:"commonImageIcon"},{cname:"label",cid:"anySizeIconLabel",text:"Any
+    size icon, image and char Icon"},{cname:"container",layout:"form",cid:"anySizeCt",items:[{cname:"icon",icon:"flower",cid:"icon1"},{cname:"icon",fontSize:"1.2em",img:"field",cid:"icon2"},{cname:"icon",icon:"🏥",fontSize:"1.5em",cid:"icon3"},{cname:"icon",icon:"list",fontSize:"2em",cid:"icon4"},{cname:"icon",icon:"🥋",fontSize:"3em",cid:"icon5"},{cname:"icon",icon:"🎭",fontSize:"4em",cid:"icon6"}]}]}]});
+hideInMenu: 'false'
+icon: image
+img: ''
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

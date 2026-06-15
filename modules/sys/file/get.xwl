@@ -1,0 +1,30 @@
+_icon: module
+cls: Wb.Module
+properties:
+  cid: module
+  remark: Get files in any path
+  serverScript: |-
+    function main() {
+      let fs = Wb.load('./fs.mjs'), items, path = Params.path, filterName = Params.filterName, filterExt = Params.filterExt;
+
+      items = fs.listFiles(path, Params.type, Params.sort, Wb.getBool('desc'), Wb.getBool('moduleSort'));
+      if (filterName) {
+        let baseFolder = items.find(item => item.text == filterName);
+        if (baseFolder) {
+          baseFolder._expanded = true;
+          items = [baseFolder];
+        } else {
+          Wb.raise(Str.notFound.format(path + filterName));
+        }
+      }
+      if (filterExt) {
+        filterExt = filterExt.splitTrim();
+        items = items.filter(item => {
+          return filterExt.some(ext => item.text.endsWith(ext) || !item._leaf);
+        });
+      }
+      Wb.send(items);
+    }
+    main();
+text: module
+title: ''

@@ -1,0 +1,13 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Get language list
+  serverScript: function main(){let e=new Wb.File(true,"wb/js/locale"),i=[];e.listFiles().forEach((e=>{let
+    s=e.name;if(s.startsWith("wb-")&&s.endsWith(".js")&&!s.endsWith(".min.js"))i.push(s.slice(3,-3))}));Wb.send(i)}main();
+tags: ''
+text: module
+title: ''

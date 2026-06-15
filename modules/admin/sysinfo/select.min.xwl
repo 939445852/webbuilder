@@ -1,0 +1,41 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Select system information
+  serverScript: Wb.checkDemo();let actions={moduleInfo(){let e=[],a,t,r=Wb.getObject("_sort")?.[0];Classes.Executor.dataMap.forEach(((r,o)=>{a=o.duration.get();t=o.times.get();e.push({module:r.slice(0,-4),duration:a/1e3,times:t,lastAccess:new
+    Date(o.lastAccess),avgDuration:Math.round(a/t)})}));if(r){e.mixSort(r.name,r.desc)}Wb.send({items:e.slice(Wb.getInt("_from"),Wb.getInt("_to")+1),total:e.length})},clear(){Classes.Executor.dataMap.clear()},sysInfo(){let
+    e=[],a=Runtime.getRuntime(),t=System.getProperties(),r=System.getenv(),o=Java.type("java.net.InetAddress").getLocalHost(),n=a.totalMemory(),m=a.freeMemory(),s=getCpuUsage();e=[{name:"Current
+    Time",value:(new Date).format(Str.dateTimeFormat)},{name:"System startup time",value:new
+    Date(Base.startTime.getTime()).format(Str.dateTimeFormat)},{name:"Available Processors",value:a.availableProcessors().intText},{name:"CPU
+    Usage",numValue:s,value:s.percentAuto},{name:"JVM CPU Usage",value:getCpuUsage(true).percentAuto},{name:"Total
+    Memory",numValue:n,value:n.mb},{name:"Used Memory",numValue:n-m,value:(n-m).mb},{name:"Free
+    Memory",value:m.mb},{name:"Max Memory",value:a.maxMemory().mb},{name:"Username",value:r?.get("USERNAME")},{name:"Computer
+    Name",value:r?.get("COMPUTERNAME")},{name:"User Domain",value:r?.get("USERDOMAIN")},{name:"Host
+    Address",value:o.getHostAddress()},{name:"Host Name",value:o.getHostName()},{name:"OS
+    Name",value:t.getProperty("os.name")},{name:"OS Architecture",value:t.getProperty("os.arch")},{name:"OS
+    Version",value:t.getProperty("os.version")},{name:"Java Version",value:t.getProperty("java.version")},{name:"Java
+    Vendor",value:t.getProperty("java.vendor")},{name:"Java Vendor URL",value:t.getProperty("java.vendor.url")},{name:"Java
+    Home",value:t.getProperty("java.home")},{name:"Java VM Specification Version",value:t.getProperty("java.vm.specification.version")},{name:"Java
+    VM Specification Vendor",value:t.getProperty("java.vm.specification.vendor")},{name:"Java
+    VM Specification Name",value:t.getProperty("java.vm.specification.name")},{name:"Java
+    VM Version",value:t.getProperty("java.vm.version")},{name:"Java VM Vendor",value:t.getProperty("java.vm.vendor")},{name:"Java
+    VM Name",value:t.getProperty("java.vm.name")},{name:"Polyglot Version",value:Classes.ContextPool.getEngineVersion()},{name:"Java
+    Specification Version",value:t.getProperty("java.specification.version")},{name:"Java
+    Specification Vendor",value:t.getProperty("java.specification.vendor")},{name:"Java
+    Specification Name",value:t.getProperty("java.specification.name")},{name:"Java
+    Class Version",value:t.getProperty("java.class.version")},{name:"Java Class Path",value:t.getProperty("java.class.path")},{name:"Java
+    Library Path",value:t.getProperty("java.library.path")},{name:"File Separator",value:Wb.encode(t.getProperty("file.separator"))},{name:"Path
+    Separator",value:Wb.encode(t.getProperty("path.separator"))},{name:"Line Separator",value:Wb.encode(t.getProperty("line.separator"))},{name:"User
+    Account Name",value:t.getProperty("user.name")},{name:"User Home Directory",value:t.getProperty("user.home")},{name:"User
+    Directory",value:t.getProperty("user.dir")},{name:"Java Extension Directories",value:t.getProperty("java.ext.dirs")},{name:"Java
+    Temp Directory",value:t.getProperty("java.io.tmpdir")}];if(Params.chart){e=e.filter((e=>e.numValue!=null))}Wb.send(e)}};actions[Params.xaction]();function
+    getCpuUsage(e){try{const a=Java.type("com.sun.management.OperatingSystemMXBean");const
+    t=java.lang.management.ManagementFactory.getPlatformMXBean(a);const r=e?t.getProcessCpuLoad():t.getSystemCpuLoad();return
+    r>=0?r:0}catch(e){return 0}}
+tags: ''
+text: module
+title: ''

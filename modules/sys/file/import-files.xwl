@@ -1,0 +1,37 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Import files in any path
+  serverScript: |-
+    Wb.checkDemo();
+    function main() {
+      let fs = Wb.load('./fs.mjs'), newFile, files = Wb.getParams('files'), charset,
+        path = new Wb.File(Params.path), unzip = Wb.getBool('unzip'), newNames, filename, filenames = [];
+
+      charset = Params.charset ? SysUtil.getCharset(Params.charset) : SysUtil.filenameCharset;
+      files.forEach(file => {
+        filename = file.name;
+        if (unzip && Wb.getFileExt(filename).toLowerCase() == 'zip') {
+          newNames = ZipUtil.unzip(file.stream, path.file, charset);
+          filenames = filenames.concat(newNames);
+          filenames.forEach(name => {
+            new Wb.File(path.file, name).cascadeSelf(file => file.clearBuffer());
+          })
+        } else {
+          filenames.push(filename);
+          newFile = new Wb.File(path, filename);
+          newFile.stream = file.stream;
+          newFile.clearBuffer();
+        }
+      });
+      files = fs.listFiles(path, Params.mode);
+      Wb.send(files.filter(file => filenames.includes(file.text)));
+    }
+    main();
+tags: ''
+text: module
+title: ''

@@ -1,0 +1,74 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: |-
+    Wb.apply(app, {
+      /**
+       * Show select window and get a single department.
+       * @param {Function} fn Callback function.
+       * @param {Object} .data The new selected department data.
+       * @param {Wb.Window} .win The edit window.
+       * @param {String} [id] The old department id.
+       * @param {String} [subTitle] Window sub title.
+       * @param {Boolean} [required] Whether is required.
+       */
+      getValue(fn, id, subTitle, required) {
+        Wb.module.dialog.Util.getValue(app, xpath, fn, id, subTitle, false, required);
+      },
+      /**
+       * Show select window and get multiple departments.
+       * @param {Function} fn Callback function.
+       * @param {Array} .data The new selected departments data list.
+       * @param {Wb.Window} .win The edit window.
+       * @param {Array} [ids] The old departments ids list.
+       * @param {String} [subTitle] Window sub title.
+       * @param {Boolean} [required] Whether is required.
+       */
+      getValues(fn, ids, subTitle, required) {
+        Wb.module.dialog.Util.getValue(app, xpath, fn, ids, subTitle, true, required);
+      }
+    });
+hideInMenu: 'false'
+icon: ''
+img: ''
+items:
+- _expanded: true
+  _icon: window
+  cls: Wb.Window
+  items:
+  - _icon: combo
+    cls: Wb.Select
+    properties:
+      cid: select1
+      clearButton: 'true'
+      subtextField: dept_code
+      tagSortable: 'true'
+      tagWrap: 'true'
+      textField: dept_name
+      treePicker: 'true'
+      url: '@xpath + ''/select'''
+      useTag: 'true'
+      valueField: sid
+    text: select1
+  properties:
+    cid: window1
+    height: 12em
+    icon: dept
+    layout: fit
+    maxHeight: calc(100vh - 5em)
+    padding: 'true'
+    resetDialog: 'true'
+    title: '@Str.selectDept'
+    width: 80em
+  text: window1
+properties:
+  cid: module
+  links: |-
+    [
+      "wb/modules/sys/dialog/dialog-util.js"
+    ]
+  remark: Department selector
+tags: ''
+text: module
+title: ''

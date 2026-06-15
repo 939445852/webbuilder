@@ -1,0 +1,182 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+items:
+- _expanded: true
+  _icon: edit
+  cls: Wb.CodeEditor
+  properties:
+    cid: codeEditor1
+    full: 'true'
+    readonly: 'true'
+    value: |-
+      //This example demonstrates the general usage of server JavaScript programming and other language programming
+      //For more resources, please visit: https://developer.mozilla.org/en-US/docs/Web/JavaScript
+
+      //Acess Java classes
+      //Access arbitrary Java classes starting with the "Packages" keyword. Not recommended.
+      let file = new Packages.java.io.File('/path');
+      //Package name starts with "com", "java", "org", etc. can omit the "Packages" keyword. Not recommended.
+      let ArrayList = new java.util.ArrayList();
+      //Using "Java.type" to get classes has higher performance and applicability. Recommended.
+      let HashMap = Java.type('java.util.HashMap');
+      //Create a HashMap object, some classes like HashMap/FileUtil/IOUtils are predefined and ready to use.
+      let map = new HashMap();
+
+      //Java objects to JS objects. Usually Java objects can be used directly in JS without conversion,
+      //and the system will automatically convert to the corresponding type.
+      strArrType = Java.type("java.lang.String[]"); //Defines the String[] type
+      javaArr = new strArrType(3); //Create an array of length 3
+      jsArray = Java.from(javaArr); //Java array to JS array
+
+      //Js objects to Java objects. Usually the system automatically converts JS objects when they are passed to Java,
+      //and in some cases the conversion can be specified in the following ways:
+      jsArr1 = ["a", "b", "c"]; //Define the JS array
+      strArrType1 = Java.type("java.lang.String[]"); //Define String[]
+      javaArr1 = Java.to(jsArr1, strArrType1); //JS array to Java array
+
+      //Java-related functions
+      jsJavaObj = Java.isJavaObject(123); //Determines whether it is a Java object
+      isCls = Java.isType(HashMap); //Determines whether it is a Java Type
+      typeName = Java.typeName(HashMap); //Gets the class name, return: java.util.HashMap
+
+      //Call overloaded Java methods
+      System.out.println(123); //Automatically adapt parameter types
+      System.out['println(boolean)'](true); //Explicitly specify function with Boolean parameter
+      System.out['println(char[])']([1, 2]); //Explicitly specify function with char[] parameter
+      System.out['println(java.lang.String)']('foo'); //Explicitly specify function with String parameter
+
+      //Access to Java array/list
+      ObjectArray = Java.type('java.lang.Object[]');
+      objArray = new ObjectArray(3); //Create an array of length 3
+      objArray[0] = 1;
+      objArray[1] = 'abc';
+      objArray[2] = new JavaDate();
+      objArray.forEach(item => Wb.log(item)); //Iterate through the array
+      objArray.each(item => {
+        Wb.log(item);
+        if (item == 1)
+          return false; //Break iteration
+      });
+      objArray.sort(); //call native sort function
+      objArray.mixSort(); //call mixSort function, see WebBuilder docs.
+
+      //Access to Java Map
+      map = new HashMap();
+      map.put('abc', 123);
+      map.put('foo', 'bar');
+      abc = map.abc; //123
+      map.forEach((k, v) => Wb.log(k + '=' + v)); //Traverse the Map
+      map.each((k, v) => {
+        Wb.log(k + '=' + v);
+        if (k == 'abc')
+          return false; //Break iteration
+      });
+
+      //Java String
+      javaString = new (Java.type('java.lang.String'))("Java");
+      javaString.length === 4; //length is a property, and Java string are treatable as JS string
+      bytes = javaString.getBytes('utf-8'); //Call the extended getBytes function to get the utf8 bytes of string
+
+      //Java date, usually when calling the Java method, the system will automatically convert the JS date to Java date.
+      DateUtil.format(new Date(), 'yyyy'); //The system automatically converts JS dates to Java dates
+      new JavaDate(new Date().getTime()); //Explicitly convert JS dates to Java dates, JavaDate is java.util.Date
+
+      //Access JS objects from Java
+      map = { foo: 'bar', abc: 123 };
+      JavaClass.javaMethod(map); //The map parameter implements the Map interface in Java, map.get("foo") to get "bar"
+
+      //JS Object/Array to Java org.json.JSONObject/org.json.JSONArray
+      jsonObject = Wb.toJava(jsObject); //Use api Wb.toJava to convert to JSONObject
+      jsonArray = Wb.toJava(jsArray); //Use api Wb.toJava to convert to JSONArray
+      jsonObject = new JSONObject(Wb.encode(jsObject)); //Convert jsObject to a string and then convert it to JSONObject
+      jsonArray = new JSONArray(Wb.encode(jsArray)); //Convert jsArray to a string and then convert it to JSONArray
+      jsonObject = new JSONObject({ foo: 'bar', abc: 123, date: new Date() });//Efficient way, js Object to JSONObject. Please note that "new Date()" will return "{}"(a JSONObject), because it is a Map in Java.
+      jsonArray = new JSONArray(Java.to(['abc', 123, new Date()]));//Efficient way, js Array to JSONArray. Please note that "new Date()" will return "{}"(a JSONObject), because it is a Map in Java.
+
+      //Java org.json.JSONObject/org.json.JSONArray to JS Object/Array
+      jsObject = Wb.toJs(jsonObject); //Use api Wb.toJs to convert to Object
+      jsArray = Wb.toJs(jsonArray); //Use api Wb.toJs to convert to Array
+      array = Wb.decode(jsonArray.toString());
+      object = Wb.decode(jsonObject.toString());
+      array = Wb.getProxy(jsonArray); //Access JSONArray via proxy, when jsonArray is large, this method is efficient.
+      object = Wb.getProxy(jsonObject); //Access JSONObject via proxy, when jsonObject is large, this method is efficient.
+
+      //app is a global visible object in execution-context, created at start and deleted at end
+      app.myVar = 'abc'; //Add myVar to the app
+      Wb.run('my/file1.xwl'); //"app.myVar" is visible in file1.xwl
+
+      //Regular traversal
+      array.forEach(item => Wb.log(item));
+      //Interruptible traversal
+      array.each(item => {
+        Wb.log(item);
+        if (item == 'foo')
+          return false; //Break iteration
+      });
+      //Suggest changing to [array.each(item => {item.method()})], avoid unexpected interruptions caused by return false
+      array.each(item => item.method());
+      //Traverse the object, return false to interrupt the traversal
+      Wb.each(object, (k, v) => {
+        console.log(k, v);
+      });
+      //Iterate Java members
+      m = Java.type('java.lang.Math')
+      for (i in m) { print(i); }
+
+      //Java class extends
+      JavaExt = Java.extend(Java.type("some.AbstractClass"), Java.type("some.Interface1"));
+      impl = new JavaExt({
+        superclassMethod: function () { },
+        interfaceMethod: function () { },
+        toString() { return "MyClass"; }
+      });
+      impl.superclassMethod();
+      sw = new (Java.type("java.io.StringWriter"));
+      FilterWriterAdapter = Java.extend(Java.type("java.io.FilterWriter"));
+      fw = new FilterWriterAdapter(sw, {
+        write: function (s, off, len) {
+        }
+      });
+      fw_super = Java.super(fw); //call super
+      fw.write("abc");
+
+      //Java classes variables
+      new HashMap();//HashMap is java.util.HashMap
+      new JavaDate(); //JavaDate is java.util.Date
+      IOUtils.copy(source, dst); //IOUtils is org.apache.commons.io.IOUtils
+
+      //Run ServerScript in Java
+      result = com.wb.graal.Executor.run("let a=123;return Wb.run('my/file.xwl');"); // Run any script
+      result = com.wb.graal.Executor.execute("Wb.sql", "select * from wb_user"); // Run Wb.sql function and get result
+      result = com.wb.graal.Executor.execute("Wb.loadCall", "wb/ss/myModule.mjs", "myExportFunc", "param1", "param2"); // Call exposed function in a specified module
+
+      //High frequency call JS function in Java code
+      fn = new com.wb.graal.JSFunc("Wb.encode");
+      // fn = new com.wb.graal.JSFunc("Wb.encode", request, response); // share request and response. This way, parameters can be shared
+      try {
+          for (i = 0; i < 1000; i++)
+            fn.execute(i);
+      } finally {
+        fn.close();
+      }
+
+      //Call other programming languages directly
+      //When using other languages, please install the corresponding language first,
+      //and the installation method is to run it in the bin directory of the JDK:
+      //gu install python //Install python
+      //gu install R //Install R
+      pyArray = Polyglot.eval('python', '[1,2,42,4]'); //Call Python code directly
+      rArray = Polyglot.eval('R', 'runif(1000)'); //Call R code directly
+      rFunc = Polyglot.evalFile('R', 'myExample.r'); //call R file
+      rResult = rFunc(); //Call R function
+    wrapBorder: '0'
+  text: codeEditor1
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

@@ -1,0 +1,19 @@
+{
+  "title": "",
+  "icon": "",
+  "img": "",
+  "hideInMenu": "false",
+  "items": [
+    "common-usage.xwl",
+    "devtools-debug.xwl",
+    "load-modules.xwl",
+    "logs.xwl",
+    "web-access.xwl",
+    "database-access.xwl",
+    "file-access.xwl",
+    "session.xwl",
+    "multi-threads.xwl",
+    "call-python.xwl",
+    "demo.py"
+  ]
+}

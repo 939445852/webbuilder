@@ -1,0 +1,173 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: |-
+    Wb.apply(app, {
+      /**
+       * Add new department.
+       * @param {Boolean} [isSibling] Whether to add sibling.
+       */
+      addDept(isSibling) {
+        let data, parentId, node, parentNode, win, deptName, tree = app.tree1;
+
+        node = tree.selection;
+        if (isSibling)
+          parentNode = node?.parent ?? tree;
+        else
+          parentNode = node ?? tree;
+        data = node?.data;
+        if (data) {
+          parentId = isSibling ? data.parent_id : data.sid;
+          deptName = data.dept_name;
+        }
+        win = tree.dictAdd({
+          url: xpath + '/add',
+          failure: app.onFailure
+        }, deptName || null, { parent_id: parentId }, (tree, node) => {
+          node.update({ items: [], _icon: 'folder1' });
+        }, null, null, null, parentNode);
+        if (isSibling) {
+          win.icon = 'insert';
+          win.title = Str.addToSibling;
+          win.subTitle = deptName;
+        }
+        win.down('dept_id_disp').readonly = false;
+      },
+      /**
+       * Method to execute when adding or updating data fails.
+       * @param {String} resp Response text.
+       */
+      onFailure(resp) {
+        let checkFields = { wb_dept_pk: 'dept_id_disp', wb_dept_dept_code: 'dept_code' };
+
+        Wb.each(checkFields, (k, v) => {
+          if (Wb.checkExists(resp, k, app.tree1.dictWin.down(v)))
+            return false;
+        });
+      }
+    });
+hideInMenu: 'false'
+icon: dept
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _expanded: true
+    _icon: toolbar
+    cls: Wb.Toolbar
+    items:
+    - _expanded: false
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: app.addDept();
+      properties:
+        cid: addBtn
+        icon: add
+        keys: Ctrl+E
+        text: '@Str.add'
+      text: addBtn
+    - _expanded: false
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: app.addDept(true);
+      properties:
+        cid: addToSiblingBtn
+        icon: insert
+        text: '@Str.addToSibling'
+      text: addToSiblingBtn
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: |-
+          let win = app.tree1.dictEdit({
+            url: xpath + '/edit',
+            failure: app.onFailure
+          }, 'code');
+          win.down('dept_id_disp').readonly = true;
+      properties:
+        cid: editBtn
+        icon: edit
+        keys: Ctrl+J
+        text: '@Str.edit'
+      text: editBtn
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: app.tree1.removeRecords(xpath + '/del', 'dept_name');
+      properties:
+        cid: delBtn
+        icon: delete
+        keys: Ctrl+D
+        text: '@Str.del'
+      text: delBtn
+    - _icon: divider
+      cls: Wb.Divider
+      properties:
+        cid: divider1
+      text: divider1
+    - _icon: text
+      cls: Wb.Text
+      events:
+        change: 'app.tree1.delayLoad({ comps: app.search });'
+      properties:
+        cid: search
+        clearButton: 'true'
+        flex: '1'
+        maxWidth: 20em
+        minWidth: 5em
+        placeholder: '@Str.search'
+      text: search
+    properties:
+      cid: tbar
+      isProperty: 'true'
+    text: tbar
+  - _expanded: true
+    _icon: tree-view
+    cls: Wb.Tree
+    events:
+      itemdrop: |-
+        let dest = draggable.dest, parentId;
+
+        parentId = draggable.mode == 'append' ? dest.data.sid : dest.parent.data.sid;
+        Wb.ajax({
+          url: xpath + '/move',
+          params: {
+            source: Wb.Tree.getTopNodes(draggable.source).pluck('data').pluck('sid'),
+            parentId
+          },
+          success() {
+            draggable.acceptDrop();
+          }
+        });
+    properties:
+      cid: tree1
+      columnsSortable: 'true'
+      defaultColumns: 'false'
+      draggable: '{ autoDrop: false }'
+      droppable: wb.dept
+      keyFields: sid
+      multiSelect: 'true'
+      pagingBar: 'true'
+      serverExport: 'true'
+      sorters: dept_code
+      stateId: wb.dept
+      url: '@xpath + ''/select'''
+    text: tree1
+  properties:
+    autoContextMenu: 'true'
+    cid: viewport1
+    layout: fit
+  text: viewport1
+properties:
+  cid: module
+  remark: Department management tool
+tags: ''
+text: module
+title: '@deptMng'

@@ -1,0 +1,134 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _expanded: true
+    _icon: label
+    cls: Wb.Label
+    properties:
+      cid: label1
+      text: Search Form
+      titleType: title3
+    text: label1
+  - _expanded: true
+    _icon: panel
+    cls: Wb.Panel
+    items:
+    - _icon: text
+      cls: Wb.Text
+      properties:
+        cid: text1
+        placeholder: search
+        text: Name
+        width: 15em
+      text: text1
+    - _icon: combo
+      cls: Wb.Select
+      properties:
+        cid: select1
+        text: Type1
+        width: 15em
+      text: select1
+    - _icon: combo
+      cls: Wb.Select
+      properties:
+        cid: select2
+        text: Type2
+        width: 15em
+      text: select2
+    - _icon: combo
+      cls: Wb.Select
+      properties:
+        cid: select3
+        text: Type3
+        width: 15em
+      text: select3
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button1
+        icon: search
+        shrinkSelf: 'false'
+        text: Search
+        type: primary
+      text: button1
+    - _expanded: true
+      _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button2
+        icon: undo
+        shrinkSelf: 'false'
+        text: Reset
+      text: button2
+    properties:
+      cid: formPanel
+      gap: 'true'
+      layout: row
+      padding: 'true'
+      roundBorder: 'true'
+      shrink: 'true'
+    text: formPanel
+  - _expanded: true
+    _icon: grid
+    cls: Wb.Grid
+    items:
+    - _expanded: true
+      _icon: toolbar
+      cls: Wb.Toolbar
+      items:
+      - _expanded: false
+        _icon: button
+        cls: Wb.Button
+        properties:
+          cid: addBtn
+          icon: add
+          text: '@Str.add'
+          type: primary
+        text: addBtn
+      - _expanded: true
+        _icon: button
+        cls: Wb.Button
+        properties:
+          cid: editBtn
+          icon: edit
+          text: '@Str.edit'
+        text: editBtn
+      - _expanded: false
+        _icon: button
+        cls: Wb.Button
+        properties:
+          cid: delBtn
+          icon: delete
+          text: '@Str.del'
+        text: delBtn
+      properties:
+        cid: tbar
+        gap: 'true'
+        isProperty: 'true'
+        padding: 'true'
+      text: tbar
+    properties:
+      cid: grid1
+      flex: '1'
+      url: demo-source?xaction=staffAllDict
+    text: grid1
+  properties:
+    background: 'true'
+    cid: viewport1
+    gap: .7em
+    layout: column
+    padding: .7em
+  text: viewport1
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

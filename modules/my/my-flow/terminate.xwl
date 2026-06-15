@@ -1,0 +1,22 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Terminate workflow
+  serverScript: |-
+    function main() {
+      let ids = Wb.getObject('ids'), update = [], $user_id = Wb.userid, $status = 1, status = 0;
+
+      ids.forEach($sid => {
+        update.push({ $sid, $user_id, $status, status });
+      });
+      // [whereFields: 'sid,user_id,status']: Restrict the update of record
+      Wb.sync({ tableName: 'wb_flow', whereFields: 'sid,user_id,status', update });
+    }
+    main();
+tags: ''
+text: module
+title: ''

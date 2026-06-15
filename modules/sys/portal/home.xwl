@@ -1,0 +1,919 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  finalize: |-
+    window.onresize = app.onResize;
+    app.onResize();
+    let smallScreen = app.treeItem.visible;
+    if (smallScreen)
+      app.moduleTree.visible = !app.moduleTab.firstItem;
+    if (app.isShowPwdDialog)
+      app.showPwdDialog();
+    if (!smallScreen && _$showNavBar$_)
+      app.createTopNavBar();
+  initialize: |-
+    /*
+     * Default home page
+     * @class $path
+     */
+    Wb.define(app, {
+      /** @property {Boolean} - Whether is demo version. */
+      isDemo: _$isDemo$_,
+      /** @property {String} - Licensee name. */
+      licensee: _$licensee$_,
+      /** @property {Boolean} - Whether to show password dialog. */
+      isShowPwdDialog: _$isShowPwdDialog$_,
+      /** @property {String} - Current user name. */
+      username: _$username$_,
+      /** @property {String} - Current user display name. */
+      dispname: _$dispname$_,
+      /** @property {Boolean} - Home module flag. */
+      inHome: true,
+      /** @property {String} - Current theme @priv */
+      theme: _$theme$_,
+      /** @property {Object} - Gets the currently open module app. Returns null if no modules are open. */
+      get$activeModule() {
+        return app.moduleTab.activeCard?.module ?? null;
+      },
+      /** @property {String} - Account display name. */
+      get$accountName() {
+        return Str.myAccount + ' (' + this.dispname + ')';
+      },
+      /** @property {Object} - Gets the currently open module card. */
+      get$activeCard() {
+        return app.moduleTab.activeCard;
+      },
+      /**
+       * Link current module to the relative menu. @priv
+       * @param {Wb.Card} [card] The card to link with. Default is the current active card.
+       */
+      linkToMenu(card) {
+        let url = (card ?? app.activeCard)?.moduleUrl;
+
+        if (url?.startsWith('m?xwl=')) {
+          let p = url.indexOf('&'), firstPath, btn, pos;
+          url = url.substring(6, p == -1 ? url.length : p) + '.xwl';
+          if (app.topNavBar) {
+            pos = url.indexOf('/');
+            firstPath = url.substr(0, pos);
+            btn = app.topNavBar.find(btn => btn.bindPath === firstPath);
+            if (btn) {
+              btn.active = true;
+              app.selectTopButton(btn, f => {
+                app.moduleTree.selectPath(url.substr(pos + 1), node => {
+                  if (node) {
+                    node.select(null, null, true);
+                    node.intoViewCenter();
+                  }
+                }, 'filename', null, true, true);
+              });
+            }
+          } else {
+            app.moduleTree.selectPath(url, node => {
+              if (node) {
+                node.select(null, null, true);
+                node.intoViewCenter();
+              }
+            }, 'filename', null, true, true);
+          }
+        }
+      },
+      /**
+       * Opens the specified module.
+       * @param {Object} data Parameter object.
+       */
+      openModule(data) {
+        let tags = data.tags, configs;
+
+        configs = {
+          icon: data._icon, img: data._img, title: data.text, url: 'm?xwl=' + data.path, allowRefresh: true,
+          tags: { strTitle: data.strTitle }
+        };
+        if (tags) {
+          tags = Wb.parse(tags);
+          configs.tags.tags = tags;
+          Wb.apply(configs, tags);
+        }
+        if (configs.frame)
+          Wb.browse(configs);
+        else if (configs.newWin)
+          Wb.openWin(configs);
+        else
+          Wb.open(configs);
+      },
+      /**
+       * Show my Account dialog.
+       */
+      showMyAccount() {
+        Wb.ajax({
+          url: xpath + '/get-user-data',
+          json: true,
+          success(resp) {
+            let win = app.accountWin;
+
+            if (!win) {
+              win = app.accountWin = Wb.Dict.createColWindow(resp.columns, 'display_name,password,confirm_password,' +
+                'email,mobile_phone,use_lang', { title: Str.myAccount, icon: 'user2', width: '50em' });
+            }
+            Wb.setValue(win, resp.items[0]);
+            win.okHandler = (win, values) => {
+              if (values.password != values.confirm_password) {
+                Wb.warn(Str.pwdNotSame, f => win.down('password').focus(false, true));
+                return;
+              }
+              Wb.ajax({
+                url: xpath + '/set-user-data',
+                comps: win,
+                success() {
+                  app.dispname = values.display_name;
+                  app.accountItem.text = app.accountName;
+                  win.hide();
+                  if (Str.lang != values.use_lang) {
+                    location.reload();
+                  }
+                }
+              });
+            };
+            win.subTitle = app.dispname;
+            win.show();
+          }
+        });
+      },
+      /**
+       * Fires after the page is ready.
+       */
+      onReady() {
+        let activeCard = app.moduleTab.activeCard, httpHeartbeat = _$httpHeartbeat$_;
+        app.moduleTab.setNavigate(app.backItem, app.forwardItem);
+        if (activeCard) {
+          //This event must be triggered again during initialization because home is not ready
+          app.moduleTab.fireEvent('cardchange', activeCard);
+        }
+        if (httpHeartbeat > 0)
+          setInterval(f => Wb.ajax('refresh-session'), httpHeartbeat * 1000);
+        console.info('%cThis software is only authorized to%c' + (app.licensee || '(unlicensed)'),
+          'padding: 2px 8px; border-radius: 3px 0 0 3px; color: #fff; background: #606060;',
+          'padding: 2px 8px; border-radius: 0 3px 3px 0; color: #fff; background: #1475b2;');
+      },
+      /**
+       * Window resize event handler. @priv
+       */
+      onResize() {
+        let visible = app.treeItem.visible = Globals.smallScreen;
+        app.toggleTools(visible);
+      },
+      /**
+       * Open the specified module. @priv
+       * @param {Object} [data] Module data.
+       */
+      doOpenModule(data) {
+        let sp = app.treeSplitter;
+
+        app.openModule(data);
+        // floating module tree
+        if (sp.slideTarget)
+          sp.restoreTargetComp();
+        else if (app.treeItem.visible)
+          app.moduleTree.hide();
+      },
+      /**
+       * Toggle tool buttons to the toolbar or menu.
+       * @param {Boolean} [inMenu] Whether tools in the menu.
+       */
+      toggleTools(inMenu) {
+        if (inMenu != app.toolsInMenu) {
+          let btn = app.backItem, items = [], menuItem = app.menuItem, menu = menuItem.menu, configs;
+
+          app.toolsInMenu = inMenu;
+          while (btn) {
+            btn.visible = !inMenu;
+            if (inMenu) {
+              configs = {
+                text: btn.tip, icon: btn.icon, refToolBtn: btn, handler() {
+                  this.refToolBtn.fireEvent('click');
+                }
+              };
+              if (btn.active != null)
+                configs.checked = btn.active;
+              items.push(configs);
+            }
+            btn = btn.nextSibling;
+            if (btn == menuItem)
+              break;
+          }
+          if (inMenu) {
+            items.push({ cname: 'divider', refToolBtn: 1 });
+            menu.insert(0, items);
+          } else {
+            menu.each(item => { item.refToolBtn && item.destroy() }, true, true);
+          }
+        }
+      },
+      /**
+       * Show password dialog for changes all default password.
+       */
+      showPwdDialog() {
+        Wb.run({ url: xpath + '/../reset-passwords' });
+      },
+      /**
+       * Create top navigate bar.
+       */
+      createTopNavBar() {
+        let fillItem = app.topFillItem, moduleTree = app.moduleTree, bar, data;
+
+        fillItem.hide();
+        app.lastNavButton = null;
+        bar = app.topNavBar = fillItem.parent.insertBefore({
+          cname: 'toolbar', cls: 'w-top-nav', alignSelf: 'stretch', style: 'padding:0', flex: 1, justify: 'center',
+          margin: '0 .5em', events: {
+            buttonclick(button) {
+              app.selectTopButton(button);
+            }
+          }
+        }, fillItem);
+        moduleTree.each(node => {
+          data = node.data;
+          bar.add({
+            icon: data._icon, img: data._img, cls: 'w-nav-btn', text: data.text, bindPath: data.path,
+            bindData: data._leaf ? data : null, groupName: 'nav'
+          });
+        });
+        moduleTree.data = null;
+        bar.firstItem?.fireEvent('click');
+      },
+      /**
+       * Select top menu bar button. @priv
+       * @param {Wb.Button} button Selected button.
+       * @param {Function} callback Execute after sucess.
+       */
+      selectTopButton(button, callback) {
+        let lastBtn = app.lastNavButton, moduleTree = app.moduleTree;
+        if (lastBtn) {
+          lastBtn.bindItems = moduleTree.data;
+          lastBtn.bindScrollTop = moduleTree.scrollEl.scrollTop;
+          lastBtn.bindSelPath = moduleTree.selection?.data.path;
+        }
+        if (button.bindData) {
+          lastBtn.active = true;
+          app.doOpenModule(button.bindData);
+          callback?.();
+        } else {
+          if (button.bindItems) {
+            moduleTree.data = button.bindItems;
+            if (button.bindSelPath)
+              moduleTree.down(node => node.data.path == button.bindSelPath)?.selectNoFocus();
+            moduleTree.scrollEl.scrollTop = button.bindScrollTop;
+            callback?.();
+          } else {
+            moduleTree.load({
+              params: { path: button.bindPath }, success() {
+                callback?.();
+              }
+            });
+          }
+          app.lastNavButton = button;
+        }
+      },
+      /**
+       * Destroy navigate bar and restore tree navigate.
+       */
+      restoreTreeNav() {
+        app.topNavBar?.destroy();
+        app.topNavBar = null;
+        app.topFillItem.show();
+        app.moduleTree.load();
+      },
+      /**
+       * Save desktop data.
+       * @param {Boolean} [asDefault] Whether to save as the default desktop.
+       */
+      saveDesktop(asDefault) {
+        function getPageData() {
+          let items = [], url, tree = app.moduleTree, expandNodes, strTitle;
+          app.moduleTab.each(card => {
+            url = card.moduleUrl;
+            if (url && card.allowRefresh) {
+              strTitle = card.strTitle;
+              items.push({
+                icon: card.icon ?? undefined, img: card.img ?? undefined, visible: card.visible, tags: card.tags,
+                title: strTitle ? undefined : card.title, strTitle, moduleUrl: card.moduleUrl
+              });
+            }
+          });
+          if (!app.noSaveExandNodes) {
+            expandNodes = [];
+            app.moduleTree.each(node => {
+              if (node.expanded)
+                expandNodes.push(node.data.strTitle || node.text);
+            });
+          }
+          return {
+            items, portlets: getPortlets(), treeVisible: tree.visible, treeWidth: tree.getStyle('width'),
+            expandNodes, showNavBar: !!app.topNavBar
+          };
+        }
+
+        function getPortlets() {
+          let card = app.moduleTab.find(card => card.moduleUrl == 'm?xwl=my/home'), items, strTitle;
+
+          if (card && !card.prepend) {
+            items = [];
+            card.down('viewport1')?.each(panel => {
+              strTitle = panel.strTitle;
+              items.push({
+                icon: panel.icon ?? undefined, img: panel.img ?? undefined, tags: panel.tags, col: panel.gridColValue,
+                row: panel.gridRowValue, title: strTitle ? undefined : panel.title, strTitle, moduleUrl: panel.moduleUrl
+              });
+            });
+          }
+          return items;
+        }
+        Wb.ajax({
+          url: xpath + '/save-desktop',
+          data: { name: 'desktop', value: getPageData(), userid: asDefault ? 'system' : undefined, asDefault },
+          success() {
+            Wb.tipDone(Str.saveDesktop);
+          }
+        });
+      }
+    });
+hideInMenu: 'false'
+icon: ''
+img: ''
+items:
+- _icon: plug
+  cls: Wb.Socket
+  events:
+    failure: |-
+      if (!Wb.unloading) {
+        Wb.login((username, dispname) => {
+          app.dispname = dispname;
+          app.accountItem.text = app.accountName;
+          if (app.username != username) {
+            app.username = username;
+            location.reload();
+          }
+        });
+      }
+    message: |-
+      function main() {
+        let data = e.data, type, msg, method;
+
+        data = Wb.decode(data);
+        type = data.type;
+        switch (type) {
+          case 'info':
+          case 'warn':
+          case 'error':
+            msg = data.msg;
+            method = 'tip' + type.capital;
+            if (Wb.isObject(msg)) {
+              Wb[method](msg.msg ?? Str.newMessage, null, msg.url ? f => {
+                if (msg.newWin)
+                  Wb.openWin(msg);
+                else
+                  Wb.open(msg);
+              } : undefined);
+            } else {
+              Wb[method](msg);
+            }
+            break;
+        }
+      }
+      main();
+  properties:
+    cid: socket
+    heartbeatInterval: _$heartbeat$_
+    loginRequired: 'true'
+    name: sys.home
+    xwl: 'sys/session/service.xwl {xaction: ''monWebsocket''}'
+  text: socket
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  events:
+    ready: app.onReady();
+  items:
+  - _expanded: true
+    _icon: toolbar
+    cls: Wb.Toolbar
+    items:
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: app.moduleTree.visible = !app.moduleTree.visible;
+      properties:
+        cid: treeItem
+        icon: tree-view
+        minWidth: 2em
+        plainIcon: 'true'
+      text: treeItem
+    - _icon: logo
+      cls: Wb.Icon
+      properties:
+        cid: logoIcon
+        fontSize: 1.5em
+        icon: geejing
+      text: logoIcon
+    - _expanded: true
+      _icon: label
+      cls: Wb.Label
+      properties:
+        cid: titleLabel
+        text: _$title$_
+      text: titleLabel
+    - _icon: right1
+      cls: Wb.Fill
+      properties:
+        cid: topFillItem
+      text: topFillItem
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      properties:
+        cid: backItem
+        cls: w-home-tbtn
+        icon: left4
+        plainIcon: 'true'
+        tip: '@Str.back'
+      text: backItem
+    - _expanded: false
+      _icon: item
+      cls: Wb.Item
+      properties:
+        cid: forwardItem
+        cls: w-home-tbtn
+        icon: right4
+        plainIcon: 'true'
+        tip: '@Str.forward'
+      text: forwardItem
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: |-
+          let card = app.moduleTab.activeCard;
+          if (card) {
+            let configs = { url: card.moduleUrl, card, tabMode: 'reload' }, tags = card.tags;
+
+            if (tags) {
+              Wb.apply(configs, tags);
+              configs.tags = { tags };
+            }
+            Wb.open(configs);
+          }
+      properties:
+        cid: refreshItem
+        cls: w-home-tbtn
+        disabled: 'true'
+        icon: refresh
+        plainIcon: 'true'
+        tip: '@Str.refresh'
+      text: refreshItem
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: Wb.openNormal('m?xwl=my/home');
+      properties:
+        cid: homeItem
+        cls: w-home-tbtn
+        icon: home
+        plainIcon: 'true'
+        tip: '@Str.home'
+      text: homeItem
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        toggle: |-
+          if (active)
+            app.linkToMenu();
+      properties:
+        active: 'false'
+        cid: linkItem
+        cls: w-home-tbtn
+        icon: link
+        plainIcon: 'true'
+        tip: '@Str.moduleLinkToMenu'
+      text: linkItem
+    - _expanded: false
+      _icon: item
+      cls: Wb.Item
+      items:
+      - _expanded: true
+        _icon: menu2
+        cls: Wb.Menu
+        events:
+          hide: |-
+            //Adapts the menu font to the current font
+            this.fontSize = null;
+          show: |-
+            let menu = this;
+            menu.fontSize = Wb.configs.fontSize; //avoid menu font changes
+            menu.each(item => { item.refToolBtn && (item.disabled = item.refToolBtn.disabled) });
+            app.topNavItem.checked = !!app.topNavBar?.visible;
+        items:
+        - _expanded: true
+          _icon: item
+          cls: Wb.Item
+          properties:
+            cid: accountItem
+            handler: app.showMyAccount
+            icon: user2
+            text: '@app.accountName'
+          text: accountItem
+        - _expanded: true
+          _icon: divider
+          cls: Wb.Divider
+          properties:
+            cid: divider1
+          text: divider1
+        - _expanded: true
+          _icon: item
+          cls: Wb.Item
+          events:
+            click: app.saveDesktop();
+          properties:
+            cid: saveDesktopItem
+            icon: desktop
+            text: '@Str.saveDesktop'
+          text: saveDesktopItem
+        - _expanded: true
+          _icon: item
+          cls: Wb.Item
+          events:
+            click: |-
+              Wb.confirm(Str.doConfirm.format(Str.resetDesktop), f => {
+                Wb.ajax({
+                  url: 'set-resource',
+                  params: { name: 'desktop' },
+                  success() {
+                    Wb.tipDone(Str.resetDesktop);
+                  }
+                });
+              });
+          properties:
+            cid: resetDesktopItem
+            icon: undo
+            text: '@Str.resetDesktop'
+          text: resetDesktopItem
+        - _expanded: true
+          _icon: item
+          cls: Wb.Item
+          events:
+            click: |-
+              Wb.confirm(Str.doConfirm.format(Str.saveAsDefaultDesktop), f => {
+                app.saveDesktop(true);
+              });
+          properties:
+            cid: saveAsDefaultDesktopItem
+            text: '@Str.saveAsDefaultDesktop'
+            visible: _$setDefaultDesktop$_
+          text: saveAsDefaultDesktopItem
+        - _expanded: true
+          _icon: item
+          cls: Wb.Item
+          events:
+            click: |-
+              Wb.confirm(Str.doConfirm.format(Str.resetDefaultDesktop), f => {
+                Wb.ajax({
+                  url: 'set-resource-all',
+                  params: { name: 'desktop', userid: 'system' },
+                  success() {
+                    Wb.tipDone(Str.resetDesktop);
+                  }
+                });
+              });
+          properties:
+            cid: resetDefaultDesktopItem
+            text: '@Str.resetDefaultDesktop'
+            visible: _$setDefaultDesktop$_
+          text: resetDefaultDesktopItem
+        - _expanded: true
+          _icon: divider
+          cls: Wb.Divider
+          properties:
+            cid: divider2
+          text: divider2
+        - _expanded: true
+          _icon: item
+          cls: Wb.Item
+          items:
+          - _expanded: true
+            _icon: menu2
+            cls: Wb.Menu
+            events:
+              menuclick: |-
+                let theme = item.theme;
+
+                if (theme == '?') {
+                  window.open('https://www.geejing.com/buy');
+                  return;
+                }
+                if (theme == app.theme)
+                  return;
+                let setTheme = f => {
+                  let link = Wb.headEl.query('[href*="-wb.css"]');
+
+                  app.theme = theme;
+                  if (link) {
+                    let newLink = document.createElement('link');
+                    newLink.rel = 'stylesheet';
+                    newLink.href = link.href.substr(0, link.href.lastIndexOf('/') + 1) + theme + '-wb.css';
+                    newLink.onload = f => {
+                      link.remove();
+                      Wb.initCssVar();
+                      Wb.CodeEditor?.initTheme(true);
+                    };
+                    Wb.headEl.insertBefore(newLink, link);
+                    app.viewport1.setCls(theme != 'dark', 'w-dark-home');
+                  } else {
+                    Wb.tipError(Str.notFound.format(Str.uiTheme));
+                  }
+                };
+                if (app.isDemo)
+                  setTheme();
+                else
+                  Wb.ajax({
+                    url: 'set-value',
+                    params: { name: 'sys.theme', value: theme },
+                    success: setTheme
+                  });
+            properties:
+              cid: menu
+              isProperty: 'true'
+              tagProperties: '({ items: _$themeItems$_ })'
+            text: menu
+          properties:
+            cid: uiThemeItem
+            icon: color
+            text: '@Str.uiTheme'
+          text: uiThemeItem
+        - _expanded: true
+          _icon: divider
+          cls: Wb.Divider
+          properties:
+            cid: divider3
+          text: divider3
+        - _expanded: true
+          _icon: container
+          cls: Wb.Container
+          items:
+          - _expanded: true
+            _icon: slidebar
+            cls: Wb.Slider
+            events:
+              change: Wb.setFontSize(value);
+              enddrag: |-
+                if (!app.isDemo) {
+                  Wb.ajax({
+                    url: 'set-value',
+                    params: { name: 'sys.fontSize', value: value }
+                  });
+                }
+            properties:
+              cid: fsSlider
+              flex: '1'
+              focusable: 'false'
+              maxValue: '50'
+              minValue: '12'
+              tabIndex: 'null'
+              text: '@Str.fontSize'
+              value: '@Wb.configs.fontSize'
+            text: fsSlider
+          - _icon: button
+            cls: Wb.Button
+            events:
+              click: |-
+                let resetSize = f => {
+                  let fs = Wb.configs.rawFontSize;
+                  Wb.setFontSize(fs);
+                  app.fsSlider.value = fs;
+                  app.menuItem.menu.hide();
+                };
+                if (app.isDemo)
+                  resetSize();
+                else
+                  Wb.ajax({
+                    url: 'set-value',
+                    params: { name: 'sys.fontSize' },
+                    success: resetSize
+                  });
+            properties:
+              cid: resetBtn
+              focusable: 'false'
+              icon: refresh
+              tabIndex: undefined
+              tip: '@Str.reset'
+              type: tool
+            text: resetBtn
+          properties:
+            cid: container1
+            gap: .2em
+            layout: row
+          text: container1
+        - _expanded: true
+          _icon: divider
+          cls: Wb.Divider
+          properties:
+            cid: divider4
+          text: divider4
+        - _expanded: true
+          _icon: item
+          cls: Wb.Item
+          events:
+            click: |-
+              if (this.checked)
+                app.restoreTreeNav();
+              else
+                app.createTopNavBar();
+          properties:
+            checked: 'false'
+            cid: topNavItem
+            text: '@Str.topNavBar'
+          text: topNavItem
+        - _expanded: true
+          _icon: item
+          cls: Wb.Item
+          events:
+            click: |-
+              if (app.topNavBar) {
+                app.moduleTree.load({
+                  success() {
+                    app.topNavBar.destroy();
+                    app.createTopNavBar();
+                  }
+                });
+              } else {
+                app.moduleTree.loadSelect();
+              }
+          properties:
+            cid: refreshListItem
+            icon: list-view
+            text: '@Str.refreshList'
+          text: refreshListItem
+        - _expanded: true
+          _icon: divider
+          cls: Wb.Divider
+          properties:
+            cid: divider5
+          text: divider5
+        - _expanded: true
+          _icon: item
+          cls: Wb.Item
+          events:
+            click: Wb.ajax('logout');
+          properties:
+            cid: logoutItem
+            icon: logout
+            keys: Ctrl+Shift+L
+            text: '@Str.logout'
+          text: logoutItem
+        properties:
+          cid: menu
+          isProperty: 'true'
+          minWidth: 20em
+        text: menu
+      properties:
+        cid: menuItem
+        cls: w-home-tbtn
+        icon: menu
+        plainIcon: 'true'
+      text: menuItem
+    properties:
+      cid: tbar
+      gap: .2em
+      isProperty: 'true'
+      style: padding:0 .5em;
+    text: tbar
+  - _expanded: true
+    _icon: tree-view
+    cls: Wb.Tree
+    events:
+      beforeload: |-
+        let node = configs.node;
+
+        if (node)
+          params.path = node.data.path;
+      itemclick: |-
+        if (item.leaf)
+          app.doOpenModule(item.data);
+        else
+          item.toggleExpand();
+        item.contentEl.rippleEffect(e.x, e.y);
+    items:
+    - _icon: combo
+      cls: Wb.Select
+      events:
+        select: app.doOpenModule(data);
+      properties:
+        cid: bbar
+        icon: search
+        isProperty: 'true'
+        url: '@xpath + ''/search-modules'''
+      text: bbar
+    properties:
+      autoLoad: 'false'
+      autoPostParams: 'false'
+      cid: moduleTree
+      data: _$moduleTree$_
+      dblclickExpand: 'false'
+      rightExpander: 'true'
+      treeStyle: menu
+      url: '@xpath + ''/get-modules-tree'''
+      visible: _$treeVisible$_
+      width: _$treeWidth$_
+    text: moduleTree
+  - _icon: splitter
+    cls: Wb.Splitter
+    properties:
+      cid: treeSplitter
+      enterShowTarget: 'true'
+    text: treeSplitter
+  - _expanded: true
+    _icon: tab
+    cls: Wb.Tab
+    events:
+      cardchange: |-
+        app.refreshItem.disabled = !newCard?.allowRefresh;
+        if (newCard?.prepend) {
+          let tags = newCard.tags, configs;
+
+          configs = {
+            url: newCard.moduleUrl, tabMode: 'reload', container: newCard, allowRefresh: true,
+            icon: newCard.icon, img: newCard.img, title: newCard.title
+          };
+          if (tags) {
+            //tags use to refresh
+            configs.tags ??= {};
+            configs.tags.tags = tags;
+            Wb.apply(configs, tags);
+          }
+          Wb.open(configs);
+          delete newCard.prepend;
+        }
+        if (app.linkItem.active)
+          app.linkToMenu(newCard);
+      ready: |-
+        this.tabBar.mon('dblclick', e => {
+          let card = e.target.getClosestComp(Wb.TabButton)?.card;
+          if (card?.allowRefresh) {
+            Wb.openWin(Wb.apply({ url: card.moduleUrl }, card.tags));
+            e.stopEvent();
+          }
+        });
+    items:
+    - _icon: file-json
+      cls: Wb.Script
+      properties:
+        cid: script1
+        script: _$moduleItems$_
+      text: script1
+    properties:
+      activeIndex: undefined
+      cid: moduleTab
+      flex: '1'
+      mainTab: 'true'
+      tabMenu: 'true'
+      useHash: touch
+    text: moduleTab
+  properties:
+    border: 'false'
+    cid: viewport1
+    cls: '@app.theme==''dark''?''w-home'':''w-home w-dark-home'''
+    layout: row
+  text: viewport1
+properties:
+  cid: module
+  loginRequired: 'false'
+  remark: Default home page
+  serverScript: |-
+    function main() {
+      const Util = Wb.load('./home/util.mjs');
+
+      if (!Util.checkLogin())
+        return;
+      const theme = Wb.get('sys.theme') || Wb.getConfig('sys.theme');
+      Wb.set(Util.getDesktopData());
+      Wb.set({
+        theme: Wb.encode(theme),
+        licensee: Wb.encode(Util.getLicensee()),
+        themeItems: Wb.encode(Util.getThemeItems(theme)),
+        title: Wb.getConfig('sys.app.title'),
+        username: Wb.encode(Wb.username),
+        dispname: Wb.encode(Wb.dispname),
+        setDefaultDesktop: Wb.permit('set-resource-all'),
+        heartbeat: Wb.getConfig('sys.session.heartbeatInterval'),
+        httpHeartbeat: Wb.getConfig('sys.session.httpHeartbeatInterval'),
+        isDemo: Config.isDemo,
+        isShowPwdDialog: Util.isShowPwdDialog()
+      });
+    }
+    main();
+  title: _$title$_
+tags: '{url: ''home'', newWin: true}'
+text: module
+title: ''

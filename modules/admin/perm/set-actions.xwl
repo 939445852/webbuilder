@@ -1,0 +1,65 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Set permission actions
+  serverScript: |-
+    let actions = {
+      /**
+       * Set permissions.
+       */
+      setPerm() {
+        let modules = Params.modules, oldModules, file, roleId = Params.roleId, checked = Wb.getBool('checked'),
+          roles = Wb.roles, filename, isAdmin = Wb.isAdmin;
+
+        if (!roleId || !isAdmin && roles.includes(roleId))
+          Wb.raise('You are not allowed to set your own permissions. Please contact the administrator.');
+        Wb.startTrans();
+        if (checked) {
+          let insert = [];
+          oldModules = Wb.getAllRecords('select module_path from wb_perm where role_id={?roleId?}').pluck(0);
+          modules = modules.diff(oldModules);
+          modules.forEach(item => {
+            filename = item + '.xwl';
+            file = new Wb.File(Wb.File.moduleFolder, filename);
+            if (!file.exists)
+              Wb.raise(Str.notExists.format(item));
+            if (!isAdmin && !Perm.permit(filename, roles))
+              Wb.raise(Str.notHavePerm.format(filename));
+            insert.push({ sid: Wb.getId(), module_path: item, role_id: roleId });
+          });
+          Wb.sync({ tableName: 'wb_perm', insert });
+          modules.forEach(item => Perm.put(item, roleId));
+        } else {
+          let del = [];
+
+          modules.forEach(item => {
+            filename = item + '.xwl';
+            if (!isAdmin && !Perm.permit(filename, roles))
+              Wb.raise(Str.notHavePerm.format(filename));
+            del.push({ $module_path: item, $role_id: roleId });
+          });
+          Wb.sync({ tableName: 'wb_perm', del, whereFields: 'module_path,role_id', unique: false });
+          modules.forEach(item => Perm.remove(item, roleId));
+        }
+      },
+      /**
+       * Clean invalid data.
+       */
+      cleanInvalid() {
+        let params = [];
+
+        Wb.getRows('select module_path from wb_perm', row => {
+          if (!new Wb.File(true, 'wb/modules/' + row.module_path + '.xwl').exists)
+            params.push(row);
+        });
+        Wb.sql({ sql: 'delete from wb_perm where module_path={?module_path?}', params });
+      }
+    };
+    actions[Params.xaction]();
+tags: ''
+text: module
+title: ''

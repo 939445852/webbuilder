@@ -1,0 +1,76 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: |-
+    Wb.apply(app, {
+      /**
+       * Init the module.
+       */
+      init() {
+        // app.date1.focus();
+      }
+    });
+hideInMenu: 'false'
+icon: ''
+img: ''
+items:
+- _expanded: true
+  _icon: panel
+  cls: Wb.Panel
+  items:
+  - _expanded: true
+    _icon: label
+    cls: Wb.Label
+    properties:
+      cid: label1
+      text: This card from card.xwl
+    text: label1
+  - _expanded: true
+    _icon: text
+    cls: Wb.Text
+    properties:
+      cid: text1
+      text: Text
+    text: text1
+  - _icon: calendar
+    cls: Wb.Date
+    properties:
+      cid: date1
+      text: Date
+    text: date1
+  - _icon: button
+    cls: Wb.Button
+    events:
+      click: app.text1.value = 'card value';
+    properties:
+      cid: setValueBtn
+      justifySelf: center
+      text: Set text value
+      width: 20em
+    text: setValueBtn
+  - _icon: button
+    cls: Wb.Button
+    events:
+      click: parentApp.runModuleCardTab.title = 'New Title';
+    properties:
+      cid: setParentTitleBtn
+      justifySelf: center
+      text: Set parent module tab title
+      width: 20em
+    text: setParentTitleBtn
+  properties:
+    cid: panel1
+    layout: grid1
+  text: panel1
+- _expanded: false
+  _icon: window
+  cls: Wb.Window
+  properties:
+    cid: thisWinAutoDestroyedAfterOwnerDestroyed
+  text: thisWinAutoDestroyedAfterOwnerDestroyed
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

@@ -1,0 +1,28 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.make(app,{cname:"viewport",layout:"grid1",cid:"viewport1",items:[{cname:"label",cid:"mainLabel",cls:"w-title3",text:"Use
+    Template"},{cname:"title",title:"HTML template",cid:"tplTitle"},{cname:"component",textSelectable:false,tpl:"<div
+    class='w-row w-gap w-lh w-justify-between w-padding'>\n  <div class='w-frame w-padding'>\n    <span
+    class='w-active-color w-bold w-size1d2'>{p1}</span>\n    <br><span>Growth</span>\n  </div>\n  <div
+    class='w-frame w-padding'>\n    <span class='w-active-color w-bold w-size1d2'>{[data.p2.usd]}</span>\n    <br><span>Income</span>\n  </div>\n  <div
+    class='w-frame w-padding'>\n    <span class='w-active-color w-bold w-size1d2'>{p3}</span>\n    <br><span>Market</span>\n  </div>\n  <div
+    class='w-frame w-padding'>\n    <span class='w-active-color w-bold w-size1d2'>{[data.p4.timeText12]}</span>\n    <br><span>Datetime</span>\n  </div>\n  <div
+    class='w-frame w-padding'>\n    <span class='w-active-color w-bold w-size1d2'>{[data.p5.intText]}</span>\n    <br><span>Total</span>\n  </div>\n</div>",tplData:{p1:"68.5%",p2:325892,p3:"Geejing",p4:new
+    Date,p5:83236},cls:"w-fit",cid:"tplComp",frame:true},{cname:"button",type:"primary",cid:"updateTplBtn",text:"Update
+    template data",events:{click(e,a){app.tplComp.update({p1:"56.82%",p2:839213,p4:new
+    Date})}}},{cname:"title",title:"Use view template",cid:"useViewTplTitle"},{cname:"view",html:"<div
+    class='w-items w-row w-gap w-lh w-justify-between w-padding'>\n</div>",data:[{name:"Growth",value:"68.5%"},{name:"Income",value:325892..usd},{name:"Market",value:"Geejing"},{name:"Datetime",value:(new
+    Date).timeText12},{name:"Total",value:83236..intText}],selectColor:"none",cid:"tplView",itemTpl:"<div
+    class='w-frame w-padding'>\n  <span class='w-active-color w-bold w-size1d2'>{value}</span>\n  <br><span>{name}</span>\n</div>"},{cname:"button",type:"primary",cid:"updateViewBtn",text:"Update
+    view data",events:{click(e,a){app.tplView.data=[{name:"Growth",value:"32.5%"},{name:"Income",value:48372..usd},{name:"Datetime",value:(new
+    Date).timeText12}]}}}]});
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

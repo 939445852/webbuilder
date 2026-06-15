@@ -1,0 +1,34 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: |-
+    // don't show titlebar in home
+    // app.noTitlebar = true;
+hideInMenu: 'false'
+icon: info1
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  properties:
+    autoScroll: 'true'
+    cid: viewport1
+    cls: w-lh
+    html: |-
+      <ul>
+        <li>Drag the left tree node to here to create a new module panel.</li>
+        <li>Drag the panel to adjust its position.</li>
+        <li>Set [app.noTitlebar = true] in module to auto hide title bar.</li>
+        <li>Click panel "menu button" to set panel row and column span.</li>
+        <li>Click panel "maximize button" to maximize panel.</li>
+        <li>Click home menu "save desktop" to save these panels.</li>
+      </ul>
+    textSelectable: 'false'
+  text: viewport1
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

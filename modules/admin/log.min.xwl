@@ -1,0 +1,16 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.apply(app,{reload(){if(app.stopReload)return;app.grid1.delayLoad({comps:app.viewport1.tbar})}});Wb.make(app,{cname:"viewport",layout:"fit",cid:"viewport1",tbar:{cname:"toolbar",flexWrap:true,gap:".1em",items:[{cname:"datetime",width:"15em",clearButton:true,placeholder:Str.startTime,cid:"beginDt",events:{change(e,t,a){app.reload()}}},{cname:"datetime",width:"15em",clearButton:true,placeholder:Str.endTime,cid:"endDt",events:{change(e,t,a){app.reload()}}},{cname:"select",keyName:"logLevel",width:"9em",clearButton:true,placeholder:Str.logLevel,editable:false,cid:"logLevel",events:{change(e,t,a){app.reload()}}},{cname:"text",width:"9em",clearButton:true,placeholder:Str.logType,cid:"logType",events:{change(e,t,a){app.reload()}}},{cname:"text",width:"9em",clearButton:true,placeholder:Str.username,cid:"username",events:{change(e,t,a){app.reload()}}},{cname:"text",width:"9em",clearButton:true,placeholder:Str.content,cid:"msg",events:{change(e,t,a){app.reload()}}},{cname:"text",width:"11em",clearButton:true,placeholder:Str.ip,cid:"ip",events:{change(e,t,a){app.reload()}}},{icon:"undo",cid:"resetItem",text:Str.reset,events:{click(e,t){app.stopReload=true;Wb.reset(app.viewport1.tbar);app.stopReload=false;app.reload()}}}]},items:[{cname:"grid",textSelectable:true,columnsSortable:true,sorters:{name:"log_date",desc:true},url:xpath+"/select",cid:"grid1",stateData:"_$004V7KE4QVEXA$_",stateId:"wb.log"}]});
+hideInMenu: 'false'
+icon: log
+img: ''
+properties:
+  cid: module
+  remark: System log
+stateMap:
+  wb.log: 004V7KE4QVEXA
+tags: ''
+text: module
+title: '@systemLog'

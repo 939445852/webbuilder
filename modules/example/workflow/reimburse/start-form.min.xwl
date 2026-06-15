@@ -1,0 +1,19 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: 'Wb.apply(app,{autoShow:false,init(e,t,a){if(e){app.grid1.load({params:{flowId:e},success(e,t,a){app.flowTitle.value=a.flowTitle;app.main.show()}})}else{app.main.show()}},beforeAction(e,t){let
+    a=app.grid1;if(!a.hasChild){Wb.tipWarn("Please input at least one item");a.startEdit(a.addData({}),1);return
+    false}return{data:app.grid1.modifiedData}},afterAction(e,t,a){Wb.log("action:
+    "+e+", node name: "+a.data.node_name)}});Wb.make(app,{cname:"window",layout:"column",padding:true,visible:true,gap:true,icon:"money",width:"60em",title:"Start
+    reimbursement workflow",autoScroll:true,cid:"main",height:"30em",items:[{cname:"text",required:true,cid:"flowTitle",text:"Title"},{cname:"grid",minHeight:"8em",editable:true,flex:1,autoLoad:false,pagingBar:false,pageSize:-1,url:xpath+"/../actions&xaction=selectStartData",cid:"grid1",tbar:{cname:"toolbar",items:[{icon:"add",text:Str.add,keys:"Ctrl+E",cid:"addBtn",events:{click(e,t){app.grid1.addRecord()}}},{icon:"delete",text:Str.del,keys:"Ctrl+D",cid:"delBtn",events:{click(e,t){app.grid1.delRecords()}}}]},columns:[{cname:"column",cid:"rowCol",rowNum:true},{cname:"column",cid:"dateCol",fieldName:"exp_date",text:"Date",editor:{cname:"date",required:true}},{cname:"column",width:-1,fieldName:"item_name",text:"Item
+    name",cid:"itemNameCol",editor:{cname:"text",required:true}},{cname:"column",width:"10em",fieldName:"amount",text:"Amount",cid:"amountCol",editor:{cname:"number",decimalCount:2,required:true}}]}]});'
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  serverScript: Wb.apply(app,{beforeAction(e,b){},afterAction(e,b){let a=b.flowId,t=Wb.userid,d=Wb.getObject("data");a=b.flowId;d.insert?.forEach((e=>{Wb.apply(e,{sid:Wb.getId(),flow_id:a,user_id:t})}));Wb.sync(Wb.apply({tableName:"wb_reimburse"},d))}});
+tags: '{container: false}'
+text: module
+title: ''

@@ -1,0 +1,31 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: 'Wb.make(app,{cname:"socket",name:"wb.ws.commonSocket",cid:"commonSocket",events:{message(e,t){Wb.tip("Received:
+    "+e.data)}}});Wb.make(app,{cname:"socket",name:"wb.ws.xwlSocket",xwl:xpath+"/actions
+    {xaction: ''receiveData''}",cid:"xwlSocket",events:{message(e,t){Wb.tip("Received:
+    "+e.data)}}});Wb.make(app,{cname:"socket",name:"wb.ws.binarySocket",cid:"binarySocket",events:{message(e,t){let
+    a=e.data;Wb.readBlob(a,(e=>{Wb.tip(''<img src="data:image/png;base64,''+e+''">'',true)}))}}});Wb.make(app,{cname:"viewport",layout:"grid1",cid:"viewport1",items:[{cname:"label",cid:"mainLabel",cls:"w-title3",text:"WebSocket"},{cname:"label",cid:"sendTextToCurrentUserLabel",text:"Send
+    text to the specified web socket of current user"},{cname:"button",type:"primary",cid:"sendTextToCurrentUserBtn",text:"Send
+    text to current user",events:{click(e,t){Wb.ajax({url:xpath+"/actions&xaction=sendTextToCurrentUser",params:{text:"text
+    message"}})}}},{cname:"label",cid:"sendBinaryToCurrentUserLabel",text:"Send binary
+    to the specified web socket of current user"},{cname:"button",type:"primary",cid:"sendBinaryToCurrentUserBtn",text:"Send
+    binary to current user",events:{click(e,t){Wb.ajax({url:xpath+"/actions&xaction=sendBinaryToCurrentUser"})}}},{cname:"label",cid:"sendTextToSpecifyUserLabel",text:"Send
+    text to the specified web socket of the specified user"},{cname:"button",type:"primary",cid:"sendTextToSpecifiedUserBtn",text:''Send
+    text to "admin" user'',events:{click(e,t){Wb.ajax({url:xpath+"/actions&xaction=sendTextToSpecifiedUser",params:{text:"text
+    message"}})}}},{cname:"label",cid:"broadcastJsonToAllUsersLabel",text:"Broadcast
+    JSON to the specified web socket of all users"},{cname:"button",type:"primary",cid:"broadcastJsonToAllUsersBtn",text:"Broadcast
+    JSON to all users",events:{click(e,t){Wb.ajax({url:xpath+"/actions&xaction=broadcastJSONToSpecifiedUser"})}}},{cname:"label",cid:"sendTextBySocketLabel",text:"Send
+    text to the specified xwl module by xwlSocket"},{cname:"button",type:"primary",cid:"sendTextBySocketBtn",text:"Send
+    text by socket",events:{click(e,t){app.xwlSocket.send("text")}}},{cname:"label",cid:"sendBinaryBySocketLabel",text:"Send
+    binary to the specified xwl module by xwlSocket"},{cname:"button",type:"primary",cid:"sendBinaryBySocketBtn",text:"Send
+    binary by socket",events:{click(e,t){let a=new Blob([Wb.encode({foo:"bar"})],{type:"application/json"});app.xwlSocket.send(a)}}}]});'
+hideInMenu: 'false'
+icon: plug
+img: ''
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

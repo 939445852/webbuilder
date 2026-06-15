@@ -1,0 +1,15 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  serverScript: 'let actions={sendTextToCurrentUser(){Wb.send(Params.text,"wb.ws.commonSocket")},sendBinaryToCurrentUser(){let
+    e=new Wb.File(true,"wb/images/app/logo.png").bytes;Wb.send(e,"wb.ws.binarySocket")},sendTextToSpecifiedUser(){Wb.send(Params.text,"wb.ws.commonSocket","admin")},broadcastJSONToSpecifiedUser(){Wb.send({text:"text
+    message",number:123},"wb.ws.commonSocket",true)},receiveData(){if(event=="message"){let
+    e;if(data instanceof InputStream)e=IOUtils.toString(data);else e=data;Wb.log("Received:
+    "+e);Wb.send("result")}}};actions[Params.xaction]();'
+tags: ''
+text: module
+title: ''

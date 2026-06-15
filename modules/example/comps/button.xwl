@@ -1,0 +1,948 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  finalize: app.useIdeTipField.highlight();
+hideInMenu: 'false'
+icon: button
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: mainLabel
+      cls: w-title3
+      text: Button
+    text: mainLabel
+  - _icon: label1
+    cls: Wb.DisplayField
+    events:
+      ready: |-
+        if (parentApp?.inIDE)
+          this.hide();
+    properties:
+      cid: useIdeTipField
+      htmlValue: 'true'
+      icon: info
+      value: For a better learning experience, please review the examples in the <a
+        href="ide?openExample=1"   target="_blank">WebBuilder IDE</a>
+    text: useIdeTipField
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: listTitle
+      title: Button list
+    text: listTitle
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _icon: button
+      cls: Wb.Button
+      events:
+        click: 'Wb.tip(this.cid + '' clicked''); // equals to: Wb.tip(app.commonBtn.cid
+          + '' clicked'');'
+      properties:
+        cid: commonBtn
+        text: Common Button
+      text: commonBtn
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: iconBtn
+        icon: gear
+        text: Icon Button
+      text: iconBtn
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: imgBtn
+        img: cut
+        text: Image Button
+      text: imgBtn
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: charIconBtn
+        icon: 🌻
+        text: Char Icon
+        tip: Any char as icon
+      text: charIconBtn
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        badgeText: 'true'
+        cid: badgeBtn
+        icon: bell
+        text: '58'
+        tip: Badge text
+      text: badgeBtn
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: leftBtn
+        icon: left4
+        iconAlign: left
+        text: Left
+      text: leftBtn
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: rightBtn
+        icon: right4
+        iconAlign: right
+        text: Right
+      text: rightBtn
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: topBtn
+        icon: up4
+        iconAlign: top
+        text: Top
+      text: topBtn
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: bottomBtn
+        icon: down4
+        iconAlign: bottom
+        text: Bottom
+      text: bottomBtn
+    - _expanded: true
+      _icon: button
+      cls: Wb.Button
+      events:
+        click: Wb.tip(this.cid + ' clicked');
+      properties:
+        cid: keyBtn
+        icon: keyboard
+        keys: Ctrl+Shift+K
+        keysTextTip: 'false'
+        text: Ctrl+Shift+K
+        tip: Press Ctrl+Shift+K to fire click event
+      text: keyBtn
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: noFocusBtn
+        focusable: 'false'
+        icon: flower
+        tabIndex: undefined
+        text: No Focus
+      text: noFocusBtn
+    - _expanded: true
+      _icon: button
+      cls: Wb.Button
+      items:
+      - _expanded: true
+        _icon: menu2
+        cls: Wb.Menu
+        items:
+        - _expanded: true
+          _icon: item
+          cls: Wb.Item
+          properties:
+            cid: item1
+            icon: calendar
+            text: item 1
+          text: item1
+        - _expanded: true
+          _icon: item
+          cls: Wb.Item
+          properties:
+            cid: item2
+            text: item 2
+          text: item2
+        - _expanded: false
+          _icon: item
+          cls: Wb.Item
+          properties:
+            cid: item3
+            text: item 3
+          text: item3
+        properties:
+          cid: menu
+          isProperty: 'true'
+        text: menu
+      properties:
+        cid: menuBtn
+        icon: menu
+        text: menu
+      text: menuBtn
+    - _expanded: true
+      _icon: split
+      cls: Wb.SplitButton
+      events:
+        click: Wb.tip(this.cid + ' clicked');
+      items:
+      - _expanded: true
+        _icon: menu2
+        cls: Wb.Menu
+        items:
+        - _expanded: true
+          _icon: item
+          cls: Wb.Item
+          properties:
+            cid: item1
+            icon: calendar
+            text: item 1
+          text: item1
+        - _expanded: true
+          _icon: item
+          cls: Wb.Item
+          properties:
+            cid: item2
+            text: item 2
+          text: item2
+        - _expanded: false
+          _icon: item
+          cls: Wb.Item
+          properties:
+            cid: item3
+            text: item 3
+          text: item3
+        properties:
+          cid: menu
+          isProperty: 'true'
+        text: menu
+      properties:
+        cid: splitButton1
+        text: Split Button
+      text: splitButton1
+    - _expanded: true
+      _icon: button
+      cls: Wb.Button
+      events:
+        click: Wb.tip(this.cid + ' clicked');
+      properties:
+        cid: tapBtn
+        tapClick: 'true'
+        text: MouseDown Click
+      text: tapBtn
+    - _expanded: true
+      _icon: button
+      cls: Wb.Button
+      events:
+        click: |-
+          app.repeatCt ??= 0;
+          Wb.toast(this.cid + ' clicked ' + (app.repeatCt++));
+      properties:
+        cid: repeatBtn
+        repeatInterval: 'true'
+        text: Repeat Click
+      text: repeatBtn
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button1
+        disabled: 'true'
+        icon: delete
+        text: Disabled
+      text: button1
+    properties:
+      cid: listCt
+      frame: 'true'
+      layout: form
+    text: listCt
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: styleTitle
+      title: Button style
+    text: styleTitle
+  - _expanded: true
+    _icon: label
+    cls: Wb.Label
+    properties:
+      cid: styleLabel
+      text: Set the "type" property to set the button style
+    text: styleLabel
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: primary
+        icon: address-book
+        text: Primary
+        type: primary
+      text: primary
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: plain
+        icon: delete
+        tip: Plain Button
+        type: plain
+      text: plain
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: tool1
+        icon: cut
+        text: cut
+        tip: Text Tool Button
+        type: tool
+      text: tool1
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: noFocusTool1
+        cname: tool
+        icon: cut
+        text: cut
+        tip: Text Tool Button no focus
+      text: noFocusTool1
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: tool2
+        icon: add1
+        tip: Tool Button
+        type: tool
+      text: tool2
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: noFocusTool2
+        cname: tool
+        icon: add1
+        tip: Tool Button no focus
+      text: noFocusTool2
+    - _expanded: true
+      _icon: button
+      cls: Wb.Button
+      properties:
+        cid: icon
+        cname: iconButton
+        icon: database
+        tip: Icon Button no focus
+      text: icon
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: light
+        cname: lightButton
+        icon: cube
+        tip: Light Button no focus
+      text: light
+    properties:
+      cid: styleCt
+      frame: 'true'
+      layout: form
+    text: styleCt
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: shapeTitle
+      title: Button shape
+    text: shapeTitle
+  - _expanded: true
+    _icon: label
+    cls: Wb.Label
+    properties:
+      cid: shapeLabel
+      text: Set the "shape" property to set the button shape
+    text: shapeLabel
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _expanded: false
+      _icon: button
+      cls: Wb.Button
+      properties:
+        cid: circleBtn
+        icon: gear
+        shape: circle
+        tip: Circle
+      text: circleBtn
+    - _expanded: false
+      _icon: button
+      cls: Wb.Button
+      properties:
+        cid: rectBtn
+        icon: gear
+        shape: rect
+        text: Rect
+      text: rectBtn
+    - _expanded: false
+      _icon: button
+      cls: Wb.Button
+      properties:
+        cid: roundBtn
+        icon: gear
+        shape: round
+        text: Round
+      text: roundBtn
+    properties:
+      cid: shapeCt
+      frame: 'true'
+      layout: form
+    text: shapeCt
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: groupTitle
+      title: Grouping and toggle button
+    text: groupTitle
+  - _expanded: true
+    _icon: label
+    cls: Wb.Label
+    properties:
+      cid: groupLabel
+      text: Set the "groupName" property for grouping and set the "active" property
+        for toggle
+    text: groupLabel
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    events:
+      buttontoggle: Wb.tip(button.cid + ' is ' + active);
+    items:
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        active: 'false'
+        cid: button1
+        groupName: group1
+        text: Button 1
+      text: button1
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        active: 'false'
+        cid: button2
+        groupName: group1
+        text: Button 2
+      text: button2
+    - _expanded: true
+      _icon: button
+      cls: Wb.Button
+      properties:
+        active: 'false'
+        cid: button3
+        groupName: group1
+        text: Button 3
+      text: button3
+    - _expanded: true
+      _icon: divider
+      cls: Wb.Divider
+      properties:
+        cid: divider1
+      text: divider1
+    - _expanded: true
+      _icon: button
+      cls: Wb.Button
+      properties:
+        active: 'false'
+        cid: button4
+        groupName: group2
+        text: Button 4
+      text: button4
+    - _expanded: false
+      _icon: button
+      cls: Wb.Button
+      properties:
+        active: 'true'
+        cid: button5
+        groupName: group2
+        text: Button 5
+      text: button5
+    - _expanded: true
+      _icon: button
+      cls: Wb.Button
+      properties:
+        active: 'false'
+        cid: button6
+        groupName: group2
+        text: Button 6
+      text: button6
+    - _icon: space
+      cls: Wb.Space
+      properties:
+        cid: space1
+      text: space1
+    - _expanded: false
+      _icon: button
+      cls: Wb.Button
+      properties:
+        active: 'false'
+        cid: button7
+        text: Toggle
+      text: button7
+    - _icon: space
+      cls: Wb.Space
+      properties:
+        cid: space2
+      text: space2
+    - _expanded: false
+      _icon: button
+      cls: Wb.Button
+      properties:
+        active: 'true'
+        activeBgColor: 'false'
+        cid: button8
+        text: No Background
+      text: button8
+    properties:
+      cid: groupCt
+      frame: 'true'
+      layout: form
+    text: groupCt
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: sizeTitle
+      title: Button size
+    text: sizeTitle
+  - _expanded: true
+    _icon: label
+    cls: Wb.Label
+    properties:
+      cid: sizeLabel
+      text: Set "fontSize" property to set whole button size, and set "iconSize" property
+        to set icon size only.
+    text: sizeLabel
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button1
+        fontSize: .8em
+        icon: gift
+        text: Button 1
+      text: button1
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button2
+        fontSize: 1.5em
+        icon: gift
+        text: Button 2
+      text: button2
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button3
+        icon: gift
+        iconAlign: top
+        iconSize: 2em
+        text: Big icon only
+      text: button3
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button4
+        icon: gift
+        iconAlign: top
+        iconSize: 2.5em
+        text: Big icon only
+      text: button4
+    properties:
+      cid: sizeCt
+      frame: 'true'
+      layout: form
+    text: sizeCt
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: layoutTitle
+      title: Button layout
+    text: layoutTitle
+  - _expanded: true
+    _icon: label
+    cls: Wb.Label
+    properties:
+      cid: layoutLabel
+      text: Set the "Layout" property to arrange buttons.
+    text: layoutLabel
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      properties:
+        cid: setupItem
+        cname: tool
+        icon: setup
+        iconAlign: top
+        iconSize: 2.8em
+        text: Setup
+      text: setupItem
+    - _icon: divider
+      cls: Wb.Divider
+      properties:
+        cid: divider1
+      text: divider1
+    - _expanded: true
+      _icon: container
+      cls: Wb.Container
+      items:
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        properties:
+          cid: pasteItem
+          cname: tool
+          icon: paste
+          iconAlign: top
+          iconSize: 2.8em
+          text: Paste
+        text: pasteItem
+      - _expanded: true
+        _icon: container
+        cls: Wb.Container
+        items:
+        - _expanded: true
+          _icon: item
+          cls: Wb.Item
+          properties:
+            cid: cutItem
+            cname: tool
+            icon: cut
+            text: Cut
+          text: cutItem
+        - _expanded: true
+          _icon: item
+          cls: Wb.Item
+          properties:
+            cid: copyItem
+            cname: tool
+            icon: copy
+            text: Copy
+          text: copyItem
+        - _expanded: true
+          _icon: item
+          cls: Wb.Item
+          properties:
+            cid: deleteItem
+            cname: tool
+            icon: delete
+            text: Delete
+          text: deleteItem
+        properties:
+          align: start
+          cid: container1
+          layout: column
+        text: container1
+      properties:
+        cid: container1
+        layout: row
+      text: container1
+    - _icon: divider
+      cls: Wb.Divider
+      properties:
+        cid: divider2
+      text: divider2
+    - _expanded: false
+      _icon: container
+      cls: Wb.Container
+      items:
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        properties:
+          cid: addItem
+          cname: tool
+          icon: add
+          text: Add
+        text: addItem
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        properties:
+          cid: editItem
+          cname: tool
+          icon: edit
+          text: Edit
+        text: editItem
+      - _expanded: true
+        _icon: container
+        cls: Wb.Container
+        items:
+        - _expanded: true
+          _icon: item
+          cls: Wb.Item
+          properties:
+            cid: upItem
+            cname: tool
+            icon: up4
+            shape: circle
+          text: upItem
+        - _expanded: true
+          _icon: item
+          cls: Wb.Item
+          properties:
+            cid: rightItem
+            cname: tool
+            icon: right4
+            shape: circle
+          text: rightItem
+        - _expanded: true
+          _icon: item
+          cls: Wb.Item
+          properties:
+            cid: downItem
+            cname: tool
+            icon: down4
+            shape: circle
+          text: downItem
+        - _expanded: true
+          _icon: item
+          cls: Wb.Item
+          properties:
+            cid: leftItem
+            cname: tool
+            icon: left4
+            shape: circle
+          text: leftItem
+        properties:
+          cid: container1
+          layout: row
+        text: container1
+      properties:
+        align: center
+        cid: container2
+        layout: column
+      text: container2
+    - _expanded: true
+      _icon: split
+      cls: Wb.SplitButton
+      items:
+      - _expanded: true
+        _icon: menu2
+        cls: Wb.Menu
+        items:
+        - _expanded: true
+          _icon: item
+          cls: Wb.Item
+          properties:
+            cid: item1
+            text: Item 1
+          text: item1
+        - _expanded: true
+          _icon: item
+          cls: Wb.Item
+          properties:
+            cid: item2
+            text: Item 2
+          text: item2
+        - _expanded: true
+          _icon: item
+          cls: Wb.Item
+          properties:
+            cid: item3
+            text: Item 3
+          text: item3
+        properties:
+          cid: menu
+          isProperty: 'true'
+        text: menu
+      properties:
+        cid: setItem
+        icon: gear
+        iconSize: 2.8em
+      text: setItem
+    properties:
+      cid: layoutCt
+      frame: 'true'
+      layout: row
+    text: layoutCt
+  - _expanded: true
+    _icon: title
+    cls: Wb.Title
+    properties:
+      cid: eventTitle
+      title: Events
+    text: eventTitle
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _expanded: false
+      _icon: button
+      cls: Wb.Button
+      events:
+        click: Wb.tip('click');
+      properties:
+        cid: button1
+        text: Click
+      text: button1
+    - _expanded: false
+      _icon: button
+      cls: Wb.Button
+      events:
+        activate: Wb.tip('activate');
+        deactivate: Wb.tip('deactivate');
+        toggle: 'Wb.tip(''toggle: '' + active);'
+      properties:
+        active: 'true'
+        cid: button2
+        text: Toggle
+      text: button2
+    properties:
+      cid: eventCt
+      frame: 'true'
+      layout: form
+    text: eventCt
+  - _expanded: true
+    _icon: title
+    cls: Wb.Title
+    properties:
+      cid: codingTitle
+      title: Coding
+    text: codingTitle
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _expanded: true
+      _icon: container
+      cls: Wb.Container
+      items:
+      - _expanded: true
+        _icon: button
+        cls: Wb.Button
+        properties:
+          cid: demoButton
+          text: Demo Button
+        text: demoButton
+      properties:
+        cid: demoCt
+        layout: form-compact
+      text: demoCt
+    - _expanded: false
+      _icon: line
+      cls: Wb.Line
+      properties:
+        cid: line1
+        dashed: 'true'
+        dimTitle: 'true'
+        title: Demonstrate
+      text: line1
+    - _expanded: true
+      _icon: container
+      cls: Wb.Container
+      items:
+      - _expanded: true
+        _icon: button
+        cls: Wb.Button
+        events:
+          click: 'app.demoCt.add({ cname: ''button'', icon: ''gear'', text: ''New
+            Button'' });'
+        properties:
+          cid: addBtn
+          text: Add Button
+        text: addBtn
+      - _expanded: true
+        _icon: button
+        cls: Wb.Button
+        events:
+          click: |-
+            let btn = app.demoButton;
+            if (btn) {
+              btn.text = 'Changed Text';
+              btn.icon = 'earth';
+            }
+        properties:
+          cid: setTextIconBtn
+          text: Set Text Icon
+        text: setTextIconBtn
+      - _expanded: true
+        _icon: button
+        cls: Wb.Button
+        events:
+          click: |-
+            app.demoButton?.setter('disabled', true); //equals to: if (app.demoButton) app.demoButton.disabled = true;
+            //app.demoButton.visible = false; //Hide
+            //app.demoButton?.hide(); //Hide
+        properties:
+          cid: disableBtn
+          text: Set Disabled
+        text: disableBtn
+      - _expanded: true
+        _icon: button
+        cls: Wb.Button
+        events:
+          click: app.demoButton?.destroy();
+        properties:
+          cid: destroyBtn
+          text: Destroy
+        text: destroyBtn
+      - _expanded: true
+        _icon: button
+        cls: Wb.Button
+        events:
+          click: |-
+            app.demoBtnOnClick ??= f => Wb.tip('clicked'); //Define function
+            app.demoButton?.on('click', app.demoBtnOnClick); //The same function can only be registered once
+            Wb.tip('Please click Demo Button');
+        properties:
+          cid: addEventBtn
+          text: Add Event
+        text: addEventBtn
+      - _expanded: true
+        _icon: button
+        cls: Wb.Button
+        events:
+          click: |-
+            app.demoButton?.un('click', app.demoBtnOnClick);
+            Wb.tip('Please click Demo Button (Event removed)');
+        properties:
+          cid: removeEventBtn
+          text: Remove Event
+        text: removeEventBtn
+      - _expanded: true
+        _icon: button
+        cls: Wb.Button
+        events:
+          click: |-
+            app.demoBtnOnMouseEnter ??= f => Wb.tip('entered'); //Define function
+            app.demoButton?.mon('mouseenter', app.demoBtnOnMouseEnter); //Add managed dom listener
+            Wb.tip('Please move mouse to Demo Button');
+        properties:
+          cid: addListenerBtn
+          text: Add Listener
+        text: addListenerBtn
+      - _expanded: true
+        _icon: button
+        cls: Wb.Button
+        events:
+          click: |-
+            app.demoButton?.mun('mouseenter', app.demoBtnOnMouseEnter);
+            Wb.tip('Please move mouse to Demo Button (Listener removed)');
+        properties:
+          cid: removeListenerBtn
+          text: Remove Listener
+        text: removeListenerBtn
+      properties:
+        cid: actionCt
+        layout: form-compact
+      text: actionCt
+    properties:
+      cid: codingCt
+      frame: 'true'
+      layout: grid1
+    text: codingCt
+  properties:
+    cid: viewport1
+    layout: grid1
+  text: viewport1
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

@@ -1,0 +1,858 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: toolbar
+img: ''
+items:
+- _expanded: true
+  _icon: array
+  cls: Wb.Array
+  items:
+  - _expanded: true
+    _icon: menu2
+    cls: Wb.Menu
+    items:
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: Wb.tip('Popup context menu from ' + this.contextTarget.getClosestComp().cid);
+      properties:
+        cid: showTargetItem
+        icon: cube
+        text: Show target
+      text: showTargetItem
+    - _icon: line
+      cls: Wb.Line
+      properties:
+        cid: line1
+      text: line1
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      properties:
+        cid: item1
+        icon: add
+        text: '@Str.add'
+      text: item1
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      properties:
+        cid: item2
+        icon: edit
+        text: '@Str.edit'
+      text: item2
+    - _expanded: false
+      _icon: item
+      cls: Wb.Item
+      properties:
+        cid: item3
+        icon: delete
+        text: '@Str.del'
+      text: item3
+    properties:
+      cid: sharedContextMenu
+    text: sharedContextMenu
+  properties:
+    cid: components
+  text: components
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: mainLabel
+      cls: w-title3
+      text: Toolbar and menu
+    text: mainLabel
+  - _expanded: true
+    _icon: title
+    cls: Wb.Title
+    properties:
+      cid: toolbarTitle
+      title: Toolbar
+    text: toolbarTitle
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _expanded: true
+      _icon: label
+      cls: Wb.Label
+      properties:
+        cid: commonToolBarLabel
+        text: Common toolbar
+      text: commonToolBarLabel
+    - _expanded: true
+      _icon: toolbar
+      cls: Wb.Toolbar
+      items:
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        properties:
+          cid: addItem
+          icon: add
+          text: '@Str.add'
+          tip: Add new item
+        text: addItem
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        properties:
+          cid: deleteItem
+          icon: delete
+          text: '@Str.del'
+        text: deleteItem
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        events:
+          click: Wb.tip(this.cid + ' clicked');
+        properties:
+          cid: shortCutKeyItem
+          icon: keyboard
+          keys: Ctrl+K
+          text: Bind key
+        text: shortCutKeyItem
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        properties:
+          cid: disabledItem
+          disabled: 'true'
+          icon: property
+          text: Disabled
+        text: disabledItem
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        items:
+        - _expanded: true
+          _icon: menu2
+          cls: Wb.Menu
+          items:
+          - _expanded: true
+            _icon: item
+            cls: Wb.Item
+            properties:
+              cid: item1
+              text: Menu item 1
+            text: item1
+          - _expanded: true
+            _icon: item
+            cls: Wb.Item
+            properties:
+              cid: item2
+              text: Menu item 2
+            text: item2
+          - _expanded: false
+            _icon: item
+            cls: Wb.Item
+            properties:
+              cid: item3
+              text: Menu item 3
+            text: item3
+          properties:
+            cid: menu
+            isProperty: 'true'
+          text: menu
+        properties:
+          cid: menuItem
+          icon: menu
+          text: Menu
+        text: menuItem
+      - _icon: divider
+        cls: Wb.Divider
+        properties:
+          cid: divider1
+        text: divider1
+      - _icon: trigger
+        cls: Wb.Trigger
+        events:
+          triggerclick: Wb.tip(this.cid + ' clicked');
+        properties:
+          cid: trigger1
+          triggerIcon: module
+        text: trigger1
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        properties:
+          alignSelf: center
+          cid: centerAlignItem
+          icon: data
+          tip: Centered button
+        text: centerAlignItem
+      - _icon: right1
+        cls: Wb.Fill
+        properties:
+          cid: fill1
+        text: fill1
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        properties:
+          cid: fillRightItem
+          icon: calendar
+        text: fillRightItem
+      properties:
+        border: 'true'
+        cid: commonToolbar
+      text: commonToolbar
+    - _expanded: true
+      _icon: label
+      cls: Wb.Label
+      properties:
+        cid: overflowedToolbarLabel
+        text: Overflowed toolbar
+      text: overflowedToolbarLabel
+    - _expanded: true
+      _icon: toolbar
+      cls: Wb.Toolbar
+      items:
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        properties:
+          cid: item1
+          icon: calculator
+          text: item 1
+        text: item1
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        properties:
+          cid: item2
+          icon: add1
+          text: item 2
+        text: item2
+      - _expanded: false
+        _icon: item
+        cls: Wb.Item
+        properties:
+          cid: menuTextItem
+          icon: broadcast
+          menuText: MenuText Item
+        text: menuTextItem
+      - _expanded: false
+        _icon: item
+        cls: Wb.Item
+        properties:
+          cid: item3
+          icon: click
+          text: item 3
+        text: item3
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        properties:
+          cid: item4
+          icon: lantern
+          text: item 4
+        text: item4
+      - _expanded: false
+        _icon: item
+        cls: Wb.Item
+        properties:
+          cid: item5
+          icon: mail
+          text: item 5
+        text: item5
+      properties:
+        border: 'true'
+        cid: overflowedToolbar
+        frame: 'true'
+        overflowMenu: 'true'
+        resizable: 'true'
+        width: 25em
+      text: overflowedToolbar
+    - _expanded: true
+      _icon: label
+      cls: Wb.Label
+      properties:
+        cid: centeredShrinkToolbarLabel
+        text: Centered shrink toolbar
+      text: centeredShrinkToolbarLabel
+    - _expanded: true
+      _icon: toolbar
+      cls: Wb.Toolbar
+      items:
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        properties:
+          cid: item1
+          icon: book1
+          text: Item1
+        text: item1
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        properties:
+          cid: item2
+          icon: card
+          text: Item2
+        text: item2
+      - _expanded: false
+        _icon: item
+        cls: Wb.Item
+        properties:
+          cid: item3
+          icon: cube
+          text: Item3
+        text: item3
+      properties:
+        border: 'true'
+        cid: centeredShrinkToolbar
+        frame: 'true'
+        justify: center
+        resizable: 'true'
+        shrink: 'true'
+        width: 25em
+      text: centeredShrinkToolbar
+    - _expanded: true
+      _icon: label
+      cls: Wb.Label
+      properties:
+        cid: verticalToolbarLabel
+        text: Vertical toolbar
+      text: verticalToolbarLabel
+    - _expanded: true
+      _icon: toolbar
+      cls: Wb.Toolbar
+      items:
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        properties:
+          cid: item1
+          icon: book1
+          text: Item1
+        text: item1
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        properties:
+          cid: item2
+          icon: card
+          text: Item2 Card
+        text: item2
+      - _expanded: false
+        _icon: item
+        cls: Wb.Item
+        properties:
+          cid: item3
+          icon: cube
+          text: Item3
+        text: item3
+      properties:
+        cid: verticalToolbar
+        frame: 'true'
+        maxWidth: 10em
+        vertical: 'true'
+      text: verticalToolbar
+    - _expanded: true
+      _icon: label
+      cls: Wb.Label
+      properties:
+        cid: menuStyleToolbarLabel
+        text: Menu style toolbar
+      text: menuStyleToolbarLabel
+    - _expanded: true
+      _icon: toolbar
+      cls: Wb.Toolbar
+      items:
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        properties:
+          cid: item1
+          icon: book1
+          text: Item1
+        text: item1
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        properties:
+          cid: item2
+          icon: card
+          text: Item2 Card
+        text: item2
+      - _expanded: false
+        _icon: item
+        cls: Wb.Item
+        properties:
+          cid: item3
+          icon: cube
+          text: Item3
+        text: item3
+      properties:
+        cid: menuStyleToolbar
+        frame: 'true'
+        maxWidth: 10em
+        type: menu
+      text: menuStyleToolbar
+    properties:
+      cid: toolbarCt
+      frame: 'true'
+      layout: grid1
+    text: toolbarCt
+  - _expanded: true
+    _icon: title
+    cls: Wb.Title
+    properties:
+      cid: menuTitle
+      title: Menu
+    text: menuTitle
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _expanded: true
+      _icon: toolbar
+      cls: Wb.Toolbar
+      items:
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        items:
+        - _expanded: true
+          _icon: menu2
+          cls: Wb.Menu
+          items:
+          - _expanded: true
+            _icon: item
+            cls: Wb.Item
+            properties:
+              cid: iconItem
+              icon: briefcase
+              text: Menu item 1
+            text: iconItem
+          - _expanded: true
+            _icon: item
+            cls: Wb.Item
+            properties:
+              cid: imgItem
+              img: sitemap
+              text: Menu item 1
+            text: imgItem
+          - _icon: divider
+            cls: Wb.Divider
+            properties:
+              cid: divider1
+            text: divider1
+          - _expanded: true
+            _icon: item
+            cls: Wb.Item
+            properties:
+              cid: disabledItem
+              disabled: 'true'
+              icon: download
+              text: Disabled
+            text: disabledItem
+          - _expanded: true
+            _icon: container
+            cls: Wb.Container
+            items:
+            - _expanded: true
+              _icon: slidebar
+              cls: Wb.Slider
+              properties:
+                cid: fsSlider
+                flex: '1'
+                focusable: 'false'
+                maxValue: '50'
+                minValue: '12'
+                tabIndex: 'null'
+                text: '@Str.fontSize'
+              text: fsSlider
+            - _icon: button
+              cls: Wb.Button
+              properties:
+                cid: resetBtn
+                focusable: 'false'
+                icon: refresh
+                tabIndex: undefined
+                tip: '@Str.reset'
+                type: tool
+              text: resetBtn
+            properties:
+              cid: container1
+              cls: w-mi-margin
+              gap: .2em
+              layout: row
+            text: container1
+          - _expanded: true
+            _icon: item
+            cls: Wb.Item
+            events:
+              click: Wb.tip(this.cid + ' clicked');
+            properties:
+              cid: bindKeyItem
+              keys: Ctrl+L
+              text: Bind key item
+            text: bindKeyItem
+          - _icon: space
+            cls: Wb.Space
+            properties:
+              cid: space1
+            text: space1
+          - _expanded: true
+            _icon: item
+            cls: Wb.Item
+            items:
+            - _expanded: true
+              _icon: menu2
+              cls: Wb.Menu
+              items:
+              - _expanded: false
+                _icon: item
+                cls: Wb.Item
+                properties:
+                  cid: item1
+                  text: Item 1
+                text: item1
+              - _expanded: false
+                _icon: item
+                cls: Wb.Item
+                properties:
+                  cid: item2
+                  text: Item 2
+                text: item2
+              - _expanded: true
+                _icon: item
+                cls: Wb.Item
+                properties:
+                  cid: item3
+                  text: Item 3
+                text: item3
+              properties:
+                cid: menu
+                isProperty: 'true'
+              text: menu
+            properties:
+              cid: subMenuItem
+              text: Sub menu
+            text: subMenuItem
+          properties:
+            cid: menu
+            isProperty: 'true'
+          text: menu
+        properties:
+          cid: item1
+          text: Menu Item
+        text: item1
+      properties:
+        cid: toolbar1
+        frame: 'true'
+        layout: center
+      text: toolbar1
+    - _expanded: true
+      _icon: button
+      cls: Wb.Button
+      items:
+      - _expanded: true
+        _icon: menu2
+        cls: Wb.Menu
+        items:
+        - _expanded: false
+          _icon: item
+          cls: Wb.Item
+          events:
+            checkchange: Wb.tip(this.cid + ' checked is ' + checked);
+          properties:
+            checked: 'false'
+            cid: uncheckItem
+            text: Unchecked item
+          text: uncheckItem
+        - _expanded: false
+          _icon: item
+          cls: Wb.Item
+          properties:
+            checked: 'true'
+            cid: checkedItem
+            text: Checked Item
+          text: checkedItem
+        - _icon: line
+          cls: Wb.Line
+          properties:
+            cid: line1
+          text: line1
+        - _expanded: true
+          _icon: item
+          cls: Wb.Item
+          properties:
+            checkGroup: group1
+            checked: 'true'
+            cid: groupedItem1
+            text: Grouped item1
+          text: groupedItem1
+        - _expanded: true
+          _icon: item
+          cls: Wb.Item
+          properties:
+            checkGroup: group1
+            checked: 'false'
+            cid: groupedItem2
+            text: Grouped item2
+          text: groupedItem2
+        - _expanded: true
+          _icon: item
+          cls: Wb.Item
+          properties:
+            checkGroup: group1
+            checked: 'false'
+            cid: groupedItem3
+            text: Grouped item3
+          text: groupedItem3
+        - _expanded: true
+          _icon: line
+          cls: Wb.Line
+          properties:
+            cid: line2
+          text: line2
+        - _expanded: true
+          _icon: item
+          cls: Wb.Item
+          properties:
+            cid: ellipsisItem
+            ellipsis: 'true'
+            text: Ellipsis Item (means to show dialog)
+          text: ellipsisItem
+        - _expanded: true
+          _icon: line
+          cls: Wb.Line
+          properties:
+            cid: line3
+          text: line3
+        - _expanded: true
+          _icon: item
+          cls: Wb.Item
+          events:
+            click: Wb.tip('clicked');
+          properties:
+            cid: noHideItem
+            clickHide: 'false'
+            text: Click not to hide menu
+          text: noHideItem
+        properties:
+          cid: menu
+          isProperty: 'true'
+        text: menu
+      properties:
+        cid: menuButton
+        icon: menu
+        text: Menu Button
+      text: menuButton
+    - _expanded: true
+      _icon: container
+      cls: Wb.Container
+      items:
+      - _expanded: true
+        _icon: menu2
+        cls: Wb.Menu
+        items:
+        - _expanded: true
+          _icon: item
+          cls: Wb.Item
+          properties:
+            cid: item1
+            icon: book1
+            text: Menu item 1
+          text: item1
+        - _expanded: true
+          _icon: item
+          cls: Wb.Item
+          properties:
+            cid: item2
+            text: Menu item 2
+          text: item2
+        - _expanded: false
+          _icon: item
+          cls: Wb.Item
+          properties:
+            cid: item3
+            text: Menu item 3
+          text: item3
+        properties:
+          cid: contextMenu
+          isProperty: 'true'
+        text: contextMenu
+      properties:
+        cid: contextMenuCt
+        frame: 'true'
+        height: 5em
+        layout: center
+        padding: 'true'
+        text: Please click the mouse context menu button to show context menu
+        textSelectable: 'false'
+        width: 20em
+      text: contextMenuCt
+    - _expanded: true
+      _icon: container
+      cls: Wb.Container
+      properties:
+        cid: sharedContextMenuCt1
+        contextMenu: app.sharedContextMenu
+        frame: 'true'
+        height: 5em
+        layout: center
+        padding: 'true'
+        text: Shared context menu comp1
+      text: sharedContextMenuCt1
+    - _expanded: true
+      _icon: container
+      cls: Wb.Container
+      properties:
+        cid: sharedContextMenuCt2
+        contextMenu: app.sharedContextMenu
+        frame: 'true'
+        height: 5em
+        layout: center
+        padding: 'true'
+        text: Shared context menu comp2
+      text: sharedContextMenuCt2
+    - _expanded: true
+      _icon: toolbar
+      cls: Wb.Toolbar
+      items:
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        items:
+        - _expanded: true
+          _icon: menu2
+          cls: Wb.Menu
+          items:
+          - _expanded: true
+            _icon: item
+            cls: Wb.Item
+            properties:
+              cid: item1
+              text: Menu item 1
+            text: item1
+          - _expanded: true
+            _icon: item
+            cls: Wb.Item
+            properties:
+              cid: item2
+              text: Menu item 2
+            text: item2
+          - _expanded: false
+            _icon: item
+            cls: Wb.Item
+            properties:
+              cid: item3
+              text: Menu item 3
+            text: item3
+          properties:
+            cid: menu
+            isProperty: 'true'
+          text: menu
+        properties:
+          cid: item1
+          icon: card
+        text: item1
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        items:
+        - _expanded: true
+          _icon: menu2
+          cls: Wb.Menu
+          items:
+          - _expanded: true
+            _icon: item
+            cls: Wb.Item
+            properties:
+              cid: item1
+              text: Menu item 1
+            text: item1
+          - _expanded: true
+            _icon: item
+            cls: Wb.Item
+            properties:
+              cid: item2
+              text: Menu item 2
+            text: item2
+          - _expanded: false
+            _icon: item
+            cls: Wb.Item
+            properties:
+              cid: item3
+              text: Menu item 3
+            text: item3
+          properties:
+            cid: menu
+            isProperty: 'true'
+          text: menu
+        properties:
+          cid: item2
+          icon: grid
+        text: item2
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        items:
+        - _expanded: true
+          _icon: menu2
+          cls: Wb.Menu
+          items:
+          - _expanded: true
+            _icon: item
+            cls: Wb.Item
+            properties:
+              cid: item1
+              text: Menu item 1
+            text: item1
+          - _expanded: true
+            _icon: item
+            cls: Wb.Item
+            properties:
+              cid: item2
+              text: Menu item 2
+            text: item2
+          - _expanded: false
+            _icon: item
+            cls: Wb.Item
+            properties:
+              cid: item3
+              text: Menu item 3
+            text: item3
+          properties:
+            cid: menu
+            isProperty: 'true'
+          text: menu
+        properties:
+          cid: item3
+          icon: text1
+        text: item3
+      properties:
+        alignSelf: start
+        cid: menuToolbar
+        defaults: '({ alignSelf: ''start'', menu: { defaultAlign: ''tl-tr?'', defaultOffset:
+          [3, 0] } })'
+        fontSize: 1.6em
+        frame: 'true'
+        layout: column
+        plainIcon: 'true'
+      text: menuToolbar
+    properties:
+      cid: menuCt
+      frame: 'true'
+      layout: form
+    text: menuCt
+  properties:
+    cid: viewport1
+    layout: grid1
+  text: viewport1
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

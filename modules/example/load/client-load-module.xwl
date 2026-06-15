@@ -1,0 +1,264 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: mainLabel
+      cls: w-title3
+      text: Client load module, js, mjs and css
+    text: mainLabel
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: openModuleTitle
+      title: Open module
+    text: openModuleTitle
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: openModuleLabel
+      text: Open module in "main tab" or new window.
+    text: openModuleLabel
+  - _icon: button
+    cls: Wb.Button
+    events:
+      click: |-
+        //equals to:  Wb.run({ url: 'm?xwl=admin/role', container: Globals.WbMainTab, title: 'custom title', icon: 'gear' });
+        Wb.open('m?xwl=admin/role');
+    properties:
+      cid: openModuleBtn
+      text: Open module
+      type: primary
+    text: openModuleBtn
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: openNormalModuleTitle
+      title: Open module as "normal type"
+    text: openNormalModuleTitle
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: openNormalModuleLabel
+      text: Open module in "main tab" or new window, and allow the page to reload/refresh.
+    text: openNormalModuleLabel
+  - _icon: button
+    cls: Wb.Button
+    events:
+      click: |-
+        //equals to:  Wb.run({ url: 'm?xwl=admin/perm', container: Globals.WbMainTab, allowRefresh: true });
+        Wb.openNormal('m?xwl=admin/perm');
+    properties:
+      cid: openNormalModuleBtn
+      text: Open module as "normal type"
+      type: primary
+    text: openNormalModuleBtn
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: runModulePanelTitle
+      title: Run module and get panel
+    text: runModulePanelTitle
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: runModulePanelLabel
+      text: Run module and get it's content to the container.
+    text: runModulePanelLabel
+  - _icon: button
+    cls: Wb.Button
+    events:
+      click: |-
+        let ct = app.runModulePanelCt;
+        ct.destroyAll();
+        Wb.run({
+          url: xpath + '/panel',
+          success(scope) {
+            ct.add(scope.main);
+          }
+        });
+    properties:
+      cid: runModulePanelBtn
+      text: Run module
+      type: primary
+    text: runModulePanelBtn
+  - _icon: container
+    cls: Wb.Container
+    properties:
+      cid: runModulePanelCt
+      frame: 'true'
+      minHeight: 10em
+    text: runModulePanelCt
+  - _expanded: true
+    _icon: title
+    cls: Wb.Title
+    properties:
+      cid: runModuleCardTitle
+      title: Run module and get tab card
+    text: runModuleCardTitle
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: runModuleCardLabel
+      text: Run module and get it's content to the new tab card.
+    text: runModuleCardLabel
+  - _icon: button
+    cls: Wb.Button
+    events:
+      click: |-
+        let card;
+
+        app.cardIndex ??= 1;
+        card = app.runModuleCardTab.add({ title: 'Card ' + app.cardIndex++, icon: 'card', layout: 'fit' }).show();
+        Wb.run({
+          url: xpath + '/card',
+          app, // pass app as parentApp, the sub module can be referred to the parent module
+          owner: card, // pass card as owner of module card.xwl, when the card is destroyed, the module will be automatically destroyed
+          cached: true, // store the module to the cache, enables the next request to fetch directly from the cache
+          success(scope) {
+            card.add(scope.panel1);
+            scope.init(); // call init function defined in card.xwl
+            //app.cardModule = scope; // save scope to app for further access, eg: app.cardModule.text1 = 'abc';
+          }
+        });
+    properties:
+      cid: runModuleCardBtn
+      text: Run module
+      type: primary
+    text: runModuleCardBtn
+  - _expanded: true
+    _icon: tab
+    cls: Wb.Tab
+    properties:
+      cid: runModuleCardTab
+      frame: 'true'
+      minHeight: 10em
+    text: runModuleCardTab
+  - _expanded: true
+    _icon: title
+    cls: Wb.Title
+    properties:
+      cid: invokeWindowTitle
+      title: Invoke window
+    text: invokeWindowTitle
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: invokeWindowLabel
+      text: Invoke a common window and pass callback function as parameter.
+    text: invokeWindowLabel
+  - _icon: button
+    cls: Wb.Button
+    events:
+      click: |-
+        Wb.run({
+          url: xpath + '/common-window',
+          owner: 'window1', //destroy the module when window1 is destroyed
+          success(scope) {
+            scope.add(3, 5, (total, win) => {
+              Wb.tip('Total value is: ' + total);
+              win.close();
+            });
+          }
+        });
+    properties:
+      cid: invokeWindowBtn
+      text: Invoke window
+      type: primary
+    text: invokeWindowBtn
+  - _expanded: true
+    _icon: title
+    cls: Wb.Title
+    properties:
+      cid: invokeSingleModuleTitle
+      title: Invoke single module
+    text: invokeSingleModuleTitle
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: invokeSingleModuleLabel
+      text: Invoke a single module and pass callback function as parameter.
+    text: invokeSingleModuleLabel
+  - _icon: button
+    cls: Wb.Button
+    events:
+      click: |-
+        Wb.run({
+          url: xpath + '/single-window',
+          single: true, //single instance module
+          success(scope) {
+            scope.add(3, 5, (total, win) => {
+              Wb.tip('Total value is: ' + total);
+              win.close();
+            });
+          }
+        });
+    properties:
+      cid: invokeSingleBtn
+      text: Invoke single module
+      type: primary
+    text: invokeSingleBtn
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: dynamicLoadJsCssTitle
+      title: Dynamic load js/css
+    text: dynamicLoadJsCssTitle
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: dynamicLoadJsCssLabel
+      text: Use [Wb.load] method to dynamic load js/css resources. Set the [links]
+        property of the module node to static load js/mjs/css resources, you can drag
+        js/mjs/css files to the [links] property directly.
+    text: dynamicLoadJsCssLabel
+  - _icon: button
+    cls: Wb.Button
+    events:
+      click: |-
+        Wb.load(
+          ['wb/css/demo.css', { url: 'wb/libs/echarts.js', async: true }],
+          f => Wb.tipSucc('The js/css resources has been successfully loaded.')
+        );
+        // Promise style
+        // Wb.loadx(['wb/css/demo.css', { url: 'wb/libs/echarts.js', async: true }]).then(
+        //   f => Wb.tipSucc('The js/css resources has been successfully loaded.'));
+    properties:
+      cid: dynamicLoadJsCssBtn
+      text: Dynamic load JS/CSS
+      type: primary
+    text: dynamicLoadJsCssBtn
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: importMJSLabel
+      text: Dynamic import Javascript module.
+    text: importMJSLabel
+  - _icon: button
+    cls: Wb.Button
+    events:
+      click: '//Wb.loadModule(xpath + ''/demo'', module => Wb.tip(''The result is:
+        '' + module.Demo.add(3, 4)));'
+    properties:
+      cid: importMJSBtn
+      text: Dynamic import mjs
+      type: primary
+    text: importMJSBtn
+  properties:
+    cid: viewport1
+    layout: grid1
+  text: viewport1
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

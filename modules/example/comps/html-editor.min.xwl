@@ -1,0 +1,17 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: 'Wb.make(app,{cname:"viewport",layout:"fit",cid:"viewport1",items:[{cname:"htmlEditor",wrapBorder:false,value:''<p>\n  <strong
+    class="ql-font-Arial ql-size-p16" style="color: fuchsia;">Rich</strong>\n  <u
+    class="ql-font-Impact ql-size-p28" style="color: lime;">Text</u>\n  <em class="ql-size-p36
+    ql-font-Times-New-Roman" style="color: blue;">Editor</em>\n</p>'',cid:"htmlEditor1"}]});'
+hideInMenu: 'false'
+icon: file-html
+img: ''
+properties:
+  cid: module
+  links: '["wb/libs/quill.css","wb/libs/quill.js"]'
+tags: ''
+text: module
+title: ''

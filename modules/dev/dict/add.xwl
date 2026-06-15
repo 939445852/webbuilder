@@ -1,0 +1,23 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Add dictionary item
+  serverScript: |-
+    function main() {
+      const Util = Wb.load('./util.mjs');
+      let rec = { sid: Wb.getId() };
+
+      Util.checkDuplicate(Params.name, Params.group_name);
+      Wb.set(rec);
+      Wb.sync({ tableName: 'wb_dict', insert: Params });
+      Util.updateBuffer();
+      Wb.send(rec);
+    }
+    main();
+tags: ''
+text: module
+title: ''

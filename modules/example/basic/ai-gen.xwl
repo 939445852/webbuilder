@@ -1,0 +1,191 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: mainLabel
+      cls: w-title3
+      text: AI Automatically Generates
+    text: mainLabel
+  - _icon: label
+    cls: Wb.Label
+    events:
+      click: |-
+        if (e.target.getAttribute('sid') == 'aiGen') {
+          if (parentApp?.inIDE) {
+            parentApp.aiTab.show();
+            parentApp.aiTextArea.focus();
+            parentApp.aiTextArea.highlight();
+          } else {
+            Wb.openWin('ide?aiGen=1');
+          }
+        }
+    properties:
+      cid: descLabel
+      html: |-
+        In the [<span class="w-link" sid="aiGen">AI-Gen</span>] tab at the bottom of the IDE, you can automatically generate
+        applications via AI. First select a target directory in the file tree, then enter a prompt similar to the example below
+        in the [Prompt] text box on the right, and the system will generate the application automatically.
+    text: descLabel
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: calculatorTitle
+      title: Create a calculator
+    text: calculatorTitle
+  - _expanded: true
+    _icon: edit
+    cls: Wb.CodeEditor
+    properties:
+      cid: calculatorEditor
+      height: 3em
+      language: txt
+      minimap: 'false'
+      readonly: 'true'
+      value: Create a calculator
+    text: calculatorEditor
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: crudTitle
+      title: Create CRUD application
+    text: crudTitle
+  - _expanded: true
+    _icon: edit
+    cls: Wb.CodeEditor
+    properties:
+      cid: crudEditor
+      height: 23em
+      language: sql
+      minimap: 'false'
+      readonly: 'true'
+      value: |-
+        Create a CRUD application based on the following table:
+        create table wb_staff
+        (
+          sid varchar(13) not null,
+          code varchar(5) not null,
+          full_name varchar(50) not null,
+          user_id varchar(13) not null,
+          dept_id varchar(13) not null,
+          birth_date timestamp,
+          gender numeric(1),
+          height numeric(3),
+          email varchar(50),
+          salary numeric(8,2),
+          cv clob,
+          photo blob
+        )
+    text: crudEditor
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: imageTitle
+      title: Create application from screenshot
+    text: imageTitle
+  - _expanded: true
+    _icon: edit
+    cls: Wb.CodeEditor
+    properties:
+      cid: imageEditor
+      height: 4em
+      language: txt
+      minimap: 'false'
+      readonly: 'true'
+      value: |-
+        Create an application based on the interface shown in the screenshot.
+        (Need to upload the screenshot)
+    text: imageEditor
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: checkTitle
+      title: Check file code issues
+    text: checkTitle
+  - _expanded: true
+    _icon: edit
+    cls: Wb.CodeEditor
+    properties:
+      cid: checkEditor
+      height: 4em
+      language: txt
+      minimap: 'false'
+      readonly: 'true'
+      value: |-
+        Check the code of these files and report any existing issues.
+        (Upload the list of xwl/js/mjs/css/sql and other files)
+    text: checkEditor
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: modifyTitle
+      title: Modify XWL module
+    text: modifyTitle
+  - _expanded: true
+    _icon: edit
+    cls: Wb.CodeEditor
+    properties:
+      cid: modifyEditor
+      height: 4em
+      language: txt
+      minimap: 'false'
+      readonly: 'true'
+      value: |-
+        Remove the delete button and move the search box to the right, and create a new user.xwl.
+        (Upload the user.xwl module)
+    text: modifyEditor
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: descTitle
+      title: Describe XWL
+    text: descTitle
+  - _expanded: true
+    _icon: edit
+    cls: Wb.CodeEditor
+    properties:
+      cid: descEditor
+      height: 4em
+      language: txt
+      minimap: 'false'
+      readonly: 'true'
+      value: |-
+        Describe the functions of the role.xwl and user.xwl modules respectively.
+        (Upload the role.xwl and user.xwl module)
+    text: descEditor
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: reactTitle
+      title: Create React UI
+    text: reactTitle
+  - _expanded: true
+    _icon: edit
+    cls: Wb.CodeEditor
+    properties:
+      cid: reactEditor
+      height: 4em
+      language: txt
+      minimap: 'false'
+      readonly: 'true'
+      value: Build a beautiful login page module with React UI; toolbar buttons need
+        to retrieve form data inside the login page.
+    text: reactEditor
+  properties:
+    cid: viewport1
+    layout: grid1
+  text: viewport1
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

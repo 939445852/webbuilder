@@ -1,0 +1,1 @@
+class Util{static getFireTime(e){let t=JobUtil.findTrigger(e);return{previous_time:Date.from(t?.getPreviousFireTime())??null,next_time:Date.from(t?.getNextFireTime())??null}}}export default Util;

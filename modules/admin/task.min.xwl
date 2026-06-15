@@ -1,0 +1,35 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.apply(app,{isStartup:_$isStartup$_,setStatus(e){let t=app.grid1,r=t.selections;if(!r.length){Wb.tipSelect();return}r=r.filter((t=>t.data.status!=e));if(!r.length)return;Wb.ajax({url:xpath+"/set-status",json:true,params:{update:r.pluck("originData"),status:e},success(t){r.forEach(((r,a)=>{t[a].status=e;r.update(t[a])}))}})},setStartStopBtn(){let
+    e=app.isStartup,t=app.startStopBtn;t.icon=e?"stop":"play";t.text=e?Str.stop:Str.start}});Wb.make(app,{cname:"window",icon:"task",layout:"form1",resetDialog:true,tableStyle:true,width:"70em",cid:"editWin",items:[{cname:"text",required:true,cid:"job_name",text:Str.name},{cname:"controlCt",layout:"grid1",text:Str.interval,required:true,cid:"intervalCt",gap:".5em",items:[{cname:"radioGroup",layout:"row",cid:"interval_type",gap:"2em",events:{change(e){let
+    t=this.value;app.interval_value.visible=[0,1,2].includes(t);app.trigger_time.visible=t>2&&t<7;app.trigger_weekday.visible=t==4;app.trigger_day.visible=t==5||t==6;app.trigger_month.visible=t==6;app.cron_express.visible=t==7}},items:[{cname:"radio",cid:"secondRadio",label:Str.s},{cname:"radio",cid:"minuteRadio",label:Str.m},{cname:"radio",cid:"hourRadio",label:Str.h},{cname:"radio",cid:"dayRadio",label:Str.day},{cname:"radio",cid:"weekRadio",label:Str.week},{cname:"radio",cid:"monthRadio",label:Str.month},{cname:"radio",cid:"yearRadio",label:Str.year},{cname:"radio",cid:"cronRadio",label:"Cron"}]},{cname:"container",layout:"row",cid:"valuesCt",gap:true,items:[{cname:"number",width:"15em",minValue:1,text:Str.every,decimalCount:0,required:true,cid:"interval_value"},{cname:"select",forceSelect:true,text:Str.month,data:(e=>{let
+    t=new Date(2022,0,1),r,a=[],i=new Intl.DateTimeFormat(Str.lang,{month:"long"});for(r=0;r<12;r++)a.push({text:i.format(t.addMonth(r)),value:r+1});return
+    a})(),required:true,cid:"trigger_month"},{cname:"select",width:"15em",forceSelect:true,text:Str.week,data:(e=>{let
+    t=new Date(2022,10,6),r,a=[],i=new Intl.DateTimeFormat(Str.lang,{weekday:"long"});for(r=0;r<7;r++)a.push({text:i.format(t.addDay(r)),value:r+1});return
+    a})(),required:true,cid:"trigger_weekday"},{cname:"number",minValue:-31,maxValue:31,validator(e){if(e==0)return
+    Str.invalidDate.format(e)},width:"10em",text:Str.day,required:true,cid:"trigger_day"},{cname:"time",width:"15em",text:Str.time,required:true,cid:"trigger_time"},{cname:"text",text:Str.expression,flex:1,required:true,cid:"cron_express"}]}]},{cname:"controlCt",cid:"durationCt",gap:true,text:Str.duration,items:[{cname:"datetime",cid:"begin_date",text:Str.from},{cname:"datetime",cid:"end_date",text:Str.to}]},{cname:"controlCt",layout:"row",text:Str.options,cid:"optionCt",gap:"2em",items:[{cname:"toggle",value:true,cid:"status",text:Str.enabled},{cname:"toggle",value:true,cid:"concurrent",text:Str.concurrent},{cname:"toggle",cid:"auto_removed",text:Str.oneTimeTask}]},{cname:"text",cid:"job_desc",text:Str.desc},{cname:"controlCt",layout:"fit",minHeight:"15em",padding:0,flex:1,text:Str.script,required:true,cid:"scriptCt",items:[{cname:"codeEditor",minimap:false,required:true,cid:"server_script"}]}]});Wb.make(app,{cname:"viewport",autoContextMenu:true,layout:"fit",cid:"viewport1",tbar:{cname:"toolbar",items:[{icon:"add",text:Str.add,keys:"Ctrl+E",cid:"addBtn",events:{click(e,t){let
+    r=app.interval_type;app.grid1.insertRecord({url:xpath+"/add",failure(e){Wb.checkExists(e,"wb_job_job_name",app.job_name)}},app.editWin);if(r.value==-1)r.value=3}}},{icon:"edit",text:Str.edit,keys:"Ctrl+J",cid:"editBtn",events:{click(e,t){app.grid1.editRecord({url:xpath+"/edit",failure(e){Wb.checkExists(e,"wb_job_job_name",app.job_name)}},app.editWin,"job_name")}}},{icon:"delete",text:Str.del,keys:"Ctrl+D",cid:"delBtn",events:{click(e,t){app.grid1.removeRecords(xpath+"/del","job_name")}}},{cname:"divider",cid:"divider1"},{icon:"pause",cid:"pauseBtn",text:Str.pause,events:{click(e,t){app.setStatus(false)}}},{icon:"resume",cid:"resumeBtn",text:Str.resume,events:{click(e,t){app.setStatus(true)}}},{cname:"divider",cid:"divider2"},{cid:"startStopBtn",events:{click(e,t){Wb.confirm(Str.doConfirm.format(app.startStopBtn.text),(e=>{Wb.ajax({url:xpath+"/start-stop-task",params:{status:!app.isStartup},success(){app.isStartup=!app.isStartup;app.setStartStopBtn();app.grid1.reload()}})}))},ready(e,t){app.setStartStopBtn()}}},{cname:"divider",cid:"divider3"},{cname:"text",minWidth:"5em",clearButton:true,placeholder:Str.search,flex:1,cid:"search",maxWidth:"20em",events:{change(e,t,r){app.grid1.delayLoad({comps:app.search})}}}]},items:[{cname:"grid",columnsSortable:true,keyFields:"sid,status",stateData:"_$004V7KE4QVEXC$_",stateId:"wb.task",sorters:"job_name",url:xpath+"/select",cid:"grid1",multiSelect:true,columns:[{cname:"column",cid:"numCol",rowNum:true},{cname:"column",width:"15em",fieldName:"job_name",text:Str.name,render(e,t,r,a){a.insertCellIcon(t.status?t.next_time?"play":"ok":"delete",e)},cid:"nameCol"},{cname:"column",width:"17em",fieldName:"interval_type",text:Str.interval,align:"left",render(e,t,r,a){let
+    i=t.interval_value,d=" ("+t.trigger_time?.timeText+")",n,c;switch(e){case 0:return
+    Str.every+" "+i+" "+Str.s;case 1:return Str.every+" "+i+" "+Str.m;case 2:return
+    Str.every+" "+i+" "+Str.h;case 3:return Str.every+' "'+Str.day+'" '+d;case 4:n=t.trigger_weekday;return
+    Str.every+' "'+app.trigger_weekday.data.find((e=>e.value==n)).text+'"'+d;case
+    5:return Str.every+' "'+Str.month+'" '+t.trigger_day+d;case 6:c=t.trigger_month;return
+    Str.every+' "'+app.trigger_month.data.find((e=>e.value==c)).text+'" '+t.trigger_day+d;case
+    7:return t.cron_express}},cid:"intervalCol"},{cname:"column",fieldName:"previous_date",width:"17em",autoWrap:"pre",sortable:false,text:Str.runTime,render(e,t,r,a){return
+    Str.previous+Str.labelSeparator+(t.previous_time?.dateTimeText||"")+"\n"+Str.next+Str.labelSeparator+(t.next_time?.dateTimeText||"")},cid:"runTimeCol"},{cname:"column",width:"17em",autoWrap:"pre",fieldName:"begin_date",text:Str.duration,render(e,t,r,a){return
+    Str.from+Str.labelSeparator+(e?.dateTimeText||"")+"\n"+Str.to+Str.labelSeparator+(t.end_date?.dateTimeText||"")},cid:"durationCol"},{cname:"column",width:-1,fieldName:"job_desc",sortable:false,text:Str.desc,cid:"descCol"}],events:{itemdblclick(e,t,r){app.editBtn.fireEvent("click")}}}]});
+hideInMenu: 'false'
+icon: task
+img: ''
+properties:
+  cid: module
+  links: '["wb/js/monaco.js"]'
+  remark: Scheduled task management tool
+  serverScript: function main(){Wb.set("isStartup",JobUtil.isStartup())}main();
+stateMap:
+  wb.task: 004V7KE4QVEXC
+tags: ''
+text: module
+title: '@taskMng'

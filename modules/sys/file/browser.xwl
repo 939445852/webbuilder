@@ -1,0 +1,879 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: |-
+    /*
+     * Xwl comments.
+     * @class $path
+     */
+    Wb.define(app, {
+      /** @property {Object} - Server params. */
+      params: _$params$_,
+      /** @property {String} - The URL used to get the files path. */
+      getFileUrl: 'm?xwl=sys/file/get',
+      /** @property {Boolean} - File tree raw path. */
+      set$rawPath(value) {
+        app.rawPath$ = value;
+        value ??= '';
+        app.basePath = value.includes('|') ? value.replace('|', app.params.appPath) : value;
+        app.rootPath = Wb.getParentDirectory(app.basePath);
+      },
+      get$rawPath() {
+        return app.rawPath$;
+      },
+      /** @property {String} - The base path of the tree. */
+      basePath: '',
+      /** @property {String} - The parent of the base path. */
+      rootPath: '',
+      /** @property {Array} - Path back list. @priv */
+      backList: [],
+      /** @property {Array} - Path forward list. @priv */
+      forwardList: [],
+      /** @property {String} - Current node path. @priv */
+      get$currentPath() {
+        return app.selNode.getPath(null, '|');
+      },
+      /** @property {String} - Current file path. @priv */
+      get$filePath() {
+        return app.selNode.data.path;
+      },
+      /** @property {Wb.TreeItem} - Current select node. @priv */
+      get$selNode() {
+        return app.fileTree.selection;
+      },
+      /**
+       * Go to the specified folder path.
+       * @param {String} path The folder path.
+       * @param {Function} Callback function after operation completion.
+       */
+      goto(path, callback) {
+        app.fileTree.selectPath(app.toTreePath(path), callback, null, '|');
+      },
+      /**
+       * Convert file path to tree path. @priv
+       * @return {String} Tree path.
+       */
+      toTreePath(path) {
+        if (path.endsWith('/'))
+          path = path.slice(0, -1);
+        path = path.split('/');
+        if (!app.rootPath && !path[0].endsWith('/'))
+          path[0] += '/';
+        return path.join('|');
+      },
+      /**
+       * Select a node.
+       * @param {TreeItem} node The node to be selected.
+       */
+      selectNode(node) {
+        let path = node.data.path;
+        app.fileGrid.load({ params: { path: path } });
+        app.upItem.disabled = !node.parent?.isNode;
+        if (path.occur('/') > 1 && path.endsWith('/'))
+          path = path.slice(0, -1);
+        app.pathSelect.value = app.getRelPath(path);
+      },
+      /**
+       * Add a new file or folder to the current folder. @priv
+       * @param {String} filename File or folder name.
+       * @param {Boolean} [isFolder] Whether is folder to be added. Default is false.
+       */
+      addFile(isFolder) {
+        Wb.prompt({ title: isFolder ? Str.addFolder : Str.addFile, icon: isFolder ? 'folder1' : 'file' },
+          { text: Str.name, required: true, cid: 'filename' }, function (values, win) {
+            Wb.ajax({
+              url: 'm?xwl=sys/file/add',
+              json: true,
+              params: { path: app.filePath, filename: values.filename, isFolder },
+              success(resp) {
+                let newItem = Wb.apply({ text: values.filename, size: isFolder ? null : 0, _leaf: !isFolder }, resp);
+
+                if (!newItem._leaf)
+                  newItem.path += '/';
+                app.fileGrid.addData(newItem).select();
+                if (isFolder && app.selNode?.loaded) {
+                  newItem.items = [];
+                  app.selNode.addData(newItem);
+                }
+                win.close();
+              }
+            });
+          });
+      },
+      /**
+       * Import files to the current folder.
+       * @param {Boolean} [unzip] Whether to unzip after import.
+       */
+      importFiles(unzip) {
+        let node = app.selNode, params = app.params, items, win;
+
+        items = [{
+          text: Str.file, cid: 'files', multiple: true, required: true, cname: 'fileInput',
+          browseMode: true, flex: 1, minHeight: '5em'
+        }];
+        items.push({
+          cid: 'charset', cname: 'select', text: Str.charset, value: params.sysFilenameCharset,
+          data: ['UTF-8', params.charset, params.osCharset, params.fileCharset, params.filenameCharset].filter(a => a).unique()
+        });
+        win = Wb.prompt({
+          title: (unzip ? Str.importUnzip : Str.import) + ' - ' + node.text, autoGrid: 'up', layout: 'form1', icon: 'import'
+        }, items, (values, win) => {
+          app.doImport(win, unzip, f => win.close(), values.charset);
+        }, 'wb.file.import');
+        win.down('charset').visible = unzip;
+      },
+      /**
+       * Download the selected files.
+       * @param {Boolean} [zip] Whether to zip before export.
+       */
+      exportFiles(zip) {
+        let items = app.fileGrid.selectionsData;
+        if (items.length)
+          Wb.download('m?xwl=sys/file/export-files', { files: items.pluck('path'), zip }, 'POST');
+        else
+          Wb.tipSelect();
+      },
+      /**
+       * Do import files. @priv
+       * @param {Wb.Component/Wb.Component[]} comps Import components.
+       * @param {Boolean} unzip Whether to unzip after import.
+       * @param {Function} callback The callback function.
+       * @param {String} charset The file name charset.
+       */
+      doImport(comps, unzip, callback, charset) {
+        let node = app.selNode;
+
+        Wb.ajax({
+          url: 'm?xwl=sys/file/import-files&mode=list',
+          comps,
+          uploadProgress: true,
+          json: true,
+          params: { path: node.data.path, unzip, charset },
+          success(resp) {
+            let newNodes, fileGrid = app.fileGrid, newItems = [];
+
+            newNodes = resp.filter(item => !fileGrid.some(sub => sub.data.text == item.text));
+            newNodes.forEach(item => newItems.push(Wb.applyWithout({}, item, 'items')));
+            fileGrid.addData(newItems)
+            fileGrid.selection = fileGrid.filter(sub => resp.some(item => item.text == sub.data.text));
+            if (node.loaded) {
+              newNodes = resp.filter(item => !item._leaf && !node.some(sub => sub.text == item.text));
+              node.addData(newNodes);
+            }
+            callback?.();
+          }
+        });
+      },
+      /**
+       * Copy or cut the selected files.
+       * @param {Event} e Event object.
+       * @param {Boolean} [cut] Whether to cut.
+       */
+      copy(e, cut) {
+        if (!document.activeElement.isInput) {
+          let files = app.fileGrid.selectionsData;
+          if (files.length) {
+            app.clipboard = files.pluck('path');
+            app.isCut = cut;
+          } else
+            Wb.tipSelect();
+          e.stopEvent();
+        }
+      },
+      /**
+       * Get relative path base on the root path.
+       * @param {String} path Full path.
+       * @return {String} Relative path.
+       */
+      getRelPath(path) {
+        let rootPath = app.rootPath, len = rootPath.length;
+
+        if (len) {
+          if (rootPath.includes('|'))
+            len = len + app.params.appPath.length;
+          path = path.substr(len);
+          if (path.startsWith('/'))
+            path = path.substr(1);
+          return path;
+        } else {
+          return path;
+        }
+      },
+      /**
+       * File grid double click handler.  @priv
+       * @param {Object} data The item data.
+       */
+      onGridDblClick(data) {
+        let path = data.path, title = Wb.getFilename(path), tip = path;
+        Wb.open({
+          url: Wb.isImageFile(path) ? 'image-viewer' : 'text-editor', title, tip, params: { path }
+        });
+      }
+    });
+hideInMenu: 'false'
+icon: ''
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  events:
+    ready: |-
+      let el = this.el;
+
+      app.fileGrid.contextMenu = Wb.createMenu(app.viewport1.tbar[0].items);
+      app.fileInput = new Wb.FileInput({ cid: 'files', multiple: true, visible: false, renderEl: BodyEl });
+      el.ondragover = Event.pdHandler;
+      el.ondrop = e => {
+        let fileInput = app.fileInput;
+
+        e.stopEvent();
+        fileInput.clear();
+        fileInput.addFile(e.dataTransfer.files);
+        app.doImport(fileInput);
+      };
+  items:
+  - _expanded: true
+    _icon: array
+    cls: Wb.Array
+    items:
+    - _expanded: true
+      _icon: toolbar
+      cls: Wb.Toolbar
+      items:
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        events:
+          click: app.addFile();
+        properties:
+          bindModule: sys/file/add.xwl
+          cid: addFileBtn
+          icon: file
+          keys: Ctrl+J
+          text: '@Str.addFile'
+        text: addFileBtn
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        events:
+          click: app.addFile(true);
+        properties:
+          bindModule: sys/file/add.xwl
+          cid: addFolderBtn
+          icon: folder1
+          keys: Ctrl+Shift+J
+          text: '@Str.addFolder'
+        text: addFolderBtn
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        events:
+          click: |-
+            if (document.activeElement.isInput)
+              return;
+            let fileGrid = app.fileGrid, row = fileGrid.selection, oldName, path, selNode = app.selNode;
+
+            if (!row) {
+              Wb.tipSelect();
+              return;
+            }
+            oldName = row.data.text;
+            fileGrid.startEdit(row, 'text', (value, row) => {
+              if (row.text != value) {
+                path = row.data.path;
+                app.isRenaming = true;
+                Wb.ajax({
+                  url: 'm?xwl=sys/file/set-property',
+                  json: true,
+                  params: { rename: true, path, filename: value },
+                  callback(resp, xhr) {
+                    if (xhr.ok) {
+                      let update = item => {
+                        item.set({
+                          text: value, path: resp.path + (item.data._leaf ? '' : '/'),
+                          lastModified: new Date(resp.lastModified).textValue
+                        });
+                      }
+                      update(row);
+                      if (!row.data._leaf) {
+                        row = selNode.findItem('text', oldName);
+                        if (row) {
+                          let newPath, len;
+
+                          len = row.data.path.length;
+                          update(row);
+                          newPath = row.data.path;
+                          row.cascade(node => {
+                            node.data.path = newPath + node.data.path.substr(len);
+                          });
+                        }
+                      }
+                    }
+                    if (app.pendSelNode) {
+                      app.selectNode(app.pendSelNode);
+                      app.pendSelNode = null;
+                    }
+                    app.isRenaming = false;
+                  }
+                });
+              }
+              return false;
+            });
+            Wb.Editor.activeEditor.select(0, oldName.lastIndexOf('.'));
+        properties:
+          bindModule: sys/file/set-property.xwl
+          cid: renameBtn
+          icon: edit
+          keys: F2
+          stopEvent: 'false'
+          text: '@Str.rename'
+        text: renameBtn
+      - _expanded: true
+        _icon: divider
+        cls: Wb.Divider
+        properties:
+          cid: divider1
+        text: divider1
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        events:
+          click: app.copy(e, true);
+        properties:
+          bindModule: sys/file/paste-files.xwl
+          cid: cutBtn
+          icon: cut
+          keys: Ctrl+X
+          stopEvent: 'false'
+          text: '@Str.cut'
+        text: cutBtn
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        events:
+          click: app.copy(e);
+        properties:
+          bindModule: sys/file/paste-files.xwl
+          cid: copyBtn
+          icon: copy
+          keys: Ctrl+C
+          stopEvent: 'false'
+          text: '@Str.copy'
+        text: copyBtn
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        events:
+          click: |-
+            function paste() {
+              let files = app.clipboard;
+              if (document.activeElement.isInput || !files?.length)
+                return;
+
+              let path = app.filePath, isCut = app.isCut, conflictFile, fromPath;
+
+              if (isCut) {
+                let firstFile = files[0];
+                fromPath = Wb.getParentDirectory(firstFile);
+                if (fromPath == path) {
+                  //same parent
+                  app.clipboard = null;
+                  return;
+                }
+              }
+              // check paste conflict
+              conflictFile = files.find(file => file.endsWith('/') && path.startsWith(file));
+              if (conflictFile) {
+                Wb.warn(Str.cannotPaste.format(conflictFile));
+                return;
+              }
+              if (isCut)
+                app.clipboard = null;
+              Wb.ajax({
+                url: 'm?xwl=sys/file/paste-files&mode=list',
+                json: true,
+                params: { source: files, isCut, dest: path },
+                success(resp) {
+                  let newNodes, fileGrid = app.fileGrid, newFiles = resp.files;
+
+                  app.selNode.addData(newFiles.filter(item => !item._leaf));
+                  newFiles.forEach(item => delete item.data);
+                  newNodes = fileGrid.addData(newFiles);
+                  fileGrid.selection = newNodes;
+                  if (isCut) {
+                    let node = app.fileTree.findPath(app.toTreePath(app.getRelPath(fromPath)), null, '|')
+                    if (node) {
+                      if (node.loaded) {
+                        node.each(child => {
+                          if (files.includes(child.data.path))
+                            child.destroy();
+                        }, true, true);
+                      } else {
+                        if (!resp.hasFolder)
+                          node.removeExpander();
+                      }
+                    }
+                  }
+                }
+              });
+            }
+            paste();
+        properties:
+          bindModule: sys/file/paste-files.xwl
+          cid: pasteBtn
+          icon: paste
+          keys: Ctrl+V
+          stopEvent: 'false'
+          text: '@Str.paste'
+        text: pasteBtn
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        events:
+          click: |-
+            let fileGrid = app.fileGrid, files = fileGrid.selectionsData;
+            if (files.length) {
+              Wb.confirm(Wb.getActionHint(files, 'text'), f => {
+                files = files.pluck('path');
+                Wb.ajax({
+                  url: 'm?xwl=sys/file/remove',
+                  params: { files },
+                  success() {
+                    let selNode = app.selNode;
+
+                    fileGrid.delRecords();
+                    if (selNode.loaded) {
+                      selNode.each(item => {
+                        if (files.includes(item.data.path))
+                          item.destroy();
+                      }, true, true);
+                    } else if (!fileGrid.some(item => !item.data._leaf)) {
+                      selNode.removeExpander();
+                    }
+                  }
+                });
+              });
+            } else {
+              Wb.tipSelect();
+            }
+        properties:
+          bindModule: sys/file/remove.xwl
+          cid: delBtn
+          icon: delete
+          keys: Shift+Delete
+          text: '@Str.del'
+        text: delBtn
+      - _expanded: true
+        _icon: divider
+        cls: Wb.Divider
+        properties:
+          cid: divider2
+        text: divider2
+      - _expanded: false
+        _icon: split
+        cls: Wb.SplitButton
+        events:
+          click: app.exportFiles();
+        items:
+        - _expanded: true
+          _icon: menu2
+          cls: Wb.Menu
+          items:
+          - _expanded: false
+            _icon: item
+            cls: Wb.Item
+            events:
+              click: app.exportFiles(true);
+            properties:
+              cid: exportZip
+              text: '@Str.exportZip'
+            text: exportZip
+          properties:
+            cid: menu
+            isProperty: 'true'
+          text: menu
+        properties:
+          bindModule: sys/file/export-files.xwl
+          cid: exportBtn
+          icon: export
+          text: '@Str.export'
+        text: exportBtn
+      - _expanded: false
+        _icon: split
+        cls: Wb.SplitButton
+        events:
+          click: app.importFiles();
+        items:
+        - _expanded: true
+          _icon: menu2
+          cls: Wb.Menu
+          items:
+          - _expanded: true
+            _icon: item
+            cls: Wb.Item
+            events:
+              click: app.importFiles(true);
+            properties:
+              cid: importUnzip
+              text: '@Str.importUnzip'
+            text: importUnzip
+          properties:
+            cid: menu
+            isProperty: 'true'
+          text: menu
+        properties:
+          bindModule: sys/file/import-files.xwl
+          cid: importBtn
+          icon: import
+          text: '@Str.import'
+        text: importBtn
+      - _expanded: true
+        _icon: divider
+        cls: Wb.Divider
+        properties:
+          cid: divider3
+        text: divider3
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        events:
+          click: app.fileTree.loadSelect();
+        properties:
+          cid: refreshBtn
+          icon: refresh
+          text: '@Str.refresh'
+        text: refreshBtn
+      properties:
+        cid: bar1
+        isProperty: 'true'
+      text: bar1
+    - _expanded: true
+      _icon: toolbar
+      cls: Wb.Toolbar
+      items:
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        events:
+          click: |-
+            let backList = app.backList, path = backList.pop();
+            app.forwardList.push(app.currentPath);
+            app.stopHistory = true;
+            app.fileTree.selectPath(path, null, null, '|');
+            app.stopHistory = false;
+            app.backBtn.disabled = !backList.length;
+            app.forwardBtn.disabled = false;
+        properties:
+          cid: backBtn
+          disabled: 'true'
+          icon: left4
+          text: '@Str.back'
+        text: backBtn
+      - _expanded: false
+        _icon: item
+        cls: Wb.Item
+        events:
+          click: |-
+            let forwardList = app.forwardList, path = forwardList.pop();
+            app.backList.push(app.currentPath);
+            app.stopHistory = true;
+            app.fileTree.selectPath(path, null, null, '|');
+            app.stopHistory = false;
+            app.forwardBtn.disabled = !forwardList.length;
+            app.backBtn.disabled = false;
+        properties:
+          cid: forwardBtn
+          disabled: 'true'
+          icon: right4
+          text: '@Str.forward'
+        text: forwardBtn
+      - _expanded: false
+        _icon: divider
+        cls: Wb.Divider
+        properties:
+          cid: divider1
+        text: divider1
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        events:
+          click: app.fileTree.selection = app.selNode.parent;
+        properties:
+          cid: upItem
+          disabled: 'true'
+          icon: up4
+          text: '@Str.up'
+        text: upItem
+      - _expanded: true
+        _icon: divider
+        cls: Wb.Divider
+        properties:
+          cid: divider2
+        text: divider2
+      - _expanded: true
+        _icon: combo
+        cls: Wb.Select
+        events:
+          keydown: |-
+            if (e.isGoKey) {
+              app.pathSelect.triggers.fireEvent('click');
+              app.pathSelect.collapse();
+              e.stopEvent();
+            }
+          select: app.goto(data.text);
+        items:
+        - _expanded: true
+          _icon: item
+          cls: Wb.Item
+          events:
+            click: |-
+              let select = this.parent, path = select.value, text, data = select.data;
+              text = path.replaceAll('\\', '/');
+              app.goto(text, node => {
+                if (node) {
+                  if (!data.some(item => item.text == text))
+                    data.insert(0, { text });
+                } else {
+                  Wb.tipWarn(Str.notFound.format(path));
+                }
+              });
+          properties:
+            cid: triggers
+            icon: right4
+            isProperty: 'true'
+            tip: '@Str.goto'
+          text: triggers
+        properties:
+          cid: pathSelect
+          data: app.params.pathList
+          flex: '1'
+          minWidth: 10em
+          selectMode: 'false'
+        text: pathSelect
+      properties:
+        cid: bar2
+        isProperty: 'true'
+      text: bar2
+    properties:
+      cid: tbar
+    text: tbar
+  - _expanded: true
+    _icon: tree-view
+    cls: Wb.Tree
+    events:
+      beforeload: |-
+        let basePath = app.basePath;
+        if (!configs.node && basePath) {
+          let rootPath = app.rootPath;
+          params.path = rootPath;
+          params.filterName = Wb.getFilename(app.basePath) || app.basePath;
+        }
+      beforeselect: |-
+        let node = this.selection;
+        if (node && !app.stopHistory) {
+          let path = node.getPath(null, '|'), backList = app.backList;
+          if (backList.lastItem != path)
+            backList.push(path);
+          app.backBtn.disabled = false;
+        }
+      selectionchange: |-
+        if (app.isRenaming) {
+          app.pendSelNode = app.selNode;
+          return false;
+        }
+        app.selectNode(app.selNode);
+    properties:
+      autoLoad: '@!Wb.parseBool(''_$dialog$_'')'
+      autoSelect: 'true'
+      cid: fileTree
+      keyWalking: 'true'
+      url: '@app.getFileUrl+''&type=tree'''
+      width: 18em
+    text: fileTree
+  - _icon: splitter
+    cls: Wb.Splitter
+    properties:
+      cid: splitter1
+    text: splitter1
+  - _expanded: true
+    _icon: grid
+    cls: Wb.Grid
+    events:
+      beforeload: |-
+        /**
+         * Set sorter params.
+         */
+        function setSorterParams() {
+          let sorter = app.fileGrid.sorters, sortMap = { text: 'name', type: 'type', size: 'size', lastModified: 'date' };
+
+          if (Wb.isString(sorter))
+            sorter = { name: sorter, desc: false };
+          params.sort = sortMap[sorter.name];
+          params.desc = sorter.desc;
+          params.filterExt = app.extNames;
+        }
+        setSorterParams();
+      itemdblclick: |-
+        let data = item.data;
+        if (data._leaf) {
+          app.onGridDblClick(data);
+        } else {
+          app.selNode.selectChild(data.text);
+        }
+      selectionchange: |-
+        let sels = this.selections, hint, len = sels.length;
+
+        if (len) {
+          hint = Str.nItems.format(len);
+          if (sels.some(item => item.data._leaf)) {
+            let total = 0;
+
+            sels.forEach(item => {
+              if (item.data._leaf)
+                total += item.data.size;
+            });
+            hint += ', ' + Str.size + Str.labelSeparator + total.fileSize + ' (' + total.intText + ')';
+          }
+        }
+        else {
+          hint = '';
+        }
+        app.fileLabel.text = hint;
+    items:
+    - _expanded: true
+      _icon: array
+      cls: Wb.Array
+      items:
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: rowNumCol
+          rowNum: 'true'
+        text: rowNumCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        items:
+        - _expanded: true
+          _icon: text
+          cls: Wb.Text
+          properties:
+            cid: editor
+            isProperty: 'true'
+            required: 'true'
+            valueType: filename
+          text: editor
+        properties:
+          cid: nameCol
+          fieldName: text
+          text: '@Str.name'
+          width: 18em
+        text: nameCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: dateCol
+          fieldName: lastModified
+          text: '@Str.modifiedDate'
+          width: 12em
+        text: dateCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: typeCol
+          fieldName: type
+          render: 'return data._leaf ? Wb.getFileExt(data.text) : Str.folder;'
+          text: '@Str.type'
+          width: 8em
+        text: typeCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: sizeCol
+          fieldName: size
+          text: '@Str.size'
+          type: fileSize
+          width: 8em
+        text: sizeCol
+      properties:
+        cid: columns
+      text: columns
+    - _icon: pagenum
+      cls: Wb.PagingBar
+      events:
+        ready: 'app.fileLabel = this.insert(2, [''->'', { cname: ''label'' }, ''|''])[1];'
+      properties:
+        cid: pagingBar
+        isProperty: 'true'
+        totalOnly: 'true'
+      text: pagingBar
+    properties:
+      autoLoad: 'false'
+      cid: fileGrid
+      columnsSortable: 'true'
+      fields: |-
+        ({
+          lastModified: { type: 'date' }, _icon: {
+            convert(value, data) {
+              return data._leaf ? Wb.getFileIcon(data.text) : 'folder1';
+            }
+          }
+        })
+      flex: '1'
+      gridLine: 'false'
+      keyWalking: 'true'
+      multiSelect: 'true'
+      pageSize: '-1'
+      rectSelect: 'true'
+      showIcon: 'true'
+      sorters: text
+      stateId: wb.file
+      stripeRows: 'false'
+      url: '@app.getFileUrl+''&type=file'''
+    text: fileGrid
+  properties:
+    cid: viewport1
+    layout: row
+  text: viewport1
+properties:
+  cid: module
+  remark: File browser shell
+  serverScript: |-
+    Wb.checkDemo();
+    /**
+     * Initialize file module.
+     */
+    function init() {
+      let realPath = Base.realPath, props = System.getProperties(), pathList, getPath = FileUtil.getPath;
+
+      pathList = [];
+      pathList.pushIf(
+        realPath ? getPath(realPath) : null,
+        Base.pathText,
+        getPath(props.getProperty('java.home')),
+        getPath(props.getProperty('user.home')),
+        getPath(props.getProperty('user.dir')),
+        getPath(props.getProperty('java.io.tmpdir'))
+      );
+      pathList = pathList.unique();
+      pathList.forEach((item, i) => item?.endsWith('/') && (pathList[i] = item.slice(0, -1)));
+      Params.params = Wb.encode({
+        pathList,
+        appPath: Base.pathText,
+        osCharset: Base.osCharset?.toUpperCase(),
+        charset: System.getProperty('file.encoding')?.toUpperCase(),
+        fileCharset: Wb.getConfig('sys.file.charset')?.toUpperCase(),
+        filenameCharset: Wb.getConfig('sys.locale.filenameCharset')?.toUpperCase(),
+        sysFilenameCharset: SysUtil.filenameCharset?.name()?.toUpperCase(),
+      });
+    }
+    init();
+tags: ''
+text: module
+title: ''

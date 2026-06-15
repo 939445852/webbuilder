@@ -1,0 +1,14 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Table select, save and download
+  serverScript: function main(){if(Params.download||Params.save)Wb.sync(Params);else{const
+    a=Wb.load("./util.mjs");let e="select * from "+Params.tableName;if(Params.where)e+="
+    where "+Wb.decodeBase64(Params.where);e+=Wb.getOrderSql();Wb.sendRowx({sql:e,db:Params.db,dateFormat:true,rs:a.maxRows,paging:Wb.getBool("useDbPaging")?"db":true})}}main();
+tags: ''
+text: module
+title: ''

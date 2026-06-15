@@ -1,0 +1,63 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Select my flow list
+  serverScript: |-
+    function main() {
+      let sql, result, userid = Wb.userid;
+
+      sql = `select a.sid,a.user_id,a.start_time,a.title,a.status,a.node_name,a.node_text,a.tpl_file,d.display_name,
+            b.status as user_status,b.user_type,b.node_name as user_node_name from
+            wb_flow a,
+            wb_flow_user b,
+            (select flow_id,max(accept_time) as accept_time from wb_flow_user where user_id={?sys.userid?} group by flow_id) c,
+            wb_user d
+            where a.sid=b.flow_id and b.flow_id=c.flow_id and b.accept_time=c.accept_time and b.user_id={?sys.userid?} and a.user_id=d.sid`;
+      sql += getTypeSql(Params.type);
+      if (Params.search) {
+        Wb.setLike('search');
+        sql += ' and a.title like {?search?}';
+      };
+      sql += Wb.getOrderSql({ display_name: 'd.display_name', $: 'a' });
+      result = Wb.getRowx({ sql });
+      result.items.forEach(item => item.initiate = item.user_id == userid ? 1 : 0);
+      Wb.send(result);
+    }
+    /**
+     * Get select type sql clause.
+     * @param {String} type Select type.
+     */
+    function getTypeSql(type) {
+      switch (type) {
+        case 'initiated':
+          return ' and a.user_id={?sys.userid?}';
+        case 'pendHandle':
+          return ' and a.status=1 and b.status<2 and b.user_type<2 and a.node_name=b.node_name';
+        case 'handled':
+          return ' and b.status>1';
+        case 'pass':
+          return ' and b.status=2';
+        case 'reject':
+          return ' and b.status=3';
+        case 'back':
+          return ' and b.status=4';
+        case 'transfer':
+          return ' and b.status=5';
+        case 'signBefore':
+          return ' and b.status=6';
+        case 'signAfter':
+          return ' and b.status=7';
+        case 'backed':
+          return ' and b.status=8';
+        default:
+          return '';
+      }
+    }
+    main();
+tags: ''
+text: module
+title: ''

@@ -1,0 +1,13 @@
+{
+  "title": "",
+  "icon": "",
+  "img": "",
+  "hideInMenu": "false",
+  "items": [
+    "index.xwl",
+    "home.xwl",
+    "home",
+    "reset-passwords.xwl",
+    "reset-passwords"
+  ]
+}

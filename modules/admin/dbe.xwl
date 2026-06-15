@@ -1,0 +1,1014 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  beforeunload: |-
+    if (!app.saveAllBtn.disabled) {
+      let card = app.tab.find(card => card.isModified), btn = card?.tabButton;
+      if (card) {
+        card.show();
+        btn.highlight();
+        return false;
+      }
+    }
+  initialize: |-
+    Wb.define(app, {
+      /** @property {Number} - The current window number. */
+      index: 1,
+      /** @property {Boolean} - Max returned rows. */
+      maxRows: 1000,
+      /**
+       * Get the currently open tab card.
+       * @return {Wb.Card} The active card.
+       */
+      get$activeCard() {
+        return app.tab.activeCard;
+      },
+      /**
+       * Get the currently open grid.
+       * @return {Wb.Grid} The active grid.
+       */
+      get$activeGrid() {
+        let card = app.activeCard, grid = card?.tab1?.activeCard?.firstItem ?? card?.firstItem;
+        return grid?.isGrid ? grid : null;
+      },
+      /**
+       * Get the currently open editable grid.
+       * @return {Wb.Grid} The edited grid.
+       */
+      get$editGrid() {
+        let grid = app.activeCard?.firstItem;
+        return grid instanceof Wb.Grid ? grid : null;
+      },
+      /**
+       * Adds a new SQL tab for the specified data source.
+       * @param {String} [sql] SQL statements. null does not update the SQL statement.
+       * @param {String} [db] The name of the data source. The default is the currently selected data source name.
+       * @param {Boolean} [newWin] If a window with the same data source already exists, a new window opens. The
+       * default is true.
+       */
+      addSql(sql, db, newWin = true) {
+        let card, editor;
+
+        db ||= app.getKeyName('db');
+        if (!newWin) {
+          card = app.tab.findBy(card => card.db == db && card.sqlCard);
+          if (card) {
+            card.show();
+            if (sql != null)
+              card.editor1.value = sql;
+            return;
+          }
+        }
+        card = {
+          title: 'SQL' + (app.index++) + ' - ' + db,
+          db,
+          sqlCard: true,
+          icon: 'file-sql',
+          layout: 'column',
+          events: {
+            destroy() {
+              this.stopShowError = true;
+              this.ajaxObject?.abort();
+            }
+          },
+          items: [{
+            cname: 'codeEditor',
+            wrapBorder: 0,
+            sqlDb: db,
+            height: '9em',
+            cid: 'editor1',
+            language: 'sql',
+            value: sql ?? '',
+            popupMenu: true,
+            editorConfigs: {
+              minimap: { enabled: false }
+            }
+          }, '||', {
+            flex: 1,
+            cid: 'tab1',
+            cname: 'tab',
+            tabMenu: true,
+            defaults: { closable: null },
+            autoScroll: true,
+            events: {
+              cardchange() {
+                app.propBtn.disabled = !app.activeGrid;
+                app.setExportBtn();
+              }
+            }
+          }]
+        };
+        card = app.tab.add(card);
+        editor = card.editor1 = card.down('editor1');
+        card.tab1 = card.down('tab1');
+        editor.editor.addAction({
+          id: 'runSql',
+          keybindings: [
+            monaco.KeyMod.CtrlCmd | (monaco.KeyCode.Enter)
+          ],
+          label: Str.runSql,
+          run() {
+            app.runSql(card);
+          }
+        });
+        card.show();
+        editor.focus();
+      },
+      /**
+       * Fire after the grid callback.
+       */
+      onGridCallback() {
+        let card = this.parent;
+        if (card) {
+          card.isLoading = false;
+          app.setLoading.cancelDelay(app);
+          app.setLoading(card, false);
+        }
+      },
+      /**
+       * Fires before the grid loads.
+       */
+      onGridBeforeLoad(configs, params) {
+        let grid = this, card = grid.parent;
+        if (card.isLoading)
+          return;
+        if (card.isModified) {
+          Wb.choose(Str.modifiedConfirm.format(card.tableName), btn => {
+            if (btn == 'yes')
+              app.doSave(card, f => grid.reload());
+            else if (btn == 'no') {
+              Wb.unModified(card);
+              app.setSaveBtns();
+              grid.reload();
+            }
+          });
+          return false;
+        }
+        params.useDbPaging = app.dbPagingBtn.active;
+        app.setLoading.delay(app, Wb.configs.maskDelay, card, true);
+        card.isLoading = true;
+      },
+      /**
+       * Fires when grid data is changed. @priv
+       */
+      onChange() {
+        let me = this, activeCard = app.activeCard, card = me.upBy(p => p.gridCard);
+        if (card) {
+          Wb.setModified(card);
+          app.saveAllBtn.disabled = false;
+          if (card == activeCard)
+            app.saveBtn.disabled = false;
+        }
+      },
+      /**
+       * Sets the save button state.
+       */
+      setSaveBtns() {
+        app.saveBtn.disabled = !app.activeCard?.isModified;
+        app.saveAllBtn.disabled = !app.tab.find(card => card.isModified);
+      },
+      /**
+       * Opens the specified db table for editing.
+       * @param {String} [tableName] The table name to open. Default is currently selected table.
+       * @param {String} [schem] Schem name. The default is the currently selected schem.
+       * @param {String} [db] The name of the data source. The default is the currently selected data source name.
+       * @param {Boolean} [isView] Whether is db view.
+       */
+      openTable(tableName, schem, db, isView) {
+        let card, configs, fullTableName;
+
+        tableName ||= app.getKeyName('tableName');
+        db ||= app.getKeyName('db');
+        schem ||= app.getKeyName('schem');
+        card = app.tab.findBy(card => card.tableName == tableName && card.schem == schem && card.db == db);
+        if (card) {
+          card.show();
+          return;
+        }
+        fullTableName = schem ? (schem + '.' + tableName) : tableName;
+        configs = {
+          title: tableName,
+          xIsView: isView,
+          tabTip: fullTableName + ' - ' + db,
+          tableName,
+          fullTableName,
+          schem,
+          db,
+          gridCard: true,
+          icon: isView ? 'viewport' : 'table',
+          layout: 'fit',
+          events: {
+            beforeclose() {
+              return this.confirmClose(app.doSave);
+            }
+          },
+          items: {
+            cname: 'grid',
+            cid: 'grid1',
+            url: xpath + '/select-table',
+            contextMenu: app.contextMenu,
+            columnsSortable: true,
+            textSelectable: isView,
+            multiSelect: true,
+            exportFilename: tableName,
+            params: { db, tableName: fullTableName, maxRows: app.maxRows },
+            editable: !isView,
+            autoLoad: false,
+            showMask: false,
+            enterAsTab: true,
+            arrowDownAppend: true,
+            events: {
+              beforeload: app.onGridBeforeLoad,
+              callback: app.onGridCallback,
+              editing: app.onChange,
+              itemchange: app.onChange
+            }
+          }
+        };
+        card = app.tab.add(configs);
+        card.grid1 = card.down('grid1');
+        card.show();
+        card.grid1.load();
+      },
+      /**
+       * Gets the key properties of the currently selected node.
+       * @return {String} [name] The property name. Not found returns null.
+       */
+      getKeyName(name) {
+        return app.tree.selection?.upBy(node => node.isNode && node.data[name])?.data[name] ?? null;
+      },
+      /**
+       * Gets the category of the current node.
+       * @return {String} Node category. Not found returns null.
+       */
+      get$category() {
+        return app.tree.selection?.upBy(node => node.isNode && node.data.cateNode)?.data.type ?? null;
+      },
+      /**
+       * Fires when the page is ready.
+       */
+      onReady() {
+        app.tab.setNavigate(app.backBtn, app.forwardBtn);
+        app.contextMenu = Wb.createMenu([app.addBtn, app.delBtn], false);
+      },
+      /**
+       * Adds the SQL execution result to the specified container. @priv
+       * @param {Wb.Tab} tab The container to render data.
+       * @param {String} title The title.
+       * @param {Object} result Render data.
+       */
+      addResult(tab, title, result) {
+        let items = result?.items;
+        if (Wb.isArray(items)) {
+          tab.add({
+            icon: 'grid', title, layout: 'fit', items: {
+              cname: 'grid', columns: result.columns, fields: result.fields, localData: items,
+              textSelectable: true, editable: true
+            }
+          });
+        } else {
+          if (Wb.isObject(result) || Wb.isArray(result))
+            result = Wb.encode(result);
+          else
+            result = String(result);
+          tab.add({ icon: 'component', cls: 'w-padding', autoScroll: true, title, text: result });
+        }
+      },
+      /**
+       * Gets the editor that currently using.
+       * @return {Wb.CodeEditor} The active editor.
+       */
+      get$activeEditor() {
+        return app.tab.activeCard?.editor1;
+      },
+      /**
+       * Sets the loading status of the specified tab. @priv
+       * @param {Wb.Card} card The tab card.
+       * @param {Boolean} status True means loading, false means loading complete.
+       */
+      setLoading(card, status) {
+        let isSqlCard = card.editor1;
+
+        card.icon = status ? 'loading' : (isSqlCard ? 'file-sql' : 'table');
+        card.spin = status;
+      },
+      /**
+       * Runs SQL statements in the specified tab card.
+       * @param {Wb.Card} card The tab card for running sql.
+       * @param {Boolean} [blob] Whether to return blobs.
+       */
+      runSql(card, blob) {
+        if (card.isLoading) {
+          Wb.tipWarn(Str.loading);
+          return;
+        }
+        let editor = card.editor1, tab = card.tab1, sql;
+
+        editor.completeEdit();
+        card.isLoading = true;
+        app.setLoading.delay(app, Wb.configs.maskDelay, card, true);
+        tab.destroyAll();
+        sql = editor.selectedText || editor.value;
+        card.lastSql = sql;
+        card.ajaxObject = Wb.ajax({
+          url: xpath + '/execute-sql',
+          params: {
+            blob,
+            maxRows: app.maxRows,
+            db: card.db,
+            //Prevent potential SQL blocking
+            data: Wb.encodeBase64(sql)
+          },
+          mask: false,
+          json: true,
+          showError: false,
+          callback() {
+            let xhr = card.ajaxObject;
+
+            if (!card.stopShowError && !xhr.ok)
+              Wb.Request.processError(xhr);
+            delete card.ajaxObject;
+            card.isLoading = false;
+            app.setLoading.cancelDelay(app);
+            app.setLoading(card, false);
+          },
+          success(resp) {
+            let hasResult;
+            //Get the results of returns
+            resp.$return?.forEach((item, i) => {
+              hasResult = true;
+              app.addResult(tab, Str.itemX.format(i + 1), item);
+            });
+            //Get output parameters and other results
+            Wb.each(resp, (k, v) => {
+              if (k != '$return') {
+                hasResult = true;
+                app.addResult(tab, k, v);
+              }
+            });
+            if (!hasResult)
+              tab.add({ text: Str.done, cls: 'w-padding' });
+            //hides tabBar if only has one item
+            tab.tabBar.visible = tab.items.length > 1;
+            tab.firstItem?.show();
+          }
+        });
+      },
+      /**
+       * Saves the data for the specified tab. @priv
+       * @param {Wb.Card} card Tab card.
+       * @param {Function} [success] Fires after success.
+       */
+      doSave(card, success) {
+        let grid = card.grid1;
+
+        grid.completeEdit();
+        grid.sync({
+          params: { save: 1 },
+          success() {
+            Wb.unModified(card);
+            app.setSaveBtns();
+            success?.();
+          }
+        });
+      },
+      /**
+       * Save data.
+       * @param {Boolean} [isAll] whether to save all.
+       */
+      save(isAll) {
+        if (isAll) {
+          app.tab.each(card => {
+            if (card.isModified)
+              app.doSave(card);
+          });
+        } else {
+          app.doSave(app.activeCard);
+        }
+      },
+      /**
+       * Rename the selected node.
+       * @param {Boolean} [uppercase] Whether to change the value to uppercase.
+       * -true: change to uppercase.
+       * -false: change to lowercase.
+       * -null: not change. Default value.
+       */
+      rename(uppercase) {
+        let tree = app.tree, row = tree.selection, editor;
+
+        if (!row) {
+          Wb.tipSelect();
+          return;
+        }
+        tree.startEdit(row, 'text', f => false);
+        editor = Wb.Editor.activeEditor;
+        if (uppercase != null) {
+          let value = editor.value;
+          editor.value = uppercase ? value.toUpperCase() : value.toLowerCase();
+        }
+        editor.select();
+      },
+      /**
+       * Import file to the specified table. @priv
+       */
+      importTable() {
+        let card = app.activeCard, tableName = card.fullTableName;
+
+
+        Wb.selectFile(file => {
+          Wb.ajax({
+            url: xpath + '/import',
+            params: { db: card.db, tableName, file },
+            uploadProgress: Str.import + ' - ' + tableName + '...',
+            success() {
+              card.grid1.reload();
+            }
+          });
+        }, '.wbt, .xls, .xlsx, .csv, .txt');
+      },
+      /**
+       * Set export button status.
+       */
+      setExportBtn() {
+        let card = app.activeCard;
+        app.exportBtn.disabled = !(app.activeGrid && (!card.sqlCard || card.tab1.items.length == 1));
+      },
+      /**
+       * Export all data to "wbt" format file.
+       */
+      exportData() {
+        let card = app.activeCard, params = { db: card.db }, tableName;
+
+        if (card.sqlCard) {
+          const regex = /(?:FROM|JOIN|INTO)\s+([\w.]+)/gi;
+          let sql = card.lastSql, match;
+          while ((match = regex.exec(sql))) {
+            tableName = match[1];
+            break;
+          }
+          tableName ||= 'data';
+          params.data = Wb.encodeBase64(sql);
+        } else {
+          tableName = card.fullTableName;
+        }
+        params.tableName = tableName;
+        Wb.download(xpath + '/export', params);
+      }
+    });
+hideInMenu: 'false'
+icon: database
+img: ''
+items:
+- _expanded: true
+  _icon: window
+  cls: Wb.Window
+  events:
+    ok: |-
+      let where = app.activeCard.whereSql = app.sqlEditor.value;
+      app.editGrid.load({ params: { where: Wb.encodeBase64(where) } });
+      this.close();
+    ready: |-
+      let me = this;
+      me.buttonsBar.insert(0, [{
+        text: Str.reset, handler() {
+          app.sqlEditor.value = '';
+          me.downWhole('ok').fireEvent('click');
+        }
+      }, '->'])
+  items:
+  - _icon: edit
+    cls: Wb.CodeEditor
+    properties:
+      cid: sqlEditor
+      language: sql
+      lineNumbers: 'false'
+      minimap: 'false'
+    text: sqlEditor
+  properties:
+    cid: filterWin
+    dialog: 'true'
+    height: 15em
+    icon: filter
+    layout: fit
+    title: '@Str.filter'
+    width: 40em
+  text: filterWin
+- _expanded: true
+  _icon: window
+  cls: Wb.Window
+  items:
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _expanded: true
+      _icon: text
+      cls: Wb.Text
+      properties:
+        cid: tableName
+        readonly: 'true'
+        text: '@Str.table'
+      text: tableName
+    - _icon: text
+      cls: Wb.Text
+      properties:
+        cid: fieldNamesText
+        flex: '1'
+        readonly: 'true'
+        text: '@Str.fields'
+      text: fieldNamesText
+    properties:
+      cid: container1
+      gap: 'true'
+      layout: row
+    text: container1
+  - _expanded: true
+    _icon: grid
+    cls: Wb.Grid
+    items:
+    - _expanded: true
+      _icon: array
+      cls: Wb.Array
+      items:
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: rowCol
+          rowNum: 'true'
+        text: rowCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: fieldNameCol
+          fieldName: fieldName
+          text: '@Str.name'
+          width: '-1'
+        text: fieldNameCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: typeCol
+          fieldName: typeName
+          text: '@Str.type'
+          width: 10em
+        text: typeCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          align: right
+          cid: precisionCol
+          fieldName: precision
+          text: '@Str.size'
+          width: 10em
+        text: precisionCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          align: right
+          cid: scaleCol
+          fieldName: scale
+          text: '@Str.decimal'
+          width: 10em
+        text: scaleCol
+      properties:
+        cid: columns
+      text: columns
+    properties:
+      cid: propGrid
+      flex: '1'
+      pagingBar: 'false'
+      showIcon: 'true'
+      textSelectable: 'true'
+    text: propGrid
+  properties:
+    cid: propWin
+    gap: 'true'
+    icon: property
+    layout: column
+    modal: 'true'
+    padding: 'true'
+    title: '@Str.property'
+    width: 80em
+  text: propWin
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  events:
+    ready: app.onReady();
+  items:
+  - _expanded: false
+    _icon: toolbar
+    cls: Wb.Toolbar
+    items:
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: app.addSql();
+      properties:
+        cid: newSqlBtn
+        icon: file-sql
+        keys: Ctrl+J
+        text: '@Str.newSql'
+      text: newSqlBtn
+    - _expanded: true
+      _icon: split
+      cls: Wb.SplitButton
+      events:
+        click: app.runSql(app.activeCard);
+      items:
+      - _expanded: true
+        _icon: menu2
+        cls: Wb.Menu
+        items:
+        - _expanded: true
+          _icon: item
+          cls: Wb.Item
+          events:
+            click: app.runSql(app.activeCard, true);
+          properties:
+            cid: getBlobBtn
+            icon: cube
+            text: '@Str.runSqlBlob'
+          text: getBlobBtn
+        properties:
+          cid: menu
+          isProperty: 'true'
+        text: menu
+      properties:
+        cid: runSqlBtn
+        disabled: 'true'
+        icon: play
+        keysText: Ctrl+Enter
+        text: '@Str.runSql'
+      text: runSqlBtn
+    - _icon: divider
+      cls: Wb.Divider
+      properties:
+        cid: divider1
+      text: divider1
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: |-
+          let grid = app.editGrid;
+          grid.addRecord(null, e.ctrlMeta ? grid.selection : null);
+      properties:
+        cid: addBtn
+        disabled: 'true'
+        icon: add
+        keys: Ctrl+E
+        menuText: '@Str.add'
+        tip: '@Str.add'
+      text: addBtn
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: app.editGrid.delRecords();
+      properties:
+        cid: delBtn
+        disabled: 'true'
+        icon: delete
+        keys: Ctrl+D
+        menuText: '@Str.del'
+        tip: '@Str.del'
+      text: delBtn
+    - _expanded: false
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: app.save();
+      properties:
+        cid: saveBtn
+        disabled: 'true'
+        icon: save
+        keys: Ctrl+S
+        tip: '@Str.save'
+      text: saveBtn
+    - _expanded: false
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: app.save(true);
+      properties:
+        cid: saveAllBtn
+        disabled: 'true'
+        icon: save-all
+        keys: Ctrl+Shift+S
+        tip: '@Str.saveAll'
+      text: saveAllBtn
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: |-
+          app.filterWin.show();
+          app.sqlEditor.value = app.activeCard.whereSql ?? '';
+      properties:
+        cid: filterBtn
+        disabled: 'true'
+        icon: filter
+        tip: '@Str.filter'
+      text: filterBtn
+    - _expanded: true
+      _icon: divider
+      cls: Wb.Divider
+      properties:
+        cid: divider2
+      text: divider2
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: |-
+          let item, data = [], fieldNames = [], tableName;
+          app.activeGrid.leafColumns.forEach(col => {
+            if (col.rowNum) return;
+            item = Wb.applyWith({}, col, ['typeName', 'precision', 'scale', 'required']);
+            item.fieldName = col.rawName ?? col.fieldName;
+            fieldNames.push(item.fieldName);
+            item._icon = col.required ? 'ok' : 'item';
+            data.push(item);
+          });
+          app.propGrid.data = data;
+          tableName = app.activeCard.tableName;
+          app.tableName.visible = tableName;
+          app.tableName.value = tableName;
+          app.fieldNamesText.value = fieldNames.join(', ');
+          app.propWin.show();
+          app.propWin.center();
+      properties:
+        cid: propBtn
+        disabled: 'true'
+        icon: property
+        tip: '@Str.property'
+      text: propBtn
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      items:
+      - _expanded: true
+        _icon: menu2
+        cls: Wb.Menu
+        items:
+        - _expanded: true
+          _icon: slidebar
+          cls: Wb.Slider
+          events:
+            enddrag: |-
+              app.maxRows = value;
+              app.maxRowsBtn.tip = Str.maxRecords + ' (' + value + ')';
+              this.parent.hide();
+          properties:
+            cid: slider1
+            maxValue: '100000'
+            minValue: '100'
+            step: '100'
+            value: '@app.maxRows'
+            width: 12em
+          text: slider1
+        properties:
+          cid: menu
+          isProperty: 'true'
+        text: menu
+      properties:
+        cid: maxRowsBtn
+        icon: record
+        tip: '@Str.maxRecords+'' (''+app.maxRows+'')'''
+      text: maxRowsBtn
+    - _expanded: true
+      _icon: split
+      cls: Wb.SplitButton
+      events:
+        click: |-
+          if (document.activeElement.isInput)
+            return;
+          app.rename();
+          e.stopEvent();
+      items:
+      - _expanded: true
+        _icon: menu2
+        cls: Wb.Menu
+        items:
+        - _expanded: true
+          _icon: item
+          cls: Wb.Item
+          events:
+            click: app.rename(false);
+          properties:
+            cid: lowercaseBtn
+            keys: Ctrl+Q
+            text: '@Str.lowercase'
+          text: lowercaseBtn
+        - _expanded: true
+          _icon: item
+          cls: Wb.Item
+          events:
+            click: app.rename(true);
+          properties:
+            cid: uppercaseBtn
+            keys: Ctrl+U
+            text: '@Str.uppercase'
+          text: uppercaseBtn
+        properties:
+          cid: menu
+          isProperty: 'true'
+        text: menu
+      properties:
+        cid: renameBtn
+        icon: edit
+        keys: F2
+        stopEvent: 'false'
+        tip: '@Str.rename'
+      text: renameBtn
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      properties:
+        activeBgColor: 'false'
+        cid: dbPagingBtn
+        enableToggle: 'true'
+        icon: pagenum
+        tip: Database Paging
+      text: dbPagingBtn
+    - _expanded: false
+      _icon: item
+      cls: Wb.Item
+      properties:
+        cid: exportBtn
+        disabled: 'true'
+        handler: app.exportData
+        icon: export
+        tip: '@Str.export'
+      text: exportBtn
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      properties:
+        cid: importBtn
+        disabled: 'true'
+        handler: app.importTable
+        icon: import
+        tip: '@Str.import'
+      text: importBtn
+    - _expanded: true
+      _icon: divider
+      cls: Wb.Divider
+      properties:
+        cid: divider3
+      text: divider3
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      properties:
+        cid: backBtn
+        icon: left4
+        tip: '@Str.back'
+      text: backBtn
+    - _expanded: false
+      _icon: item
+      cls: Wb.Item
+      properties:
+        cid: forwardBtn
+        icon: right4
+        tip: '@Str.forward'
+      text: forwardBtn
+    properties:
+      cid: tbar
+      isProperty: 'true'
+    text: tbar
+  - _expanded: true
+    _icon: tree-view
+    cls: Wb.Tree
+    events:
+      itemclick: |-
+        let data = item.data, type = data.type;
+        if (e.ctrlMeta) {
+          app.addSql(null, app.getKeyName('db'), false);
+        } else {
+          if (type == 'table')
+            app.openTable();
+          else if (type == 'view')
+            app.openTable(data.viewName, null, null, true);
+        }
+      itemdblclick: |-
+        if (e.ctrlMeta && item.data.type != 'db') {
+          app.activeEditor?.setter('selectedText', item.text);
+        }
+    items:
+    - _expanded: true
+      _icon: array
+      cls: Wb.Array
+      items:
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        items:
+        - _expanded: true
+          _icon: text
+          cls: Wb.Text
+          properties:
+            cid: editor
+            isProperty: 'true'
+            readonly: 'true'
+          text: editor
+        properties:
+          cid: textCol
+          expander: 'true'
+          fieldName: text
+          render: |-
+            //use sub-color to render subText
+            let subText = data.subText, index;
+
+            if (data.type == 'field')
+              index = data.fieldIndex + '. ';
+            else
+              index = '';
+            if (subText) {
+              let span = el.addTag('span');
+              span.textContent = index + value;
+              span = el.addEl('w-sub-color w-margin-l', 'span');
+              span.textContent = subText;
+            } else
+              return index + value;
+          width: '-1'
+        text: textCol
+      properties:
+        cid: columns
+      text: columns
+    - _expanded: true
+      _icon: array
+      cls: Wb.Array
+      items:
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        events:
+          click: Wb.openNormal('m?xwl=admin/dbc');
+        properties:
+          cid: setItem
+          icon: gear
+          tip: '@Str.set'
+        text: setItem
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        events:
+          click: app.tree.loadSelect();
+        properties:
+          cid: refreshItem
+          icon: refresh
+          tip: '@Str.refresh'
+        text: refreshItem
+      properties:
+        cid: tools
+      text: tools
+    properties:
+      autoPostParams: 'true'
+      autoSelect: 'true'
+      cid: tree
+      icon: database
+      keyWalking: 'true'
+      title: '@Str.dbList'
+      url: '@xpath + ''/select-tree'''
+      width: 20em
+    text: tree
+  - _icon: splitter
+    cls: Wb.Splitter
+    properties:
+      cid: splitter1
+    text: splitter1
+  - _expanded: true
+    _icon: tab
+    cls: Wb.Tab
+    events:
+      cardchange: |-
+        app.runSqlBtn.disabled = !newCard?.sqlCard;
+        app.addBtn.disabled = app.delBtn.disabled = app.importBtn.disabled = !newCard?.gridCard || newCard?.xIsView;
+        app.filterBtn.disabled = !newCard?.gridCard
+        app.propBtn.disabled = !app.activeGrid;
+        app.setExportBtn();
+        app.setSaveBtns();
+    properties:
+      cid: tab
+      flex: '1'
+      tabMenu: 'true'
+    text: tab
+  properties:
+    cid: viewport1
+    layout: row
+  text: viewport1
+properties:
+  cid: module
+  remark: Database management tool
+tags: ''
+text: module
+title: '@dbe'

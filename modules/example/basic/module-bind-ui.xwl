@@ -1,0 +1,68 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _expanded: true
+    _icon: toolbar
+    cls: Wb.Toolbar
+    items:
+    - _expanded: false
+      _icon: item
+      cls: Wb.Item
+      properties:
+        bindModule: example/crud/dict-edit-dialog/add.xwl
+        cid: addBtn
+        icon: add
+        keys: Ctrl+E
+        text: '@Str.add'
+      text: addBtn
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      properties:
+        bindModule: example/crud/dict-edit-dialog/edit.xwl
+        cid: editBtn
+        icon: edit
+        keys: Ctrl+J
+        text: '@Str.edit'
+      text: editBtn
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      properties:
+        cid: delBtn
+        disabled: _$delDisabled$_
+        icon: delete
+        keys: Ctrl+D
+        text: '@Str.del'
+      text: delBtn
+    properties:
+      cid: tbar
+      isProperty: 'true'
+    text: tbar
+  properties:
+    cid: viewport1
+    html: |-
+      <div>This example demonstrates how a component's "visible" property bind to a specified module. If the module
+        is accessible, it is visible, otherwise it is hidden.</div>
+      <ul>
+        <li>addBtn is binded to example/crud/dict-edit-dialog/add.xwl</li>
+        <li>editBtn is binded to example/crud/dict-edit-dialog/edit.xwl</li>
+        <li>delBtn "disabled" property is binded to "delDisabled" which set in serverScript.</li>
+      </ul>
+    padding: 'true'
+  text: viewport1
+properties:
+  cid: module
+  serverScript: 'Wb.set({ delDisabled: !Wb.permit(''example/crud/dict-edit-dialog/del'')
+    })'
+tags: ''
+text: module
+title: ''

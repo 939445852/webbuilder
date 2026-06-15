@@ -1,0 +1,14 @@
+{
+  "title": "",
+  "icon": "",
+  "img": "",
+  "hideInMenu": "false",
+  "items": [
+    "common-usage.xwl",
+    "string.xwl",
+    "number.xwl",
+    "date.xwl",
+    "array-set.xwl",
+    "map.xwl"
+  ]
+}

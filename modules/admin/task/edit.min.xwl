@@ -1,0 +1,12 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Edit task
+  serverScript: function main(){const e=Wb.load("./util.mjs");let o=Params.$sid,t=Wb.getConn();Wb.sync({tableName:"wb_job",update:Params,db:t});if(Wb.parseBool(Wb.getx("status"))){JobUtil.reloadJob(o,t.connection)}else{JobUtil.stopJob(o)}Wb.send(e.getFireTime(o))}main();
+tags: ''
+text: module
+title: ''

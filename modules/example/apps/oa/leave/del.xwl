@@ -1,0 +1,22 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  serverScript: |-
+    function main() {
+      const Util = Wb.load('./util.mjs');
+
+      Params.flowId = Wb.getObject('del').$flow_id;
+      Wb.startTrans();
+      Util.checkProcess();
+      Wb.sql('delete from wb_flow where sid={?flowId?}');
+      Wb.sql('delete from wb_flow_user where flow_id={?flowId?}');
+      Wb.sql('delete from wb_leave where flow_id={?flowId?}');
+    }
+    main();
+tags: ''
+text: module
+title: ''

@@ -1,0 +1,18 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Delete version files
+  serverScript: |-
+    function main() {
+      let del = Wb.getObject('del');
+
+      Wb.sync({ tableName: 'wb_version', del });
+    }
+    main();
+tags: ''
+text: module
+title: ''

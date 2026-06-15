@@ -1,0 +1,13 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  description: |-
+    Please select this module and click [Properties] button on the IDE toolbar to view properties of this module:
+    see parameters: {frame: true, url: 'https://www.geejing.com'}
+tags: '{frame: true, url: ''https://www.geejing.com''}'
+text: module
+title: ''

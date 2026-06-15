@@ -1,0 +1,19 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.make(app,{cname:"viewport",layout:"grid1",cid:"viewport1",items:[{cname:"title",title:"Email
+    Sender",cid:"titleComp"},{cname:"text",text:"Smtp",value:"smtp.xxx.com",required:true,cid:"smtp"},{cname:"text",text:"Username",value:"name@xxx.com",required:true,cid:"username"},{cname:"text",text:"Password",value:"password",required:true,cid:"password"},{cname:"text",value:"name@xxx.com",cid:"authUsername",text:"Auth
+    username"},{cname:"text",value:"someAuthNumber",cid:"authPassword",text:"Auth
+    password"},{cname:"text",text:"From",value:"name@xxx.com",required:true,cid:"from"},{cname:"text",text:"To",value:"to@xxx.com",required:true,cid:"to"},{cname:"text",cid:"cc",text:"CC"},{cname:"text",cid:"title",text:"Title"},{cname:"textArea",value:"Hello
+    world",cid:"content",text:"Mail Content"},{cname:"fileInput",multiple:true,cid:"attachFiles",text:"Attach
+    Files"},{cname:"button",icon:"paper-plane",text:"Send",type:"primary",cid:"Send",events:{click(e,t){if(!Wb.verify(app.viewport1))return;Wb.ajax({url:xpath+"/send",comps:app.viewport1,success(){Wb.tipSucc("The
+    email has been successfully sent.")}})}}}]});
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

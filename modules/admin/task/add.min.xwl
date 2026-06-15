@@ -1,0 +1,12 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Add task
+  serverScript: function main(){const b=Wb.load("./util.mjs");let e=Wb.getId(),n={sid:e},t=Wb.getConn();Wb.set(n);Wb.sync({tableName:"wb_job",insert:Params,db:t});JobUtil.reloadJob(e,t.connection);Wb.send(Wb.apply(n,b.getFireTime(e)))}main();
+tags: ''
+text: module
+title: ''

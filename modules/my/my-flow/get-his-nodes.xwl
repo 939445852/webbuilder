@@ -1,0 +1,28 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Get history nodes list
+  serverScript: |-
+    function main() {
+      let recs, nodeName, distinctRecs = [];
+
+      recs = Wb.getRecord('select node_name from wb_flow where sid={?flowId?}');
+      Params.nodeName = recs?.[0];
+      recs = Wb.getAllRecords(`select node_text,node_name from wb_flow_user where flow_id={?flowId?}
+          and user_type<2 and node_name<>{?nodeName?} order by accept_time desc`);
+      recs.forEach(rec => {
+        nodeName = rec[1];
+        if (distinctRecs.every(item => item[1] != nodeName))
+          distinctRecs.push(rec);
+      });
+      distinctRecs.lastItem[0] = Str.initiator;
+      Wb.send(distinctRecs);
+    }
+    main();
+tags: ''
+text: module
+title: ''

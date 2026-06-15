@@ -1,0 +1,90 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+items:
+- _expanded: true
+  _icon: edit
+  cls: Wb.CodeEditor
+  properties:
+    cid: codeEditor1
+    full: 'true'
+    readonly: 'true'
+    value: |-
+      //Output to the IDE devtools console associated with the specified user.
+      //These methods are recommended to show logging information
+      Wb.log('log'); //Output log message to IDE devtools console of current user, if current user is not available then output to the anonymous user(Config item: "sys.ss.anonymousDebugUser")
+      Wb.log('admin-log', "admin"); //Output log message to IDE devtools console of admin user
+      Wb.log('all-log', true); //Output log message to IDE devtools console of all users
+      Wb.info('info');
+      Wb.info('all-info', true);
+      Wb.warn('warn');
+      Wb.warn('all-warn', true);
+      Wb.error('error');
+      Wb.error('all-error', true);
+      Wb.table([{ a: 1, b: 2, c: 3 }, { a: 4, b: 5, c: 6 }]); //Output table to IDE devtools console of the current user
+      Wb.table([{ a: 1, b: 2, c: 3 }, { a: 4, b: 5, c: 6 }], true); //Output table to IDE devtools console of all users
+      Wb.debug('debug');
+      Wb.debug('all-debug', true); //Output "debug" to IDE devtools console of all users
+
+      //Output to the IDE devtools console and the server file logs.
+      Wb.recordTrace('trace');
+      Wb.recordDebug('debug');
+      Wb.recordInfo('info');
+      Wb.recordWarn('warn');
+      Wb.recordError('error');
+      Wb.recordExcept(new Classes.NullPointerException('exception'));
+      Wb.recordFatal('fatal');
+
+      //Output to the IDE devtools console and the server db logs.
+      Wb.recordInfox('info', 'myInfo');
+      Wb.recordWarnx('warn');
+      Wb.recordErrorx('error');
+      Wb.recordExceptx(new Classes.NullPointerException('exception'));
+
+      //Output to the server logs
+      LogUtil.trace('trace');
+      LogUtil.trace('trace', request); //Logs object as trace and outputs to the client IDE devtools console associated with the specified session or request.
+      LogUtil.debug('debug');
+      LogUtil.info('info');
+      LogUtil.warn('warn');
+      LogUtil.error('error');
+      LogUtil.except(new Classes.NullPointerException('exception'));
+      LogUtil.fatal('fatal');
+
+      //Output to the server db
+      LogxUtil.info('info');
+      LogxUtil.info('info', 'type');
+      LogxUtil.info('info', 'type', request); //Logs object as information and outputs to the client IDE devtools console associated with the specified session.
+      LogxUtil.warn('warn');
+      LogxUtil.error('error');
+      LogxUtil.except(new Classes.NullPointerException('exception'));
+
+      //Output to the remote debugging devtools console
+      console.log('log');
+      console.info('info');
+      console.debug('debug');
+      console.warn('info');
+      console.error('error')
+      console.assert(1 == 2, 'not equal');
+      console.clear();
+      console.count();
+      console.countReset();
+      console.group();
+      console.groupEnd();
+      console.time();
+      console.timeLog();
+      console.timeEnd();
+
+      //Others
+      System.out.println('msg'); //Output to the system console
+      print('msg'); //Output to the system console and the remote debugging devtools console
+    wrapBorder: '0'
+  text: codeEditor1
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

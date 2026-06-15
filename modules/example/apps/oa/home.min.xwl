@@ -1,0 +1,60 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.apply(app,{openModule(e,a){let t,i="m?xwl="+e.path;t=Wb.apply({url:i},Wb.parse(e.tags));if(t.frame)Wb.browse(t);else
+    if(t.newWin)Wb.openWin(t);else{let n=app.clientCardCt,s;s=n.find((e=>e.moduleUrl==i));if(s){if(a){s.destroy();s=null}else{app.clientCardCt.activeCard=s}}if(!s){let
+    a=app.clientCardCt.add({cname:"container",moduleUrl:i,moduleData:e});app.clientCardCt.activeCard=a;t.container=a;Wb.run(t)}}}});Wb.make(app,{cname:"viewport",border:false,layout:"row",cid:"viewport1",tbar:[{cname:"container",border:false,layout:"row",padding:"0
+    15px 0 15px",background:"url(wb/images/app/banner1.png;) no-repeat 0 0 / 100%
+    100%",justify:"space-between",gap:"20px",textSelectable:false,cls:"w-bar-color",align:"center",cid:"bannerCt",height:50,items:[{cname:"container",align:"center",layout:"row",cid:"leftCt",items:[{cname:"icon",icon:"flower",fontSize:"38px",cid:"logoIcon"},{cname:"component",html:'<span
+    style="color:#fff;font-size:32px;font-weight:bold;font-style:italic;padding:.5em">My
+    Office System</span>',cid:"titleComp"}]},{cname:"container",cid:"centerCt"},{cname:"container",cid:"rightCt",items:[{cname:"button",icon:"menu",type:"tool",cid:"menuBtn",menu:{cname:"menu",items:[{icon:"power",cid:"logoutItem",text:Str.logout,events:{click(e,a){}}}]}}]}]},{cname:"container",layout:"row",padding:true,align:"stretch",cid:"addressCt",gap:".2em",items:[{cname:"text",selectOnFocus:true,text:"URL",readonly:true,flex:1,cid:"urlText"},{cname:"divider",cid:"divider1"},{cname:"button",icon:"refresh",tip:Str.refresh,type:"tool",cid:"refreshItem",events:{click(e,a){let
+    t=app.clientCardCt.activeCard?.moduleData;if(t){app.openModule(t,true)}}}},{cname:"button",icon:"delete",tip:Str.close,type:"tool",cid:"closeItem",events:{click(e,a){app.clientCardCt.activeCard?.destroy()}}}]}],items:[{cname:"tree",rightExpander:true,width:"18em",cls:"w-home-tree",dblclickExpand:false,treeStyle:"menu",url:"m?xwl=sys/portal/home/get-modules-tree",cid:"moduleTree",events:{itemclick(e,a,t){if(e.leaf)app.openModule(e.data);else
+    e.toggleExpand()},beforeload(e,a,t){let i=e.node;a.path=i?.data.path}}},{cname:"splitter",cid:"splitter1"},{cname:"cardCt",flex:1,useHash:true,cid:"clientCardCt",events:{cardchange(e,a,t){let
+    i=e?.moduleUrl;app.urlText.value=i?Wb.qualifyURL(i):""}},items:[{cname:"container",layout:"column",padding:"1em",shrink:false,background:"true",gap:"1em",autoScroll:true,cid:"mainCt",items:[{cname:"container",layout:"row",padding:true,roundBorder:true,background:"false",gap:".8em",align:"center",cid:"searchCt",items:[{cname:"icon",icon:"calendar",cid:"icon1"},{cname:"button",border:false,active:true,groupName:"dateButtons",text:"Today",shape:"round",cid:"today"},{cname:"button",border:false,groupName:"dateButtons",text:"This
+    Week",shape:"round",cid:"week"},{cname:"button",border:false,groupName:"dateButtons",text:"This
+    Month",shape:"round",cid:"month"},{cname:"button",border:false,groupName:"dateButtons",text:"This
+    Year",shape:"round",cid:"year"},{cname:"date",cid:"date1",placeholder:"Select
+    Date"}]},{cname:"container",layout:"grid4",textSelectable:false,padding:false,color:"#555",cid:"summaryCt",items:[{cname:"component",html:"<div
+    class='w-row w-align-center w-justify-around w-padding1' style='background:#c0f9cb'>\n  <div
+    class='w-column w-gap2'>\n    <div><span class='w-bold w-size1d5'>9.5%</span>
+    Increase</div>\n    <div><span class='w-bold w-size1d5'>387</span> Amount</div>\n  </div>\n  <div
+    class='w-icon icon-table w-size4'></div>\n</div>",cid:"data1",frame:true},{cname:"component",html:"<div
+    class='w-row w-align-center w-justify-around w-padding1' style='background:#fde0f8'>\n  <div
+    class='w-column w-gap2'>\n    <div><span class='w-bold w-size1d5'>$3,259</span>
+    Total</div>\n    <div><span class='w-bold w-size1d5'>2,328</span> Visits</div>\n  </div>\n  <div
+    class='w-icon icon-dt-picker w-size4'></div>\n</div>",cid:"data2",frame:true},{cname:"component",html:"<div
+    class='w-row w-align-center w-justify-around w-padding1' style='background:#f6efbd'>\n  <div
+    class='w-column w-gap2'>\n    <div><span class='w-bold w-size1d5'>165</span> Items</div>\n    <div><span
+    class='w-bold w-size1d5'>5.2%</span> Percent</div>\n  </div>\n  <div class='w-icon
+    icon-list w-size4'></div>\n</div>",cid:"data3",frame:true},{cname:"component",html:"<div
+    class='w-row w-align-center w-justify-around w-padding1' style='background:#f1fffd'>\n  <div
+    class='w-column w-gap2'>\n    <div><span class='w-bold w-size1d5'>629</span> Users</div>\n    <div><span
+    class='w-bold w-size1d5'>9,185</span> Count</div>\n  </div>\n  <div class='w-icon
+    icon-cluster w-size4'></div>\n</div>",cid:"data4",frame:true}]},{cname:"container",layout:"grid2",padding:false,background:"false",cid:"chartCt",frame:true,items:[{cname:"chart",roundBorder:true,cid:"chart1",height:"25em",option:{legend:false,grid:{left:20,right:20,bottom:20,top:20,containLabel:true},xAxis:[{type:"category",boundaryGap:false,data:["Mon","Tue","Wed","Thu","Fri","Sat","Sun"]}],yAxis:[{type:"value"}],series:[{name:"Email",type:"line",stack:"Total",areaStyle:{},emphasis:{focus:"series"},data:[120,132,101,134,90,230,210]},{name:"Union
+    Ads",type:"line",stack:"Total",areaStyle:{},emphasis:{focus:"series"},data:[220,182,191,234,290,330,310]},{name:"Video
+    Ads",type:"line",stack:"Total",areaStyle:{},emphasis:{focus:"series"},data:[150,232,201,154,190,330,410]},{name:"Direct",type:"line",stack:"Total",areaStyle:{},emphasis:{focus:"series"},data:[320,332,301,334,390,330,320]},{name:"Search
+    Engine",type:"line",stack:"Total",label:{show:true,position:"top"},areaStyle:{},emphasis:{focus:"series"},data:[820,932,901,934,1290,1330,1320]}]}},{cname:"chart",roundBorder:true,cid:"chart2",height:"25em",option:{legend:false,grid:{left:20,right:20,bottom:20,top:20,containLabel:true},xAxis:[{type:"category",data:["Mon","Tue","Wed","Thu","Fri","Sat","Sun"]}],yAxis:[{type:"value"}],series:[{name:"Direct",type:"bar",emphasis:{focus:"series"},data:[320,332,301,334,390,330,320]},{name:"Email",type:"bar",stack:"Ad",emphasis:{focus:"series"},data:[120,132,101,134,90,230,210]},{name:"Union
+    Ads",type:"bar",stack:"Ad",emphasis:{focus:"series"},data:[220,182,191,234,290,330,310]},{name:"Video
+    Ads",type:"bar",stack:"Ad",emphasis:{focus:"series"},data:[150,232,201,154,190,330,410]},{name:"Search
+    Engine",type:"bar",data:[862,1018,964,1026,1679,1600,1570],emphasis:{focus:"series"},markLine:{lineStyle:{type:"dashed"},data:[[{type:"min"},{type:"max"}]]}},{name:"Baidu",type:"bar",barWidth:5,stack:"Search
+    Engine",emphasis:{focus:"series"},data:[620,732,701,734,1090,1130,1120]},{name:"Google",type:"bar",stack:"Search
+    Engine",emphasis:{focus:"series"},data:[120,132,101,134,290,230,220]},{name:"Bing",type:"bar",stack:"Search
+    Engine",emphasis:{focus:"series"},data:[60,72,71,74,190,130,110]},{name:"Others",type:"bar",stack:"Search
+    Engine",emphasis:{focus:"series"},data:[62,82,91,84,109,110,120]}]}}]},{cname:"iconView",defaultFields:{badge:{value:99}},layout:"grid4",padding:".5em",roundBorder:true,data:[{icon:"user",text:"User
+    Management"},{icon:"support",text:"Support Service"},{icon:"list",text:"Consumption
+    List"},{icon:"preview",text:"Disabled Item",_disabled:true,_tip:"This item is
+    disabled"},{icon:"gear",text:"System Settings"},{icon:"truck",text:"The text content
+    of this item is too long and maybe overflowed"},{icon:"database",text:"Database
+    Management"},{icon:"flow1",text:"WorkFlow Design"}],gap:"1em",iconField:"icon",selectColor:"active",cid:"iconView",events:{itemclick(e,a,t){Wb.tip(e.data.text+"
+    clicked")}}}]}]}]});
+hideInMenu: 'false'
+icon: home
+img: ''
+properties:
+  cid: module
+  links: '["wb/libs/echarts.js"]'
+  serverScript: function main(){Params.oaPath=Wb.encode(Base.pathText+"wb/modules/example/apps/oa")}main();
+tags: '{newWin: true}'
+text: module
+title: Office Home

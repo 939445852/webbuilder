@@ -1,0 +1,140 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: |-
+    Wb.apply(app, {
+      /**
+       * Pass the search parameters and reload the grid.
+       */
+      reload() {
+        if (app.stopReload)
+          return;
+        app.grid1.delayLoad({ comps: app.viewport1.tbar });
+      }
+    });
+hideInMenu: 'false'
+icon: log
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _expanded: true
+    _icon: toolbar
+    cls: Wb.Toolbar
+    items:
+    - _icon: dt-picker
+      cls: Wb.Datetime
+      events:
+        change: app.reload();
+      properties:
+        cid: beginDt
+        clearButton: 'true'
+        placeholder: '@Str.startTime'
+        width: 15em
+      text: beginDt
+    - _icon: dt-picker
+      cls: Wb.Datetime
+      events:
+        change: app.reload();
+      properties:
+        cid: endDt
+        clearButton: 'true'
+        placeholder: '@Str.endTime'
+        width: 15em
+      text: endDt
+    - _icon: combo
+      cls: Wb.Select
+      events:
+        change: app.reload();
+      properties:
+        cid: logLevel
+        clearButton: 'true'
+        editable: 'false'
+        keyName: logLevel
+        placeholder: '@Str.logLevel'
+        width: 9em
+      text: logLevel
+    - _icon: text
+      cls: Wb.Text
+      events:
+        change: app.reload();
+      properties:
+        cid: logType
+        clearButton: 'true'
+        placeholder: '@Str.logType'
+        width: 9em
+      text: logType
+    - _expanded: true
+      _icon: text
+      cls: Wb.Text
+      events:
+        change: app.reload();
+      properties:
+        cid: username
+        clearButton: 'true'
+        placeholder: '@Str.username'
+        width: 9em
+      text: username
+    - _icon: text
+      cls: Wb.Text
+      events:
+        change: app.reload();
+      properties:
+        cid: msg
+        clearButton: 'true'
+        placeholder: '@Str.content'
+        width: 9em
+      text: msg
+    - _icon: text
+      cls: Wb.Text
+      events:
+        change: app.reload();
+      properties:
+        cid: ip
+        clearButton: 'true'
+        placeholder: '@Str.ip'
+        width: 11em
+      text: ip
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: |-
+          app.stopReload = true;
+          Wb.reset(app.viewport1.tbar);
+          app.stopReload = false;
+          app.reload();
+      properties:
+        cid: resetItem
+        icon: undo
+        text: '@Str.reset'
+      text: resetItem
+    properties:
+      cid: tbar
+      flexWrap: 'true'
+      gap: .1em
+      isProperty: 'true'
+    text: tbar
+  - _icon: grid
+    cls: Wb.Grid
+    properties:
+      cid: grid1
+      columnsSortable: 'true'
+      sorters: '{name: ''log_date'', desc: true}'
+      stateId: wb.log
+      textSelectable: 'true'
+      url: '@xpath + ''/select'''
+    text: grid1
+  properties:
+    cid: viewport1
+    layout: fit
+  text: viewport1
+properties:
+  cid: module
+  remark: System log
+tags: ''
+text: module
+title: '@systemLog'

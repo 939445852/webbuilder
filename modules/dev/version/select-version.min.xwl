@@ -1,0 +1,13 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Select all versions
+  serverScript: function main(){Wb.sendRecords({sql:"select distinct file_version
+    from wb_version order by file_version desc",rs:-1})}main();
+tags: ''
+text: module
+title: ''

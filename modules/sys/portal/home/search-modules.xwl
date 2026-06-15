@@ -1,0 +1,43 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Search module names
+  serverScript: |-
+    function main() {
+      let query = Params.query, fs = Wb.load('wb/modules/sys/file/fs.mjs');
+
+      //[] indicates a complete match
+      if (query.startsWith('[') && query.endsWith(']'))
+        query = query.slice(1, -1);
+      else if (!query.includes('*') && !query.includes('?'))
+        query = '*' + query + '*';
+      Wb.send(search(fs, '', query).mixSort('text'));
+    }
+    /**
+     * Search the module files in the entire module directory.
+     * @param {Object} fs FS util object.
+     * @param {String} path Search relative path.
+     * @param {String} query Search keyname.
+     * @return {Array} Search result.
+     */
+    function search(fs, path, query) {
+      let items = fs.listFiles(Base.modulePathText + path, 'home'), result = [];
+      items.forEach(item => {
+        if (item._leaf) {
+          if (item.text.wildcardMatch(query) || item.path.lastItem('/').wildcardMatch(query)) {
+            result.push(Wb.applyWith({}, item, ['text', '_icon', '_img', 'path', 'strTitle']));
+          }
+        } else {
+          result.pushAll(search(fs, '/' + item.path, query));
+        }
+      });
+      return result;
+    }
+    main();
+tags: ''
+text: module
+title: ''

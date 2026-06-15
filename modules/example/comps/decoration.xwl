@@ -1,0 +1,354 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: label
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: mainLabel
+      cls: w-title3
+      text: Label and decorative components
+    text: mainLabel
+  - _expanded: true
+    _icon: title
+    cls: Wb.Title
+    properties:
+      cid: labelTitle
+      title: Label
+    text: labelTitle
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _icon: label
+      cls: Wb.Label
+      properties:
+        cid: textLabel
+        text: Text label
+      text: textLabel
+    - _icon: label
+      cls: Wb.Label
+      properties:
+        cid: htmlLabel
+        html: HTML <span class="w-error-color">label</span>
+      text: htmlLabel
+    - _icon: label
+      cls: Wb.Label
+      properties:
+        cid: linkLabel
+        href: https://www.geejing.com
+        target: _blank
+        text: Link label
+      text: linkLabel
+    properties:
+      cid: labelCt
+      frame: 'true'
+      layout: form
+    text: labelCt
+  - _expanded: true
+    _icon: title
+    cls: Wb.Title
+    properties:
+      cid: boxLabelTitle
+      title: BoxLabel
+    text: boxLabelTitle
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _icon: box-label
+      cls: Wb.BoxLabel
+      properties:
+        cid: centerLabel
+        frame: 'true'
+        text: Center
+      text: centerLabel
+    - _icon: box-label
+      cls: Wb.BoxLabel
+      properties:
+        align: topLeft
+        cid: topLeftLabel
+        frame: 'true'
+        text: Top left
+      text: topLeftLabel
+    - _icon: box-label
+      cls: Wb.BoxLabel
+      properties:
+        align: bottomRight
+        cid: bottomRightLabel
+        frame: 'true'
+        text: Bottom right
+      text: bottomRightLabel
+    properties:
+      cid: boxLabelCt
+      defaults: '({ width: ''10em'', height: ''5em'' })'
+      frame: 'true'
+      layout: form
+    text: boxLabelCt
+  - _expanded: true
+    _icon: title
+    cls: Wb.Title
+    properties:
+      cid: breadcrumbTitle
+      title: Breadcrumb
+    text: breadcrumbTitle
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _icon: right3
+      cls: Wb.Breadcrumb
+      events:
+        itemclick: 'Wb.tip(''Clicked: '' + Wb.encode(item) + '', index: '' + index);'
+      properties:
+        cid: breadcrumb1
+        items: '[''Item1'', { text: ''Item2'', id: ''myId'' }, ''Item3'', 123]'
+      text: breadcrumb1
+    properties:
+      cid: breadcrumbCt
+      frame: 'true'
+      layout: form
+    text: breadcrumbCt
+  - _expanded: true
+    _icon: title
+    cls: Wb.Title
+    properties:
+      cid: decTitle
+      title: Decorative components
+    text: decTitle
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _expanded: true
+      _icon: title
+      cls: Wb.Title
+      properties:
+        cid: commonTitle
+        title: Title
+      text: commonTitle
+    - _expanded: true
+      _icon: title
+      cls: Wb.Title
+      properties:
+        cid: iconTitle
+        icon: external-link
+        title: Icon title
+      text: iconTitle
+    - _expanded: true
+      _icon: title
+      cls: Wb.Title
+      properties:
+        cid: noLineTitle
+        icon: map
+        line: 'false'
+        title: Title without line
+      text: noLineTitle
+    - _icon: line
+      cls: Wb.Line
+      properties:
+        cid: commonLine
+      text: commonLine
+    - _icon: line
+      cls: Wb.Line
+      properties:
+        cid: titleLine
+        title: Line Title
+      text: titleLine
+    - _icon: line
+      cls: Wb.Line
+      properties:
+        cid: dashedLine
+        dashed: 'true'
+        dimTitle: 'true'
+        title: Dashed Line
+      text: dashedLine
+    - _icon: line
+      cls: Wb.Line
+      properties:
+        cid: iconLine
+        icon: favorite
+        title: Icon line
+      text: iconLine
+    - _expanded: true
+      _icon: fieldset
+      cls: Wb.Fieldset
+      items:
+      - _expanded: true
+        _icon: button
+        cls: Wb.Button
+        properties:
+          cid: button1
+          text: Button 1
+        text: button1
+      - _expanded: true
+        _icon: divider
+        cls: Wb.Divider
+        properties:
+          cid: divider1
+        text: divider1
+      - _expanded: true
+        _icon: button
+        cls: Wb.Button
+        properties:
+          cid: button2
+          text: Button 2
+        text: button2
+      - _expanded: true
+        _icon: button
+        cls: Wb.Button
+        properties:
+          cid: button3
+          text: Button 3
+        text: button3
+      - _expanded: false
+        _icon: space
+        cls: Wb.Space
+        properties:
+          cid: space1
+        text: space1
+      - _expanded: true
+        _icon: button
+        cls: Wb.Button
+        properties:
+          cid: button4
+          text: Button 4
+        text: button4
+      - _icon: right1
+        cls: Wb.Fill
+        properties:
+          cid: fill1
+        text: fill1
+      - _expanded: true
+        _icon: button
+        cls: Wb.Button
+        properties:
+          cid: button5
+          text: Button 5
+        text: button5
+      properties:
+        cid: horizontalFieldSet
+        icon: splitter
+        layout: row
+        title: Horizontal split and fill
+      text: horizontalFieldSet
+    - _expanded: true
+      _icon: fieldset
+      cls: Wb.Fieldset
+      items:
+      - _expanded: true
+        _icon: button
+        cls: Wb.Button
+        properties:
+          cid: button1
+          text: Button 1
+        text: button1
+      - _expanded: true
+        _icon: divider
+        cls: Wb.Divider
+        properties:
+          cid: divider1
+        text: divider1
+      - _expanded: true
+        _icon: button
+        cls: Wb.Button
+        properties:
+          cid: button2
+          text: Button 2
+        text: button2
+      - _expanded: true
+        _icon: button
+        cls: Wb.Button
+        properties:
+          cid: button3
+          text: Button 3
+        text: button3
+      - _expanded: false
+        _icon: space
+        cls: Wb.Space
+        properties:
+          cid: space1
+        text: space1
+      - _expanded: true
+        _icon: button
+        cls: Wb.Button
+        properties:
+          cid: button4
+          text: Button 4
+        text: button4
+      - _icon: right1
+        cls: Wb.Fill
+        properties:
+          cid: fill1
+        text: fill1
+      - _expanded: true
+        _icon: button
+        cls: Wb.Button
+        properties:
+          cid: button5
+          text: Button 5
+        text: button5
+      properties:
+        cid: verticalFieldSet
+        height: 20em
+        icon: splitter
+        layout: column
+        title: Vertical split and fill
+        width: 20em
+      text: verticalFieldSet
+    properties:
+      cid: decCt
+      frame: 'true'
+      layout: grid1
+    text: decCt
+  - _expanded: true
+    _icon: title
+    cls: Wb.Title
+    properties:
+      cid: compTitle
+      title: Component
+    text: compTitle
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _icon: component
+      cls: Wb.Component
+      properties:
+        autoScroll: 'true'
+        border: 'true'
+        cid: component1
+        cls: w-key-color
+        height: 7em
+        html: Component is a "div" element that can show HTML or serve as a placeholder
+          for third-party components.
+        padding: 'true'
+        width: 25em
+      text: component1
+    - _icon: file-json
+      cls: Wb.Script
+      properties:
+        cid: script1
+        script: '({ cname: ''component'', html: ''<div>Custom script</div>'' })'
+      text: script1
+    properties:
+      cid: compCt
+      frame: 'true'
+      layout: form
+    text: compCt
+  properties:
+    cid: viewport1
+    layout: grid1
+  text: viewport1
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

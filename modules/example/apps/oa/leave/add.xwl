@@ -1,0 +1,22 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  serverScript: |-
+    function main() {
+      let flow, rec;
+
+      flow = new Wb.Workflow({ file: 'example/leave.flw', title: Params.title });
+      flow.start();
+      rec = { sid: Wb.getId(), flow_id: flow.flowId, user_id: Wb.userid };
+      Wb.set(rec);
+      Wb.sync({ tableName: 'wb_leave', insert: Params });
+      Wb.send(rec);
+    }
+    main();
+tags: ''
+text: module
+title: ''

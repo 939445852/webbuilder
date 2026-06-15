@@ -1,0 +1,11 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  serverScript: Wb.sendRows('select * from wb_staff');
+tags: ''
+text: module
+title: ''

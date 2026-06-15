@@ -1,0 +1,17 @@
+{
+  "title": "",
+  "icon": "",
+  "img": "",
+  "hideInMenu": "false",
+  "items": [
+    "user-selector.xwl",
+    "user-selector",
+    "role-selector.xwl",
+    "role-selector",
+    "dept-selector.xwl",
+    "dept-selector",
+    "module-selector.xwl",
+    "dialog-util.mjs",
+    "dialog-util.js"
+  ]
+}

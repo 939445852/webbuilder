@@ -1,0 +1,140 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: mainLabel
+      cls: w-title3
+      text: Server side web request
+    text: mainLabel
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: getHtmlTitle
+      title: Get mozilla.org site html
+    text: getHtmlTitle
+  - _icon: desktop
+    cls: Wb.Viewer
+    properties:
+      cid: htmlSourceViewer
+      height: 8em
+    text: htmlSourceViewer
+  - _icon: button
+    cls: Wb.Button
+    events:
+      click: |-
+        Wb.ajax({
+          url: xpath + '/actions&xaction=getHtml',
+          success(resp) {
+            app.htmlSourceViewer.text = resp;
+          }
+        });
+    properties:
+      cid: getHtmlBtn
+      text: Get html
+      type: primary
+    text: getHtmlBtn
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: postParamsTitle
+      title: Send post request with params
+    text: postParamsTitle
+  - _expanded: true
+    _icon: button
+    cls: Wb.Button
+    events:
+      click: |-
+        Wb.ajax({
+          url: xpath + '/actions&xaction=postParams',
+          success(resp) {
+            Wb.tipDone();
+          }
+        });
+    properties:
+      cid: postParamsBtn
+      text: Post params
+      type: primary
+    text: postParamsBtn
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: postPayloadDataTitle
+      title: Send post request with payload data
+    text: postPayloadDataTitle
+  - _icon: button
+    cls: Wb.Button
+    events:
+      click: |-
+        Wb.ajax({
+          url: xpath + '/actions&xaction=postPayload',
+          success(resp) {
+            Wb.tipDone();
+          }
+        });
+    properties:
+      cid: postPayloadDataBtn
+      text: Post payload data
+      type: primary
+    text: postPayloadDataBtn
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: postFileTitle
+      title: Send post request with files
+    text: postFileTitle
+  - _expanded: true
+    _icon: button
+    cls: Wb.Button
+    events:
+      click: |-
+        Wb.ajax({
+          url: xpath + '/actions&xaction=postFiles',
+          success(resp) {
+            Wb.tipDone();
+          }
+        });
+    properties:
+      cid: postFilesBtn
+      text: Post files
+      type: primary
+    text: postFilesBtn
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: loginTitle
+      title: Login to the system, access modules and logout.
+    text: loginTitle
+  - _icon: button
+    cls: Wb.Button
+    events:
+      click: |-
+        Wb.ajax({
+          url: xpath + '/actions&xaction=loginAndLogout',
+          success(resp) {
+            Wb.tipDone();
+          }
+        });
+    properties:
+      cid: loginAccessBtn
+      text: Login and Access
+      type: primary
+    text: loginAccessBtn
+  properties:
+    cid: viewport1
+    layout: grid1
+  text: viewport1
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

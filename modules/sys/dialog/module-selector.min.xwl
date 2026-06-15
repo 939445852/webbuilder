@@ -1,0 +1,18 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.apply(app,{modulePath:_$modulePath$_,getValue(e,t,l){let i=app.window1,o,a=app.tree1;o=t=>{i.okHandler=t=>{let
+    l=a.selectionData;if(l?._leaf)e?.(l.path.slice(app.modulePath.length),i);else
+    Wb.tipSelect()};i.show();a.focus()};i.subTitle=l;if(t)a.selectPath(t,o);else o()}});Wb.make(app,{cname:"window",layout:"fit",dialog:true,icon:"module",width:"60em",title:Str.selectModule,cid:"window1",height:"30em",tools:[{icon:"refresh",tip:Str.refresh,cid:"refreshItem",events:{click(e,t){app.tree1.loadSelect()}}}],items:[{cname:"tree",fields:{_icon:{convert(e,t){return
+    t.icon||(t._leaf?"module":"folder1")}},title:{convert(e){return e?.startsWith("@")?Str[e.slice(1)]:e}}},url:"m?xwl=sys/file/get&type=ide&moduleSort=true",cid:"tree1",subtextField:"title",events:{itemdblclick(e,t,l){if(e.leaf)app.window1.okHandler()},beforeload(e,t,l){if(!e.node)t.path=app.modulePath}}}]});
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Module selector
+  serverScript: Params.modulePath=Wb.encode(Base.modulePathText);
+tags: ''
+text: module
+title: ''

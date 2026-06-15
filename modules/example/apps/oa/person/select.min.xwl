@@ -1,0 +1,16 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  serverScript: function main(){let e=Wb.getObject("download");if(e){let a=Wb.getRow({sql:"select
+    full_name, photo from wb_staff where sid={?$sid?}",blob:true,params:e});if(a?.photo)Wb.exportData(a.photo,a.full_name+".png");else
+    Wb.raise("Photo not found.")}else{let e;e=`\n        select a.*,b.user_name,c.dept_name,c.dept_code
+    from wb_staff a, wb_user b, wb_dept c\n        where a.user_id=b.sid and a.dept_id=c.sid\n        `;if(Params.searchText){Wb.setLike("searchText");e+="
+    and (a.full_name like {?searchText?} or a.code like {?searchText?})"}else if(Params.searchDeptId){e+="
+    and a.dept_id={?searchDeptId?}"}e+=Wb.getOrderSql({email:"a.email"});Wb.sendRowx({sql:e,kv:{gender:"gender"}})}}main();
+tags: ''
+text: module
+title: ''

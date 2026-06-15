@@ -1,0 +1,17 @@
+_icon: module
+cls: Wb.Module
+properties:
+  cid: module
+  remark: Create documents from the files
+  serverScript: Wb.checkDemo();let creator,index=1;function main(){Wb.load("./ide-ss.js");const
+    e=Wb.ide.DocsCreator;creator=new e;processFile(new Wb.File(Wb.File.wbFolder,"js/wb.js"));processFile(new
+    Wb.File(Wb.File.wbFolder,"js/wb-client.js"));["js","ss","modules","docs"].forEach((e=>{new
+    Wb.File(Wb.File.wbFolder,e).cascade((e=>{if(e.path.endsWith("/wb/js/wb.js")||e.path.endsWith("/wb/js/wb-client.js"))return;processFile(e)}),true,false,true)}));creator.build()}function
+    processFile(e){let s,t,r,i=e.name,l,c;switch(e.extension){case"js":case"mjs":if(i.endsWith(".min.js")||i.endsWith(".min.mjs"))return;s=e.text;if(s.includes("/**")){l=e.relPath;t=l.replaceAll("/",".");if(l.startsWith("wb/modules"))t="Modules."+t.substr(11).beforeItem(".");else
+    t=t.beforeItem(".").capital;s=s.replaceAll("@class $path","@class "+t);creator.addScript(s,e.relPath)}break;case"xwl":if(i.endsWith(".min.xwl"))return;t=e.relPath.replaceAll("/",".");t=t.substr(11).beforeItem(".");r=e.object;s=r.properties.serverScript;if(s?.includes("/**")){s=s.replaceAll("@class
+    $path","@class Modules."+t+"#server");creator.addScript(s,e.relPath)}s=extractXwlClient(r);if(s){s=s.replaceAll("@class
+    $path","@class Modules."+t+"#client");creator.addScript(s,e.relPath)}break;case"wd":("\n"+e.text).split("\n##").forEach(((e,s)=>{if(s>0){c=e.indexOf("\n");creator.addDoc({cls:e.substr(0,c),index:index++,title:e.substr(c+1)})}}));break}}function
+    extractXwlClient(e){let s=e.events?.initialize??"";Wb.cascade([e],(t=>{Wb.each(t.properties,((r,i)=>{if((t!=e||r!="serverScript")&&i.includes("/**")){if(s)s+="\n";s+=i}}));Wb.each(t.events,((r,i)=>{if((t!=e||r!="initialize")&&i.includes("/**")){if(s)s+="\n";s+=i}}))}));return
+    s}main();
+text: module
+title: ''

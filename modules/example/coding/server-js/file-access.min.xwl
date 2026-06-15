@@ -1,0 +1,54 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: 'Wb.make(app,{cname:"codeEditor",readonly:true,wrapBorder:0,value:"//Use
+    java.io.File to acess files\nlet file = new File(Base.path, ''wb/js/wb.js'');
+    //File = java.io.File\nlet text = FileUtils.readFileToString(file, Wb.utf8); //Use
+    org.apache.commons.io.FileUtils.readFileToString\nWb.send(text); //Send text to
+    the client\n\n//Use Wb.File to access files\nfile = new Wb.File(true, ''wb/js/wb.js'');
+    //Create file object\ntext = file.text; //Re-read the file text contents\nWb.send(text);
+    //Send text to the client\nfileHandle = file.file; //file''s file property is
+    java.io.File\n\n//Read JSON objects or arrays in a file\nWb.log(new Wb.File(true,
+    ''wb/system/config.json'').object);\n\n//Read and write files\nfile = new Wb.File(true,
+    ''test.txt'');\nfile.text = ''abc''; //Save \"abc\" to a file immediately\nfile.object
+    = { foo: ''bar'', abc: [1, 2, 3] }; //Save the JSON object or array to a file
+    immediately\nWb.log(file.object); //Re-read the JSON object in the file\nfile.bytes
+    = [1, 2, 3]; //Save bytes to a file immediately\nWb.log(Wb.encode(file.bytes));
+    //Re-read the byte array in the file\nbs = file.byteStream; //Re-read the ByteArrayInputStream
+    in the file\nfile.stream = inputStream; //Save the inputStream to a file immediately\ninputStream
+    = file.stream; //Re-read the buffered FileInputStream in the file\nbase64 = file.base64;
+    ///Re-read the content represented by base64 in the file\nfile.base64 = base64;
+    //Save the content represented by base64 to a file immediately\n\n//File name
+    and path access\nname = file.name; //Get file name\nfile.name = name; //Set file
+    name\nextension = file.extension; //Get file name extension\nfile.extension =
+    extension; //Set file name extension\nnormalName = file.normalName; //Get a file
+    name without an extension\npath = file.path; //Get file path\nrelPath = file.relPath;
+    //Get file relative path under the application directory\n\n//Get file iist\nWb.File.listRoots();
+    //List root files\nfiles = file.listFiles(sortType, desc); //List files of folder\n\n//Traverse\nfile.each(f
+    => Wb.log(f.name)); //Traverse the current directory\nfile.cascade(f => Wb.log(f));
+    //Iterate through all subfiles and subdirectories\nfile.cascadeSelf(f => { //Iterate
+    include file itself\n  Wb.log(f);\n  if (f.name == ''myfile1.txt'')\n    return
+    false; //Break traversal\n  if (f.name == ''myfile2.txt'')\n    return null; //The
+    remaining files in the current directory will no longer be traversed\n});\nfile.bubble(f
+    => Wb.log(f)); //Traverse the current file/directory and all parent directories\nfile.bubbleParent(f
+    => Wb.log(f)); //Traverse without current file/directory\n\n//File lock, only
+    synchronous multithreaded access, and does not lock the file itself\nfile.lock();
+    //Thread lock\ndoSomething();\nfile.unlock(); //Unlock the thread immediately.
+    The block will auto unlock when execution-context finished.\n\n//Others\nfile.createFile();
+    //Create a file\nfile.createFolder(); //Create a file\nfile.remove(); //Remove
+    a file or folder\nexists = file.exists; //Determines whether the file exists\nlastModified
+    = file.lastModified; //Last modified date as a numeric value\nlastModifiedDate
+    = file.lastModifiedDate; //Last modified date\nisEqual = file1.equals(file1);
+    //Determines whether the paths are the same\nisFile = file.isFile; //Determines
+    whether it is a file\nisFolder = file.isFolder; //Determines whether it is a folder\nlength
+    = file.length; //File size\nparent = file.parent; //File parent directory",cid:"codeEditor1",full:true});'
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  links: '["wb/js/monaco.js"]'
+tags: ''
+text: module
+title: ''

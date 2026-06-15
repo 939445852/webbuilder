@@ -1,0 +1,168 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: |-
+    Wb.apply(app, {
+      /**
+       * Check out files.
+       */
+      checkOut() {
+        let sels = app.grid1.selections;
+        if (!sels.length) {
+          Wb.tipSelect();
+          return;
+        }
+        Wb.confirm(Wb.getActionHint(sels, 'file_path', Str.checkOut), f => {
+          Wb.ajax({
+            url: xpath + '/check-out',
+            params: { ids: sels.map(item => item.data.sid) },
+            success() {
+              Wb.tipDone(Str.checkOut);
+            }
+          });
+        }).showBy(app.checkOutBtn, 'br');
+      },
+      /**
+       * Load grid data.
+       */
+      load() {
+        app.grid1.delayLoad({ comps: app.viewport1.tbar });
+      }
+    });
+hideInMenu: 'false'
+icon: form
+img: ''
+items:
+- _expanded: true
+  _icon: window
+  cls: Wb.Window
+  events:
+    ok: |-
+      let version = app.versionSelect.value;
+      Wb.confirm(Str.actionConfirm.format(Str.back, version), f => {
+        Wb.ajax({
+          url: xpath + '/rollback',
+          params: { version },
+          success() {
+            app.backWin.close();
+          }
+        });
+      });
+  items:
+  - _icon: combo
+    cls: Wb.Select
+    properties:
+      cid: versionSelect
+      editable: 'false'
+      required: 'true'
+      text: '@Str.version'
+      url: '@xpath + ''/select-version'''
+    text: versionSelect
+  properties:
+    cid: backWin
+    dialog: 'true'
+    icon: undo
+    layout: grid1
+    title: '@Str.back'
+  text: backWin
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _expanded: true
+    _icon: toolbar
+    cls: Wb.Toolbar
+    items:
+    - _expanded: false
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: app.checkOut();
+      properties:
+        cid: checkOutBtn
+        icon: logout
+        keys: Ctrl+E
+        text: '@Str.checkOut'
+      text: checkOutBtn
+    - _expanded: false
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: app.backWin.show();
+      properties:
+        cid: backBtn
+        icon: undo
+        text: '@Str.back'
+      text: backBtn
+    - _icon: divider
+      cls: Wb.Divider
+      properties:
+        cid: divider1
+      text: divider1
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: app.grid1.removeRecords(xpath + '/del', 'file_path');
+      properties:
+        cid: delBtn
+        icon: delete
+        keys: Ctrl+D
+        text: '@Str.del'
+      text: delBtn
+    - _icon: divider
+      cls: Wb.Divider
+      properties:
+        cid: divider2
+      text: divider2
+    - _icon: combo
+      cls: Wb.Select
+      events:
+        clearclick: app.load();
+        select: app.load();
+      properties:
+        cid: searchVersion
+        clearButton: 'true'
+        editable: 'false'
+        placeholder: '@Str.version'
+        url: '@xpath + ''/select-version'''
+        width: 8em
+      text: searchVersion
+    - _icon: text
+      cls: Wb.Text
+      events:
+        change: app.load();
+      properties:
+        cid: searchFile
+        clearButton: 'true'
+        flex: '1'
+        maxWidth: 20em
+        minWidth: 5em
+        placeholder: '@Str.search'
+      text: searchFile
+    properties:
+      cid: tbar
+      isProperty: 'true'
+    text: tbar
+  - _expanded: true
+    _icon: grid
+    cls: Wb.Grid
+    properties:
+      cid: grid1
+      columnsSortable: 'true'
+      keyFields: sid
+      multiSelect: 'true'
+      sorters: '{name:''sdate'', desc: true}'
+      url: '@xpath + ''/select'''
+    text: grid1
+  properties:
+    cid: viewport1
+    layout: fit
+  text: viewport1
+properties:
+  cid: module
+  remark: File version management
+tags: ''
+text: module
+title: '@versionMng'

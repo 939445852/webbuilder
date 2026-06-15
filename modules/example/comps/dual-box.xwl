@@ -1,0 +1,192 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: dual-box
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: mainLabel
+      cls: w-title3
+      text: DualBox
+    text: mainLabel
+  - _expanded: true
+    _icon: title
+    cls: Wb.Title
+    properties:
+      cid: localDataTitle
+      title: Local data
+    text: localDataTitle
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: localDataLabel
+      text: Use local data to select
+    text: localDataLabel
+  - _icon: dual-box
+    cls: Wb.DualBox
+    properties:
+      cid: localDataDualBox
+      destData: |-
+        [
+          { code: "10007", full_name: "Ovidiu Cracium" },
+          { code: "10008", full_name: "Janice Galvin" },
+          { code: "10009", full_name: "Thierry D'Hers" }
+        ]
+      height: 15em
+      sourceData: |-
+        [
+          { code: "10001", full_name: "Terri Duffy" },
+          { code: "10002", full_name: "Roberto Tamburello" },
+          { code: "10003", full_name: "Michael Sullivan" },
+          { code: "10004", full_name: "Sharon Salavaria" },
+          { code: "10005", full_name: "Gail Erickson" },
+          { code: "10006", full_name: "Jossef Goldberg" }
+        ]
+      subtextField: code
+      textField: full_name
+    text: localDataDualBox
+  - _icon: button
+    cls: Wb.Button
+    events:
+      click: 'Wb.tip(''Selected: '' + Wb.encode(app.localDataDualBox.destData));'
+    properties:
+      cid: getSelectedDataBtn
+      justifySelf: start
+      text: Get Selected Data
+    text: getSelectedDataBtn
+  - _expanded: true
+    _icon: title
+    cls: Wb.Title
+    properties:
+      cid: remoteDataTitle
+      title: Remote data
+    text: remoteDataTitle
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: remoteDataLabel
+      text: Use remote data to select and sync selections in database
+    text: remoteDataLabel
+  - _expanded: true
+    _icon: dual-box
+    cls: Wb.DualBox
+    events:
+      beforemove: |-
+        Wb.ajax({
+          url: xpath + '/sync-select',
+          params: { items, include },
+          success: f => {
+            this.acceptMove(); // this == app.remoteDataDualBox;
+          }
+        });
+        return false;
+      ready: |-
+        let me = this;
+
+        me.sourceGrid.pageSize = 10;
+        me.sourceGrid.load();
+        me.destGrid.pageSize = 10;
+        me.destGrid.load();
+    items:
+    - _expanded: true
+      _icon: grid
+      cls: Wb.Grid
+      properties:
+        cid: sourceGridConfigs
+        isProperty: 'true'
+        title: User List
+      text: sourceGridConfigs
+    - _expanded: true
+      _icon: grid
+      cls: Wb.Grid
+      properties:
+        cid: destGridConfigs
+        isProperty: 'true'
+        title: Admin Users
+      text: destGridConfigs
+    properties:
+      autoLoad: 'false'
+      cid: remoteDataDualBox
+      destUrl: demo-source?xaction=selectAdminStaff
+      height: 15em
+      searchBar: 'true'
+      sourceUrl: demo-source?xaction=selectNoneAdminStaff
+    text: remoteDataDualBox
+  - _expanded: true
+    _icon: title
+    cls: Wb.Title
+    properties:
+      cid: customizeColsTitle
+      title: Customize Columns
+    text: customizeColsTitle
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: customizeColsLabel
+      text: Customize grid columns
+    text: customizeColsLabel
+  - _expanded: true
+    _icon: dual-box
+    cls: Wb.DualBox
+    items:
+    - _expanded: true
+      _icon: array
+      cls: Wb.Array
+      items:
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: rowNumCol
+          rowNum: 'true'
+        text: rowNumCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: codeCol
+          fieldName: code
+          text: Code
+        text: codeCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: fullNameCol
+          fieldName: full_name
+          text: Full name
+          width: '-1'
+        text: fullNameCol
+      properties:
+        cid: columns
+      text: columns
+    - _expanded: true
+      _icon: grid
+      cls: Wb.Grid
+      properties:
+        cid: sourceGridConfigs
+        isProperty: 'true'
+        pagingBar: 'false'
+      text: sourceGridConfigs
+    properties:
+      cid: customizeColsDualBox
+      gridHeader: 'true'
+      height: 15em
+      sourceUrl: demo-source?xaction=staffDict
+    text: customizeColsDualBox
+  properties:
+    cid: viewport1
+    layout: grid1
+  text: viewport1
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

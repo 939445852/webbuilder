@@ -1,0 +1,74 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  serverScript: |-
+    let actions = {
+      /**
+       * Upload file.
+       */
+      upload() {
+        let singleFile, multiFiles;
+
+        singleFile = Params.singleFileInput;// same as Wb.get('singleFileInput');
+        //if singleFileInput uploaded
+        if (singleFile) {
+          Wb.log(singleFile.name + ' file size is: ' + singleFile.size);
+          //This example outputs the uploaded stream to a file, which you can also output to a database.
+          new Wb.File(true, 'temp/' + singleFile.name).stream = singleFile.stream;
+        }
+
+        //Whether uploading a single or multiple files, using getParams will result in an array like parameter list
+        multiFiles = Wb.getParams('multiFileInput');
+        multiFiles.forEach(file => {
+          Wb.log(file.name + ' file size is: ' + file.size);
+          new Wb.File(true, 'temp/' + file.name).stream = file.stream;
+        });
+
+        Wb.log('text1 value is: ' + Params.text1);
+
+        Wb.send(Base.pathText + 'temp');
+        //All streams will be automatically closed
+      },
+      /**
+       * Download wb.js file.
+       */
+      downloadWbJs() {
+        Wb.exportData(new Wb.File(true, 'wb/js/wb.js'));
+      },
+      /**
+       * Download a database blob.
+       */
+      downloadBlob() {
+        let row = Wb.getRow({ sql: "select full_name, photo from wb_staff where sid='0040CCVTQ71JG'", blob: true });
+
+        // row.photo is ByteArrayInputStream, no need to close
+        // row.photo.available is blob size, notify the client the length of the blob to display the download progress on the client
+        Wb.exportData(row.photo, row.full_name + '.png', row.photo.available())
+      },
+      /**
+       * Download a zipped css folder file.
+       */
+      downloadZip() {
+        Wb.setContentType('css.zip');
+        ZipUtil.zip([new File(Base.path, 'wb/css')], response.getOutputStream());
+      },
+      /**
+       * Download after upload.
+       */
+      downloadAfterUpload() {
+        let multiFiles = Wb.getParams('multiFileInput');
+        multiFiles.forEach(file => {
+          Wb.log(file.name + ' file size is: ' + file.size);
+          new Wb.File(true, 'temp/' + file.name).stream = file.stream;
+        });
+        Wb.exportData(new Wb.File(true, 'wb/js/wb.js'));
+      }
+    };
+    actions[Params.xaction]();
+tags: ''
+text: module
+title: ''

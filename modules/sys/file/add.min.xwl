@@ -1,0 +1,9 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+properties:
+  cid: module
+  remark: Create file in any path
+  serverScript: function main(){let a=Wb.load("./fs.mjs"),e,i,l,t,m=Params.fullname;i=Wb.applyValueWith({},Params,["title","icon","img","tags","hideInMenu"]);if(m){l=Wb.getDirectory(m);t=Wb.getFilename(m)}else{l=Params.path;t=Params.filename}e=a.addFile(l,t,Wb.getBool("isFolder"),Params.url,Params.relName,i);Wb.send({lastModified:e.lastModifiedDate,path:e.path})}main();
+text: module
+title: ''

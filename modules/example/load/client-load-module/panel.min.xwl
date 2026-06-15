@@ -1,0 +1,15 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.make(app,{cname:"panel",layout:"grid1",title:"This panel from panel.xwl",closable:true,cid:"main",items:[{cname:"label",cid:"descLabel",text:'The
+    component which cid is "main" represents the owner of the entire module, and when
+    the main component is destroyed, the entire module will be destroyed.'},{cname:"line",title:"Form",cid:"line1"},{cname:"text",cid:"text1",text:"Text"},{cname:"number",cid:"number1",text:"Number"}]});Wb.make(app,{cname:"window",cid:"thisWinAutoDestroyedAfterMainDestroyed"});
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

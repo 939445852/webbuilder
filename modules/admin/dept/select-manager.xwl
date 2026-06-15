@@ -1,0 +1,24 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Select department manager
+  serverScript: |-
+    function main() {
+      let sql;
+
+      sql = 'select sid as manager_id,user_name as manager_user,display_name as manager_name from wb_user';
+      if (Params.query) {
+        Wb.setLike('query');
+        sql += ' where (user_name like {?query?} or display_name like {?query?})';
+      }
+      sql += ' order by display_name';
+      Wb.sendRows(sql);
+    }
+    main();
+tags: ''
+text: module
+title: ''

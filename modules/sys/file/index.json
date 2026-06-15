@@ -1,0 +1,21 @@
+{
+  "items": [
+    "browser.xwl",
+    "get.xwl",
+    "get-resource.xwl",
+    "open.xwl",
+    "open-resource.xwl",
+    "save.xwl",
+    "add.xwl",
+    "remove.xwl",
+    "set-property.xwl",
+    "get-property.xwl",
+    "paste-files.xwl",
+    "import-files.xwl",
+    "export-files.xwl",
+    "find-shortcut.xwl",
+    "image-viewer.xwl",
+    "text-editor.xwl",
+    "fs.mjs"
+  ]
+}

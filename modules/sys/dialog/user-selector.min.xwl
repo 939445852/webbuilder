@@ -1,0 +1,16 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.apply(app,{getValue(e,t,a,l){Wb.module.dialog.Util.getValue(app,xpath,e,t,a,false,l)},getValues(e,t,a,l){Wb.module.dialog.Util.getValue(app,xpath,e,t,a,true,l)}});Wb.make(app,{cname:"window",layout:"fit",resetDialog:true,padding:true,maxHeight:"calc(100vh
+    - 5em)",icon:"users",width:"80em",title:Str.selectUser,cid:"window1",height:"12em",items:[{cname:"select",clearButton:true,tagSortable:true,tagWrap:true,useTag:true,valueField:"sid",url:xpath+"/select",cid:"select1",subtextField:"user_name",textField:"display_name"}]});
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  links: '["wb/modules/sys/dialog/dialog-util.js"]'
+  remark: User selector
+tags: ''
+text: module
+title: ''

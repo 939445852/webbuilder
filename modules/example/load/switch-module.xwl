@@ -1,0 +1,11 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  serverScript: 'Wb.invoke(Params.type == ''someType'' ? ''admin/user'' : ''dbe'');'
+tags: ''
+text: module
+title: ''

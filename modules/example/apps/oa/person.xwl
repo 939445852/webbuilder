@@ -1,0 +1,406 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: user3
+img: ''
+items:
+- _expanded: true
+  _icon: window
+  cls: Wb.Window
+  items:
+  - _expanded: true
+    _icon: fieldset
+    cls: Wb.Fieldset
+    items:
+    - _expanded: true
+      _icon: text
+      cls: Wb.Text
+      properties:
+        cid: code
+        maxLength: '5'
+        required: 'true'
+        text: Code
+      text: code
+    - _icon: search-file
+      cls: Wb.FileInput
+      properties:
+        accept: .png
+        browseHeight: 8em
+        browseMode: 'true'
+        cid: photo
+        gridRow: span 3
+        text: Photo
+      text: photo
+    - _expanded: true
+      _icon: text
+      cls: Wb.Text
+      properties:
+        cid: full_name
+        required: 'true'
+        text: Full name
+      text: full_name
+    - _icon: combo
+      cls: Wb.Select
+      properties:
+        bindField: user_id
+        cid: user_name
+        forceSelect: 'true'
+        required: 'true'
+        subtextField: display_name
+        text: Username
+        textField: user_name
+        url: m?xwl=sys/dialog/user-selector/select
+        valueField: sid
+      text: user_name
+    - _icon: combo
+      cls: Wb.Select
+      properties:
+        cid: dept_name
+        clearButton: 'true'
+        gridColumn: span 2
+        required: 'true'
+        subtextField: dept_code
+        text: Dept name
+        textField: dept_name
+        treePicker: 'true'
+        url: m?xwl=sys/dialog/dept-selector/select
+        valueField: sid
+        valueMap: '{ sid: ''dept_id'', dept_name: ''dept_name'', dept_code: ''dept_code''
+          }'
+      text: dept_name
+    - _icon: calendar
+      cls: Wb.Date
+      properties:
+        cid: birth_date
+        text: Birth date
+      text: birth_date
+    - _icon: combo
+      cls: Wb.Select
+      properties:
+        cid: gender
+        keyName: gender
+        text: Gender
+      text: gender
+    - _icon: number-edit
+      cls: Wb.Number
+      properties:
+        cid: height
+        decimalCount: '0'
+        maxValue: '999'
+        minValue: '0'
+        text: Height
+      text: height
+    - _expanded: true
+      _icon: text
+      cls: Wb.Text
+      properties:
+        cid: email
+        text: Email
+        valueType: email
+      text: email
+    - _icon: number-edit
+      cls: Wb.Number
+      properties:
+        cid: salary
+        decimalCount: '2'
+        text: Salary
+      text: salary
+    properties:
+      autoGrid: 'true'
+      cid: generalFieldSet
+      collapsible: 'true'
+      icon: address-book
+      layout: grid2
+      title: General Information
+    text: generalFieldSet
+  - _expanded: true
+    _icon: fieldset
+    cls: Wb.Fieldset
+    items:
+    - _icon: textarea
+      cls: Wb.TextArea
+      properties:
+        cid: cv
+        minHeight: 10em
+      text: cv
+    properties:
+      cid: resumeFieldSet
+      collapsible: 'true'
+      flex: '1'
+      icon: text1
+      layout: fit
+      title: Personal Resume
+    text: resumeFieldSet
+  properties:
+    autoScroll: 'true'
+    cid: editWin
+    gap: 'true'
+    layout: column
+    padding: 'true'
+    resetDialog: 'true'
+    width: 60em
+  text: editWin
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _expanded: true
+    _icon: toolbar
+    cls: Wb.Toolbar
+    items:
+    - _expanded: false
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: |-
+          let deptData;
+
+          app.grid1.insertRecord({
+            url: xpath + '/add',
+            failure(resp) {
+              Wb.checkExists(resp, 'wb_staff_code', app.editWin.down('code'));
+            }
+          }, app.editWin);
+          // set default dept
+          deptData = app.tree1.selectionData;
+          if (deptData?.sid)
+            app.dept_name.value = Wb.applyWith({}, deptData, 'sid,dept_code,dept_name');
+      properties:
+        cid: addBtn
+        icon: add
+        keys: Ctrl+E
+        text: '@Str.add'
+      text: addBtn
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: |-
+          let rec = app.grid1.selection;
+          app.grid1.editRecord({
+            url: xpath + '/edit',
+            failure(resp) {
+              Wb.checkExists(resp, 'wb_staff_code', app.editWin.down('code'));
+            }
+          }, app.editWin);
+          if (rec)
+            app.editWin.down('photo').preview(xpath + '/get-photo&sid=' + rec.data.sid + '&' + Wb.getId());
+      properties:
+        cid: editBtn
+        icon: edit
+        keys: Ctrl+J
+        text: '@Str.edit'
+      text: editBtn
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: app.grid1.removeRecords(xpath + '/del', 'code');
+      properties:
+        cid: delBtn
+        icon: delete
+        keys: Ctrl+D
+        text: '@Str.del'
+      text: delBtn
+    - _expanded: true
+      _icon: divider
+      cls: Wb.Divider
+      properties:
+        cid: divider1
+      text: divider1
+    - _icon: text
+      cls: Wb.Text
+      events:
+        change: |-
+          let params;
+
+          if (value)
+            params = { searchText: value };
+          else
+            params = { searchDeptId: app.tree1.selectionData?.sid };
+          app.grid1.delayLoad({ params });
+      properties:
+        cid: search
+        clearButton: 'true'
+        flex: '1'
+        maxWidth: 20em
+        minWidth: 5em
+        placeholder: '@Str.search'
+      text: search
+    properties:
+      cid: tbar
+      isProperty: 'true'
+    text: tbar
+  - _icon: label1
+    cls: Wb.DisplayField
+    properties:
+      cid: bbar
+      icon: info1
+      isProperty: 'true'
+      padding: 'true'
+      value: This module demonstrates database CRUD
+    text: bbar
+  - _expanded: true
+    _icon: tree-view
+    cls: Wb.Tree
+    events:
+      selectionchange: 'app.grid1.load({ params: { searchDeptId: app.tree1.selectionData?.sid
+        } });'
+    properties:
+      autoSelect: 'true'
+      cid: tree1
+      textField: dept_name
+      url: '@xpath + ''/select-dept'''
+      width: 18em
+    text: tree1
+  - _icon: splitter
+    cls: Wb.Splitter
+    properties:
+      cid: splitter1
+    text: splitter1
+  - _expanded: true
+    _icon: grid
+    cls: Wb.Grid
+    events:
+      itemdblclick: app.editBtn.fireEvent('click');
+    items:
+    - _expanded: true
+      _icon: array
+      cls: Wb.Array
+      items:
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: rowNumCol
+          rowNum: 'true'
+        text: rowNumCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: codeCol
+          fieldName: code
+          text: Code
+          width: 5em
+        text: codeCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: fullNameCol
+          fieldName: full_name
+          text: Full name
+          width: 13em
+        text: fullNameCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: usernameCol
+          fieldName: user_name
+          text: Username
+        text: usernameCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: deptCol
+          fieldName: dept_name
+          render: Wb.Column.addSubText(el, value, data.dept_code);
+          text: Department
+          width: 13em
+        text: deptCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: birthDateCol
+          fieldName: birth_date
+          text: Birth date
+        text: birthDateCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: genderCol
+          fieldName: gender
+          keyValue: 'true'
+          text: Gender
+          width: 6em
+        text: genderCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: heightCol
+          fieldName: height
+          text: Height
+          width: 6em
+        text: heightCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: emailCol
+          fieldName: email
+          text: Email
+          width: 18em
+        text: emailCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: salaryCol
+          fieldName: salary
+          text: Salary
+          type: usd
+          width: 9em
+        text: salaryCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: cvCol
+          fieldName: cv
+          sortable: 'false'
+          text: CV
+          width: 15em
+        text: cvCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: photoCol
+          fieldName: photo
+          render: |-
+            if (value)
+              Wb.Column.createDownload(el, column.fieldName, data.full_name + '.png');
+          sortable: 'false'
+          text: Photo
+          width: 15em
+        text: photoCol
+      properties:
+        cid: columns
+      text: columns
+    properties:
+      autoLoad: 'false'
+      cid: grid1
+      columnsSortable: 'true'
+      flex: '1'
+      multiSelect: 'true'
+      sorters: code
+      stateId: wb.oa.person
+      url: '@xpath + ''/select'''
+    text: grid1
+  properties:
+    autoContextMenu: 'true'
+    cid: viewport1
+    layout: row
+  text: viewport1
+properties:
+  cid: module
+tags: ''
+text: module
+title: Person Management

@@ -1,0 +1,11 @@
+{
+  "title": "@myApp",
+  "icon": "briefcase",
+  "img": "",
+  "hideInMenu": "false",
+  "items": [
+    "my-flow.xwl",
+    "my-flow",
+    "home.xwl"
+  ]
+}

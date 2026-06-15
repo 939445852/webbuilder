@@ -1,0 +1,14 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.make(app,{cname:"viewport",layout:"grid1",cid:"viewport1",items:[{cname:"label",cid:"mainLabel",cls:"w-title3",text:"SQL
+    to Excel"},{cname:"title",title:"Export to Excel",cid:"textTitle"},{cname:"button",type:"primary",cid:"downloadBtn",text:"Download",events:{click(t,e){Wb.download(xpath+"/create")}}}]});
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

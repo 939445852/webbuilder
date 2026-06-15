@@ -1,0 +1,35 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Set current user resource
+  serverScript: |-
+    /**
+     * Store big data to database.
+     * @param {String} name value name.
+     * @param {String} value stored value, empty value will clear the value.
+     * @param {String} [type] value type:
+     * -'object': represent a object or array value.
+     * -'string': represent a string value, default.
+     * -[other type]: auto detect.
+     */
+    function setResource() {
+      let { name, value, type } = Params;
+
+      if (value) {
+        if (value.stream instanceof InputStream)
+          value = value.stream;
+        else if (type == 'object')
+          type = 1;
+      } else {
+        value = null;
+      }
+      Wb.setResource(name, value, app.userid, type);
+    }
+    setResource();
+tags: ''
+text: module
+title: ''

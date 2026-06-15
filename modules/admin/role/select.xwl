@@ -1,0 +1,22 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Select roles
+  serverScript: |-
+    function main() {
+      let sql = 'select t.*,t.sid as role_id_disp from wb_role t';
+      if (Params.search) {
+        Wb.setLike('search');
+        sql += ' where t.role_name like {?search?} or t.sid like {?search?}';
+      }
+      sql += Wb.getOrderSql();
+      Wb.sendDict(sql, 'wb,');
+    }
+    main();
+tags: ''
+text: module
+title: ''

@@ -1,0 +1,12 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Terminate workflow
+  serverScript: function main(){let s=Wb.getObject("ids"),e=[],t=Wb.userid,i=1,a=0;s.forEach((s=>{e.push({$sid:s,$user_id:t,$status:i,status:a})}));Wb.sync({tableName:"wb_flow",whereFields:"sid,user_id,status",update:e})}main();
+tags: ''
+text: module
+title: ''

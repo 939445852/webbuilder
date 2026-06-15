@@ -1,0 +1,83 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: |-
+    Wb.apply(app, {
+      /**
+       * Fire after module is loaded.
+       */
+      onLoad() {
+        app.reloadItem.fireEvent('click');
+      }
+    });
+hideInMenu: 'false'
+icon: ''
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _expanded: true
+    _icon: toolbar
+    cls: Wb.Toolbar
+    items:
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: |-
+          Wb.ajax({
+            url: xpath + '/actions&xaction=reload',
+            success(resp) {
+              app.container1.html = '';
+              app.container1.html = resp;
+            }
+          });
+      properties:
+        cid: reloadItem
+        icon: refresh
+        text: Reload
+      text: reloadItem
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: Wb.download(xpath + '/actions&xaction=export');
+      properties:
+        cid: exportItem
+        icon: export
+        text: Export
+      text: exportItem
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: Wb.print(app.container1, 'A3 landscape');
+      properties:
+        cid: printItem
+        icon: print
+        text: Print
+      text: printItem
+    properties:
+      cid: tbar
+      isProperty: 'true'
+    text: tbar
+  - _icon: container
+    cls: Wb.Container
+    properties:
+      cid: container1
+      cls: w-max-size /* for print centered only */
+      layout: middle
+    text: container1
+  properties:
+    autoScroll: 'true'
+    cid: viewport1
+    layout: fit
+  text: viewport1
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

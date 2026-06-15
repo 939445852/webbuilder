@@ -1,0 +1,52 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: IDE server side actions
+  serverScript: Wb.load("./ide-ss.js");let actions={aiDialog(){let e,a,s;a=Params.search||"";if(a){Wb.setLike("search");a="and
+    a.msg like {?varchar|search?}"}e=Wb.getRowx(`select a.group_id,a.msg,a.file_name
+    from wb_ai a,\n(select group_id,min(sdate) as sdate,min(order_index) as order_index
+    from wb_ai group by group_id) b\nwhere a.group_id=b.group_id and a.sdate=b.sdate
+    and a.order_index=b.order_index and a.user_id={?sys.userid?} ${a}\norder by a.sdate
+    desc,a.msg_type,a.order_index`);e.items.forEach((e=>{s=e.file_name;if(s)e.msg=s;else
+    e.msg=e.msg?.ellipsis()||"Unknow dialog";delete e.file_name}));Wb.send(e)},aiCreate(){const
+    e="(Parse file)";const a=Wb.ide.AIGenerator;let s,i,t=Params.group_id||Wb.getId(),r=Params.baseFolder,d=Params.msg,n,l=Wb.getBool("overwrite"),o=Wb.getBool("uploadAnswers"),m,g,b,u,_=Wb.getBool("aiClear"),f,c,h=0;r=new
+    Wb.File(r);if(!Wb.File.moduleFolder.contains(r))Wb.accessDenied(r.path);s=Wb.getRows({sql:"select
+    msg,msg_type,is_bin,file_name from wb_ai where user_id={?sys.userid?} and group_id={?group_id?}
+    and "+"order_index<>99990"+(o?"":" and msg_type<6")+" order by sdate,order_index",params:{group_id:t},rs:Wb.getConfig("sys.ai.maxHistory")-1});g=Params.uploadFiles;if(_){m=Params.oldFiles;if(m){let
+    e,a=[];m.each((e=>{e=new Wb.File(Wb.File.moduleFolder,e);if(e.exists){e.removeIndex();e.clearBuffer();e.remove();a.push(e.parent)}}));a.each((a=>{if(a.exists){e=a.file.list()?.length||0;if(e==0||e==1&&new
+    Wb.File(a,"index.json").exists){a.removeIndex();a.remove()}}}))}}f=Wb.userid;u=new
+    Date;m=a.create(s,d,g,r,l);b=[];i=Wb.getId();d||=e;b.push({sid:i,sdate:u,user_id:f,group_id:t,msg_type:0,msg:d,order_index:d==e?99990:h++});g?.each((e=>{i=Wb.getId();c=e.name;b.push({sid:i,sdate:u,user_id:f,group_id:t,msg_type:1,file_name:c,is_bin:1,order_index:h++,msg:e.content,file_size:a.getBase64(e.content,true).length})}));if(m.answer){b.push({sid:Wb.getId(),sdate:u,user_id:f,group_id:t,msg_type:6,msg:m.answer,order_index:h++})}m.files?.each((e=>{n=e.content;b.push({sid:Wb.getId(),sdate:u,user_id:f,group_id:t,msg_type:7,file_name:e.path,is_bin:e.isBin?1:null,msg:n,order_index:h++,file_size:e.isBin?a.getBase64(n,true).length:n.getBytes().length})}));Wb.sync({tableName:"wb_ai",insert:b});b.each((e=>{delete
+    e.user_id;delete e.group_id;delete e.is_bin;delete e.order_index;if(e.msg_type!=0&&e.msg_type!=6)delete
+    e.msg}));Wb.send({group_id:t,msg:d,items:b,files:m.files?.map((e=>e.path))})},aiRemoveHis(){let
+    e=Wb.getObject("del");Params.$user_id=Wb.userid;Wb.syncFree({tableName:"wb_ai",del:e,contextParams:true,whereFields:"group_id,user_id"})},aiCreateFile(){let
+    e,a,s;a=Wb.getRow("select file_name,is_bin,msg from wb_ai where sid={?sid?} and
+    user_id={?sys.userid?}");if(!a)Wb.raise("File not found.");e=a.file_name;s=new
+    Wb.File(Wb.File.moduleFolder,e);if(a.is_bin)s.bytes=Wb.ide.AIGenerator.getBase64(a.msg,true);else
+    s.text=a.msg;s.clearBuffer();Wb.send(e)},aiRemoveItem(){Wb.sql("delete from wb_ai
+    where sid={?sid?} and user_id={?sys.userid?}")},aiDetails(){Wb.sendRows("select
+    sid,msg_type,file_name,file_size,sdate,case when msg_type=0 or msg_type=6 then
+    msg else null end as msg from wb_ai"+" where user_id={?sys.userid?} and group_id={?groupId?}
+    and order_index >=0 order by sdate,order_index")},aiDownload(){let e,a;e=Wb.getRow("select
+    is_bin,file_name,msg from wb_ai where sid={?sid?} and user_id={?sys.userid?}");if(!e)Wb.raise("The
+    file not found.");a=e.msg||"";if(e.is_bin){a=Wb.ide.AIGenerator.getBase64(a,true)}else{a=a.getBytes()}Wb.exportData(a,Wb.getFilename(e.file_name))},exportFiles(){let
+    e=Wb.getObject("files"),a;a=e.map((e=>{e=new Wb.File(e);if(e.isFolder)Wb.raise('"'+e.name+'"
+    is not a file.');return{name:e.name,data:e.base64}}));Wb.send(a)},createQuery(){let
+    e=new Wb.ide.Generator(Params);e.buildQuery()},createCRUD(){let e=new Wb.ide.Generator(Params);e.buildCRUD()},createSource(){let
+    e=new Wb.ide.Generator(Params),a=Params.modulePath,s=Params.params;if(a){s&&=Wb.parse(s);Wb.invoke(new
+    Wb.File(a).modulePath,s)}else{Wb.send(e.getSourceData())}},jsProvider(){const
+    e=["com","edu","java","javax","javafx","org","jakarta"];let a,s,i;try{let t=Params.cls;if((t+".").startsWith("Packages.")){t=t.substr(9);i=true}else
+    if(t.startsWith("Classes."))t=Classes[t.substr(8)].class.getName();else if(!t.includes(".")&&Java.isJavaObject(globalThis[t]))t=globalThis[t].class.getName();s=new
+    Wb.ide.ClassSearcher(t);if(!Java.isJavaObject(Wb.getNS(t))&&!i&&!e.includes(t.firstItem(".")))a=s.getJSMembers(t);else
+    a=s.getJavaMembers(t)||s.getClassMembers(t+".")}catch(e){a=[]}Wb.send(a)},getThreads(){const
+    e=Java.type("java.lang.Thread");const a=Java.type("java.lang.Thread[]");let s=[],i,t,r,d,n,l,o;l=e=>{if(!e?.length)return"";let
+    a=[],s,i,t;i=e.length;for(s=0;s<i;s++){t=e[s];a.push(`    at ${t.getClassName()}.${t.getMethodName()}`+`(${t.getFileName()||"Unknown"}:${t.getLineNumber()>=0?t.getLineNumber():"?"})`)}return
+    a.join("\n")};t=e.currentThread().getThreadGroup();while(t.getParent()){t=t.getParent()}r=new
+    a(t.activeCount()*3);n=t.enumerate(r,true);for(d=0;d<n;d++){i=r[d];s.push({name:i.getName(),id:i.getId(),state:i.getState().toString(),priority:i.getPriority(),daemon:i.isDaemon(),groupName:i.getThreadGroup()?.getName(),live:i.isAlive(),stack:l(i.getStackTrace())})}o=Wb.getObject("_sort")?.[0];if(o){s.mixSort(o.name,o.desc)}Wb.send({items:s,columns:[{rowNum:true},{fieldName:"name",text:"Name",width:"-1",minWidth:"10em",maxWidth:"25em"},{fieldName:"id",text:"ID",width:"4em"},{fieldName:"state",text:"State"},{fieldName:"priority",text:"Priority",width:"6em"},{fieldName:"daemon",text:"Daemon",width:"6em"},{fieldName:"live",text:"Live",width:"5em"},{fieldName:"groupName",text:"Group
+    Name",width:"-1",minWidth:"10em",maxWidth:"25em"}]})}};actions[Params.xaction]();
+tags: ''
+text: module
+title: ''

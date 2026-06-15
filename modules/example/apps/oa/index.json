@@ -1,0 +1,14 @@
+{
+  "title": "",
+  "icon": "",
+  "img": "",
+  "hideInMenu": "false",
+  "items": [
+    "home.xwl",
+    "home",
+    "person.xwl",
+    "person",
+    "leave.xwl",
+    "leave"
+  ]
+}

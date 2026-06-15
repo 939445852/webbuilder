@@ -1,0 +1,15 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Select roles
+  serverScript: function main(){let e=Wb.roles,a,r;if(Wb.isAdmin){a=""}else{let s=Wb.Query.getArraySql(e,"varchar");a="
+    and sid not in ("+s.sql+")";r=s.params}Wb.sendRows({sql:`select sid,role_name
+    as text`+(Params.check?`,0 as "_checked"`:"")+`,'true' as "_leaf" from wb_role
+    where sid<>'admin'${a} order by role_name`,params:r,rs:-1})}main();
+tags: ''
+text: module
+title: ''

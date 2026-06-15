@@ -1,0 +1,16 @@
+_icon: module
+cls: Wb.Module
+properties:
+  cid: module
+  remark: Search text in app folder
+  serverScript: Wb.checkDemo();let actions={searchText(){Wb.load("./ide-ss.js");let
+    e,t,l=Wb.ide.FileSearcher;t=new l(Wb.getObject("path"),Params.search,Params.fileType,Wb.getObject("options"));e=t.searchReplace();Wb.send(e)},searchFile(){let
+    e=Params.search,t=[];e="*"+e+"*";Wb.File.appFolder.cascade((l=>{if(!l.isMinFile&&l.match(e)){t.push({path:l.path,content:l.name.htmlText,lineNumber:1,column:1});if(t.length>999)return
+    false}}));Wb.send(t)},searchUrl(){let e=[],t=new Wb.File(true,"wb/system/url.json").object,l=Params.search,i,a=Base.modulePathText;if(i=t["/"+l]){e.push({path:a+i,content:l.htmlText,lineNumber:1,column:1});delete
+    t["/"+l]}Wb.each(t,((t,i)=>{if(t.includes(l))e.push({path:a+i,content:t.substr(1).htmlText,lineNumber:1,column:1})}));Wb.send(e)},peekFile(){let
+    e=[],t=Params.query,l,i,a,s,n;Wb.File.appFolder.cascade((o=>{a=o.name;n=!o.isMinFile;if(n&&o.isModuleFile){s=Wb.optText(o.object.title)}else{s=null}if(n&&(a.includes(t)||s?.includes(t))){l=o.inModuleFolder;if(l)i=o.modulePath;else
+    i=o.relPath;e.push({text:i,module:l,subtext:s});if(e.length>999)return false}}));Wb.send(e)},noneLoginModule(){let
+    e,t=[];Wb.File.moduleFolder.cascade((l=>{if(l.isModuleFile&&!l.isMinFile){try{e=l.object.properties;if(!e)throw
+    e}catch(e){Wb.raise('Invalid module "'+l.modulePath+'".')}if(!Wb.parseBool(e.loginRequired??true)){t.push({path:l.path,compPath:e.cid,propName:"loginRequired",propType:"properties",content:"loginRequired",lineNumber:1,column:1})}}}));Wb.send(t)}};actions[Params.xaction]();
+text: module
+title: ''

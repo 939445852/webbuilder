@@ -1,0 +1,18 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'true'
+icon: ''
+img: ''
+properties:
+  cid: module
+  serverScript: let actions={selectStartData(){let e;e=Wb.getRowx("select * from wb_reimburse
+    where flow_id={?flowId?}");e.flowTitle=new Wb.Workflow({flowId:Params.flowId}).title;Wb.send(e)},selectHandleData(){let
+    e,r,s;e=new Wb.Workflow({flowId:Params.flowId});Params.userid=e.userid;r=Wb.getRows(`select
+    exp_date,item_name,amount from wb_reimburse where flow_id={?flowId?}\n      and
+    user_id={?userid?} order by exp_date`);s=Wb.getRows(`select b.process_time,c.display_name,b.opinions
+    from wb_reimburse a,\n       wb_ra_opinions b, wb_user c where a.flow_id={?flowId?}
+    and a.user_id={?userid?}\n       and a.sid=b.reimburse_id and b.approver_user_id=c.sid\n       order
+    by b.process_time`);Wb.send({list:r,history:s,applicant:e.getInitUser().text})}};actions[Params.xaction]();
+tags: ''
+text: module
+title: ''

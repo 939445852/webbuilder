@@ -1,0 +1,25 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  serverScript: let actions={getChats(){Wb.sendRowx({sql:`\n      select a.send_date,
+    a.text_content, a.bin_len, b.userid, c.display_name from\n\n      wb_chats a,\n\n      (\n        select
+    userid, max(sid) as sid from\n        (\n          select sid,from_user as userid
+    from wb_chats where to_user={?sys.userid?}\n          union all\n          select
+    sid,to_user as userid  from wb_chats where from_user={?sys.userid?}\n        )
+    x\n        group by userid\n      ) b,\n\n      wb_user c\n\n      where a.sid=b.sid
+    and b.userid=c.sid\n      order by a.send_date desc\n    `,clob:100})},getChatDetail(){Wb.sendRows(`\n      select
+    sid,send_date,text_content,bin_len,1 as direction from wb_chats where to_user={?sys.userid?}
+    and from_user={?userid?}\n      union all\n      select sid,send_date,text_content,bin_len,0
+    as direction from wb_chats where from_user={?sys.userid?} and to_user={?userid?}\n      order
+    by send_date desc\n    `)},download(){let e=Wb.getRow({sql:"select bin_len,text_content,bin_content
+    from wb_chats where sid={?id?}",blob:true});Wb.setContentType(e.text_content,null,e.bin_len);Wb.send(e.bin_content)},getContacts(){Wb.sendRowx("select
+    sid, user_name, display_name, email from wb_user where sid<>{?sys.userid?} and
+    status=1")},sendMessage(){let e=Params.file,s=Params.userid,n;n={sid:Wb.getId(),send_date:new
+    Date,from_user:Wb.userid,bin_len:e?.size,text_content:Params.text};Wb.sync({tableName:"wb_chats",insert:Wb.apply({to_user:s,bin_content:e?.stream},n)});n.display_name=Wb.dispname;Wb.send(n,"wb.chat",s);Wb.send(n)}};actions[Params.xaction]();
+tags: ''
+text: module
+title: ''

@@ -1,0 +1,21 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.make(app,{cname:"viewport",layout:"grid1",cid:"viewport1",items:[{cname:"label",cid:"mainLabel",cls:"w-title3",text:"Miscellaneous
+    comps"},{cname:"title",title:"ControlCt",cid:"controlCtTitle"},{cname:"label",cid:"controlCtLabel",text:"Control
+    container, like a control with a label, can also add child controls."},{cname:"container",layout:"grid1",cid:"controlCtCt",frame:true,items:[{cname:"controlCt",layout:"form",cid:"controlCt",text:"Container
+    label",items:[{cname:"text",cid:"text1"},{cname:"label",cid:"label1",text:"Label"},{cname:"button",cid:"button1",text:"Button"}]},{cname:"text",cid:"controlCtAlignText",text:"Other
+    control"}]},{cname:"title",title:"ScrolledCt",cid:"scrolledCtTitle"},{cname:"label",cid:"scrolledCtLabel",text:"Scrolled
+    container can automatically scroll without scrollbar."},{cname:"container",layout:"grid1",cid:"scrolledCtCt",frame:true,items:[{cname:"scrolledCt",layout:"row",width:"30em",padding:true,cid:"scrolledCt",gap:true,items:[{cname:"button",cid:"button1",text:"Button1"},{cname:"button",cid:"button2",text:"Button2"},{cname:"button",cid:"button3",text:"Button3"},{cname:"button",cid:"button4",text:"Button4"},{cname:"button",cid:"button5",text:"Button5"},{cname:"button",cid:"button6",text:"Button6"}]}]},{cname:"title",title:"Carousel",cid:"carouselTitle"},{cname:"label",cid:"carouselLabel",text:"Automatic
+    carousel play container."},{cname:"container",layout:"grid1",cid:"carouselCt",frame:true,items:[{cname:"carousel",interval:2e3,cid:"carousel1",frame:true,height:"8em",items:[{cname:"component",style:"color:#fff",cls:"w-center",text:"Comp1",background:"#f88",cid:"component1"},{cname:"component",style:"color:#000",cls:"w-center",text:"Comp2",background:"#8f8",cid:"component2"},{cname:"component",style:"color:#fff",cls:"w-center",text:"Comp3",background:"#ababf7",cid:"component3"},{cname:"component",style:"color:#fff",cls:"w-center",text:"Comp4",background:"#3bdbd9",cid:"component4"}]}]},{cname:"title",title:"ProgressBar",cid:"progressBarTitle"},{cname:"label",cid:"progressBarLabel",text:"Display
+    progress through graphics and text."},{cname:"container",layout:"grid1",cid:"progressBarCt",frame:true,items:[{cname:"progressBar",value:35,cid:"progressBar1"},{cname:"progressBar",value:68.5,cid:"progressBar2",progressText:"Copying
+    files"}]}]});
+hideInMenu: 'false'
+icon: list1
+img: ''
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

@@ -1,0 +1,68 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  serverScript: |-
+    let actions = {
+      /**
+       * Send text to "wb.ws.commonSocket" of current user.
+       */
+      sendTextToCurrentUser() {
+        Wb.send(Params.text, 'wb.ws.commonSocket');
+      },
+      /**
+       * Send binary to "wb.ws.binarySocket" of current user.
+       */
+      sendBinaryToCurrentUser() {
+        // Caution: if use Wb.send(inputStream, 'wb.ws.binarySocket') to send InputStream,
+        // only the first websocket client will receive data, because the InputStream is unidirectional
+
+        let bytes = new Wb.File(true, 'wb/images/app/logo.png').bytes;
+        Wb.send(bytes, 'wb.ws.binarySocket');
+      },
+      /**
+       * Send text to "wb.ws.commonSocket" of the specified user.
+       */
+      sendTextToSpecifiedUser() {
+        Wb.send(Params.text, 'wb.ws.commonSocket', 'admin');
+      },
+      /**
+       * Broadcast JSON to "wb.ws.commonSocket" of all users.
+       */
+      broadcastJSONToSpecifiedUser() {
+        //use Wb.serialize/Wb.deserialize to send object
+        Wb.send({ text: 'text message', number: 123 }, 'wb.ws.commonSocket', true);
+      },
+      /**
+       * Receive data from client web socket.
+       */
+      receiveData() {
+        //Global parameters:
+        //data: data sent by the client websocket
+        //event: message, open, close, error
+        //session: websocket session
+        //httpSession: http session; may be invalidated
+        //closeReason: close reason
+        //error: exception object
+
+        if (event == 'message') {
+          let value;
+
+          if (data instanceof InputStream)
+            value = IOUtils.toString(data); // data is ByteArrayInputStream, no need to close
+          else
+            value = data;
+          Wb.log('Received: ' + value);
+          Wb.send('result'); // send text to the client web socket
+          // Wb.send(inputStream); // send inputStream to the client web socket
+          // Wb.send(bytes); // send bytes to the client web socket
+        }
+      }
+    };
+    actions[Params.xaction]();
+tags: ''
+text: module
+title: ''

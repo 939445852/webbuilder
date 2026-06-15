@@ -1,0 +1,45 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.make(app,{cname:"viewport",layout:"grid1",cid:"viewport1",items:[{cname:"label",cid:"mainLabel",cls:"w-title3",text:"Input
+    controls"},{cname:"title",title:"Text",cid:"textTitle"},{cname:"container",layout:"grid",cid:"textCt",frame:true,items:[{cname:"text",cid:"commonText",placeholder:"placeholder",text:"Common"},{cname:"text",icon:"lock",eyeButton:true,password:true,text:"Password",cid:"passwordText"},{cname:"text",cid:"clearText",clearButton:true,text:"With
+    Clear"},{cname:"text",cid:"hintText",hint:"Please enter your name",text:"Input
+    Hint"},{cname:"text",labelAlign:"left",cid:"alignText",text:"Left Align Text"},{cname:"text",text:"Prefix
+    Suffix",suffix:"%",prefix:"$",cid:"prefixSuffixText"},{cname:"text",readonly:true,cid:"readonlyText",text:"Readonly"},{cname:"text",disabled:true,cid:"disabledText",text:"Disabled"},{cname:"text",showEmptyLabel:true,cid:"emptyLabelText",placeholder:"empty
+    label"},{cname:"text",icon:"loading1",text:"Loading",cid:"loadingText",spin:true},{cname:"text",inactiveBorder:true,text:"Flat",flat:true,cid:"flatText"},{cname:"displayField",icon:"info",showEmptyLabel:true,value:"Display
+    value",cid:"displayField1"},{cname:"displayField",icon:"info",value:"No label",cid:"displayField2"},{cname:"text",labelSeparator:false,text:"Icon
+    label",labelIcon:"book1",labelAlign:"left",cid:"iconLabelText"},{cname:"fill",cid:"fill1"},{cname:"text",labelUp:true,cid:"upLabelText",text:"The
+    label is above the input box"}]},{cname:"title",title:"Number",cid:"numberTitle"},{cname:"container",layout:"grid",cid:"numberCt",frame:true,items:[{cname:"number",cid:"commonNumber",text:"Common
+    Number"},{cname:"number",cid:"upDownNumber",spinner:"upDown",text:"Up Down"},{cname:"number",cid:"leftRightNumber",spinner:"leftRight",text:"Left
+    Right"},{cname:"number",cid:"beforeAfterNumber",spinner:"beforeAfter",text:"Before
+    After"},{cname:"number",numberInput:"true /* Show number keyboard in phone */",text:"No
+    Spinner",cid:"noSpinnerNumber",spinner:false},{cname:"number",step:5,cid:"step5Number",text:"Step
+    5"},{cname:"number",decimalCount:3,cid:"dicimal3Number",text:"Max 3 Dicimals"},{cname:"number",prefix:"$",text:"Auto
+    Format",suffix:"%",autoFormat:true,decimalCount:2,value:1234.567,cid:"autoFormatNumber"},{cname:"number",minValue:10,text:"10
+    - 20",maxValue:20,cid:"constrainNumber"}]},{cname:"title",title:"Text Area",cid:"textAreaTitle"},{cname:"container",layout:"grid",cid:"textAreaCt",frame:true,items:[{cname:"textArea",cid:"commonTextArea",text:"Common
+    TextArea"},{cname:"textArea",noWrap:true,text:"No Wrap",value:"WebBuilder is a
+    powerful rapid application development and runtime platform",cid:"noWrapTextArea"},{cname:"textArea",cid:"overflowTextArea",text:"Now
+    The Text Label Overflowed"},{cname:"line",cid:"line1"},{cname:"textArea",autoResize:true,text:"Auto
+    Resize",rows:1,maxHeight:"10em",value:"Auto resize to fit content height",cid:"autoResizeTextArea"}]},{cname:"title",title:"File
+    Input",cid:"fileInputTitle"},{cname:"label",cid:"fileInputLabel",text:"You can
+    drag and drop files from the operating system shell to the file control."},{cname:"container",layout:"grid1",cid:"fileInputCt",frame:true,items:[{cname:"fileInput",cid:"commonFileInput",text:"Common"},{cname:"fileInput",multiple:true,cid:"multipleFileInput",text:"Multiple"},{cname:"fileInput",multiple:true,browseMode:true,text:"Browse
+    file",cid:"browseFileInput"},{cname:"fileInput",multiple:true,text:"Virtual Files",value:[{name:"file1.xlsx",size:8958},{name:"
+    file2.png",size:32842}],cid:"virtualFilesFileInput"}]},{cname:"title",title:"Validation
+    value",cid:"validationTitle"},{cname:"container",layout:"grid",cid:"validationCt",frame:true,items:[{cname:"text",required:true,cid:"requiredText1",text:"Required1"},{cname:"text",sideErrorTip:true,text:"Required2",required:true,cid:"requiredText2"},{cname:"text",text:"Limit
+    Length",maxLength:9,cid:"lengthText",minLength:3},{cname:"text",cid:"alphaNumText",text:"Alpha
+    num",valueType:"alphaNum"},{cname:"text",cid:"emailText",text:"Email",valueType:"email"},{cname:"text",cid:"urlText",text:"URL",valueType:"url"},{cname:"text",regex:/\d{5}$/,regexText:"Please
+    enter at least 5 digits",placeholder:"enter 5 digits",text:"Regular Exp",cid:"regExpText"},{cname:"text",validator(e){if(e!="good")return'Please
+    enter "good"'},cid:"customValidateText",text:"Custom Validation"},{cname:"text",validator(e){let
+    t=this;Wb.ajax({url:"demo-source?xaction=checkUser",params:{username:e},mask:false,callback(i,a){t.removeError();if(i=="failed"||!a.ok)t.addError(Str.alreadyExists.format(e))}})},placeholder:"user
+    name",text:"Remote Validation",cid:"remoteValidateText"}]},{cname:"title",title:"Input
+    size",cid:"sizeTitle"},{cname:"label",cid:"sizeLabel",text:'Set the "fontSize"
+    property to set input size'},{cname:"container",layout:"grid1",cid:"sizeCt",frame:true,items:[{cname:"text",fontSize:".8em",cid:"text1",text:"text"},{cname:"number",fontSize:"1.2em",cid:"number1",text:"number"},{cname:"select",fontSize:"1.4em",text:"select",data:["item1","item2","item3"],cid:"select1"}]}]});
+hideInMenu: 'false'
+icon: text
+img: ''
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

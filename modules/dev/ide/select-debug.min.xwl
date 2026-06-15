@@ -1,0 +1,10 @@
+_icon: module
+cls: Wb.Module
+properties:
+  cid: module
+  remark: Select debug module list
+  serverScript: function main(){if(!Config.debug)return;let e,t=Wb.userid,s=[],i=DebugFiles.getDebugFiles(t);if(i){i.each(((t,i)=>{e={file:t};if(i.context)e.status=2;else
+    e.status=i.status;s.push(e)}));s.sort(((e,t)=>{let s=9,i=9;if(e.status==2)s-=5;if(t.status==2)i-=5;if(e.file<t.file)s--;else
+    i--;return s-i}))}Wb.send({items:s})}main();
+text: module
+title: ''

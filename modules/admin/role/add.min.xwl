@@ -1,0 +1,12 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Add role
+  serverScript: function main(){let a=Params.role_id_disp||Wb.getId();Params.sid=a;Wb.sync({tableName:"wb_role",insert:Params});Wb.send({sid:a,role_id_disp:a})}main();
+tags: ''
+text: module
+title: ''

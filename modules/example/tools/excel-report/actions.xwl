@@ -1,0 +1,49 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  serverScript: |-
+    let actions = {
+      /**
+       * Reload data.
+       */
+      reload() {
+        let html;
+
+        html = Wb.getExcelHtml('report.xlsx', this.getData(), this.getRowConfigs());
+        Wb.send(html);
+      },
+      /**
+       * Export data.
+       */
+      export() {
+        Wb.getExcelFile('my-report.xlsx', 'report.xlsx', this.getData(), this.getRowConfigs());
+      },
+      /**
+       * Get report data.
+       * @return {Object} Report data.
+       */
+      getData() {
+        return {
+          name: 'Geejing', date: new Date().dateText, by: 'Janice Galvin', reviewer: 'Rachel Valdez',
+          director: 'Annette Hill', email: 'contact@geejing.com',
+          rows: Wb.getAllRows('select * from wb_report_demo1 order by row_num')
+        };
+      },
+      /**
+       * Get write rows configs. @priv
+       */
+      getRowConfigs() {
+        // [{ name: 'rows', x: 0, y: 5, sheet: 'Sheet2', mergeRows: ['f1', 'f3'], mergeCols: [['f1', 'f2'], ['f5', 'f6']] }, more...]
+        return {
+          name: 'rows', x: 0, y: 5, mergeRows: 'f1', mergeCols: 'f1, f2'
+        }
+      }
+    };
+    actions[Params.xaction]();
+tags: ''
+text: module
+title: ''

@@ -1,0 +1,12 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  serverScript: let actions={select(){Wb.sendDict("select * from wb_staff","wb,")},getForm(){Wb.send(Wb.getExcelHtml("form.xlsx",{now:(new
+    Date).dateText}))},export(){let e=Wb.getObject("data");e.gender=e.gender$;Wb.getExcelFile("my-form.xlsx","form.xlsx",e)}};actions[Params.xaction]();
+tags: ''
+text: module
+title: ''

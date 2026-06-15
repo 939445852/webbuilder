@@ -1,0 +1,345 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: |-
+    Wb.define(app, {
+      /** @property {String} - The currently selected role ID. */
+      get$roleId() {
+        return app.roleTree1.selectionData?.sid;
+      },
+      /**
+       * Sets permissions for the specified list of module nodes.
+       * @param {Wb.TreeItem[]/Wb.TreeItem} nodes List of module nodes.
+       * @param {String} roleId The role id.
+       * @param {Boolean} checked True allows, false prohibits.
+       * @param {Function} [success] Fires after success.
+       */
+      setPerm(nodes, roleId, checked, success) {
+        let len;
+
+        nodes = Wb.toArray(nodes);
+        len = nodes.length;
+        if (len > 1 || !nodes[0].leaf) {
+          let word = len > 1 ? Str.nItems.format(len) : nodes[0].text;
+          word = ' "' + word + '" ';
+          Wb.confirm(Str.doConfirm.format(checked ? (Str.permit + word) : (Str.forbid + word)),
+            f => app.doSetPerm(nodes, roleId, checked, success));
+        } else
+          app.doSetPerm(nodes, roleId, checked, success);
+      },
+      /**
+       * Executes Set the permissions that specify the list of module nodes. @priv
+       * @param {Array} nodes List of module nodes.
+       * @param {String} roleId The role id.
+       * @param {Boolean} checked True allows, false prohibits.
+       * @param {Function} [success] Fires after success.
+       */
+      doSetPerm(nodes, roleId, checked, success) {
+        let modules = [], leafNodes = [], oldRoles;
+
+        nodes.forEach(node => {
+          if (node.leaf)
+            leafNodes.push(node);
+          else
+            leafNodes.pushAll(node.downAll(sub => sub.leaf));
+        });
+        leafNodes.forEach(node => modules.push(node.data.path));
+        Wb.ajax({
+          url: xpath + '/set-actions&xaction=setPerm',
+          //Data can upload more data than params
+          data: { modules, roleId, checked },
+          success() {
+            leafNodes.forEach(node => {
+              if (node.leaf) {
+                oldRoles = node.data.roles ??= [];
+                if (checked) {
+                  if (!oldRoles.includes(roleId))
+                    oldRoles.push(roleId);
+                } else {
+                  oldRoles.remove(roleId);
+                }
+              }
+            });
+            app.refreshPerms();
+            app.refreshRoles();
+            success?.();
+          }
+        });
+      },
+      /**
+       * Updates the check box of the module tree.
+       */
+      refreshPerms() {
+        let tree = app.moduleTree;
+
+        tree.suspendEvent();
+        app.scanPerms(app.roleId, tree, true);
+        tree.resumeEvent();
+      },
+      /**
+       * Updates the check boxes for the role tree.
+       */
+      refreshRoles() {
+        let tree = app.roleTree2, moduleNode = app.moduleTree.selection;
+
+        tree.suspendEvent();
+        tree.each(node => {
+          node.checked = app.scanPerms(node.data.sid, moduleNode);
+        });
+        tree.resumeEvent();
+      },
+      /**
+       * Updates the check box of the module tree. @priv
+       * @param {String} roleId The role id.
+       * @param {Wb.TreeView/Wb.TreeItem} baseNode Specifies that the node and all its child nodes are set.
+       * @param {Boolean} [doCheck] Whether to perform check module nodes.
+       * @return {Boolean} Whether the node and all its child nodes are selected. If both checked and unchecked
+       * nodes exist, return "half".
+       */
+      scanPerms(roleId, baseNode, doCheck) {
+        let hasPerm, checked, allChecked = true, allUnchecked = true;
+
+        if (baseNode.leaf) {
+          hasPerm = baseNode.data.roles?.includes(roleId);
+          if (doCheck)
+            baseNode.checked = hasPerm;
+          if (hasPerm)
+            allUnchecked = false;
+          else
+            allChecked = false;
+        } else {
+          baseNode.each(node => {
+            checked = app.scanPerms(roleId, node, doCheck);
+            if (checked == 'half') {
+              allChecked = false;
+              allUnchecked = false;
+            } else if (checked)
+              allUnchecked = false;
+            else
+              allChecked = false;
+          });
+        }
+        if (allChecked)
+          checked = true;
+        else if (allUnchecked)
+          checked = false;
+        else
+          checked = 'half';
+        if (doCheck && baseNode.isNode)
+          baseNode.checked = checked;
+        return checked;
+      },
+      /**
+       * Select the first entry after the tree loads.
+       * @param {Wb.Tree} tree The tree.
+       */
+      selectOnLoad(tree) {
+        if (tree.loaded)
+          tree.firstItem?.doSelect(true);
+        else
+          tree.on('success', f =>
+            tree.firstItem?.doSelect(true)
+            , true, { once: true });
+      }
+    });
+hideInMenu: 'false'
+icon: lock
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _expanded: true
+    _icon: tree-view
+    cls: Wb.Tree
+    events:
+      selectionchange: |-
+        this.subTitle = this.selection.text;
+        app.refreshPerms();
+    properties:
+      cid: roleTree1
+      icon: role
+      leafExpander: 'false'
+      showIcon: 'false'
+      title: '@Str.role'
+      url: '@xpath + ''/select-roles'''
+      width: 20vw
+    text: roleTree1
+  - _icon: splitter
+    cls: Wb.Splitter
+    properties:
+      cid: splitter1
+    text: splitter1
+  - _expanded: true
+    _icon: tree-view
+    cls: Wb.Tree
+    events:
+      beforecheckchange: |-
+        if (app.roleId)
+          app.setPerm(node, app.roleId, checked);
+        return false;
+      selectionchange: |-
+        app.roleTree2.subTitle = this.selection.text;
+        app.refreshRoles();
+      success: app.selectOnLoad(app.roleTree1);
+    items:
+    - _expanded: true
+      _icon: toolbar
+      cls: Wb.Toolbar
+      items:
+      - _expanded: false
+        _icon: item
+        cls: Wb.Item
+        events:
+          click: |-
+            if (app.roleId)
+              app.setPerm(app.moduleTree.topSelections, app.roleId, true);
+            else
+              Wb.tipSelect(Str.role);
+        properties:
+          cid: permitItem
+          icon: ok
+          keys: Ctrl+E
+          text: '@Str.permit'
+        text: permitItem
+      - _expanded: false
+        _icon: item
+        cls: Wb.Item
+        events:
+          click: |-
+            if (app.roleId)
+              app.setPerm(app.moduleTree.topSelections, app.roleId, false);
+            else
+              Wb.tipSelect(Str.role);
+        properties:
+          cid: forbidItem
+          icon: cancel
+          keys: Ctrl+D
+          text: '@Str.forbid'
+        text: forbidItem
+      - _icon: divider
+        cls: Wb.Divider
+        properties:
+          cid: divider1
+        text: divider1
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        events:
+          click: app.moduleTree.expandAll();
+        properties:
+          cid: expandAll
+          icon: expand
+          text: '@Str.expandAll'
+        text: expandAll
+      - _expanded: false
+        _icon: item
+        cls: Wb.Item
+        events:
+          click: app.moduleTree.collapseAll();
+        properties:
+          cid: collapseAll
+          icon: compress
+          text: '@Str.collapseAll'
+        text: collapseAll
+      - _icon: divider
+        cls: Wb.Divider
+        properties:
+          cid: divider2
+        text: divider2
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        events:
+          click: |-
+            Wb.confirm(Str.doConfirm.format(Str.clear), f => {
+              Wb.ajax({
+                url: xpath + '/set-actions&xaction=cleanInvalid',
+                success() {
+                  Wb.tipDone(Str.clear);
+                }
+              });
+            });
+        properties:
+          cid: clearItem
+          icon: recycle
+          text: '@Str.clear'
+          tip: '@Str.clearInvalidData'
+        text: clearItem
+      properties:
+        cid: tbar
+        isProperty: 'true'
+      text: tbar
+    - _expanded: true
+      _icon: array
+      cls: Wb.Array
+      items:
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: expanderCol
+          expander: 'true'
+          fieldName: text
+          render: |-
+            let remark = data.remark;
+
+            if (remark) {
+              let span = el.addTag('span');
+              span.textContent = value;
+              span = el.addEl('w-sub-color w-margin-l', 'span');
+              span.textContent = Wb.optText(remark);
+            } else {
+              return value;
+            }
+        text: expanderCol
+      properties:
+        cid: columns
+      text: columns
+    properties:
+      allowDeselect: 'false'
+      cid: moduleTree
+      flex: '1'
+      itemIcon: module
+      minWidth: 10em
+      multiSelect: 'true'
+      url: '@xpath + ''/select-modules'''
+    text: moduleTree
+  - _icon: splitter
+    cls: Wb.Splitter
+    properties:
+      cid: splitter2
+    text: splitter2
+  - _expanded: true
+    _icon: tree-view
+    cls: Wb.Tree
+    events:
+      beforecheckchange: |-
+        app.setPerm(app.moduleTree.selection, node.data.sid, checked, f => {
+          this.suspendEvent();
+          node.checked = checked;
+          this.resumeEvent();
+        });
+        return false;
+      success: app.selectOnLoad(app.moduleTree);
+    properties:
+      cid: roleTree2
+      icon: role
+      leafExpander: 'false'
+      showIcon: 'false'
+      title: '@Str.set'
+      url: '@xpath + ''/select-roles&check=1'''
+      width: 20vw
+    text: roleTree2
+  properties:
+    cid: viewport1
+    layout: row
+  text: viewport1
+properties:
+  cid: module
+  remark: System permission management tool
+tags: ''
+text: module
+title: '@permMng'

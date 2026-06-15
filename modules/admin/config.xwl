@@ -1,0 +1,443 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: |-
+    /**
+     * System configuration management tools.
+     */
+    Wb.define(app, {
+      /** @property {String} - The current config item path. */
+      get$path() {
+        return app.tree1.getPath('text', '.');
+      },
+      /**
+       * Fix the value. @priv
+       * @param {Object} value Value to be fixed.
+       * @param {String} type Value type.
+       * @return {Object} The fixed value.
+       */
+      fixValue(value, type) {
+        if (type == 'object' || type == 'array')
+          return Wb.encode(Wb.parse(value));
+        else if (type == 'date')
+          return value.textValue;
+        else
+          return value;
+      },
+      /**
+       * Verify the validity of the input value. @priv
+       * @return {Boolean} Return true if the value is valid.
+       */
+      verifyValue() {
+        let type = app.typeEditor.value, value = app.valueEditor.value, isArray, valid;
+
+        isArray = type == 'array';
+        if (isArray || type == 'object') {
+          try {
+            valid = isArray ? Wb.isArray(Wb.parse(value)) : Wb.isObject(Wb.parse(value));
+          } catch (e) {
+            valid = false;
+          }
+          if (!valid) {
+            Wb.warn(Str.invalidValue.format(value), f => app.valueEditor.focus());
+            return false;
+          }
+        }
+        return true;
+      },
+      /**
+       * Creates a value editor of the specified type. @priv
+       * @param {String} type The value type.
+       * @param {String} [data] List data, only applicable when the type is enum.
+       * @return {Wb.Control} The created editor.
+       */
+      createValueEditor(type, data) {
+        let editor;
+        switch (type) {
+          case 'string':
+            editor = { cname: 'text' };
+            break;
+          case 'int':
+          case 'long':
+            editor = { cname: 'number', decimalCount: 0 };
+            break;
+          case 'double':
+            editor = { cname: 'number' };
+            break;
+          case 'date':
+            editor = { cname: 'datetime' };
+            break;
+          case 'bool':
+            editor = { cname: 'toggle' };
+            break;
+          case 'enum':
+            if (data)
+              editor = { cname: 'select', forceSelect: true, data };
+            else
+              editor = { cname: 'text' };
+            break;
+          default:
+            editor = { cname: 'textArea', minHeight: '8em' };
+        }
+        if (type != 'string' && type != 'text')
+          editor.required = true;
+        Wb.apply(editor, { text: Str.value, cid: 'valueEditor', app });
+        return Wb.create(editor);
+      }
+    });
+hideInMenu: 'false'
+icon: gear
+img: ''
+items:
+- _expanded: true
+  _icon: window
+  cls: Wb.Window
+  events:
+    ok: |-
+      let win = this, params = Wb.getValue(win), name = params.nameEditor, node = app.tree1, path,
+        newNode, valid, listValue = params.listEditor, type = params.typeEditor, fixedList;
+
+      if (listValue) {
+        try {
+          valid = Wb.isArray(Wb.parse(listValue));
+        } catch (e) {
+          valid = false;
+        }
+        if (!valid) {
+          Wb.warn(Str.invalidValue.format(listValue), f => app.listEditor.focus());
+          return;
+        }
+      }
+      if (!app.verifyValue())
+        return;
+      fixedList = Wb.encode(Wb.parse(listValue));
+      params.listEditor = fixedList;
+      if (name.startsWith('.'))
+        name = app.path + name;
+      else if (!name.includes('.'))
+        name = app.path + '.' + name;
+      params.nameEditor = name;
+      Wb.ajax({
+        url: xpath + '/add',
+        params,
+        success() {
+          path = name.beforeItem('.');
+          name = name.lastItem('.');
+          path.split('.').forEach(item => {
+            node = node.find(sub => sub.text == item) ?? node.addData({ text: item, items: [] });
+          });
+          if (node.selected) {
+            let desc = params.descEditor, trimDesc = desc.trim();
+
+            //allow to set multi-lan desc
+            if (trimDesc.startsWith('{') && trimDesc.endsWith('}')) {
+              try {
+                trimDesc = Wb.parse(trimDesc);
+                desc = trimDesc[Str.lang] ?? trimDesc.text;
+              } catch (e) {
+                //ignore
+              }
+            }
+            app.grid1.addData({
+              name, value: app.fixValue(params.valueEditor, type), type, desc, list: fixedList
+            }).select();
+          } else {
+            app.selConfigName = name;
+            node.select();
+          }
+          win.hide();
+        }
+      });
+  items:
+  - _icon: text
+    cls: Wb.Text
+    properties:
+      cid: nameEditor
+      required: 'true'
+      text: '@Str.name'
+    text: nameEditor
+  - _expanded: false
+    _icon: combo
+    cls: Wb.Select
+    events:
+      select: |-
+        let addWin = app.addWin, type = data.text, editor;
+        addWin.down('valueEditor')?.destroy();
+        editor = app.createValueEditor(type);
+        addWin.gridTplRows = editor.cname == 'textArea' ? 'auto auto 1fr auto' : null;
+        addWin.insertAfter(editor, this);
+        if (type == 'enum') {
+          if (!app.listEditor)
+            addWin.insertAfter({ cname: 'text', text: Str.list, cid: 'listEditor', required: true, app },
+              app.valueEditor);
+        } else {
+          app.listEditor?.destroy();
+        }
+        addWin.show();
+    properties:
+      cid: typeEditor
+      data: '[''string'', ''int'', ''long'', ''double'', ''date'', ''bool'', ''enum'',
+        ''array'', ''object'', ''text'']'
+      editable: 'false'
+      required: 'true'
+      text: '@Str.type'
+      valueIndex: '0'
+    text: typeEditor
+  - _expanded: false
+    _icon: text
+    cls: Wb.Text
+    properties:
+      cid: valueEditor
+      text: '@Str.value'
+    text: valueEditor
+  - _icon: text
+    cls: Wb.Text
+    properties:
+      cid: descEditor
+      required: 'true'
+      text: '@Str.desc'
+    text: descEditor
+  properties:
+    cid: addWin
+    dialog: 'true'
+    icon: add
+    layout: grid1
+    title: '@Str.add'
+    width: 60em
+  text: addWin
+- _expanded: true
+  _icon: window
+  cls: Wb.Window
+  events:
+    ok: |-
+      let win = this, params = Wb.getValue(win), rec = app.grid1.selection;
+
+      if (!app.verifyValue())
+        return;
+      params.nameEditor = app.path + '.' + rec.data.name;
+      Wb.ajax({
+        url: xpath + '/edit',
+        params,
+        success() {
+          let value;
+
+          try {
+            value = app.fixValue(params.valueEditor, rec.data.type)
+          } catch (e) {
+            Wb.error(Str.invalidExpress);
+            return;
+          }
+          rec.set('value', value);
+          win.hide();
+        }
+      });
+  properties:
+    cid: editWin
+    dialog: 'true'
+    icon: edit
+    layout: grid1
+    title: '@Str.edit'
+    width: 60em
+  text: editWin
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _expanded: true
+    _icon: toolbar
+    cls: Wb.Toolbar
+    items:
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: |-
+          let addWin = app.addWin;
+
+          Wb.reset(Wb.pluck(addWin.children, ['nameEditor', 'valueEditor', 'listEditor', 'descEditor']));
+          addWin.show();
+      properties:
+        cid: addBtn
+        icon: add
+        keys: Ctrl+E
+        text: '@Str.add'
+      text: addBtn
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: |-
+          let data = app.grid1.selection?.data;
+          if (!data) {
+            Wb.tipSelect();
+            return;
+          }
+          let editWin = app.editWin, children = editWin.children, list = data.list, editor;
+          children.valueEditor?.destroy();
+          editor = app.createValueEditor(data.type, list ? Wb.decode(list) : null);
+          editWin.add(editor);
+          editWin.gridTplRows = editor.cname == 'textArea' ? '1fr' : null;
+          editWin.subTitle = data.name;
+          children.valueEditor.value = data.value;
+          editWin.show();
+      properties:
+        cid: editBtn
+        icon: edit
+        keys: Ctrl+J
+        text: '@Str.edit'
+      text: editBtn
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: |-
+          let rec = app.grid1.selection;
+          if (!rec) {
+            Wb.tipSelect();
+            return;
+          }
+          Wb.confirm(Wb.getActionHint(rec, 'name'), f => {
+            Wb.ajax({
+              url: xpath + '/del',
+              params: { nameEditor: app.path + '.' + rec.data.name },
+              success() {
+                app.grid1.delRecords();
+              }
+            });
+          });
+      properties:
+        cid: delBtn
+        icon: delete
+        keys: Ctrl+D
+        text: '@Str.del'
+      text: delBtn
+    - _icon: divider
+      cls: Wb.Divider
+      properties:
+        cid: divider1
+      text: divider1
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: app.tree1.loadSelect();
+      properties:
+        cid: refreshBtn
+        icon: refresh
+        text: '@Str.refresh'
+      text: refreshBtn
+    - _icon: divider
+      cls: Wb.Divider
+      properties:
+        cid: divider2
+      text: divider2
+    - _icon: label
+      cls: Wb.Label
+      properties:
+        cid: pathLabel
+        textSelectable: 'true'
+      text: pathLabel
+    properties:
+      cid: tbar
+      isProperty: 'true'
+    text: tbar
+  - _expanded: true
+    _icon: tree-view
+    cls: Wb.Tree
+    events:
+      selectionchange: |-
+        let path = app.path;
+        app.grid1.load({ params: { path } });
+        app.pathLabel.text = path;
+    properties:
+      autoSelect: 'true'
+      cid: tree1
+      url: '@xpath + ''/select-tree'''
+      width: 17em
+    text: tree1
+  - _expanded: true
+    _icon: splitter
+    cls: Wb.Splitter
+    properties:
+      cid: splitter1
+    text: splitter1
+  - _expanded: true
+    _icon: grid
+    cls: Wb.Grid
+    events:
+      itemdblclick: app.editBtn.fireEvent('click');
+      selectionchange: |-
+        let item = this.selection, node = app.tree1.selection;
+        app.pathLabel.text = node.getPath('text', '.') + (item ? ('.' + item.data.name) : '');
+      success: |-
+        /** @property {String} selConfigName The name of the configuration item selected after the table is loaded successfully. */
+        if (app.selConfigName) {
+          this.find(item => item.data.name == app.selConfigName)?.select();
+          app.selConfigName = null;
+        }
+    items:
+    - _expanded: true
+      _icon: array
+      cls: Wb.Array
+      items:
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: rowCol
+          rowNum: 'true'
+        text: rowCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: nameCol
+          fieldName: name
+          text: '@Str.name'
+          width: 14em
+        text: nameCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          align: left
+          cid: valueCol
+          fieldName: value
+          render: |-
+            if (data.type == 'date')
+              return value.dateValue.dateTimeText;
+            else
+              return value;
+          text: '@Str.value'
+          width: 23em
+        text: valueCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: descCol
+          fieldName: desc
+          text: '@Str.desc'
+          width: '-1'
+        text: descCol
+      properties:
+        cid: columns
+      text: columns
+    properties:
+      autoLoad: 'false'
+      cid: grid1
+      flex: '1'
+      pagingBar: 'false'
+      url: '@xpath + ''/select-list'''
+    text: grid1
+  properties:
+    cid: viewport1
+    layout: row
+  text: viewport1
+properties:
+  cid: module
+  remark: System configuration tool
+tags: ''
+text: module
+title: '@systemConfig'

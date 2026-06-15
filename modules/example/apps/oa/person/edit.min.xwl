@@ -1,0 +1,11 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  serverScript: function main(){Wb.sync({tableName:"wb_staff",update:Params})}main();
+tags: ''
+text: module
+title: ''

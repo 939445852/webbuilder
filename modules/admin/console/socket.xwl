@@ -1,0 +1,23 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: System console socket monitor
+  serverScript: |-
+    function main() {
+      switch (event) {
+        case 'open':
+          com.wb.tool.Console.startCapture();
+          break;
+        case 'close':
+          com.wb.tool.Console.stopCapture();
+          break;
+      }
+    }
+    main();
+tags: ''
+text: module
+title: ''

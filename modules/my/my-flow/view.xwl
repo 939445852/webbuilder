@@ -1,0 +1,32 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: View the form of workflow
+  serverScript: |-
+    function main() {
+      const Util = Wb.load('./util.mjs');
+      let now = new Date(), flow = new Wb.Workflow({ flowId: Params.flowId }), form, update = [], userid = Wb.userid;
+
+      // Mark the given flow read
+      Wb.getObject('allFlowId').forEach(item => {
+        update.push({ $flow_id: item, $user_id: userid, $status: 0, status: 1, process_time: now });
+      });
+      Wb.sync({
+        tableName: 'wb_flow_user', whereFields: 'flow_id,user_id,status', unique: false, update
+      });
+      form = Wb.getBool('handle') ? Util.getForm(flow, 'handle') : Util.getForm(flow, 'view');
+      if (!form)
+        Wb.raise('The workflow is configured with neither handleForm nor viewForm.');
+      Wb.send({
+        form, back: flow.getProperty('back'), transfer: flow.getProperty('transfer'), reject: flow.getProperty('reject'),
+        signBefore: flow.getProperty('signBefore'), signAfter: flow.getProperty('signAfter'), restarting: flow.restarting
+      });
+    }
+    main();
+tags: ''
+text: module
+title: ''

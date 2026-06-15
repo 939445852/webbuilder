@@ -1,0 +1,24 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.make(app,{cname:"viewport",icon:"form",layout:"fit",title:"To Do
+    List",cid:"viewport1",tools:[{icon:"gear",cid:"item1"},{icon:"share",cid:"item2"},{icon:"close",cid:"item3",events:{click(e,t){app.todoView.close()}}}],items:[{cname:"view",layout:"column",roundBorder:true,data:[{text:"To
+    complete the project report by the end of this week.",done:1},{text:"To schedule
+    a meeting with my team to discuss the progress of the project.",done:1},{text:"To
+    review the financial reports and identify any areas of concern."},{text:"To prepare
+    a presentation for the upcoming board meeting."},{text:"To catch up on any outstanding
+    emails and replies."},{text:"To update the company website with the latest news
+    and announcements."},{text:"To research potential new business opportunities and
+    identify potential markets."},{text:"To organize a training session for new employees
+    to familiarize them with company policies and procedures."}],flex:1,plainTitle:true,cid:"view1",itemTpl:'<div
+    class="w-row w-align-center w-gapd5 w-padding">\n  <div class="w-icon icon-{if
+    data.done}check9{else}check1{/if}"></div>\n  <div class="w-name">{text}</div>\n</div>'}]});
+hideInMenu: 'false'
+icon: form
+img: ''
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

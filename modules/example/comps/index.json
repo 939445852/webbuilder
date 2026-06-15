@@ -1,0 +1,32 @@
+{
+  "title": "",
+  "icon": "",
+  "img": "",
+  "hideInMenu": "false",
+  "items": [
+    "button.xwl",
+    "input.xwl",
+    "select.xwl",
+    "date.xwl",
+    "decoration.xwl",
+    "container.xwl",
+    "window.xwl",
+    "toolbar-menu.xwl",
+    "check-slider.xwl",
+    "option.xwl",
+    "view.xwl",
+    "grid.xwl",
+    "tree.xwl",
+    "slot.xwl",
+    "visual.xwl",
+    "chart.xwl",
+    "chart",
+    "misc-comps.xwl",
+    "code-editor.xwl",
+    "html-editor.xwl",
+    "web-socket.xwl",
+    "web-socket",
+    "dual-box.xwl",
+    "dual-box"
+  ]
+}

@@ -1,0 +1,61 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  serverScript: |-
+    let actions = {
+      /**
+       * Send get request.
+       */
+      getHtml() {
+        Wb.send(Wb.submit('https://developer.mozilla.org'));
+      },
+      /**
+       * Send post request with params.
+       */
+      postParams() {
+        // For reference
+        // Wb.submit({ url: 'http://localhost:8080/wb/m?xwl=test2', params: { foo: 'bar' } });
+      },
+      /**
+       * Send post request with payload data.
+       */
+      postPayload() {
+        // For reference
+        // Wb.submit({ url: 'http://localhost:8080/wb/m?xwl=test2', data: payloadObject });
+      },
+      /**
+       * Send post request with files.
+       */
+      postFiles() {
+        // Wb.submit({
+        //   url: 'http://localhost:8080/wb/m?xwl=test2',
+        //   params: {
+        //     foo: 'bar', 'wb.js': new Wb.File(true, 'wb/js/wb.js'), file: javaFile,
+        //     myBytes: bytes, 'name|filename.dat': inputStream
+        //   }
+        // });
+      },
+      /**
+       * Login to the system, verify the username and password, and get the cookie token.
+       */
+      loginAndLogout() {
+        // For reference
+        /*
+        let cookie = Wb.submit({
+          url: 'http://localhost:8080/wb/verify', all: true, params: { username: 'admin', password: 'admin' }
+        }).cookie;
+        //Access module1 with logined cookie token
+        let result = Wb.submit({ url: 'http://localhost:8080/wb/m?xwl=module1', cookie }, { foo: 'bar' });
+        //Logout
+        Wb.submit({ url: 'http://localhost:8080/wb/logout', cookie });
+        */
+      }
+    };
+    actions[Params.xaction]();
+tags: ''
+text: module
+title: ''

@@ -1,0 +1,573 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: tree-view
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: mainLabel
+      cls: w-title3
+      text: Tree
+    text: mainLabel
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: commonRemoteTreeTitle
+      title: Common remote tree
+    text: commonRemoteTreeTitle
+  - _expanded: true
+    _icon: tree-view
+    cls: Wb.Tree
+    properties:
+      cid: commonRemoteTree
+      height: 15em
+      url: demo-source?xaction=listAreaTree
+    text: commonRemoteTree
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: miscTreeTitle
+      title: Miscillaneous tree
+    text: miscTreeTitle
+  - _expanded: true
+    _icon: tree-view
+    cls: Wb.Tree
+    events:
+      itemdblclick: Wb.tip(item.data.text + ' row double clicked');
+    items:
+    - _expanded: true
+      _icon: array
+      cls: Wb.Array
+      items:
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: textCol
+          expander: 'true'
+          fieldName: text
+          freeze: 'true'
+          render: |-
+            //use sub-color to render subText
+            let textEl, subText = data.percentage > 0.15 ? 'Large area' : null;
+            if (subText) {
+              // Manual add sub text, please use subtext field instead
+              el.cls = 'w-text-wrap';
+              el.removeCls('w-text');
+              el.addEl('w-text').textContent = value;
+              el.addEl('w-sub-text').textContent = subText;
+              // let span = el.addTag('span');
+              // span.textContent = value;
+              // span = el.addEl('w-sub-color w-margin-l', 'span');
+              // span.textContent = subText;
+            } else
+              return value;
+          text: Area
+          width: 18em
+        text: textCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        items:
+        - _expanded: true
+          _icon: column
+          cls: Wb.Column
+          properties:
+            cid: percentageCol
+            fieldName: percentage
+            text: Percentage
+            titleAlign: right
+            type: percent
+          text: percentageCol
+        - _expanded: true
+          _icon: column
+          cls: Wb.Column
+          properties:
+            cid: areaCol
+            fieldName: area
+            render: |-
+              if (value < 10000000) {
+                el.parentNode.cls = 'w-succ-bgcolor-row';
+                el.cls = 'w-error-color';
+                value = '* ' + value.intText;
+              } else {
+                value = value?.intText;
+              }
+
+              //add icon manually
+              let wrapEl = el.addEl('w-row w-align-center');
+              el.removeCls('w-text');
+              wrapEl.addEl('w-margin-l w-icon icon-thumb');
+              wrapEl.addEl('w-text').textContent = value;
+            text: Area(Sq. Km)
+            titleAlign: right
+          text: areaCol
+        properties:
+          cid: landAreasCol
+          text: Land Areas
+        text: landAreasCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: remarkCol
+          fieldName: remark
+          text: Remark
+          width: '-1'
+        text: remarkCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          checkBox: int
+          checkRefresh: 'true'
+          cid: checkCol1
+          fieldName: myCheck
+          menuText: Check
+        text: checkCol1
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          checkBox: roTrue
+          cid: checkCol2
+          fieldName: myCheck
+        text: checkCol2
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          checkBox: roAll
+          cid: checkCol3
+          fieldName: myCheck
+        text: checkCol3
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: toggleCol
+          render: |-
+            let row = this;
+            value = row.data.myCheck;
+            row.addFooter({
+              cname: 'toggle', returnType: 'int', value, toggleAlign: 'center', clickToggle: true,
+              events: {
+                change(value) {
+                  // If there is no need to synchronously update other fields, this is more efficient
+                  // row.data.myCheck = value; // only update myCheck field value
+                  row.set('myCheck', value); // update whole row
+                }
+              }
+            }, el);
+          text: Toggle
+          width: 5em
+        text: toggleCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: linkCol
+          render: |-
+            let a = el.addTag('a');
+            el.cls = 'w-ta-center';
+            a.textContent = 'Download';
+            a.onclick = e => Wb.tip('Download data of ' + data.text);
+            // a.onclick = app.myFunc;
+          text: Link
+          width: 8em
+        text: linkCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        items:
+        - _expanded: true
+          _icon: array
+          cls: Wb.Array
+          items:
+          - _expanded: false
+            _icon: item
+            cls: Wb.Item
+            events:
+              click: Wb.tip('Set ' + this.data.text);
+            properties:
+              cid: setItem
+              icon: gear
+              tip: Set
+            text: setItem
+          - _expanded: false
+            _icon: item
+            cls: Wb.Item
+            events:
+              click: Wb.tip('Share ' + this.data.text);
+            properties:
+              cid: shareItem
+              icon: share2
+              tip: Add
+            text: shareItem
+          properties:
+            cid: buttons
+          text: buttons
+        properties:
+          cid: actionsCol
+          text: Actions
+          width: 8em
+        text: actionsCol
+      properties:
+        cid: columns
+      text: columns
+    properties:
+      cid: miscTree
+      columnsSortable: 'true'
+      defaultFields: |-
+        ({
+          _icon: { value: 'geejing' },
+          _checked: {
+            convert(value, data) {
+              if (value === true)
+                return true;
+              else
+                return data.text == 'Mexico' ? null : false;
+            }
+          }
+        })
+      frame: 'true'
+      gridLine: 'true'
+      height: 20em
+      linkedCheck: 'true'
+      localData: |-
+        [
+          {
+            text: 'Asia', _icon: 'flag1', _checked: true, myCheck: 1,
+            remark: 'Asia is the largest continent in the world', area: 44579000, percentage: 0.3, items: [
+              { text: 'China', _leaf: true, _checked: true, myCheck: 0 },
+              { text: 'Japan', _leaf: true, _checked: true, myCheck: 1 },
+              { text: 'Korea', _leaf: true, _checked: true, myCheck: 0 }
+            ]
+          },
+          {
+            text: 'Europe', _icon: 'flag1', myCheck: 1,
+            remark: 'Europe is between Asia and Africa', area: 9938000, percentage: 0.067, items: [
+              { text: 'France', _leaf: true },
+              { text: 'Germany', _leaf: true },
+              { text: 'UK', _leaf: true }
+            ]
+          },
+          {
+            text: 'North America', _icon: 'flag1', _selected: true, _expanded: true,
+            remark: "North America is the third largest of the world's continents", area: 24256000, percentage: 0.165, items: [
+              { text: 'Canada', _leaf: true },
+              { text: 'Mexico', _leaf: true },
+              { text: 'USA', _leaf: true }
+            ]
+          },
+          {
+            text: 'South America', _icon: 'flag1', _disabled: true,
+            remark: "Sorth America is the fourth largest of the world's continents", area: 17819000, percentage: 0.12, items: [
+              { text: 'Argentina', _leaf: true },
+              { text: 'Brazil', _leaf: true }
+            ]
+          }
+        ]
+      pagingBar: 'true'
+      resizable: 'true'
+      sorters: text
+      stateId: wb.miscTree
+    text: miscTree
+  - _icon: component
+    cls: Wb.Component
+    properties:
+      cid: miscDescComp
+      html: |-
+        <div>Feature List:</div>
+        <ul>
+          <li>Columns sortable, resizable, draggable and freezable.</li>
+          <li>Arbitrary multi-Level Headers.</li>
+          <li>Customize cell rendering.</li>
+          <li>Rows and columns highlighing.</li>
+          <li>Local data pagination.</li>
+          <li>Bind buttons or any controls to cells.</li>
+          <li>Multiple styles of check columns.</li>
+          <li>Customize columns and persistence to the database.</li>
+        </ul>
+      textSelectable: 'false'
+    text: miscDescComp
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: groupingTreeTitle
+      title: Grouping tree
+    text: groupingTreeTitle
+  - _expanded: true
+    _icon: tree-view
+    cls: Wb.Tree
+    items:
+    - _expanded: true
+      _icon: array
+      cls: Wb.Array
+      items:
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: nameCol
+          expander: 'true'
+          fieldName: name
+          sortable: 'false'
+          text: Name
+          width: 18em
+        text: nameCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: departmentCol
+          fieldName: department
+          text: Department
+          width: 18em
+        text: departmentCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: jobTitleCol
+          fieldName: jobTitle
+          text: Job Title
+          width: 18em
+        text: jobTitleCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: countryCol
+          fieldName: country
+          text: Country
+          width: '-1'
+        text: countryCol
+      properties:
+        cid: columns
+      text: columns
+    properties:
+      cid: groupingTree
+      columnsSortable: 'true'
+      frame: 'true'
+      gridLine: 'true'
+      grouping: 'true'
+      height: 20em
+      localData: |-
+        [
+          { name: 'Alice', department: 'Engineering', jobTitle: 'Software Engineer', country: 'USA', _leaf: true },
+          { name: 'Bob', department: 'Marketing', jobTitle: 'Marketing Manager', country: 'UK', _leaf: true },
+          { name: 'Charlie', department: 'Engineering', jobTitle: 'Junior Software Engineer', country: 'USA', _leaf: true },
+          { name: 'David', department: 'Sales', jobTitle: 'Sales Representative', country: 'China', _leaf: true },
+          { name: 'Eve', department: 'Marketing', jobTitle: 'Content Marketer', country: 'UK', _leaf: true },
+          { name: 'Frank', department: 'Engineering', jobTitle: 'Software Engineer', country: 'USA', _leaf: true },
+          { name: 'Grace', department: 'Sales', jobTitle: 'Sales Manager', country: 'China', _leaf: true },
+          { name: 'Heidi', department: 'Engineering', jobTitle: 'Junior Software Engineer', country: 'USA', _leaf: true },
+          { name: 'Ivan', department: 'Marketing', jobTitle: 'Social Media Marketer', country: 'UK', _leaf: true },
+          { name: 'Judy', department: 'Sales', jobTitle: 'Sales Representative', country: 'China', _leaf: true },
+          { name: 'Kevin', department: 'Engineering', jobTitle: 'Software Engineer', country: 'USA', _leaf: true },
+          { name: 'Luna', department: 'Marketing', jobTitle: 'Marketing Coordinator', country: 'UK', _leaf: true },
+          { name: 'Mike', department: 'Engineering', jobTitle: 'Junior Software Engineer', country: 'USA', _leaf: true },
+          { name: 'Nora', department: 'Sales', jobTitle: 'Sales Manager', country: 'China', _leaf: true },
+          { name: 'Oscar', department: 'Engineering', jobTitle: 'Intern', country: 'USA', _leaf: true }
+        ]
+      resizable: 'true'
+      sorters: department
+    text: groupingTree
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: editableTreeTitle
+      title: Editable tree
+    text: editableTreeTitle
+  - _expanded: true
+    _icon: tree-view
+    cls: Wb.Tree
+    items:
+    - _expanded: true
+      _icon: toolbar
+      cls: Wb.Toolbar
+      items:
+      - _expanded: false
+        _icon: item
+        cls: Wb.Item
+        events:
+          click: |-
+            //Some related methods: tree.add()/tree.addData()/tree.insert()/tree.insertData()/tree.insertXXX()/tree.insertDataXXX() etc.
+            app.editableTree.addRecord({ area_name: 'New item', _checked: false });
+        properties:
+          cid: addBtn
+          icon: add
+          keys: Ctrl+E
+          text: '@Str.add'
+        text: addBtn
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        events:
+          click: |-
+            let firstRec = app.editableTree.firstItem;
+            if (firstRec) {
+              firstRec.set({ sid: 'code', area_name: 'new name' });
+              app.editableTree.startEdit(firstRec, 'area_name');
+              firstRec.highlight();
+            }
+        properties:
+          cid: editBtn
+          icon: edit
+          keys: Ctrl+J
+          text: '@Str.edit'
+        text: editBtn
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        events:
+          click: |-
+            //Some related methods: tree.destroySelection()/item.destroy()/Wb.destroy(items);
+            app.editableTree.delRecords();
+        properties:
+          cid: delBtn
+          icon: delete
+          keys: Ctrl+D
+          text: '@Str.del'
+        text: delBtn
+      - _icon: divider
+        cls: Wb.Divider
+        properties:
+          cid: divider1
+        text: divider1
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        events:
+          click: |-
+            let tree = this.upBy(p => p instanceof Wb.Tree); //same as: app.editableTree
+            let firstNode = tree.items[0], newNode;
+            firstNode.expand(n => {
+              newNode = firstNode.addData({ area_name: 'new node', _leaf: true, _icon: 'earth', _checked: true });
+              //other relative methods: insertData, insertDataBefore, insertDataAfter, insert, add etc
+              newNode.select();
+            });
+        properties:
+          cid: addChild
+          icon: insert
+          text: Add Child
+        text: addChild
+      - _icon: divider
+        cls: Wb.Divider
+        properties:
+          cid: divider2
+        text: divider2
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        events:
+          click: |-
+            app.editableTree.sync({
+              url: xpath, //Should be changed to a valid URL
+              success() {
+                Wb.tipDone();
+              }
+            });
+        properties:
+          cid: saveBtn
+          icon: save
+          keys: Ctrl+S
+          text: '@Str.save'
+        text: saveBtn
+      properties:
+        cid: tbar
+        isProperty: 'true'
+      text: tbar
+    - _expanded: true
+      _icon: array
+      cls: Wb.Array
+      items:
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        items:
+        - _expanded: true
+          _icon: text
+          cls: Wb.Text
+          properties:
+            cid: editor
+            isProperty: 'true'
+            required: 'true'
+          text: editor
+        properties:
+          cid: areaNameCol
+          expander: 'true'
+          fieldName: area_name
+          text: Area name
+          width: '-1'
+        text: areaNameCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        items:
+        - _expanded: true
+          _icon: text
+          cls: Wb.Text
+          properties:
+            cid: editor
+            isProperty: 'true'
+            required: 'true'
+          text: editor
+        properties:
+          cid: sidCol
+          fieldName: sid
+          text: Id
+          width: 15em
+        text: sidCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        items:
+        - _icon: combo
+          cls: Wb.Select
+          properties:
+            cid: editor
+            forceSelect: 'true'
+            isProperty: 'true'
+            required: 'true'
+            textField: sid
+            url: demo-source?xaction=areaSearch
+          text: editor
+        properties:
+          cid: parentIdCol
+          fieldName: parent_id
+          text: Parent id
+          width: 15em
+        text: parentIdCol
+      properties:
+        cid: columns
+      text: columns
+    properties:
+      cid: editableTree
+      columnsSortable: 'true'
+      editable: 'true'
+      frame: 'true'
+      height: 15em
+      multiSelect: 'true'
+      pagingBar: 'true'
+      sorters: area_name
+      url: demo-source?xaction=listAreaTree
+    text: editableTree
+  properties:
+    cid: viewport1
+    layout: grid1
+  text: viewport1
+properties:
+  cid: module
+  description: demo-source=example/common/demo-source.xwl
+tags: ''
+text: module
+title: ''

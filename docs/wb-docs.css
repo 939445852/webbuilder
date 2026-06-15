@@ -1,0 +1,160 @@
+/* main page */
+.wd-doc {
+  padding: .5em;
+  line-height: 1.8;
+}
+/* doc image */
+.wd-doc img {
+  margin: .5em 0;
+}
+/* main page children */
+.wd-doc > * {
+  flex-shrink: 0;
+}
+/* manual el */
+.wd-manual {
+  overflow: auto;
+}
+/* manual el */
+.wd-manual > .wd-list {
+  overflow: visible;
+}
+/* title */
+.wd-title {
+  align-items: baseline;
+  padding: 0 .5em;
+}
+/* pre */
+.wd-pre {
+  margin: 1em 0;
+}
+/* description */
+.wd-main-desc {
+  padding: .5em;
+}
+/* description hint */
+.wd-hint-desc {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  margin: 0 1em;
+  cursor: pointer;
+}
+/* sub title */
+.wd-sub-title {
+  font-size: 1.2em;
+  margin-left: 1em;
+}
+/* docs list */
+.wd-list {
+  flex: 1;
+  overflow: auto;
+}
+/* segment */
+.wd-segment {
+  margin-top: 1em;
+}
+/* class name */
+.wd-cls {
+  margin-left: auto;
+  margin-right: .5em;
+}
+/* items header */
+.wd-header {
+  margin-bottom: .5em;
+}
+/* header children div */
+.wd-header > div {
+  white-space: nowrap;
+}
+/* segment title */
+.wd-seg-title {
+  align-items: center;
+  font-weight: bold;
+  padding: 1em .5em;
+}
+/* section title */
+.wd-sec-title {
+  font-weight: bold;
+  font-size: 1.3em;
+  margin: .7em 0;
+}
+/* new line */
+.wd-newline {
+  height: .8em;
+}
+/* key flag */
+.wd-key-flag {
+  font-size: .8em;
+  width: 1.5em;
+  flex: none;
+  cursor: pointer;
+}
+/* view source arrow */
+.wd-view-arrow {
+  font-size: .8em;
+  margin-right: .5em;
+  cursor: pointer;
+}
+/* logo */
+.wd-logo {
+  user-select: none;
+  font-weight: bold;
+  width: 2em;
+  border-radius: 50%;
+  padding: .1em .3em;
+  margin-right: .5em;
+  text-align: center;
+}
+/* flag */
+.wd-flag {
+  padding: .02em .3em;
+  margin: 0 .3em;
+  text-align: center;
+}
+/* list item */
+.wd-item {
+  padding: 1em .5em;
+}
+/* Separator */
+.wd-sp {
+  margin: 0 .3em;
+}
+/* getter & setter key */
+.wd-accessor-desc {
+  font-style: italic;
+  font-family: Courier New;
+  margin-right: .5em;
+}
+/* params key */
+.wd-params-key {
+  font-weight: bold;
+  margin: .3em 0;
+}
+/* indent */
+.wd-padding {
+  padding: 0 .5em;
+}
+/* param */
+.wd-param {
+  align-items: center;
+}
+/* dot */
+.wd-dot {
+  width: 1.5em;
+}
+/* dot before */
+.wd-dot:before {
+  content: "\e7dd";
+}
+/* strong */
+.wd-doc strong {
+  font-weight: bold;
+}
+/* doc code */
+.wd-doc code {
+  font-family: Courier New;
+}
+/* doc ul */
+.wd-doc ul {
+  margin: .5em 0;
+}

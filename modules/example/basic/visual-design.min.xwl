@@ -1,0 +1,17 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.make(app,{cname:"viewport",layout:"grid1",cid:"viewport1",items:[{cname:"text",cid:"text1",text:"text1"},{cname:"number",cid:"number1",text:"number1"},{cname:"button",cid:"button1",text:"button"},{cname:"label",html:"<ol>\n  <li>Select
+    container control that requires visual design, such as click viewport1 node.</li>\n  <li>Click
+    the [UI Designer] button on the toolbar to launch the visual layout designer.</li>\n  <li>Drag
+    the control(or double click/Ctrl + double click) from the control tree to the
+    designer.</li>\n  <li>Drag the control to adjust its position.</li>\n</ol>",cid:"label1"}]});
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

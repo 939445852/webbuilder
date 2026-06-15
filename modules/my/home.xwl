@@ -1,0 +1,228 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: |-
+    Wb.apply(app, {
+      /**
+       * Execute after load.
+       */
+      onLoad() {
+        let card = parentContainer;
+
+        app.restorePanels();
+        if (card?.app?.inHome) {
+          let tab = card.parent;
+          app.viewport1.homeTab = tab; // don't assign to app, prevent tab auto destroy
+          app.onCardChange.call(tab, card);
+          tab.on('cardchange', app.onCardChange)
+        }
+      },
+      /**
+       * Execute after tab card change. @priv
+       */
+      onCardChange(card) {
+        let tree = this.app.moduleTree, enabled = card == parentContainer;
+
+        tree.draggable = enabled ? {
+          acceptDrop() {
+            let data = this.source[0].data, tags = data.tags, panel;
+
+            if (tags) {
+              tags = Wb.parse(tags);
+              if (tags.frame || tags.newWin) {
+                Wb.tipWarn(Str.cannotOpenModule);
+                return;
+              }
+            }
+            panel = app.createPanel({
+              moduleUrl: 'm?xwl=' + data.path, icon: data._icon, img: data._img, tags,
+              strTitle: data.strTitle, title: data.text
+            });
+            panel.intoView();
+            panel.highlight();
+          }
+        } : false;
+        tree.setEvents(enabled, 'itemdrag', app.onItemDrag);
+      },
+      /**
+       * Module tree items drag. @priv
+       */
+      onItemDrag(data) {
+        let d = data.source[0].data;
+        data.allowDrop = d._leaf && d.path != 'my/home';
+        data.mode = 'append';
+      },
+      /**
+       * Create module panel. @priv
+       * @param {Object} data Module data.
+       * @return {Wb.Panel} The created panel.
+       */
+      createPanel(data) {
+        let panel, configs, moduleUrl, tags = data.tags, val, script;
+
+        moduleUrl = data.moduleUrl;
+        configs = {
+          cname: 'panel', layout: 'fit', plainTitle: true, roundBorder: true, closable: true, maximizable: true,
+          moduleUrl, tags
+        };
+        val = data.col || 6;
+        configs.gridColValue = val;
+        configs.gridColumn = 'span ' + val;
+        val = data.row || 4;
+        configs.gridRowValue = val;
+        configs.gridRow = 'span ' + val;
+        if (data.icon)
+          configs.icon = data.icon;
+        else if (data.img)
+          configs.img = data.img;
+        if (data.strTitle) {
+          configs.strTitle = data.strTitle;
+          configs.title = Str[data.strTitle];
+        } else {
+          configs.title = data.title;
+        }
+        panel = app.viewport1.add(configs);
+        configs = {
+          container: panel, updateTitle: false, success(scope) {
+            let vp = panel.firstItem, tools;
+
+            if (vp instanceof Wb.Panel) {
+              vp.border = false;
+              tools = vp.tools?.filter(tool => tool.icon != 'close') ?? [];
+              if (vp.title)
+                panel.title = vp.title;
+              if (vp.icon)
+                panel.icon = vp.icon;
+              else if (vp.img)
+                panel.img = vp.img;
+            } else {
+              tools = [];
+            }
+            tools.push({
+              icon: 'menu', handler() {
+                let comp = this.up(p => p instanceof Wb.Panel);
+                app.menuSetComp = comp;
+                app.colSlider.value = comp.gridColValue ?? 1;
+                app.rowSlider.value = comp.gridRowValue ?? 1;
+                app.mainMenu.showBy(this);
+              }
+            });
+            panel.tools = tools;
+            vp?.titleBar$?.destroy();
+            if (scope?.noTitlebar) {
+              panel.titleBar.hide();
+              panel.mon({
+                mouseenter() {
+                  this.titleBar.show();
+                },
+                mouseleave() {
+                  this.titleBar.hide();
+                }
+              })
+            }
+          }
+        };
+        script = data.script;
+        if (script)
+          configs.script = script;
+        else
+          configs.url = moduleUrl;
+        Wb.open(Wb.apply(configs, tags));
+        return panel;
+      },
+      /**
+       * Restore saved panels. @priv
+       */
+      restorePanels() {
+        let items = _$items$_;
+
+        items.forEach(item => {
+          app.createPanel(item);
+        });
+      }
+    });
+hideInMenu: 'false'
+icon: home
+img: ''
+items:
+- _expanded: true
+  _icon: menu2
+  cls: Wb.Menu
+  items:
+  - _icon: slidebar
+    cls: Wb.Slider
+    events:
+      change: |-
+        app.menuSetComp.gridColValue = value;
+        app.menuSetComp.gridColumn = 'span ' + value;
+    properties:
+      cid: colSlider
+      maxValue: '12'
+      minValue: '1'
+      suffix: 'true'
+      text: '@Str.column'
+    text: colSlider
+  - _icon: slidebar
+    cls: Wb.Slider
+    events:
+      change: |-
+        app.menuSetComp.gridRowValue = value;
+        app.menuSetComp.gridRow = 'span ' + value;
+    properties:
+      cid: rowSlider
+      maxValue: '12'
+      minValue: '1'
+      suffix: 'true'
+      text: '@Str.row'
+    text: rowSlider
+  properties:
+    cid: mainMenu
+    defaults: '({ labelWidth: ''5em'' })'
+    gap: 'true'
+    layout: grid1
+    minWidth: 18em
+    padding: 1em
+  text: mainMenu
+- _icon: viewport
+  cls: Wb.Viewport
+  events:
+    beforesort: |-
+      // only allow drag title bar
+      if (!dragComp?.titleBar.el.contains(e.target))
+        return false;
+    destroy: app.viewport1.homeTab?.un('cardchange', app.onCardChange);
+  properties:
+    background: 'true'
+    bodyCls: w-home-body
+    cid: viewport1
+    droppable: wb.home
+    gap: .5em
+    itemsSortable: 'true'
+    layout: grid12
+    padding: .5em
+  text: viewport1
+properties:
+  cid: module
+  remark: My home page
+  serverScript: |-
+    // Get desktop data
+    function loadPageData() {
+      let data = Wb.getResource(['desktop', 'desktop'], [null, 'system']), items, url;
+
+      data = data[0] ?? data[1];
+      items = data?.portlets || [];
+      items.forEach(item => {
+        try {
+          url = item.moduleUrl;
+          item.script = Wb.permitx(url) && Wb.execute(url);
+        } catch (e) {
+          item.script = e?.toString();
+        }
+      });
+      Wb.set({ items: Wb.encode(items) });
+    }
+    loadPageData();
+tags: ''
+text: module
+title: '@home'

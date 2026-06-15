@@ -1,0 +1,78 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: form
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _expanded: true
+    _icon: array
+    cls: Wb.Array
+    items:
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      properties:
+        cid: item1
+        icon: gear
+      text: item1
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      properties:
+        cid: item2
+        icon: share
+      text: item2
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: app.todoView.close();
+      properties:
+        cid: item3
+        icon: close
+      text: item3
+    properties:
+      cid: tools
+    text: tools
+  - _expanded: true
+    _icon: list-view
+    cls: Wb.View
+    properties:
+      cid: view1
+      data: |-
+        [
+          { text: 'To complete the project report by the end of this week.', done: 1 },
+          { text: 'To schedule a meeting with my team to discuss the progress of the project.', done: 1 },
+          { text: 'To review the financial reports and identify any areas of concern.' },
+          { text: 'To prepare a presentation for the upcoming board meeting.' },
+          { text: 'To catch up on any outstanding emails and replies.' },
+          { text: 'To update the company website with the latest news and announcements.' },
+          { text: 'To research potential new business opportunities and identify potential markets.' },
+          { text: 'To organize a training session for new employees to familiarize them with company policies and procedures.' }
+        ]
+      flex: '1'
+      itemTpl: |-
+        <div class="w-row w-align-center w-gapd5 w-padding">
+          <div class="w-icon icon-{if data.done}check9{else}check1{/if}"></div>
+          <div class="w-name">{text}</div>
+        </div>
+      layout: column
+      plainTitle: 'true'
+      roundBorder: 'true'
+    text: view1
+  properties:
+    cid: viewport1
+    icon: form
+    layout: fit
+    title: To Do List
+  text: viewport1
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

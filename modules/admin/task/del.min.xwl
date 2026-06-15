@@ -1,0 +1,12 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Delete tasks
+  serverScript: function main(){let b=Wb.getObject("del");b.forEach((b=>JobUtil.stopJob(b.$sid)));Wb.sync({tableName:"wb_job",del:b})}main();
+tags: ''
+text: module
+title: ''

@@ -1,0 +1,9 @@
+{
+  "title": "@about",
+  "icon": "",
+  "img": "",
+  "hideInMenu": "true",
+  "items": [
+    "get-new-version.xwl"
+  ]
+}

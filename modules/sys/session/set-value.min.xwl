@@ -1,0 +1,13 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Set current user value
+  serverScript: function setValue(){const e=["sys.theme","sys.fontSize"];let{name:s,value:t,type:a}=Params,i,l;i=s.startsWith("sys.");if(i&&!e.includes(s))Wb.accessDenied();if(t){switch(a){case"number":a=1;break;case"date":a=2;break;case"bool":a=3;break}}else{t=null}Wb.setValue(s,t,app.userid,a);if(i){l=request.getSession();if(t==null)l.removeAttribute(s);else
+    l.setAttribute(s,t)}}setValue();
+tags: ''
+text: module
+title: ''

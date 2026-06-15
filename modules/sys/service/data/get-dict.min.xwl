@@ -1,0 +1,16 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Get dictionary data
+  serverScript: let actions={getItems(){let e=Params.items,i=Config.maxRows,d,t;if(e.length>i)Wb.raise("The
+    dictionary only allows "+i+" items to be returned.");d=[];e.forEach((e=>{t=DictCls.findItem(e);if(!t)Wb.raise(`The
+    dictionary item "${e}" not found.`);if(!t.displayHidden)t.displayHidden=undefined;if(!t.editFill)t.editFill=undefined;if(!t.editHidden)t.editHidden=undefined;d.push(Wb.applyValue({},t))}));Wb.send(d)},getGroups(){let
+    e,i=[];e="select distinct group_name from wb_dict";if(Params.query){Wb.setLike("query");e+="
+    where group_name like {?query?}"}else{i.push("true")}e+=" order by group_name";i.pushAll(Wb.getRecords(e).pluck(0));Wb.send(i)}};actions[Params.xaction]();
+tags: ''
+text: module
+title: ''

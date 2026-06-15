@@ -1,0 +1,1059 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  beforeunload: |-
+    if (!app.saveBtn.disabled)
+      return false;
+  initialize: |-
+    Wb.define(app, {
+      /** @property {String} - Gets the currently selected database name. */
+      get$currentName() {
+        return app.listTree.selection.text;
+      },
+      /**
+       * Fires when the controls value changes.
+       */
+      onChange() {
+        if (!app.stopChange)
+          app.saveBtn.disabled = false;
+      },
+      /**
+       * Open a prompt window for database operations. @priv
+       * @param {String} name Database name, null represents the default db.
+       * @param {String} title The window title.
+       * @param {String} icon The window icon.
+       * @param {Function} callback The callback function of the window.
+       * @param {Boolean} [overwrite] Whether to create an override option checkbox.
+       */
+      promptSetDb(name, title, icon, callback, overwrite) {
+        Wb.ajax({
+          url: xpath + '/set-default&type=get-db',
+          params: { name },
+          success(resp) {
+            const data = [
+              'db2', 'derby', 'dameng', 'firebird', 'h2', 'hsqldb', 'informix', 'kingbase', 'mariadb', 'mysql',
+              'oracle', 'pointbase', 'postgresql', 'sap', 'sqlite', 'sql server', 'sybase', 'teradata'
+            ];
+            let value, items;
+            resp = resp.toLowerCase();
+            value = data.find(item => resp.includes(item));
+            if (!value) {
+              if (resp.includes('sqlserver'))
+                value = 'sql server';
+              else if (resp.includes('da meng') || resp.includes('dm'))
+                value = 'dameng';
+            }
+            items = [{
+              text: Str.dbType, cname: 'select', cid: 'dbType', required: true, forceSelect: true, data, value
+            }];
+            if (overwrite)
+              items.push({ label: Str.overwriteTables, cname: 'check', cid: 'overwrite', showEmptyLabel: true });
+            Wb.prompt({ title, icon }, items, callback);
+          }
+        });
+      },
+      /**
+       * Save data.
+       * @param {Function} [callback] Fires after success.
+       */
+      save(callback) {
+        if (Wb.verify(app.detailPanel)) {
+          Wb.ajax({
+            url: xpath + '/config&type=save',
+            params: { oldName: app.editNode.text, name: app.text.value, data: Wb.getValue(app.detailPanel, true) },
+            success() {
+              app.saveBtn.disabled = true;
+              app.editNode.text = app.text.value;
+              callback?.call();
+            }
+          });
+        }
+      },
+      /**
+       * Load connection properties.
+       * @param {Function} [callback] Callback function.
+       */
+      loadProperties(callback) {
+        let name = app.currentName;
+        Wb.ajax({
+          url: xpath + '/config&type=property',
+          params: { name },
+          json: true,
+          success(resp) {
+            let win = app.propWin;
+
+            Wb.setValue(win, resp.pool);
+            app.connGrid.data = resp.items;
+            callback?.();
+          }
+        });
+      }
+    });
+hideInMenu: 'false'
+icon: data-provider
+img: ''
+items:
+- _icon: plug
+  cls: Wb.Socket
+  events:
+    message: |-
+      if (app.acceptProgress)
+        Wb.progress(Wb.decode(e.data));
+  properties:
+    cid: socket1
+    name: sys.dbc
+  text: socket1
+- _expanded: true
+  _icon: window
+  cls: Wb.Window
+  items:
+  - _expanded: true
+    _icon: toolbar
+    cls: Wb.Toolbar
+    items:
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: |-
+          let name = app.currentName, rec = app.connGrid.selection, data = rec?.data;
+
+          if (!rec) {
+            Wb.tipSelect();
+            return;
+          }
+          if (data.isClosed) {
+            Wb.tipWarn('The connection is already closed.');
+            return;
+          }
+          Wb.confirm(`Are you sure to close the connection "${data.id.intText}"?`, f => {
+            Wb.ajax({
+              url: xpath + '/config&type=close',
+              params: { name, id: data.id },
+              success(resp) {
+                app.loadProperties();
+                rec.proxy.isClosed = true;
+              }
+            });
+          });
+      properties:
+        cid: closeItem
+        icon: security
+        text: Close
+      text: closeItem
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: |-
+          let name = app.currentName;
+          Wb.confirm('Are you sure to clear all idle connections?', f => {
+            Wb.ajax({
+              url: xpath + '/config&type=clear',
+              params: { name },
+              success(resp) {
+                app.loadProperties();
+              }
+            });
+          });
+      properties:
+        cid: clearItem
+        icon: brush1
+        text: Clear
+      text: clearItem
+    - _icon: divider
+      cls: Wb.Divider
+      properties:
+        cid: divider1
+      text: divider1
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: app.loadProperties();
+      properties:
+        cid: refreshItem
+        icon: refresh
+        text: Refresh
+      text: refreshItem
+    properties:
+      cid: tbar
+      isProperty: 'true'
+    text: tbar
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _icon: text
+      cls: Wb.Text
+      properties:
+        cid: maxTotal
+        readonly: 'true'
+        text: Max
+        width: 8em
+      text: maxTotal
+    - _icon: text
+      cls: Wb.Text
+      properties:
+        cid: numActive
+        readonly: 'true'
+        text: Active
+        width: 9em
+      text: numActive
+    - _icon: text
+      cls: Wb.Text
+      properties:
+        cid: numIdle
+        readonly: 'true'
+        text: Idle
+        width: 8em
+      text: numIdle
+    - _icon: text
+      cls: Wb.Text
+      properties:
+        cid: createdCount
+        readonly: 'true'
+        text: Created
+        width: 13em
+      text: createdCount
+    - _icon: text
+      cls: Wb.Text
+      properties:
+        cid: destroyedCount
+        readonly: 'true'
+        text: Destroyed
+        width: 14em
+      text: destroyedCount
+    - _icon: text
+      cls: Wb.Text
+      properties:
+        cid: borrowedCount
+        readonly: 'true'
+        text: Borrowed
+        width: 18em
+      text: borrowedCount
+    - _icon: text
+      cls: Wb.Text
+      properties:
+        cid: numWaiters
+        readonly: 'true'
+        text: Waiters
+        width: 9em
+      text: numWaiters
+    properties:
+      cid: container1
+      defaults: '({ width: ''11em'' })'
+      flexWrap: 'true'
+      gap: 'true'
+      layout: row
+    text: container1
+  - _expanded: true
+    _icon: grid
+    cls: Wb.Grid
+    items:
+    - _expanded: true
+      _icon: array
+      cls: Wb.Array
+      items:
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: rowCol
+          rowNum: 'true'
+        text: rowCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: idCol
+          fieldName: id
+          render: |-
+            if (!data.isClosed) {
+              el.parentNode.setStyle('color', '#d75a4a');
+            }
+            return value;
+          text: ID
+          width: 11em
+        text: idCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: borrowedCountCol
+          fieldName: borrowedCount
+          text: Borrowed
+          width: 13em
+        text: borrowedCountCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: createTimeCol
+          fieldName: createTime
+          text: Create Time
+          width: 13em
+        text: createTimeCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: lastBorrowTimeCol
+          fieldName: lastBorrowTime
+          text: Last Borrow Time
+          width: 13em
+        text: lastBorrowTimeCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: lastReturnTimeCol
+          fieldName: lastReturnTime
+          text: Last Return Time
+          width: 13em
+        text: lastReturnTimeCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: lastUsedTimeCol
+          fieldName: lastUsedTime
+          text: Last Used Time
+          width: 13em
+        text: lastUsedTimeCol
+      properties:
+        cid: columns
+      text: columns
+    properties:
+      cid: connGrid
+      defaultFields: |-
+        ({
+          createTime: { type: 'date' },
+          lastBorrowTime: { type: 'date' },
+          lastReturnTime: { type: 'date' },
+          lastUsedTime: { type: 'date' }
+        })
+      flex: '1'
+      pagingBar: 'false'
+      reserveScrollbar: 'true'
+    text: connGrid
+  properties:
+    cid: propWin
+    height: 46em
+    icon: property
+    layout: form1
+    modal: 'true'
+    padding: 1em
+    title: '@Str.property'
+    width: 85em
+  text: propWin
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _expanded: true
+    _icon: toolbar
+    cls: Wb.Toolbar
+    items:
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: |-
+          Wb.prompt({ title: Str.add, icon: 'add' }, { cid: 'name', text: Str.name, required: true }, (values, win) => {
+            Wb.ajax({
+              url: xpath + '/config&type=add',
+              params: values,
+              success() {
+                let node = app.listTree.addData({ text: values.name, _icon: 'database', _leaf: true });
+                node.select();
+                win.close();
+              }
+            });
+          });
+      properties:
+        cid: addBtn
+        icon: add
+        keys: Ctrl+E
+        text: '@Str.add'
+      text: addBtn
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: |-
+          let node = app.listTree.selection, name = node.text;
+          Wb.prompt({ title: Str.copy + ' - ' + name, icon: 'copy' },
+            { cid: 'newName', text: Str.name, required: true, value: name + '1', selectOnInit: true },
+            (values, win) => {
+              values.name = name;
+              Wb.ajax({
+                url: xpath + '/config&type=copy',
+                params: values,
+                success() {
+                  node = app.listTree.insertDataAfter({ text: values.newName, _icon: 'database', _leaf: true }, node);
+                  node.select();
+                  win.close();
+                }
+              });
+            });
+      properties:
+        cid: copyBtn
+        icon: copy
+        text: '@Str.copy'
+      text: copyBtn
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: |-
+          let name = app.currentName;
+          Wb.confirm(Str.deleteConfirm.format(name), f => {
+            Wb.ajax({
+              url: xpath + '/config&type=delete',
+              params: { name },
+              success() {
+                app.saveBtn.disabled = true;
+                app.listTree.delRecords();
+              }
+            });
+          });
+      properties:
+        cid: deleteBtn
+        icon: delete
+        keys: Ctrl+D
+        text: '@Str.del'
+      text: deleteBtn
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: app.save();
+      properties:
+        cid: saveBtn
+        disabled: 'true'
+        icon: save
+        keys: Ctrl+S
+        text: '@Str.save'
+      text: saveBtn
+    - _icon: divider
+      cls: Wb.Divider
+      properties:
+        cid: divider1
+      text: divider1
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: |-
+          let name = app.currentName, testFn = f => Wb.ajax({
+            url: xpath + '/config&type=test',
+            params: { name },
+            success() {
+              Wb.tipDone();
+            }
+          });
+          if (app.saveBtn.disabled)
+            testFn();
+          else
+            Wb.confirm(Str.modifiedConfirm.format(name), f => {
+              app.save(testFn);
+            });
+      properties:
+        cid: testBtn
+        icon: bolt
+        text: '@Str.test'
+      text: testBtn
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: |-
+          let listTree = app.listTree, node = listTree.selection, name = node.text;
+          app.promptSetDb(name, Str.setDefaultDb + ' - ' + name, 'favorite', (values, win) => {
+            let overwrite = values.overwrite, doSetDefault = f => {
+              app.acceptProgress = true;
+              Wb.ajax({
+                url: xpath + '/set-default&type=set-default',
+                params: { overwrite, name, dbType: values.dbType },
+                mask: { width: '50vw', delay: 0 },
+                callback() {
+                  Wb.unmask();
+                },
+                success() {
+                  listTree.cascade(node => {
+                    node.icon = node.text == name ? 'favorite' : 'database';
+                  });
+                  app.defaultBtn.disabled = true;
+                  app.acceptProgress = false;
+                  win.close();
+                }
+              });
+            };
+            if (overwrite)
+              Wb.confirm(Str.doConfirm.format(Str.overwriteTables), doSetDefault);
+            else
+              doSetDefault();
+          }, true);
+      properties:
+        cid: defaultBtn
+        disabled: 'true'
+        icon: favorite
+        text: '@Str.default'
+        tip: '@Str.setDefaultDb'
+      text: defaultBtn
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: |-
+          app.promptSetDb(null, Str.createSysTables, 'table', (params, win) => {
+            Wb.ajax({
+              url: xpath + '/set-default&type=create',
+              params,
+              success() {
+                win.close();
+              }
+            });
+          });
+      properties:
+        cid: createTablesBtn
+        icon: table
+        text: '@Str.createTables'
+        tip: '@Str.createSysTables'
+      text: createTablesBtn
+    - _icon: divider
+      cls: Wb.Divider
+      properties:
+        cid: divider2
+      text: divider2
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: |-
+          app.loadProperties(f => {
+            let win = app.propWin;
+            win.subTitle = app.currentName;
+            win.show();
+          });
+      properties:
+        cid: propertyBtn
+        icon: property
+        text: '@Str.property'
+      text: propertyBtn
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: |-
+          let listTree = app.listTree;
+          if (app.saveBtn.disabled)
+            listTree.loadSelect();
+          else
+            Wb.choose(Str.saveChanges.format(Str.dbc), btn => {
+              if (btn == 'yes') {
+                app.save(f => listTree.loadSelect());
+              } else if (btn == 'no') {
+                app.saveBtn.disabled = true;
+                listTree.loadSelect();
+              }
+            });
+      properties:
+        cid: refreshBtn
+        icon: refresh
+        text: '@Str.refresh'
+      text: refreshBtn
+    properties:
+      cid: tbar
+      isProperty: 'true'
+    text: tbar
+  - _expanded: true
+    _icon: tree-view
+    cls: Wb.Tree
+    events:
+      beforeselect: |-
+        let panel = app.detailPanel;
+
+        if (app.saveBtn.disabled) {
+          Wb.ajax({
+            url: xpath + '/config&type=get',
+            params: {
+              name: item.text
+            },
+            comps: panel,
+            json: true,
+            success(data) {
+              app.stopChange = true;
+              app.editNode = item;
+              Wb.setValue(panel, data, true);
+              app.stopChange = false;
+            }
+          });
+        } else {
+          Wb.choose(Str.saveChanges.format(Str.dbc), btn => {
+            if (btn == 'yes') {
+              app.save(f => item.select());
+            } else if (btn == 'no') {
+              app.saveBtn.disabled = true;
+              item.select()
+            }
+          });
+          return false;
+        }
+      select: app.defaultBtn.disabled = item.icon != 'database';
+    properties:
+      autoSelect: 'true'
+      cid: listTree
+      url: '@xpath + ''/config&type=list'''
+      width: 15em
+    text: listTree
+  - _icon: splitter
+    cls: Wb.Splitter
+    properties:
+      cid: splitter1
+    text: splitter1
+  - _expanded: true
+    _icon: panel
+    cls: Wb.Panel
+    events:
+      ready: Wb.setEvents(this, 'change', app.onChange);
+    items:
+    - _icon: title
+      cls: Wb.Title
+      properties:
+        cid: title1
+        title: '@Str.general'
+      text: title1
+    - _expanded: true
+      _icon: text
+      cls: Wb.Text
+      properties:
+        cid: text
+        required: 'true'
+        text: '@Str.name'
+      text: text
+    - _expanded: true
+      _icon: text
+      cls: Wb.Text
+      properties:
+        cid: desc
+        text: '@Str.desc'
+      text: desc
+    - _expanded: true
+      _icon: combo
+      cls: Wb.Select
+      events:
+        select: |-
+          let urlText = app.url, urlValue = urlText.value;
+          if (!urlValue || urlValue == 'url')
+            urlText.valueIndex = item.itemIndex;
+      properties:
+        cid: driverClassName
+        data: |-
+          [
+            'com.microsoft.sqlserver.jdbc.SQLServerDriver',
+            'oracle.jdbc.driver.OracleDriver',
+            'com.mysql.cj.jdbc.Driver',
+            'org.postgresql.Driver',
+            'org.apache.derby.jdbc.EmbeddedDriver',
+            'com.ibm.db2.jdbc.app.DB2Driver',
+            'com.ibm.db2.jdbc.net.DB2Driver',
+            'com.sybase.jdbc.SybDriver',
+            'com.teradata.jdbc.TeraDriver',
+            'org.h2.Driver',
+            'org.sqlite.JDBC',
+            'dm.jdbc.driver.DmDriver',
+            'com.kingbase.Driver',
+            'org.mariadb.jdbc.Driver',
+            'org.apache.hive.jdbc.HiveDriver',
+            'com.sap.db.jdbc.Driver'
+          ]
+        required: 'true'
+        text: driverClassName
+      text: driverClassName
+    - _expanded: true
+      _icon: combo
+      cls: Wb.Select
+      properties:
+        cid: url
+        data: |-
+          [
+            'jdbc:sqlserver://127.0.0.1:1433;DatabaseName=mydb;encrypt=false;',
+            'jdbc:oracle:thin:@127.0.0.1:1521:mydb',
+            'jdbc:mysql://127.0.0.1:3306/mydb?autoReconnect=true&allowMultiQueries=true&useUnicode=true&characterEncoding=utf-8&mysqlEncoding=utf8&nullCatalogMeansCurrent=true',
+            'jdbc:postgresql://127.0.0.1:5432/mydb',
+            'jdbc:derby:$$wb/system/mydb;create=true',
+            'jdbc:db2:mydb',
+            'jdbc:db2://127.0.0.1:6789/mydb',
+            'jdbc:sybase:Tds:127.0.0.1:4100/mydb',
+            'jdbc:teradata://127.0.0.1/database=mydb, tmode=ANSI, charset=UTF8',
+            'jdbc:h2:$$wb/system/mydb',
+            'jdbc:sqlite:$$wb/system/mydb',
+            'jdbc:dm://127.0.0.1:12345/mydb',
+            'jdbc:kingbase://127.0.0.1:54321/mydb',
+            'jdbc:mariadb://127.0.0.1:3306/test',
+            'jdbc:hive2://127.0.0.1:10000/hadoop',
+            'jdbc:sap://127.0.0.1:30015?reconnect=true'
+          ]
+        required: 'true'
+        text: url
+      text: url
+    - _icon: text
+      cls: Wb.Text
+      properties:
+        cid: username
+        text: username
+      text: username
+    - _expanded: true
+      _icon: text
+      cls: Wb.Text
+      properties:
+        cid: password
+        eyeButton: 'true'
+        password: 'true'
+        text: password
+      text: password
+    - _expanded: true
+      _icon: text
+      cls: Wb.Text
+      properties:
+        cid: connectionProperties
+        text: connectionProperties
+      text: connectionProperties
+    - _icon: switcher-on
+      cls: Wb.Toggle
+      properties:
+        cid: disableConnectionPooling
+        text: disableConnectionPooling
+      text: disableConnectionPooling
+    - _icon: title
+      cls: Wb.Title
+      properties:
+        cid: title2
+        title: '@Str.connection'
+      text: title2
+    - _icon: combo
+      cls: Wb.Select
+      properties:
+        cid: defaultAutoCommit
+        clearButton: 'true'
+        data: '[{ text: ''true'', value: true }, { text: ''false'', value: false }]'
+        forceSelect: 'true'
+        text: defaultAutoCommit
+      text: defaultAutoCommit
+    - _icon: combo
+      cls: Wb.Select
+      properties:
+        cid: defaultReadOnly
+        clearButton: 'true'
+        data: '[{ text: ''true'', value: true }, { text: ''false'', value: false }]'
+        forceSelect: 'true'
+        text: defaultReadOnly
+      text: defaultReadOnly
+    - _expanded: true
+      _icon: combo
+      cls: Wb.Select
+      properties:
+        cid: defaultTransactionIsolation
+        data: |-
+          [
+            { text: 'none', value: 0 },
+            { text: 'read uncommitted', value: 1 },
+            { text: 'read committed', value: 2 },
+            { text: 'repeatable read', value: 4 },
+            { text: 'serializable', value: 8 }
+          ]
+        forceSelect: 'true'
+        text: defaultTransactionIsolation
+      text: defaultTransactionIsolation
+    - _icon: text
+      cls: Wb.Text
+      properties:
+        cid: defaultCatalog
+        text: defaultCatalog
+      text: defaultCatalog
+    - _icon: switcher-on
+      cls: Wb.Toggle
+      properties:
+        cid: cacheState
+        text: cacheState
+      text: cacheState
+    - _expanded: false
+      _icon: number-edit
+      cls: Wb.Number
+      properties:
+        cid: defaultQueryTimeout
+        decimalCount: '0'
+        minValue: '0'
+        text: defaultQueryTimeout(s)
+      text: defaultQueryTimeout
+    - _icon: switcher-on
+      cls: Wb.Toggle
+      properties:
+        cid: autoCommitOnReturn
+        text: autoCommitOnReturn
+      text: autoCommitOnReturn
+    - _expanded: false
+      _icon: switcher-on
+      cls: Wb.Toggle
+      properties:
+        cid: rollbackOnReturn
+        text: rollbackOnReturn
+      text: rollbackOnReturn
+    - _expanded: false
+      _icon: title
+      cls: Wb.Title
+      properties:
+        cid: title3
+        title: '@Str.connectionPool'
+      text: title3
+    - _icon: number-edit
+      cls: Wb.Number
+      properties:
+        cid: initialSize
+        decimalCount: '0'
+        minValue: '0'
+        text: initialSize
+      text: initialSize
+    - _icon: number-edit
+      cls: Wb.Number
+      properties:
+        cid: maxTotal
+        decimalCount: '0'
+        minValue: '0'
+        text: maxTotal
+      text: maxTotal
+    - _icon: number-edit
+      cls: Wb.Number
+      properties:
+        cid: maxIdle
+        decimalCount: '0'
+        minValue: '0'
+        text: maxIdle
+      text: maxIdle
+    - _icon: number-edit
+      cls: Wb.Number
+      properties:
+        cid: minIdle
+        decimalCount: '0'
+        minValue: '0'
+        text: minIdle
+      text: minIdle
+    - _icon: number-edit
+      cls: Wb.Number
+      properties:
+        cid: maxWaitMillis
+        decimalCount: '0'
+        minValue: '-1'
+        text: maxWaitMillis(ms)
+      text: maxWaitMillis
+    - _icon: title
+      cls: Wb.Title
+      properties:
+        cid: title4
+        title: '@Str.validation'
+      text: title4
+    - _icon: text
+      cls: Wb.Text
+      properties:
+        cid: validationQuery
+        text: validationQuery
+      text: validationQuery
+    - _icon: number-edit
+      cls: Wb.Number
+      properties:
+        cid: validationQueryTimeout
+        decimalCount: '0'
+        minValue: '0'
+        text: validationQueryTimeout(s)
+      text: validationQueryTimeout
+    - _icon: switcher-on
+      cls: Wb.Toggle
+      properties:
+        cid: testOnCreate
+        text: testOnCreate
+      text: testOnCreate
+    - _expanded: true
+      _icon: switcher-on
+      cls: Wb.Toggle
+      properties:
+        cid: testOnBorrow
+        text: testOnBorrow
+      text: testOnBorrow
+    - _expanded: false
+      _icon: switcher-on
+      cls: Wb.Toggle
+      properties:
+        cid: testOnReturn
+        text: testOnReturn
+      text: testOnReturn
+    - _expanded: true
+      _icon: switcher-on
+      cls: Wb.Toggle
+      properties:
+        cid: testWhileIdle
+        text: testWhileIdle
+      text: testWhileIdle
+    - _icon: number-edit
+      cls: Wb.Number
+      properties:
+        cid: timeBetweenEvictionRunsMillis
+        decimalCount: '0'
+        minValue: '0'
+        text: timeBetweenEvictionRunsMillis(ms)
+      text: timeBetweenEvictionRunsMillis
+    - _icon: number-edit
+      cls: Wb.Number
+      properties:
+        cid: numTestsPerEvictionRun
+        decimalCount: '0'
+        minValue: '0'
+        text: numTestsPerEvictionRun
+      text: numTestsPerEvictionRun
+    - _icon: number-edit
+      cls: Wb.Number
+      properties:
+        cid: minEvictableIdleTimeMillis
+        decimalCount: '0'
+        minValue: '0'
+        text: minEvictableIdleTimeMillis(ms)
+      text: minEvictableIdleTimeMillis
+    - _icon: number-edit
+      cls: Wb.Number
+      properties:
+        cid: softMinEvictableIdleTimeMillis
+        decimalCount: '0'
+        minValue: '0'
+        text: softMinEvictableIdleTimeMillis(ms)
+      text: softMinEvictableIdleTimeMillis
+    - _icon: number-edit
+      cls: Wb.Number
+      properties:
+        cid: maxConnLifetimeMillis
+        decimalCount: '0'
+        minValue: '0'
+        text: maxConnLifetimeMillis(ms)
+      text: maxConnLifetimeMillis
+    - _icon: switcher-on
+      cls: Wb.Toggle
+      properties:
+        cid: logExpiredConnections
+        text: logExpiredConnections
+      text: logExpiredConnections
+    - _icon: textarea
+      cls: Wb.TextArea
+      properties:
+        cid: connectionInitSqls
+        height: 7em
+        text: connectionInitSqls
+      text: connectionInitSqls
+    - _expanded: true
+      _icon: switcher-on
+      cls: Wb.Toggle
+      properties:
+        cid: lifo
+        text: lifo
+      text: lifo
+    - _icon: title
+      cls: Wb.Title
+      properties:
+        cid: title5
+        title: '@Str.others'
+      text: title5
+    - _icon: switcher-on
+      cls: Wb.Toggle
+      properties:
+        cid: poolPreparedStatements
+        text: poolPreparedStatements
+      text: poolPreparedStatements
+    - _icon: number-edit
+      cls: Wb.Number
+      properties:
+        cid: maxOpenPreparedStatements
+        decimalCount: '0'
+        minValue: '0'
+        text: maxOpenPreparedStatements
+      text: maxOpenPreparedStatements
+    - _expanded: true
+      _icon: switcher-on
+      cls: Wb.Toggle
+      properties:
+        cid: accessToUnderlyingConnectionAllowed
+        text: accessToUnderlyingConnectionAllowed
+      text: accessToUnderlyingConnectionAllowed
+    - _expanded: true
+      _icon: switcher-on
+      cls: Wb.Toggle
+      properties:
+        cid: removeAbandonedOnMaintenance
+        text: removeAbandonedOnMaintenance
+      text: removeAbandonedOnMaintenance
+    - _expanded: false
+      _icon: switcher-on
+      cls: Wb.Toggle
+      properties:
+        cid: removeAbandonedOnBorrow
+        text: removeAbandonedOnBorrow
+      text: removeAbandonedOnBorrow
+    - _icon: number-edit
+      cls: Wb.Number
+      properties:
+        cid: removeAbandonedTimeout
+        decimalCount: '0'
+        minValue: '0'
+        text: removeAbandonedTimeout(s)
+      text: removeAbandonedTimeout
+    - _expanded: true
+      _icon: switcher-on
+      cls: Wb.Toggle
+      properties:
+        cid: logAbandoned
+        text: logAbandoned
+      text: logAbandoned
+    - _expanded: false
+      _icon: switcher-on
+      cls: Wb.Toggle
+      properties:
+        cid: abandonedUsageTracking
+        text: abandonedUsageTracking
+      text: abandonedUsageTracking
+    - _expanded: true
+      _icon: switcher-on
+      cls: Wb.Toggle
+      properties:
+        cid: fastFailValidation
+        text: fastFailValidation
+      text: fastFailValidation
+    - _icon: textarea
+      cls: Wb.TextArea
+      properties:
+        cid: disconnectionSqlCodes
+        height: 7em
+        text: disconnectionSqlCodes
+      text: disconnectionSqlCodes
+    - _icon: text
+      cls: Wb.Text
+      properties:
+        cid: jmxName
+        text: jmxName
+      text: jmxName
+    properties:
+      autoGrid: up
+      cid: detailPanel
+      flex: '1'
+      layout: grid1
+      tableStyle: 'true'
+      wideLabel: 'true'
+    text: detailPanel
+  properties:
+    cid: viewport1
+    layout: row
+  text: viewport1
+properties:
+  cid: module
+  remark: Database source configuration
+tags: ''
+text: module
+title: '@dbc'

@@ -1,0 +1,96 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: 'Wb.make(app,{cname:"codeEditor",readonly:true,wrapBorder:0,value:"//This
+    example demonstrates the general usage of client JavaScript programming\n//For
+    more resources, please visit: https://developer.mozilla.org/en-US/docs/Web/JavaScript\n\n//Open/Run
+    modules, open windows and submit forms\nWb.open(''m?xwl=admin/dbe''); //Open the
+    database explorer module\nWb.open({ url: ''dbe'', params: { foo: ''bar'' }, method:
+    ''POST'' }); //Pass parameters and set method\nWb.openNormal(''dbe''); //Open
+    the database explorer module and allow the page to refresh\nWb.run({ url: ''dbe'',
+    params: { foo: ''bar'' }, container: app.panel1 }); //Runs the module and displays
+    it in the specified container\n//Run the module and dynamically add it''s viewport1
+    to panel1 in the callback function. Owner means that viewport1 in dbe owns the\n//entire
+    module, and destroys the entire module when viewport1 is destroyed\nWb.run({ url:
+    ''dbe'', owner: ''viewport1'', success(scope) { app.panel1.add(scope.viewport1)
+    } });\nWb.openWin(''https://developer.mozilla.org/''); //Opens MDN in a new window\n//Set
+    the parameters and method and open into the specified iframe\nWb.openWin({ url:
+    ''dbe'', params: { foo: ''bar'' }, method: ''POST'', target: ''myIframe'' });\n//Submit
+    the form with parameters\nWb.submit(''https://www.geejing.com'', { p1: ''foo'',
+    p2: new Date() });\n//Browse URL in Tab card(Wb.Tab.mainTab)\nWb.browse(''https://www.geejing.com'');\n\n//Download\nWb.download(''m?xwl=foo/bar'',
+    { param1: ''abc'' }); //Download url with parameters\nWb.downloadBlob(file1, ''myFile.txt'');
+    //Download blob\nWb.downloadBase64(base64Text, ''myFile.dat''); //Download the
+    Base64-encoded string as a file\n\n//Displays a dialog box containing the specified
+    controls\nWb.prompt(''My Dialog'', [{ text: ''Your Name'', cid: ''name'' }], (values,
+    win) => {\n  Wb.tip(values.name);\n  win.close();\n});\n\n//Show message\nWb.info(''Hello'');
+    //Show info\nWb.info(''<span style=\"color:red\">Hello</span>'', f => { Wb.tip(''click
+    ok'') }, true); //Show HTML info\nWb.succ(''Hello''); //Show succ\nWb.warn(''Hello'');
+    //Show warn\nWb.error(''Hello''); //Show error\n//Displays a confirmation dialog
+    box with OK and Cancel buttons\nWb.confirm(''Are you sure you want to delete?'',
+    f => doSomething());\n//Displays a confirmation dialog box with Yes, No, and Cancel
+    buttons\nWb.choose(''Are you sure you want to save?'', button => Wb.info(button));\nWb.tip(''Hello'');
+    //Show tip that is automatically close with a delay\nWb.tip(''<span style=\"color:red\">Hello</span>'',
+    true); //Show HTML tip\nWb.tipAt(''Hello'', 200, 30); //Show tip at the specified
+    location\nWb.tipSucc(''Hello''); //Show succ tip\nWb.tipWarn(''Hello''); //Show
+    warn tip\nWb.tipError(''Hello''); //Show error tip\nWb.toast(''Hello''); //Show
+    single tip that is automatically close with a delay in the center of the window\nWb.toast(''<span
+    style=\"color:red\">Hello</span>'', true); //Show HTML toast\nWb.toastSucc(''Hello'');
+    //Show succ toast\nWb.toastWarn(''Hello''); //Show warn succ\nWb.toastError(''Hello'');
+    //Show error succ\nWb.tipSelect(); //Show \"Please select a valid item\" tip in
+    the local language\n\n//Load JS/MJS/CSS files\nWb.load(''foo/bar.js'', f => doSomething());
+    //Load js file\n//Load CSS/JS in a specific way\nWb.load([''file.css'', ''file.js'',
+    { url: ''foo/bar'', async: true, type: ''js'', reload: true, autoRemove: true
+    }], callback);\nWb.loadx(''foo/bar.js'').then(f => doSomething()); //Promise version
+    of Wb.load\nWb.loadModule(''wb/js/my.mjs'', module => module.MyCls.doSomething());
+    //Load mjs module file\n\n//Access elements as components\nWb.get(div).tip = ''message'';
+    //Gets the Wb.Component object of the specified element and sets the property\nWb.fly(''my-div'').hide();
+    //Gets a shared Wb.Component object for the specified element and makes a method
+    call\n\n//Access, setting, and validation values\nvalues = Wb.getValue(panel1);
+    //Get the values of all components in panel1\nvalues = Wb.getValue([panel1, viewport1],
+    true); //Get the values of all components in panel1, viewport1\nWb.setValue(container1,
+    { text1: ''foo'', number1: 123 }); //Set the values in container1\n///Set the
+    values to the specific component in container1, panel1\nWb.setValue([container1,
+    panel1], { text1: ''foo'', number1: 123 }, true, true);\nWb.reset(panel1); //Resets
+    the values of all components in panel1\nWb.reset([panel1, text1], true); //Resets
+    the values of specific components in panel1 and text1\nWb.clear(panel1); //Clears
+    the values of all components in panel1\nWb.clear([panel1, text1], true); //Clears
+    the values of specific components in panel1 and text1\nif (Wb.verify(panel1))
+    return; //Verify the values of all components in panel1\nWb.verify([panel1, date1],
+    true, true);  //Verify the values of specific components in panel1 and date1\n\n//Send
+    requests\n//Send GET request with parameters\nWb.ajax({ url: path, params: { p1:
+    ''abc'', p2: 123 }, method: ''GET'', success(resp) { doSuccess(); } });\n//Send
+    POST request with parameters, file and blob\nWb.ajax({ url: path, params: { p1:
+    ''abc'', p2: 123, p3: file, p4: blob } });\n//Send request with form, comps and
+    params\nWb.ajax({ url: path, form: myForm, comps: [panel1, file1], params: { foo:
+    ''bar'' } });\n//Send request with object and array parameters\nWb.ajax({ url:
+    path, params: { object: { foo: ''bar'' }, array: [1, ''abc'', new Date()] } });\n//Send
+    request with multiple parameters with the same name\nWb.ajax({ url: path, params:
+    { myParam: Wb.markParams([1, ''abc'', new Date()]) } });\n//Send request with
+    payload data and specific header\nWb.ajax({ url: path, data: bigDataContent, header:
+    { ''Content-Type'': ''text/html;charset=utf-8'' } });\n//Download file in ajax
+    mode\nWb.ajax({ url: path, download: true });\n//Send request with object that
+    can be auto deserialized in server side\nWb.ajax({ url: path, object: { foo: ''bar'',
+    num: 123, date: new Date() } });\n//Promise version of Wb.ajax\nWb.fetch({ url:
+    path, params: { p1: ''abc'', p2: 123 } }).then(\n  result => {\n    if (result.ok)\n      console.log(result.response);\n    else\n      console.warn(''failed'');\n  }\n);\n\n//Set
+    the style and class of documentElement\nWb.addCls(''w-cls''); //Add class\nWb.removeCls(''w-cls'');
+    //Remove class\nWb.setCls(true, ''w-cls''); //Add or remove class\nWb.toggleCls(''w-cls'');
+    //Toggle class\n\n//Some getter properties of Wb\nWb.activeComp; //The component
+    that currently has focus\nWb.activeWindow; //The window that currently has focus\n\n//The
+    properties and methods of Event\ne.stopEvent(); //Prevents default and stops the
+    propagation of event\ne.stopSpread(); //Alias for Event.prototype.stopImmediatePropagation\ne.hasAssistKey;
+    //Whether to press any of the Ctrl, Shift, Alt, or Meta keys\n\n//The methods
+    of Function\nWb.info.delay(Wb, 1000, ''Hello''); //Show info with delay\nWb.info.delay(Wb,
+    1000, ''Hello World''); //Cancel pending delay and show info with delay again\nWb.warn.delays(Wb,
+    1000, ''Hello''); //Show warn with delay without cancel pending delay\nWb.tip.delay(Wb,
+    1000, ''tip''); //Show tip with delay\nWb.tip.cancelDelay(Wb); //Cancel pending
+    tip immediately",cid:"codeEditor1",full:true});'
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  links: '["wb/js/monaco.js"]'
+tags: ''
+text: module
+title: ''

@@ -1,0 +1,8 @@
+_icon: module
+cls: Wb.Module
+properties:
+  cid: module
+  remark: Save file content in any path
+  serverScript: let fs=Wb.load("./fs.mjs");Wb.send(fs.saveFile(Wb.payload,Params.confirm=="1"));
+text: module
+title: ''

@@ -1,0 +1,61 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+items:
+- _icon: viewport
+  cls: Wb.Viewport
+  events:
+    ready: |-
+      let div, el = this.el;
+
+      if (Str.lang == 'zh-cn')
+        div = el.query('[cid=lang-zh-cn]');
+      else
+        div = el.query('[cid=lang-en]');
+      div.setStyle('display', 'block');
+  properties:
+    autoScroll: 'true'
+    cid: viewport1
+    html: |-
+      <div cid='lang-en' class='w-html' style='line-height:2;display:none;'>
+        <div>This example demonstrates how to remotely debug server-side code using the browser "devtools":</div>
+        <ol>
+          <li>Add the module file "test.xwl" and write arbitrary code in the serverScript property, such as "Wb.log('test')".
+          </li>
+          <li>Select the "test.xwl" module and click IDE menu [Run] ->[Toggle Debugging Status].</li>
+          <li>Click the IDE menu [Run] -> [Run] to run "test.xwl".</li>
+          <li>Click the "Debugging" tab card at the bottom of the IDE, and double-click the "test1.xwl" debugging item to open
+            new window.</li>
+          <li>Click the address bar in the new window, press "Ctrl+V" to paste the debugging address, and press Enter to open
+            the "devtools" debugging page.</li>
+          <li>After adding the keyword "debugger" anywhere in the script, the code will pause and wait for debugging there.
+          </li>
+          <li>The debugging URL is the same in the same session and the same module, debugging multiple times only requires
+            refreshing the "devtools" debugging page after running the module.</li>
+          <li>When debugging remotely, due to security reasons, the browser may block access to the debugging page and prompt
+            that the page was not found. In this case, you can press [F12] key to open "devtools" and then press Enter key in
+            the browser address bar.</li>
+        </ol>
+      </div>
+      <div cid='lang-zh-cn' class='w-html' style='line-height:2;display:none;'>
+        <div>该示例演示了如何使用浏览器"devtools"远程调试服务器端代码：</div>
+        <ol>
+          <li>添加模块文件"test.xwl"，并在serverScript属性中编写任意代码，如："Wb.log('test')"。</li>
+          <li>选择"test.xwl"模块，并点击IDE菜单[运行]->[切换调试状态]。</li>
+          <li>点击IDE菜单[运行]->[运行]，运行"test.xwl"。</li>
+          <li>点击IDE底部的"调试"选项卡，并双击"test1.xwl"调试项打开新窗口。</li>
+          <li>在新窗口中点击地址栏，按"Ctrl+V"粘贴调试地址，并按回车键打开"devtools"调试页面。</li>
+          <li>在脚本任意处添加关键字"debugger"后，代码将在该处暂停运行并等待调试。</li>
+          <li>同一个模块文件在同一个HTTP会话内调试的URL地址不变，多次调试只需运行模块后刷新"devtools"调试页面即可。</li>
+          <li>当远程调试时，基于安全原因，浏览器可能阻止对调试页面的访问并提示页面未找到，此时可以按[F12]键打开"devtools"并在浏览器地址栏按回车键即可。</li>
+        </ol>
+      </div>
+  text: viewport1
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

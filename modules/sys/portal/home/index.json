@@ -1,0 +1,15 @@
+{
+  "title": "",
+  "icon": "",
+  "img": "",
+  "hideInMenu": "true",
+  "items": [
+    "get-modules-tree.xwl",
+    "search-modules.xwl",
+    "get-langs.xwl",
+    "get-user-data.xwl",
+    "set-user-data.xwl",
+    "save-desktop.xwl",
+    "util.mjs"
+  ]
+}

@@ -1,0 +1,21 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.apply(app,{addDept(e){let t,d,a,i,p,r,l=app.tree1;a=l.selection;if(e)i=a?.parent??l;else
+    i=a??l;t=a?.data;if(t){d=e?t.parent_id:t.sid;r=t.dept_name}p=l.dictAdd({url:xpath+"/add",failure:app.onFailure},r||null,{parent_id:d},((e,t)=>{t.update({items:[],_icon:"folder1"})}),null,null,null,i);if(e){p.icon="insert";p.title=Str.addToSibling;p.subTitle=r}p.down("dept_id_disp").readonly=false},onFailure(e){let
+    t={wb_dept_pk:"dept_id_disp",wb_dept_dept_code:"dept_code"};Wb.each(t,((t,d)=>{if(Wb.checkExists(e,t,app.tree1.dictWin.down(d)))return
+    false}))}});Wb.make(app,{cname:"viewport",autoContextMenu:true,layout:"fit",cid:"viewport1",tbar:{cname:"toolbar",items:[{icon:"add",text:Str.add,keys:"Ctrl+E",cid:"addBtn",events:{click(e,t){app.addDept()}}},{icon:"insert",cid:"addToSiblingBtn",text:Str.addToSibling,events:{click(e,t){app.addDept(true)}}},{icon:"edit",text:Str.edit,keys:"Ctrl+J",cid:"editBtn",events:{click(e,t){let
+    d=app.tree1.dictEdit({url:xpath+"/edit",failure:app.onFailure},"code");d.down("dept_id_disp").readonly=true}}},{icon:"delete",text:Str.del,keys:"Ctrl+D",cid:"delBtn",events:{click(e,t){app.tree1.removeRecords(xpath+"/del","dept_name")}}},{cname:"divider",cid:"divider1"},{cname:"text",minWidth:"5em",clearButton:true,placeholder:Str.search,flex:1,cid:"search",maxWidth:"20em",events:{change(e,t,d){app.tree1.delayLoad({comps:app.search})}}}]},items:[{cname:"tree",droppable:"wb.dept",columnsSortable:true,defaultColumns:false,draggable:{autoDrop:false},keyFields:"sid",serverExport:true,stateData:"_$004V7KE4QVEX9$_",stateId:"wb.dept",pagingBar:true,sorters:"dept_code",url:xpath+"/select",cid:"tree1",multiSelect:true,events:{itemdrop(e,t,d){let
+    a=e.dest,i;i=e.mode=="append"?a.data.sid:a.parent.data.sid;Wb.ajax({url:xpath+"/move",params:{source:Wb.Tree.getTopNodes(e.source).pluck("data").pluck("sid"),parentId:i},success(){e.acceptDrop()}})}}}]});
+hideInMenu: 'false'
+icon: dept
+img: ''
+properties:
+  cid: module
+  remark: Department management tool
+stateMap:
+  wb.dept: 004V7KE4QVEX9
+tags: ''
+text: module
+title: '@deptMng'

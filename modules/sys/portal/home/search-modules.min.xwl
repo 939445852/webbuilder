@@ -1,0 +1,15 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Search module names
+  serverScript: function main(){let e=Params.query,t=Wb.load("wb/modules/sys/file/fs.mjs");if(e.startsWith("[")&&e.endsWith("]"))e=e.slice(1,-1);else
+    if(!e.includes("*")&&!e.includes("?"))e="*"+e+"*";Wb.send(search(t,"",e).mixSort("text"))}function
+    search(e,t,s){let i=e.listFiles(Base.modulePathText+t,"home"),a=[];i.forEach((t=>{if(t._leaf){if(t.text.wildcardMatch(s)||t.path.lastItem("/").wildcardMatch(s)){a.push(Wb.applyWith({},t,["text","_icon","_img","path","strTitle"]))}}else{a.pushAll(search(e,"/"+t.path,s))}}));return
+    a}main();
+tags: ''
+text: module
+title: ''

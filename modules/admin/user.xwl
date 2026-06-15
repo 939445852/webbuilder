@@ -1,0 +1,200 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: |-
+    Wb.apply(app, {
+      /** @property {Object} - The edit window configs object. */
+      winConfigs: {
+        tagName: 'form',
+        layout: 'form1',
+        height: '45em',
+        width: '75em',
+        autoScroll: true,
+        manualShow: true,
+        events: {
+          ready() {
+            let win = this, ct = new Wb.Container({ layout: 'grid2', padding: false, autoGrid: true });
+
+            win.down('display_name').inputEl.autocomplete = 'off';
+            win.el.autocomplete = 'off';
+            ct.add(win.items.copy());
+            win.add(ct);
+            win.add({
+              cid: 'roleBox', cname: 'dualBox', flex: 1, minHeight: '10em', url: xpath + '/select-roles',
+              getValue() {
+                return this.destData.pluck('sid');
+              },
+              sourceGridConfigs: {
+                title: Str.availableRoles, tools: {
+                  icon: 'refresh', tip: Str.refresh, handler() {
+                    let roleBox = this.up('roleBox');
+                    app.loadRoles(data => {
+                      let excludeItems = roleBox.destGrid.items;
+
+                      roleBox.sourceData = data.sourceRoles.filter(item => !excludeItems.some(t => t.data.sid == item.sid))
+                    });
+                  }
+                }
+              }, destGridConfigs: { title: Str.selectedRoles }
+            });
+          },
+          beforeok() {
+            let win = this, pwd = win.down('password');
+            //The two passwords are not the same
+            if (pwd.value != win.down('confirm_password').value) {
+              Wb.warn(Str.pwdNotSame, f => pwd.focus(false, true));
+              return false;
+            }
+          }
+        }
+      },
+      /**
+       * Fires after insert or update fails.
+       */
+      onFailure(resp) {
+        let checkFields = { wb_user_pk: 'user_id_disp', wb_user_user_name: 'user_name' };
+
+        Wb.each(checkFields, (k, v) => {
+          if (Wb.checkExists(resp, k, app.grid1.dictWin.down(v)))
+            return false;
+        });
+      },
+      /**
+       * Load available roles.
+       * @param {Function} success The callback function after success.
+       * @param {Array} .items Available roles.
+       * @param {String} [userId] User id for getting dest roles.
+       */
+      loadRoles(success, userId) {
+        Wb.ajax({
+          url: xpath + '/select-roles',
+          json: true,
+          params: { userId },
+          success(data) {
+            success?.(data);
+          }
+        });
+      }
+    });
+hideInMenu: 'false'
+icon: user2
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _expanded: true
+    _icon: toolbar
+    cls: Wb.Toolbar
+    items:
+    - _expanded: false
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: |-
+          app.loadRoles(data => {
+            let win, roleBox;
+
+            win = app.grid1.dictAdd({
+              url: xpath + '/add',
+              failure: app.onFailure
+            }, Str.username, null, null, app.winConfigs);
+            roleBox = win.down('roleBox');
+            roleBox.sourceData = data.sourceRoles;
+            roleBox.destData = [];
+            win.show();
+            win.down('user_id_disp').readonly = false;
+          });
+      properties:
+        cid: addBtn
+        icon: add
+        keys: Ctrl+E
+        text: '@Str.add'
+      text: addBtn
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: |-
+          let grid = app.grid1, data = grid.selectionData;
+          if (!data) {
+            Wb.tipSelect();
+            return;
+          }
+          app.loadRoles(data => {
+            let win, roleBox;
+            win = grid.dictEdit({
+              url: xpath + '/edit',
+              failure: app.onFailure
+            }, 'user_name', null, null, app.winConfigs);
+            roleBox = win.down('roleBox');
+            roleBox.sourceData = data.sourceRoles;
+            roleBox.destData = data.destRoles;
+            win.show();
+            win.down('user_id_disp').readonly = true;
+          }, data.sid);
+      properties:
+        cid: editBtn
+        icon: edit
+        keys: Ctrl+J
+        text: '@Str.edit'
+      text: editBtn
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: app.grid1.removeRecords(xpath + '/del', 'user_name');
+      properties:
+        cid: delBtn
+        icon: delete
+        keys: Ctrl+D
+        text: '@Str.del'
+      text: delBtn
+    - _icon: divider
+      cls: Wb.Divider
+      properties:
+        cid: divider1
+      text: divider1
+    - _icon: text
+      cls: Wb.Text
+      events:
+        change: 'app.grid1.delayLoad({ comps: app.search });'
+      properties:
+        cid: search
+        clearButton: 'true'
+        flex: '1'
+        maxWidth: 20em
+        minWidth: 5em
+        placeholder: '@Str.search'
+      text: search
+    properties:
+      cid: tbar
+      isProperty: 'true'
+    text: tbar
+  - _expanded: true
+    _icon: grid
+    cls: Wb.Grid
+    events:
+      itemdblclick: app.editBtn.fireEvent('click');
+    properties:
+      cid: grid1
+      columnsSortable: 'true'
+      keyFields: sid,user_name
+      multiSelect: 'true'
+      sorters: user_name
+      stateId: wb.user
+      url: '@xpath + ''/select'''
+    text: grid1
+  properties:
+    autoContextMenu: 'true'
+    cid: viewport1
+    layout: fit
+  text: viewport1
+properties:
+  cid: module
+  remark: User account management tool
+tags: ''
+text: module
+title: '@userMng'

@@ -1,0 +1,22 @@
+{
+  "items": [
+    "ide.xwl",
+    "ide",
+    "controls.xwl",
+    "controls",
+    "dict.xwl",
+    "dict",
+    "kve.xwl",
+    "kve",
+    "lang.xwl",
+    "lang",
+    "version.xwl",
+    "version",
+    "docs.xwl",
+    "welcome.xwl"
+  ],
+  "title": "@devSuite",
+  "icon": "codepen",
+  "img": "",
+  "hideInMenu": "false"
+}

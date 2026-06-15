@@ -1,0 +1,76 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+items:
+- _expanded: true
+  _icon: edit
+  cls: Wb.CodeEditor
+  properties:
+    cid: codeEditor1
+    full: 'true'
+    readonly: 'true'
+    value: |-
+      //Multithreaded programming
+
+      //Create a new thread and get the result returned by the thread
+      let map = Wb.startThread(params => {
+        Wb.log(params.date);
+        Wb.sleep(100);
+        return { result: 'ok' };
+      }, { foo: 'bar', abc: 123, date: new Date() });
+      map.thread.join(); //Wait for the thread
+      Wb.log(map.result); //Displays the results: {result: 'ok'}
+
+      let future = Wb.poolStart(params => {
+        Wb.log(params.date);
+        Wb.sleep(100);
+        return { result: 'ok' };
+      }, { foo: 'bar', abc: 123, date: new Date() });
+      future.get(); //Wait for executing
+      Wb.log('ok');
+
+      //Each thread has an exclusive execution-context, and the JS objects can only be accessed by the
+      //current execution-context, so no concurrency control is required.
+      //Concurrency control still needs to be handled when accessing Java objects, such as when accessing
+      //a globally shared Java static object.
+      Base.map.put('foo', 'bar'); //Add variables to the global static Java ConcurrentHashMap object
+      //Add "myVar" to the global JS object app in the execution-context, which is visible only to the current execution-context
+      app.myVar = 'value';
+      Wb.run('my/file1'); //Call the file1 module to safely access app.myVar
+
+      //Sync lock
+      //Create a lock named my.lock1, and when executed again, the code will be blocked until the lock is released
+      let lock = new Wb.Lock('my.lock1');
+      try {
+        let myJavaObject = BaseMap.get('myJavaObject'); //Access BaseMap
+        myJavaObject.doSomeThing(); //Execution is safe in locking
+      } finally {
+        lock.unlock(); //Release the lock. The block will auto unlock when execution-context finished.
+      }
+
+      //Execute function after the specified delay
+      //Since the delayed execution method is in an independent thread and context, external variables cannot be referenced, only parameters in "params" can be referenced
+      let future = Wb.setTimeout(params => {
+        Wb.log(params.date);
+        return { result: 'ok' };
+      }, 1000, { foo: 'bar', abc: 123, date: new Date() });
+      // future.cancel(false); // cancel setTimeout
+
+      //Execute function periodically
+      //Since the execution method periodically is in an independent thread and context, external variables cannot be referenced, only parameters in "params" can be referenced
+      let future = Wb.setInterval(params => {
+        Wb.log(params.date);
+        return { result: 'ok' };
+      }, 1000, { foo: 'bar', abc: 123, date: new Date() });
+      Wb.sleep(3000);
+      future.cancel(false); // cancel interval
+    wrapBorder: '0'
+  text: codeEditor1
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

@@ -1,0 +1,88 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  finalize: app.panel1.setLoginFocus();
+hideInMenu: 'false'
+icon: ''
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _expanded: true
+    _icon: toolbar
+    cls: Wb.Toolbar
+    items:
+    - _icon: logo
+      cls: Wb.Icon
+      properties:
+        cid: logoIcon
+        fontSize: 3em
+        icon: geejing
+      text: logoIcon
+    - _expanded: true
+      _icon: label
+      cls: Wb.Label
+      properties:
+        cid: titleLabel
+        fontSize: 2em
+        style: 'font-weight: bold; color: #333;'
+        text: _$title$_
+      text: titleLabel
+    properties:
+      cid: tbar
+      isProperty: 'true'
+      padding: 'true'
+    text: tbar
+  - _expanded: true
+    _icon: panel
+    cls: Wb.Panel
+    events:
+      ready: Wb.createLoginPanel(this, f => location.reload(), false, _$verifyCode$_);
+    properties:
+      cid: panel1
+      cls: w-limit-width
+      style: box-shadow:#00000055 0px 2px 10px 5px
+    text: panel1
+  - _expanded: true
+    _icon: toolbar
+    cls: Wb.Toolbar
+    items:
+    - _icon: label
+      cls: Wb.Label
+      properties:
+        cid: copyrightLabel
+        fontSize: .8em
+        style: color:#555
+        text: Copyright © Geejing, All Rights Reserved.
+      text: copyrightLabel
+    properties:
+      cid: bbar
+      isProperty: 'true'
+      justify: center
+      padding: 'true'
+    text: bbar
+  properties:
+    autoScroll: 'true'
+    bodyStyle: 'background-color:#959595;background-image: repeating-linear-gradient(40deg,rgba(0,0,255,0.2)
+      2px,transparent 2.5px),repeating-linear-gradient(126deg,rgba(255,0,0,0.2) 2px,transparent
+      2.5px),repeating-linear-gradient(238deg,rgba(0,255,0,0.2) 2px,transparent 2.5px);'
+    border: 'false'
+    cid: viewport1
+    layout: middle
+  text: viewport1
+properties:
+  cid: module
+  loginRequired: 'false'
+  remark: Login page
+  serverScript: |-
+    Wb.set({
+      title: Wb.getConfig('sys.app.title'),
+      verifyCode: Wb.getConfig('sys.session.verifyCode')
+    });
+  theme: 'true'
+tags: ''
+text: module
+title: '@login'

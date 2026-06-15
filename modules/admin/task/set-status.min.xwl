@@ -1,0 +1,12 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Set tasks status
+  serverScript: function main(){const t=Wb.load("./util.mjs");let o=Wb.getObject("update"),b=Wb.getBool("status")?1:0,e=[],i,s=Wb.getConn();o.forEach((t=>t.status=b));Wb.sync({tableName:"wb_job",update:o,db:s});if(b){JobUtil.reloadJobs(o.pluck("$sid"),s.connection)}o.forEach((o=>{i=o.$sid;if(!b)JobUtil.stopJob(i);e.push(t.getFireTime(i))}));Wb.send(e)}main();
+tags: ''
+text: module
+title: ''

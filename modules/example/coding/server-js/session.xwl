@@ -1,0 +1,50 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+items:
+- _expanded: true
+  _icon: edit
+  cls: Wb.CodeEditor
+  properties:
+    cid: codeEditor1
+    full: 'true'
+    readonly: 'true'
+    value: |-
+      //Gets the current user session
+      let session = request.getSession();
+      //Gets the current user name
+      let username = Wb.username;
+      //Gets the current user ID
+      let userid = Wb.userid;
+      //Gets the current user display name
+      let dispname = Wb.dispname;
+      //Gets the current user role
+      let roles = Wb.roles;
+
+      //Determines whether the current user can access dbe.xwl
+      let result = Wb.permit('admin/dbe.xwl');
+      //Determines whether the current user contains a role
+      let hasRole = Wb.hasRole('admin');
+      //Determines whether the current user contains some roles
+      hasRole = Wb.hasRole(['admin', 'manager']);
+      //If the specified role is not included, the specified exception information is thrown
+      Wb.permitRole('manager', 'Only manager is allowed');
+      Wb.permitRole(['manager', 'test'], 'Only manager and test are allowed');
+      //If the specified role is included, the specified exception information is thrown
+      Wb.forbidRole('manager', 'manager is not allowed');
+      Wb.forbidRole(['manager', 'test'], 'manager and test are not allowed');
+
+      //Gets the session list map of the specified user
+      let map = Sessions.getSessions('admin');
+      //Get all the corresponding websocket sessions by user id
+      let list = Sessions.getWSSessions('admin', '$ide');
+    wrapBorder: '0'
+  text: codeEditor1
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

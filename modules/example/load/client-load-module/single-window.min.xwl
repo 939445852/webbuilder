@@ -1,0 +1,15 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.apply(app,{onLoad(){app.number3.value=Wb.random(100)},add(e,a,u){app.number1.value=e;app.number2.value=a;app.callback=u;app.window1.show()}});Wb.make(app,{cname:"window",layout:"grid1",resetDialog:true,visible:true,title:"Perform
+    add",cid:"window1",events:{ok(e){app.callback(app.number1.value+app.number2.value+app.number3.value,this)}},items:[{cname:"label",cid:"label1",text:"This
+    window from single-window.xwl"},{cname:"number",required:true,cid:"number1",text:"Value1"},{cname:"number",required:true,cid:"number2",text:"Value2"},{cname:"number",required:true,cid:"number3",text:"Value3"}]});
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

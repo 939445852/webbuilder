@@ -1,0 +1,21 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Reset passwords for all users
+  serverScript: |-
+    function main() {
+      Wb.sql({
+        sql: 'update wb_user set password={?pwd?}, login_times=2',
+        params: {
+          pwd: Wb.UserUtil.encryptPassword(Params.password)
+        }
+      });
+    }
+    main();
+tags: ''
+text: module
+title: ''

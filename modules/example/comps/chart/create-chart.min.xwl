@@ -1,0 +1,12 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  serverScript: function main(){Wb.load("wb/libs/echarts.js");let e,t,r,a,i=[];a=echarts.init(null,Wb.get("sys.theme")=="dark"?"dark":null,{renderer:"svg",locale:Str.lang=="zh-cn"?"ZH":"EN",ssr:true,width:500,height:400});for(e=0;e<=100;e++){t=e/100*360;r=5*(1+Math.sin(t/180*Math.PI));i.push([r,t])}a.setOption({title:{text:"Server
+    render"},legend:{data:["line"]},polar:{},tooltip:{trigger:"axis",axisPointer:{type:"cross"}},angleAxis:{type:"value",startAngle:0},radiusAxis:{},series:[{coordinateSystem:"polar",name:"line",type:"line",data:i}]});Wb.send(a.renderToSVGString())}main();
+tags: ''
+text: module
+title: ''

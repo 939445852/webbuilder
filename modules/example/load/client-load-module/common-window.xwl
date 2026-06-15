@@ -1,0 +1,73 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: |-
+    Wb.apply(app, {
+      /** @property {Function} callback The callback function. @priv */
+      /**
+       * Perform add.
+       * @param {Number} value1 value 1.
+       * @param {Number} value2 value 2.
+       * @param {Function} callback The callback function after completion.
+       * @param {Number} .total The total value.
+       * @param {Wb.Window} .win The edit window.
+       */
+      add(value1, value2, callback) {
+        app.number1.value = value1;
+        app.number2.value = value2;
+        app.callback = callback;
+        app.window1.show();
+      }
+    });
+hideInMenu: 'false'
+icon: ''
+img: ''
+items:
+- _expanded: true
+  _icon: window
+  cls: Wb.Window
+  events:
+    ok: app.callback(app.number1.value + app.number2.value, this);
+  items:
+  - _expanded: true
+    _icon: label
+    cls: Wb.Label
+    properties:
+      cid: label1
+      text: This window from common-window.xwl
+    text: label1
+  - _icon: number-edit
+    cls: Wb.Number
+    properties:
+      cid: number1
+      required: 'true'
+      text: Value1
+    text: number1
+  - _expanded: true
+    _icon: number-edit
+    cls: Wb.Number
+    properties:
+      cid: number2
+      required: 'true'
+      text: Value2
+    text: number2
+  properties:
+    cid: window1
+    closeAction: destroy
+    layout: grid1
+    resetDialog: 'true'
+    title: Perform add
+    visible: 'true'
+  text: window1
+- _expanded: false
+  _icon: window
+  cls: Wb.Window
+  properties:
+    cid: thisWinAutoDestroyedAfterWindow1Destroyed
+  text: thisWinAutoDestroyedAfterWindow1Destroyed
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

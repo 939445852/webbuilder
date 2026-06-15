@@ -1,0 +1,166 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: plug
+img: ''
+items:
+- _icon: plug
+  cls: Wb.Socket
+  events:
+    message: |-
+      // let object = Wb.decode(e.data); // if e.data is JSON text
+      Wb.tip('Received: ' + e.data);
+  properties:
+    cid: commonSocket
+    name: wb.ws.commonSocket
+  text: commonSocket
+- _expanded: true
+  _icon: plug
+  cls: Wb.Socket
+  events:
+    message: 'Wb.tip(''Received: '' + e.data);'
+  properties:
+    cid: xwlSocket
+    name: wb.ws.xwlSocket
+    xwl: '@xpath + "/actions {xaction: ''receiveData''}"'
+  text: xwlSocket
+- _expanded: false
+  _icon: plug
+  cls: Wb.Socket
+  events:
+    message: |-
+      let blob = e.data;
+      Wb.readBlob(blob, value => {
+        Wb.tip('<img src="data:image/png;base64,' + value + '">', true);
+      });
+  properties:
+    cid: binarySocket
+    name: wb.ws.binarySocket
+  text: binarySocket
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: mainLabel
+      cls: w-title3
+      text: WebSocket
+    text: mainLabel
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: sendTextToCurrentUserLabel
+      text: Send text to the specified web socket of current user
+    text: sendTextToCurrentUserLabel
+  - _icon: button
+    cls: Wb.Button
+    events:
+      click: |-
+        Wb.ajax({
+          url: xpath + '/actions&xaction=sendTextToCurrentUser',
+          params: { text: 'text message' }
+        });
+    properties:
+      cid: sendTextToCurrentUserBtn
+      text: Send text to current user
+      type: primary
+    text: sendTextToCurrentUserBtn
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: sendBinaryToCurrentUserLabel
+      text: Send binary to the specified web socket of current user
+    text: sendBinaryToCurrentUserLabel
+  - _icon: button
+    cls: Wb.Button
+    events:
+      click: |-
+        Wb.ajax({
+          url: xpath + '/actions&xaction=sendBinaryToCurrentUser'
+        });
+    properties:
+      cid: sendBinaryToCurrentUserBtn
+      text: Send binary to current user
+      type: primary
+    text: sendBinaryToCurrentUserBtn
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: sendTextToSpecifyUserLabel
+      text: Send text to the specified web socket of the specified user
+    text: sendTextToSpecifyUserLabel
+  - _icon: button
+    cls: Wb.Button
+    events:
+      click: |-
+        Wb.ajax({
+          url: xpath + '/actions&xaction=sendTextToSpecifiedUser',
+          params: { text: 'text message' }
+        });
+    properties:
+      cid: sendTextToSpecifiedUserBtn
+      text: Send text to "admin" user
+      type: primary
+    text: sendTextToSpecifiedUserBtn
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: broadcastJsonToAllUsersLabel
+      text: Broadcast JSON to the specified web socket of all users
+    text: broadcastJsonToAllUsersLabel
+  - _icon: button
+    cls: Wb.Button
+    events:
+      click: |-
+        Wb.ajax({
+          url: xpath + '/actions&xaction=broadcastJSONToSpecifiedUser'
+        });
+    properties:
+      cid: broadcastJsonToAllUsersBtn
+      text: Broadcast JSON to all users
+      type: primary
+    text: broadcastJsonToAllUsersBtn
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: sendTextBySocketLabel
+      text: Send text to the specified xwl module by xwlSocket
+    text: sendTextBySocketLabel
+  - _icon: button
+    cls: Wb.Button
+    events:
+      click: app.xwlSocket.send('text');
+    properties:
+      cid: sendTextBySocketBtn
+      text: Send text by socket
+      type: primary
+    text: sendTextBySocketBtn
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: sendBinaryBySocketLabel
+      text: Send binary to the specified xwl module by xwlSocket
+    text: sendBinaryBySocketLabel
+  - _icon: button
+    cls: Wb.Button
+    events:
+      click: |-
+        let blob = new Blob([Wb.encode({ foo: 'bar' })], { type: 'application/json' });
+        app.xwlSocket.send(blob);
+    properties:
+      cid: sendBinaryBySocketBtn
+      text: Send binary by socket
+      type: primary
+    text: sendBinaryBySocketBtn
+  properties:
+    cid: viewport1
+    layout: grid1
+  text: viewport1
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

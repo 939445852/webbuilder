@@ -1,0 +1,34 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  serverScript: |-
+    let actions = {
+      /**
+       * Select data.
+       */
+      select() {
+        Wb.sendDict('select * from wb_staff', 'wb,');
+      },
+      /**
+       * Get form.
+       */
+      getForm() {
+        Wb.send(Wb.getExcelHtml('form.xlsx', { now: new Date().dateText }));
+      },
+      /**
+       * Export data.
+       */
+      export() {
+        let data = Wb.getObject('data');
+        data.gender = data.gender$; // display text
+        Wb.getExcelFile('my-form.xlsx', 'form.xlsx', data);
+      }
+    };
+    actions[Params.xaction]();
+tags: ''
+text: module
+title: ''

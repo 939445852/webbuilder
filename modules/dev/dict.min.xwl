@@ -1,0 +1,16 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.apply(app,{load(){app.grid1.delayLoad({comps:app.viewport1.tbar})}});Wb.make(app,{cname:"viewport",autoContextMenu:true,layout:"fit",cid:"viewport1",tbar:{cname:"toolbar",items:[{icon:"add",text:Str.add,keys:"Ctrl+E",cid:"addBtn",events:{click(e,t){app.grid1.dictAdd(xpath+"/add",Str.dictConfig)}}},{icon:"edit",text:Str.edit,keys:"Ctrl+J",cid:"editBtn",events:{click(e,t){let
+    a=app.grid1.selection?.data;app.grid1.dictEdit(xpath+"/edit","name",{oldName:a?.name,oldGroup:a?.group_name})}}},{icon:"delete",text:Str.del,keys:"Ctrl+D",cid:"delBtn",events:{click(e,t){app.grid1.removeRecords(xpath+"/del","name")}}},{cname:"divider",cid:"divider1"},{cname:"text",minWidth:"5em",clearButton:true,placeholder:Str.name,flex:1,cid:"search",maxWidth:"20em",events:{change(e,t,a){app.load()}}},{cname:"text",minWidth:"5em",clearButton:true,placeholder:Str.groupName,flex:1,cid:"searchGroup",maxWidth:"20em",events:{change(e,t,a){app.load()}}},{cname:"text",minWidth:"5em",clearButton:true,placeholder:Str.content,flex:1,cid:"searchContent",maxWidth:"20em",events:{change(e,t,a){app.load()}}}]},items:[{cname:"grid",keyWalking:"name",columnsSortable:true,keyFields:"sid",sorters:"name",url:xpath+"/select",cid:"grid1",multiSelect:true,events:{itemdblclick(e,t,a){app.editBtn.fireEvent("click")}}}]});
+hideInMenu: 'false'
+icon: dict
+img: ''
+properties:
+  cid: module
+  links: '["wb/js/monaco.js"]'
+  remark: Dictionary configuration utility
+tags: ''
+text: module
+title: '@dictConfig'

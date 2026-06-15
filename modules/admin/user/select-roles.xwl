@@ -1,0 +1,27 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Select all roles and the specified user's roles
+  serverScript: |-
+    function main() {
+      let sourceRoles, destRoles;
+
+      if (Params.userId) {
+        sourceRoles = Wb.getAllRows(`select sid,role_name as text,remark as subtext from wb_role where sid<>'default' and status=1
+          and sid not in (select role_id from wb_user_role where user_id={?userId?}) order by role_name`);
+        destRoles = Wb.getAllRows(`select sid,role_name as text,remark as subtext from wb_role where sid<>'default' and status=1
+          and sid in (select role_id from wb_user_role where user_id={?userId?}) order by role_name`);
+      } else {
+        sourceRoles = Wb.getAllRows(`select sid,role_name as text,remark as subtext from wb_role where sid<>'default' and status=1
+         order by role_name`);
+      }
+      Wb.send({ sourceRoles, destRoles });
+    }
+    main();
+tags: ''
+text: module
+title: ''

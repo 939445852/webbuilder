@@ -1,0 +1,23 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Get key value list
+  serverScript: |-
+    function main() {
+      switch (Params.type) {
+        case 'list':
+          Wb.send(Wb.ServerDict.getKVList(Params.name));
+          break;
+        case 'names':
+          Wb.send(Wb.ServerDict.getKeyNames(Params.query));
+          break;
+      }
+    }
+    main();
+tags: ''
+text: module
+title: ''

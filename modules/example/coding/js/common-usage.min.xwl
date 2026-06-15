@@ -1,0 +1,116 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: 'Wb.make(app,{cname:"codeEditor",readonly:true,wrapBorder:0,value:"//This
+    example demonstrates the general usage of JavaScript in client and server programming\n//For
+    more resources, please visit: https://developer.mozilla.org/en-US/docs/Web/JavaScript\n\n//Define
+    a class\nCls[''My.pack.ClassName''] = class myClassName extends Wb.Base {\n  //static
+    class prototype property\n  static foo = ''bar'';\n\n  //static class prototype
+    function\n  static func() {\n  }\n\n  //instance property\n  myProp = ''xxx''\n\n  //private
+    instance property\n  #privateProp = new Date();\n\n  //instance prototype members(all
+    members of \"protos\" will be added to the prototype of the class instance)\n  static
+    protos = {\n    foo: ''bar'',\n    abc: 123\n  };\n\n  //constructor function\n  constructor(param)
+    {\n    super(param); //call super function\n    this.param = param; //add param
+    to the class instance\n    this.abc = 234; //Add class instance property abc\n    this.def
+    = 456; //Add class instance property def\n    console.log(this.foo); //show prototype
+    property foo, foo value is \"bar\"\n    console.log(this.abc); //show instance
+    property abc, abc value is \"234\"\n    delete this.abc; //delete instance property
+    abc\n    console.log(this.abc); //show prototype property abc, abc value is \"123\",
+    because there is no instance property at this time\n    console.log(this.#privateProp);
+    //show private instance property #privateProp\n    this.height = 456; //use setter\n    console.log(this.height);
+    //use getter\n  }\n\n  //prototype function\n  myFunc(param) {\n    super.myFunc(param);
+    //call super function\n  }\n\n  //Setter\n  set height(value) {\n    let me =
+    this;\n\n    if (me.height$ !== value) {\n      me.height$ = value;\n      me.doSomething();\n    }\n  }\n\n  //Getter\n  get
+    height() {\n    return this.height$;\n  }\n}\nlet myCls = new My.pack.ClassName();
+    //create a new instance\n\n//Define getter and setter in app\nWb.define(app, {\n  /**
+    @property {String} - Setter description. */\n  set$name(value) {\n    //this is
+    equal to app\n    if (this.name$ !== value) {\n      this.name$ = value;\n      doSomething();\n    }\n  },\n  /**
+    @property {String} - Getter description. */\n  get$name() {\n    //this is equal
+    to app\n    return this.name$;\n  },\n  /**\n   * Function description.\n   */\n  myMethod()
+    {\n  }\n});\n\n//Determines the type of value\nisString = Wb.isString(123); //Determines
+    whether the value is a string\nisNumber = Wb.isNumber(''abc''); //Determines whether
+    the value is a number\nisNumeric = Wb.isNumeric(''123''); //Determines whether
+    the value is a numeric value\nisDate = Wb.isDate(123); //Determines whether the
+    value is a date\nisBoolean = Wb.isBoolean(''abc''); //Determines whether the value
+    is a boolean\nisArray = Wb.isArray([1, 2, 3]); //Determines whether the value
+    is an array\nisObject = Wb.isObject({ foo: ''bar'' }); //Determines whether the
+    value is a \"JavaScript Object\"\nisFunction = Wb.isFunction(''abc''); ///Determines
+    whether the value is a Function\nisPrimitive = Wb.isPrimitive(123); //Determines
+    whether the value is of the narrow original type(String, Number, and Boolean)\nisIterable
+    = Wb.isIterable([]); //Determines whether the value is traversable\nisEmpty =
+    Wb.isEmpty({}); //Determines whether the value is empty(null, undefined, '''',
+    [], {} and other object with length 0)\n\n//Conversion of values\nstringValue
+    = String(value); //to a string\nboolValue = Wb.parseBool(''false''); //to a boolean.
+    ''false'', ''0'' and falsy value return false, others return true\ndateValue =
+    Wb.parseDate(''2021-3-10 15:13:12.18'', ''y-MM-dd HH:mm:ss.S''); //Converts specified
+    format text to date\nintValue = parseInt(''123''); //to an integer\nfloatValue
+    = parseFloat(''1.23''); //to a float\n\n//Copies all enumerable own properties
+    from one or more source objects to a target object. Alias for Object.assign.\nresult
+    = Wb.apply({ abc: 123 }, { foo: ''bar'' });\n//Copies non-existent properties
+    from source objects\nresult = Wb.applyIf({ foo: ''abc'' }, { foo: ''def'', bar:
+    123 });\n//Copies non undefined/null properties from source objects\nresult =
+    Wb.applyValue({ foo: ''abc'' }, { bar: 123, more: null });\n//Copies properties
+    from source objects with specified names\nresult = Wb.applyWith({ foo: ''abc''
+    }, { param1: ''def'', param2: 123 }, [''param2'']);\n//Copies non undefined/null
+    properties from source objects with specified names\nresult = Wb.applyValueWith({
+    foo: ''abc'' }, { param1: ''def'', param2: null }, [''param2'']);\n//Copies properties
+    from source objects without specified names\nresult = Wb.applyWithout({ foo: ''abc''
+    }, { param1: ''def'', param2: 123 }, [''param2'']);\n//Copies properties from
+    source objects and merge object\nresult = Wb.applyMerge({ a: { v1: 1, v2: 2 },
+    b: ''abc'' }, { a: { v3: 3, v4: 4 }, c: ''xyz'' });\n//Shallow copy object\nresult
+    = Wb.copy({ abc: 123 });\n//Deep clone object\nresult = Wb.clone({ foo: ''bar'',
+    arr: [1, 2, 3] });\n//Copies object with getter/setter support\nresult = Wb.define({
+    get$method() { }, set$method() { } });\n\n//Encode and decode\n//Converts a JavaScript
+    value to a JSON string. Alias for JSON.stringify.\nlet text = Wb.encode({ foo:
+    ''bar'', abc: 123 });\n//Parses a JSON string, constructing the JavaScript value
+    or object described by the string. Alias for JSON.parse.\nlet object = Wb.decode(text);\n//Wb.encode
+    with pretty formatting\nlet prettyText = Wb.encodePretty({ foo: ''bar'' });\n//Serialize
+    a JavaScript value to a string. The difference from Wb.encode is that it supports
+    date encoding.\ntext = Wb.serialize({ foo: ''bar'', date: new Date()});\n//Deserialize
+    a string to a JavaScript value. The difference from Wb.decode is that it supports
+    date decoding.\nobject = Wb.deserialize(text);\n//Encode the string to a Base64
+    string\nbase64Text = Wb.encodeBase64(text);\n//Decodes the Base64 string to a
+    string\ntext = Wb.decodeBase64(base64Text);\n\n//Iterates through all members
+    of the object\nWb.each({ abc: 123 }, (k, v) => {\n  console.log(k);\n  if (k ==
+    ''foo'')\n    return false; //Break iteration\n});\n\n//Find object\n//Find the
+    first member name and output \"bar\"\nWb.find({ foo: 123, bar: ''abc'' }, (k,
+    v) => v === ''abc'');\n//Find all member names\nWb.filter(object, fn);\n//Determines
+    whether some members meet test condition\nWb.some({ foo: { name: ''Allen'' },
+    bar: { name: ''Linda'' } }, (k, v) => v.name == ''Linda'');\n//Determines whether
+    all members meet test condition\nWb.every({ foo: { name: ''Allen'' }, bar: { name:
+    ''Linda'' } }, (k, v) => v.name == ''Linda'');\n//Finds the first member name
+    in an object that has the specified value\nWb.findKey({ a: 123 }, 123);\n\n//Down
+    traverse\nitems = [{ param: ''one'' }, { param: ''two'', items: [{ param: ''three''
+    }] }];\nWb.cascade(items, item => console.log(item.param)); //output: one, two,
+    three\nWb.cascade(parentNode, node => console.log(node), ''childNodes''); //Traverses
+    all child nodes of the element\nobject = { param: ''two'', items: [{ param: ''three''
+    }] };\nitems = [{ param: ''one'' }, object];\nWb.down(items, item => item.param
+    === ''two''); //Down traverses the object and find the first item\nWb.downAll(items,
+    fn); //Down traverses the object and find all items\n\n//Up traverse\nlet items
+    = { param: ''one'', parent: { param: ''two'', parent: { param: ''three'' } } };\nWb.bubble(items,
+    parent => console.log(parent.param)); //output: one, two, three\nWb.bubble(childNode,
+    parent => console.log(parent), ''parentNode''); //Traverses all parent nodes of
+    an element\nlet object = { param: ''two'', parent: { param: ''three'' } };\nlet
+    items = { param: ''one'', parent: object };\nWb.up(items, parent => parent.param
+    === ''two''); //Up traverses the object and find the first item\nWb.upAll(items,
+    fn); //Up traverses the object and find all items\n\n//Exception handling\ntry
+    {\n  doSomething();\n  Wb.raise(''error message''); //throw and Error\n} catch
+    (e) {\n  processException();\n  throw e;\n} finally {\n  finallyMethod();\n}\n\n//Value
+    comparison\nWb.compare(a, b); //Intl.Collator().compare\nWb.lowerCompare(a, b);
+    //to lowercase compare\nWb.mixCompare(a, b); //Mixed values compare, supports
+    local comparison of UTF characters.\n\n//Value formatting\nval = Wb.format(1234,
+    ''#,##0.00''); //Format a number, output: \"1,234.00\"\nval = Wb.format(''Your
+    name is {name}'', { name: ''Jeena'' }); //Format a string, output: \"Your name
+    is Jeena\"\nval = Wb.format(''foo {0} bar {1} and {0}'', ''abc'', 123); //Format
+    a string, output: \"foo abc bar 123 and abc\"\nval = Wb.format(new Date(''2021-3-10''),
+    ''y-MM-dd''); //Format a date, output: \"2021-03-10\"",cid:"codeEditor1",full:true});'
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  links: '["wb/js/monaco.js"]'
+tags: ''
+text: module
+title: ''

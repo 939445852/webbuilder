@@ -1,0 +1,23 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.make(app,{cname:"window",icon:"paper-plane",layout:"grid1",resetDialog:true,title:"Leave
+    application",autoScroll:true,cid:"window1",items:[{cname:"text",required:true,cid:"title",text:"Title"},{cname:"date",required:true,cid:"begin_date",text:"Begin
+    Date"},{cname:"date",required:true,cid:"end_date",text:"End Date"},{cname:"number",minValue:0,text:"Leave
+    days",decimalCount:0,maxLength:5,required:true,cid:"leave_days"},{cname:"text",required:true,cid:"leave_reason",text:"Reason"}]});Wb.make(app,{cname:"viewport",layout:"fit",cid:"viewport1",tbar:{cname:"toolbar",items:[{icon:"add",text:Str.add,keys:"Ctrl+E",cid:"addBtn",events:{click(e,t){app.grid1.insertRecord(xpath+"/add",app.window1)}}},{icon:"edit",text:Str.edit,keys:"Ctrl+J",cid:"editBtn",events:{click(e,t){app.grid1.editRecord(xpath+"/edit",app.window1)}}},{icon:"delete",text:Str.del,keys:"Ctrl+D",cid:"delBtn",events:{click(e,t){app.grid1.removeRecords(xpath+"/del","title")}}}]},bbar:{cname:"displayField",icon:"info1",padding:true,value:"This
+    module demonstrates workflow and multi-tables CRUD"},items:[{cname:"grid",columnsSortable:true,sorters:{name:"begin_date",desc:true},url:xpath+"/select",cid:"grid1",columns:[{cname:"column",cid:"rowCol",rowNum:true},{cname:"column",fieldName:"begin_date",text:"Begin
+    Date",type:"dateText",cid:"beginDateCol"},{cname:"column",fieldName:"end_date",text:"End
+    Date",type:"dateText",cid:"endDateCol"},{cname:"column",width:"15em",fieldName:"title",text:"Title",cid:"titleCol"},{cname:"column",cid:"leaveDaysCol",fieldName:"leave_days",text:"Leave
+    Days"},{cname:"column",cid:"approvalNodeCol",fieldName:"node_text",text:"Approval
+    Node"},{cname:"column",width:-1,minWidth:"8em",fieldName:"leave_reason",text:"Leave
+    Reason",cid:"leaveReasonCol"},{cname:"column",width:"3em",cid:"actionsCol",freeze:true,buttons:[{icon:"undo",tip:"Withdraw
+    Application",cid:"withdrawItem",events:{click(e,t){this.gridItem.select();app.grid1.removeRecords(xpath+"/del","title")}}}]}],events:{itemdblclick(e,t,a){app.editBtn.fireEvent("click")}}}]});
+hideInMenu: 'false'
+icon: paper-plane
+img: ''
+properties:
+  cid: module
+tags: ''
+text: module
+title: Leave Application

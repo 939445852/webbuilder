@@ -1,0 +1,126 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  beforeunload: |-
+    if (!app.saveItem.disabled) {
+      return false;
+    }
+  initialize: |-
+    Wb.apply(app, {
+      /**
+       * Reload ips.
+       */
+      reload() {
+        Wb.ajax({
+          url: xpath + '/set-actions&xaction=getIPs',
+          success(resp) {
+            app.codeEditor1.value = resp;
+            app.saveItem.disabled = true;
+          }
+        });
+      },
+      /**
+       * Save ips.
+       */
+      save() {
+        Wb.ajax({
+          url: xpath + '/set-actions&xaction=save',
+          data: app.codeEditor1.value,
+          success(resp) {
+            app.saveItem.disabled = true;
+          }
+        });
+      }
+    });
+hideInMenu: 'false'
+icon: delete3
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _expanded: true
+    _icon: toolbar
+    cls: Wb.Toolbar
+    items:
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: app.save();
+      properties:
+        cid: saveItem
+        disabled: 'true'
+        icon: save
+        keys: Ctrl+S
+        text: '@Str.save'
+      text: saveItem
+    - _icon: divider
+      cls: Wb.Divider
+      properties:
+        cid: divider1
+      text: divider1
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: |-
+          if (app.saveItem.disabled) {
+            app.reload();
+          } else {
+            Wb.choose(Str.saveChanges.format('IPs'), btn => {
+              if (btn == 'yes')
+                app.save();
+              else if (btn == 'no') {
+                app.reload();
+              }
+            });
+          }
+      properties:
+        cid: refreshItem
+        icon: refresh
+        text: '@Str.refresh'
+      text: refreshItem
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: |-
+          Wb.ajax({
+            url: xpath + '/set-actions&xaction=clear',
+            success() {
+              Wb.tipDone(Str.clear);
+            }
+          });
+      properties:
+        cid: clearItem
+        icon: recycle
+        text: '@Str.clear'
+        tip: '@Str.clearInvalidData'
+      text: clearItem
+    properties:
+      cid: tbar
+      isProperty: 'true'
+    text: tbar
+  - _icon: edit
+    cls: Wb.CodeEditor
+    events:
+      change: app.saveItem.disabled = false;
+      ready: app.reload();
+    properties:
+      cid: codeEditor1
+      language: txt
+      minimap: 'false'
+      wrapBorder: 'false'
+    text: codeEditor1
+  properties:
+    cid: viewport1
+    layout: fit
+  text: viewport1
+properties:
+  cid: module
+tags: ''
+text: module
+title: '@blockedIPs'

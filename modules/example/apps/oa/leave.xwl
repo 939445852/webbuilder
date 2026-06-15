@@ -1,0 +1,226 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: paper-plane
+img: ''
+items:
+- _expanded: true
+  _icon: window
+  cls: Wb.Window
+  items:
+  - _icon: text
+    cls: Wb.Text
+    properties:
+      cid: title
+      required: 'true'
+      text: Title
+    text: title
+  - _expanded: true
+    _icon: calendar
+    cls: Wb.Date
+    properties:
+      cid: begin_date
+      required: 'true'
+      text: Begin Date
+    text: begin_date
+  - _expanded: true
+    _icon: calendar
+    cls: Wb.Date
+    properties:
+      cid: end_date
+      required: 'true'
+      text: End Date
+    text: end_date
+  - _icon: number-edit
+    cls: Wb.Number
+    properties:
+      cid: leave_days
+      decimalCount: '0'
+      maxLength: '5'
+      minValue: '0'
+      required: 'true'
+      text: Leave days
+    text: leave_days
+  - _icon: text
+    cls: Wb.Text
+    properties:
+      cid: leave_reason
+      required: 'true'
+      text: Reason
+    text: leave_reason
+  properties:
+    autoScroll: 'true'
+    cid: window1
+    icon: paper-plane
+    layout: grid1
+    resetDialog: 'true'
+    title: Leave application
+  text: window1
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _expanded: true
+    _icon: toolbar
+    cls: Wb.Toolbar
+    items:
+    - _expanded: false
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: app.grid1.insertRecord(xpath + '/add', app.window1);
+      properties:
+        cid: addBtn
+        icon: add
+        keys: Ctrl+E
+        text: '@Str.add'
+      text: addBtn
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: app.grid1.editRecord(xpath + '/edit', app.window1);
+      properties:
+        cid: editBtn
+        icon: edit
+        keys: Ctrl+J
+        text: '@Str.edit'
+      text: editBtn
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: app.grid1.removeRecords(xpath + '/del', 'title');
+      properties:
+        cid: delBtn
+        icon: delete
+        keys: Ctrl+D
+        text: '@Str.del'
+      text: delBtn
+    properties:
+      cid: tbar
+      isProperty: 'true'
+    text: tbar
+  - _icon: label1
+    cls: Wb.DisplayField
+    properties:
+      cid: bbar
+      icon: info1
+      isProperty: 'true'
+      padding: 'true'
+      value: This module demonstrates workflow and multi-tables CRUD
+    text: bbar
+  - _expanded: true
+    _icon: grid
+    cls: Wb.Grid
+    events:
+      itemdblclick: app.editBtn.fireEvent('click');
+    items:
+    - _expanded: true
+      _icon: array
+      cls: Wb.Array
+      items:
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: rowCol
+          rowNum: 'true'
+        text: rowCol
+      - _icon: column
+        cls: Wb.Column
+        properties:
+          cid: beginDateCol
+          fieldName: begin_date
+          text: Begin Date
+          type: dateText
+        text: beginDateCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: endDateCol
+          fieldName: end_date
+          text: End Date
+          type: dateText
+        text: endDateCol
+      - _icon: column
+        cls: Wb.Column
+        properties:
+          cid: titleCol
+          fieldName: title
+          text: Title
+          width: 15em
+        text: titleCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: leaveDaysCol
+          fieldName: leave_days
+          text: Leave Days
+        text: leaveDaysCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: approvalNodeCol
+          fieldName: node_text
+          text: Approval Node
+        text: approvalNodeCol
+      - _icon: column
+        cls: Wb.Column
+        properties:
+          cid: leaveReasonCol
+          fieldName: leave_reason
+          minWidth: 8em
+          text: Leave Reason
+          width: '-1'
+        text: leaveReasonCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        items:
+        - _expanded: true
+          _icon: array
+          cls: Wb.Array
+          items:
+          - _expanded: false
+            _icon: item
+            cls: Wb.Item
+            events:
+              click: |-
+                this.gridItem.select();
+                app.grid1.removeRecords(xpath + '/del', 'title');
+            properties:
+              cid: withdrawItem
+              icon: undo
+              tip: Withdraw Application
+            text: withdrawItem
+          properties:
+            cid: buttons
+          text: buttons
+        properties:
+          cid: actionsCol
+          freeze: 'true'
+          width: 3em
+        text: actionsCol
+      properties:
+        cid: columns
+      text: columns
+    properties:
+      cid: grid1
+      columnsSortable: 'true'
+      sorters: '{name: ''begin_date'', desc: true}'
+      url: '@xpath + ''/select'''
+    text: grid1
+  properties:
+    cid: viewport1
+    layout: fit
+  text: viewport1
+properties:
+  cid: module
+tags: ''
+text: module
+title: Leave Application

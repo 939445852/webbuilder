@@ -1,0 +1,34 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: 'Wb.make(app,{cname:"viewport",layout:"grid1",cid:"viewport1",items:[{cname:"label",cid:"mainLabel",cls:"w-title3",text:"Create
+    Page"},{cname:"label",cid:"descLabel",text:"This example demonstrates how to create
+    pages"},{cname:"title",title:"Static page",cid:"staticPageTitle"},{cname:"label",cid:"staticPageLabel",text:"Create
+    a page by defining HTML property"},{cname:"panel",html:''<div class="w-grid2"
+    style="grid-template-columns: 8em 1fr;">\n  <div>Code:</div>\n  <div>10001</div>\n  <div>Name:</div>\n  <div>Terri
+    Duffy</div>\n  <div>Birth Date:</div>\n  <div>2002/07/01</div>\n  <div>Email:</div>\n  <div>terri0@geejing.com</div>\n</div>'',cid:"staticPagePanel"},{cname:"title",title:"Dynamic
+    page",cid:"dynamicPageTitle"},{cname:"label",cid:"dynamicPageLabel",text:"Create
+    a page by set HTML and create elements in ready event"},{cname:"panel",html:''<div
+    class="w-padding">\n  <div cid="title" class="w-title2"></div>\n  <div cid="subTitle"></div>\n  <div
+    cid="list" class="w-grid2" style="grid-template-columns: 8em 1fr;">\n  </div>\n</div>'',cid:"dynamicPagePanel",events:{ready(e,t){let
+    a=this.el,i;a.query("[cid=title]").textContent="Staff form";a.query("[cid=subTitle]").innerHTML="<span>"+(new
+    Date).dateText+"</span>";i=a.query("[cid=list]");Wb.ajax({url:"demo-source?xaction=staffFirstRow",json:true,success(e){i.addEl().textContent="Code:";i.addEl().textContent=e.code;i.addEl().textContent="Name:";i.addEl().textContent=e.full_name;i.addEl().textContent="Birth
+    Date:";i.addEl().textContent=e.birth_date.dateValue.dateText;i.addEl().textContent="Email:";i.addEl().textContent=e.email}})}}},{cname:"title",title:"Template
+    page",cid:"tplPageTitle"},{cname:"label",cid:"tplPageLabel",text:"Create a page
+    by defining tpl and update data in ready event"},{cname:"panel",tpl:''<div class="w-grid2"
+    style="grid-template-columns: 8em 1fr;">\n  <div>Code:</div>\n  <div>{code}</div>\n  <div>Name:</div>\n  <div>{full_name}</div>\n  <div>Birth
+    Date:</div>\n  <div>{birth_date}</div>\n  <div>Email:</div>\n  <div>{email}</div>\n</div>'',cid:"tplPagePanel",events:{ready(e,t){Wb.ajax({url:"demo-source?xaction=staffFirstRow",json:true,success(e){app.tplPagePanel.update(e)}})}}},{cname:"title",title:"Component
+    page",cid:"compPageTitle"},{cname:"label",cid:"compPageLabel",text:"Create a page
+    by adding components in ready event"},{cname:"panel",layout:"grid1",cid:"compPagePanel",events:{ready(e,t){let
+    a=app.compPagePanel;Wb.ajax({url:"demo-source?xaction=staffFirstRow",json:true,success(e){a.add({cname:"displayField",cid:"code",text:"Code",value:e.code});a.add({cname:"text",cid:"full_name",text:"Name",value:e.full_name});a.add({cname:"text",cid:"birth_date",text:"Birth
+    Date",value:e.birth_date});a.add({cname:"text",cid:"email",text:"Email",value:e.email});a.add({cname:"component",html:"WebBuilder
+    components"})}})}}}]});'
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

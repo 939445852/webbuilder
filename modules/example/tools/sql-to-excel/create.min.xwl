@@ -1,0 +1,13 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  serverScript: function main(){let t,e,a;t=new ByteArrayOutputStream;e=Wb.getRowx({sql:"select
+    * from wb_staff",rs:-1});a=e.columns;a.shift();a.forEach((t=>t.width=parseInt(t.width)));com.wb.office.SheetWriter.createExcel(t,Wb.toJava(a),Wb.toJava(e.items),0,"Staff
+    List",null);Wb.exportData(t.toByteArray(),"staff.xlsx")}main();
+tags: ''
+text: module
+title: ''

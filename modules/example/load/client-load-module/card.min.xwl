@@ -1,0 +1,17 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.apply(app,{init(){}});Wb.make(app,{cname:"panel",layout:"grid1",cid:"panel1",items:[{cname:"label",cid:"label1",text:"This
+    card from card.xwl"},{cname:"text",cid:"text1",text:"Text"},{cname:"date",cid:"date1",text:"Date"},{cname:"button",width:"20em",justifySelf:"center",text:"Set
+    text value",cid:"setValueBtn",events:{click(e,t){app.text1.value="card value"}}},{cname:"button",width:"20em",justifySelf:"center",text:"Set
+    parent module tab title",cid:"setParentTitleBtn",events:{click(e,t){parentApp.runModuleCardTab.title="New
+    Title"}}}]});Wb.make(app,{cname:"window",cid:"thisWinAutoDestroyedAfterOwnerDestroyed"});
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

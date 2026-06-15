@@ -1,0 +1,25 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Delete users
+  serverScript: |-
+    function main() {
+      const reservedName = Wb.UserUtil.reservedName;
+      let del = Wb.getObject('del'), username;
+
+      //Reserved accounts cannot be deleted
+      del.forEach(item => (username = item.$user_name) && reservedName.includes(username) &&
+        Wb.raise(Str.cannotDelete.format(username)));
+      Wb.sync({ tableName: 'wb_user', del });
+      Wb.sql({ sql: 'delete from wb_user_role where user_id={?$sid?}', params: del });
+      //logout
+      del.forEach(item => Sessions.invalidate(item.$sid));
+    }
+    main();
+tags: ''
+text: module
+title: ''

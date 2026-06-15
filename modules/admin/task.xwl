@@ -1,0 +1,560 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: |-
+    Wb.apply(app, {
+      isStartup: _$isStartup$_,
+      /**
+       * Set status of the specified tasks.
+       * @param {Boolean} status false disabled, true enabled.
+       */
+      setStatus(status) {
+        let grid = app.grid1, selRecs = grid.selections;
+        if (!selRecs.length) {
+          Wb.tipSelect();
+          return;
+        }
+        selRecs = selRecs.filter(rec => rec.data.status != status);
+        if (!selRecs.length)
+          return;
+        Wb.ajax({
+          url: xpath + '/set-status',
+          json: true,
+          params: { update: selRecs.pluck('originData'), status },
+          success(items) {
+            selRecs.forEach((rec, i) => {
+              items[i].status = status;
+              rec.update(items[i]);
+            });
+          }
+        });
+      },
+      /**
+       * Set the startStop btn text and icon.
+       */
+      setStartStopBtn() {
+        let b = app.isStartup, btn = app.startStopBtn;
+        btn.icon = b ? 'stop' : 'play';
+        btn.text = b ? Str.stop : Str.start;
+      }
+    });
+hideInMenu: 'false'
+icon: task
+img: ''
+items:
+- _expanded: true
+  _icon: window
+  cls: Wb.Window
+  items:
+  - _icon: text
+    cls: Wb.Text
+    properties:
+      cid: job_name
+      required: 'true'
+      text: '@Str.name'
+    text: job_name
+  - _expanded: true
+    _icon: model
+    cls: Wb.ControlCt
+    items:
+    - _expanded: true
+      _icon: radios
+      cls: Wb.RadioGroup
+      events:
+        change: |-
+          let value = this.value;
+
+          app.interval_value.visible = [0, 1, 2].includes(value);
+          app.trigger_time.visible = value > 2 && value < 7;
+          app.trigger_weekday.visible = value == 4;
+          app.trigger_day.visible = value == 5 || value == 6;
+          app.trigger_month.visible = value == 6;
+          app.cron_express.visible = value == 7;
+      items:
+      - _icon: check2
+        cls: Wb.Radio
+        properties:
+          cid: secondRadio
+          label: '@Str.s'
+        text: secondRadio
+      - _icon: check2
+        cls: Wb.Radio
+        properties:
+          cid: minuteRadio
+          label: '@Str.m'
+        text: minuteRadio
+      - _icon: check2
+        cls: Wb.Radio
+        properties:
+          cid: hourRadio
+          label: '@Str.h'
+        text: hourRadio
+      - _icon: check2
+        cls: Wb.Radio
+        properties:
+          cid: dayRadio
+          label: '@Str.day'
+        text: dayRadio
+      - _icon: check2
+        cls: Wb.Radio
+        properties:
+          cid: weekRadio
+          label: '@Str.week'
+        text: weekRadio
+      - _icon: check2
+        cls: Wb.Radio
+        properties:
+          cid: monthRadio
+          label: '@Str.month'
+        text: monthRadio
+      - _icon: check2
+        cls: Wb.Radio
+        properties:
+          cid: yearRadio
+          label: '@Str.year'
+        text: yearRadio
+      - _icon: check2
+        cls: Wb.Radio
+        properties:
+          cid: cronRadio
+          label: Cron
+        text: cronRadio
+      properties:
+        cid: interval_type
+        gap: 2em
+        layout: row
+      text: interval_type
+    - _expanded: true
+      _icon: container
+      cls: Wb.Container
+      items:
+      - _expanded: true
+        _icon: number-edit
+        cls: Wb.Number
+        properties:
+          cid: interval_value
+          decimalCount: '0'
+          minValue: '1'
+          required: 'true'
+          text: '@Str.every'
+          width: 15em
+        text: interval_value
+      - _icon: combo
+        cls: Wb.Select
+        properties:
+          cid: trigger_month
+          data: |-
+            (f => {
+              let date = new Date(2022, 0, 1), i, months = [],
+                formatter = new Intl.DateTimeFormat(Str.lang, { month: 'long' });
+              for (i = 0; i < 12; i++)
+                months.push({ text: formatter.format(date.addMonth(i)), value: i + 1 });
+              return months;
+            })()
+          forceSelect: 'true'
+          required: 'true'
+          text: '@Str.month'
+        text: trigger_month
+      - _icon: combo
+        cls: Wb.Select
+        properties:
+          cid: trigger_weekday
+          data: |-
+            (f => {
+              let date = new Date(2022, 10, 6), i, days = [],
+                formatter = new Intl.DateTimeFormat(Str.lang, { weekday: 'long' });
+              for (i = 0; i < 7; i++)
+                days.push({ text: formatter.format(date.addDay(i)), value: i + 1 });
+              return days;
+            })()
+          forceSelect: 'true'
+          required: 'true'
+          text: '@Str.week'
+          width: 15em
+        text: trigger_weekday
+      - _expanded: true
+        _icon: number-edit
+        cls: Wb.Number
+        properties:
+          cid: trigger_day
+          maxValue: '31'
+          minValue: '-31'
+          required: 'true'
+          text: '@Str.day'
+          validator: |-
+            if (value == 0)
+              return Str.invalidDate.format(value);
+          width: 10em
+        text: trigger_day
+      - _icon: time
+        cls: Wb.Time
+        properties:
+          cid: trigger_time
+          required: 'true'
+          text: '@Str.time'
+          width: 15em
+        text: trigger_time
+      - _expanded: true
+        _icon: text
+        cls: Wb.Text
+        properties:
+          cid: cron_express
+          flex: '1'
+          required: 'true'
+          text: '@Str.expression'
+        text: cron_express
+      properties:
+        cid: valuesCt
+        gap: 'true'
+        layout: row
+      text: valuesCt
+    properties:
+      cid: intervalCt
+      gap: .5em
+      layout: grid1
+      required: 'true'
+      text: '@Str.interval'
+    text: intervalCt
+  - _expanded: true
+    _icon: model
+    cls: Wb.ControlCt
+    items:
+    - _icon: dt-picker
+      cls: Wb.Datetime
+      properties:
+        cid: begin_date
+        text: '@Str.from'
+      text: begin_date
+    - _icon: dt-picker
+      cls: Wb.Datetime
+      properties:
+        cid: end_date
+        text: '@Str.to'
+      text: end_date
+    properties:
+      cid: durationCt
+      gap: 'true'
+      text: '@Str.duration'
+    text: durationCt
+  - _expanded: true
+    _icon: model
+    cls: Wb.ControlCt
+    items:
+    - _icon: switcher-on
+      cls: Wb.Toggle
+      properties:
+        cid: status
+        text: '@Str.enabled'
+        value: 'true'
+      text: status
+    - _expanded: true
+      _icon: switcher-on
+      cls: Wb.Toggle
+      properties:
+        cid: concurrent
+        text: '@Str.concurrent'
+        value: 'true'
+      text: concurrent
+    - _icon: switcher-on
+      cls: Wb.Toggle
+      properties:
+        cid: auto_removed
+        text: '@Str.oneTimeTask'
+      text: auto_removed
+    properties:
+      cid: optionCt
+      gap: 2em
+      layout: row
+      text: '@Str.options'
+    text: optionCt
+  - _icon: text
+    cls: Wb.Text
+    properties:
+      cid: job_desc
+      text: '@Str.desc'
+    text: job_desc
+  - _expanded: true
+    _icon: model
+    cls: Wb.ControlCt
+    items:
+    - _icon: edit
+      cls: Wb.CodeEditor
+      properties:
+        cid: server_script
+        minimap: 'false'
+        required: 'true'
+      text: server_script
+    properties:
+      cid: scriptCt
+      flex: '1'
+      layout: fit
+      minHeight: 15em
+      padding: '0'
+      required: 'true'
+      text: '@Str.script'
+    text: scriptCt
+  properties:
+    cid: editWin
+    icon: task
+    layout: form1
+    resetDialog: 'true'
+    tableStyle: 'true'
+    width: 70em
+  text: editWin
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _expanded: true
+    _icon: toolbar
+    cls: Wb.Toolbar
+    items:
+    - _expanded: false
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: |-
+          let type = app.interval_type;
+          app.grid1.insertRecord(
+            {
+              url: xpath + '/add',
+              failure(resp) {
+                Wb.checkExists(resp, 'wb_job_job_name', app.job_name);
+              }
+            }, app.editWin);
+          if (type.value == -1)
+            type.value = 3;
+      properties:
+        cid: addBtn
+        icon: add
+        keys: Ctrl+E
+        text: '@Str.add'
+      text: addBtn
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: |-
+          app.grid1.editRecord(
+            {
+              url: xpath + '/edit',
+              failure(resp) {
+                Wb.checkExists(resp, 'wb_job_job_name', app.job_name);
+              }
+            }, app.editWin, 'job_name');
+      properties:
+        cid: editBtn
+        icon: edit
+        keys: Ctrl+J
+        text: '@Str.edit'
+      text: editBtn
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: app.grid1.removeRecords(xpath + '/del', 'job_name');
+      properties:
+        cid: delBtn
+        icon: delete
+        keys: Ctrl+D
+        text: '@Str.del'
+      text: delBtn
+    - _icon: divider
+      cls: Wb.Divider
+      properties:
+        cid: divider1
+      text: divider1
+    - _expanded: false
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: app.setStatus(false);
+      properties:
+        cid: pauseBtn
+        icon: pause
+        text: '@Str.pause'
+      text: pauseBtn
+    - _expanded: false
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: app.setStatus(true);
+      properties:
+        cid: resumeBtn
+        icon: resume
+        text: '@Str.resume'
+      text: resumeBtn
+    - _expanded: true
+      _icon: divider
+      cls: Wb.Divider
+      properties:
+        cid: divider2
+      text: divider2
+    - _expanded: false
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: |-
+          Wb.confirm(Str.doConfirm.format(app.startStopBtn.text), f => {
+            Wb.ajax({
+              url: xpath + '/start-stop-task',
+              params: { status: !app.isStartup },
+              success() {
+                app.isStartup = !app.isStartup;
+                app.setStartStopBtn();
+                app.grid1.reload();
+              }
+            });
+          });
+        ready: app.setStartStopBtn();
+      properties:
+        cid: startStopBtn
+      text: startStopBtn
+    - _expanded: true
+      _icon: divider
+      cls: Wb.Divider
+      properties:
+        cid: divider3
+      text: divider3
+    - _icon: text
+      cls: Wb.Text
+      events:
+        change: 'app.grid1.delayLoad({ comps: app.search });'
+      properties:
+        cid: search
+        clearButton: 'true'
+        flex: '1'
+        maxWidth: 20em
+        minWidth: 5em
+        placeholder: '@Str.search'
+      text: search
+    properties:
+      cid: tbar
+      isProperty: 'true'
+    text: tbar
+  - _expanded: true
+    _icon: grid
+    cls: Wb.Grid
+    events:
+      itemdblclick: app.editBtn.fireEvent('click');
+    items:
+    - _expanded: true
+      _icon: array
+      cls: Wb.Array
+      items:
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: numCol
+          rowNum: 'true'
+        text: numCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: nameCol
+          fieldName: job_name
+          render: 'el.insertCellIcon(data.status ? (data.next_time ? ''play'' : ''ok'')
+            : ''delete'', value);'
+          text: '@Str.name'
+          width: 15em
+        text: nameCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          align: left
+          cid: intervalCol
+          fieldName: interval_type
+          render: |-
+            let intervalValue = data.interval_value, time = ' (' + data.trigger_time?.timeText + ')', weekday, month;
+            switch (value) {
+              case 0:
+                return Str.every + ' ' + intervalValue + ' ' + Str.s;
+              case 1:
+                return Str.every + ' ' + intervalValue + ' ' + Str.m;
+              case 2:
+                return Str.every + ' ' + intervalValue + ' ' + Str.h;
+              case 3:
+                return Str.every + ' "' + Str.day + '" ' + time;
+              case 4:
+                weekday = data.trigger_weekday;
+                return Str.every + ' "' + app.trigger_weekday.data.find(item => item.value == weekday).text + '"' + time;
+              case 5:
+                return Str.every + ' "' + Str.month + '" ' + data.trigger_day + time;
+              case 6:
+                month = data.trigger_month;
+                return Str.every + ' "' + app.trigger_month.data.find(item => item.value == month).text + '" ' + data.trigger_day + time;
+              case 7:
+                return data.cron_express;
+            }
+          text: '@Str.interval'
+          width: 17em
+        text: intervalCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          autoWrap: pre
+          cid: runTimeCol
+          fieldName: previous_date
+          render: |-
+            return Str.previous + Str.labelSeparator + (data.previous_time?.dateTimeText || '') + '\n' +
+              Str.next + Str.labelSeparator + (data.next_time?.dateTimeText || '');
+          sortable: 'false'
+          text: '@Str.runTime'
+          width: 17em
+        text: runTimeCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          autoWrap: pre
+          cid: durationCol
+          fieldName: begin_date
+          render: |-
+            return Str.from + Str.labelSeparator + (value?.dateTimeText || '') + '\n' +
+              Str.to + Str.labelSeparator + (data.end_date?.dateTimeText || '');
+          text: '@Str.duration'
+          width: 17em
+        text: durationCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: descCol
+          fieldName: job_desc
+          sortable: 'false'
+          text: '@Str.desc'
+          width: '-1'
+        text: descCol
+      properties:
+        cid: columns
+      text: columns
+    properties:
+      cid: grid1
+      columnsSortable: 'true'
+      keyFields: sid,status
+      multiSelect: 'true'
+      sorters: job_name
+      stateId: wb.task
+      url: '@xpath + ''/select'''
+    text: grid1
+  properties:
+    autoContextMenu: 'true'
+    cid: viewport1
+    layout: fit
+  text: viewport1
+properties:
+  cid: module
+  remark: Scheduled task management tool
+  serverScript: |-
+    function main() {
+      Wb.set('isStartup', JobUtil.isStartup());
+    }
+    main();
+tags: ''
+text: module
+title: '@taskMng'

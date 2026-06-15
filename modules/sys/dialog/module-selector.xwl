@@ -1,0 +1,107 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: |-
+    Wb.apply(app, {
+      /** @property {String} - Module path. @priv */
+      modulePath: _$modulePath$_,
+      /**
+       * Show select window.
+       * @param {Function} fn Callback function.
+       * @param {String} .path The new selected module path.
+       * @param {Wb.Window} .win The edit window.
+       * @param {String} [path] The old module path.
+       * @param {String} [subTitle] Window sub title.
+       */
+      getValue(fn, path, subTitle) {
+        let win = app.window1, doGet, tree = app.tree1;
+
+        doGet = f => {
+          win.okHandler = f => {
+            let data = tree.selectionData;
+
+            if (data?._leaf)
+              fn?.(data.path.slice(app.modulePath.length), win);
+            else
+              Wb.tipSelect();
+          }
+          win.show();
+          tree.focus();
+        }
+        win.subTitle = subTitle;
+        if (path)
+          tree.selectPath(path, doGet);
+        else
+          doGet();
+      }
+    });
+hideInMenu: 'false'
+icon: ''
+img: ''
+items:
+- _expanded: true
+  _icon: window
+  cls: Wb.Window
+  items:
+  - _expanded: true
+    _icon: tree-view
+    cls: Wb.Tree
+    events:
+      beforeload: |-
+        if (!configs.node)
+          params.path = app.modulePath;
+      itemdblclick: |-
+        if (item.leaf)
+          app.window1.okHandler();
+    properties:
+      cid: tree1
+      fields: |-
+        ({
+          _icon: {
+            convert(v, data) {
+              return data.icon || (data._leaf ? 'module' : 'folder1')
+            }
+          },
+          title: {
+            convert(v) {
+              return v?.startsWith('@') ? Str[v.slice(1)] : v;
+            }
+          }
+        })
+      subtextField: title
+      url: m?xwl=sys/file/get&type=ide&moduleSort=true
+    text: tree1
+  - _expanded: true
+    _icon: array
+    cls: Wb.Array
+    items:
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: app.tree1.loadSelect();
+      properties:
+        cid: refreshItem
+        icon: refresh
+        tip: '@Str.refresh'
+      text: refreshItem
+    properties:
+      cid: tools
+    text: tools
+  properties:
+    cid: window1
+    dialog: 'true'
+    height: 30em
+    icon: module
+    layout: fit
+    title: '@Str.selectModule'
+    width: 60em
+  text: window1
+properties:
+  cid: module
+  remark: Module selector
+  serverScript: Params.modulePath = Wb.encode(Base.modulePathText);
+tags: ''
+text: module
+title: ''

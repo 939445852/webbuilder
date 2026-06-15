@@ -1,0 +1,41 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  serverScript: let actions={staffDict(){Wb.sendDict("select code, full_name from
+    wb_staff"+Wb.getOrderSql(),"wb,")},staffDictDesc(){Wb.sendDict("select code, full_name
+    from wb_staff order by code desc","wb,")},staffAllDict(){if(!this.downloadBlob())Wb.sendDict("select
+    * from wb_staff"+Wb.getOrderSql(),"wb,")},staffRows(){Wb.sendRows("select code,
+    full_name from wb_staff")},staffFirstRow(){Wb.sendRow("select * from wb_staff
+    where code='10001'")},staffSearch(){let e;e="select code, full_name, email from
+    wb_staff";if(Params.query){Wb.setLike("query");e+=" where full_name like {?query?}"}e+="
+    order by code";Wb.sendRows(e)},listRootArea(){Wb.sendDict(`select * from wb_area
+    where parent_id='0' order by area_name`)},listArea(){Wb.sendDict("select * from
+    wb_area where parent_id={?parent_id?} order by area_name")},listAreaTree(){Params.sid??="0";Wb.sendDict(`\n    select
+    area_name as text, sid as subtext, 0 as "_checked", area_name, sid, parent_id,\n      case
+    when (select count(*) from wb_area b where b.parent_id=a.sid)>0 then 0 else 1
+    end as "_leaf"\n      from wb_area a where parent_id={?sid?} order by area_name\n    `)},listAreaTree1(){let
+    e="";Params.sid??="0";if(Params.query){Wb.setLike("query");e="area_name like {?query?}"}else{e="parent_id={?sid?}"}Wb.sendDict(`\n    select
+    area_name as text, sid as subtext, area_name, sid, parent_id,\n      case when
+    (select count(*) from wb_area b where b.parent_id=a.sid)>0 then 0 else 1 end as
+    "_leaf"\n      from wb_area a where ${e} order by area_name\n    `)},areaSearch(){let
+    e;e="select * from wb_area";if(Params.query){Wb.setLike("query");e+=" where sid
+    like {?query?}"}Wb.sendRows(e)},staffDbPaging(){if(this.downloadBlob())return;let
+    e=Wb.getConn();if(e.match("derby")){Wb.sendDict({sql:"select * from wb_staff offset
+    {?bigint|_from?} rows fetch first {?bigint|_size?} rows only",db:e,dict:"wb",paging:false,total:"select
+    count(*) from wb_staff"})}else{Wb.sendDict({sql:"select * from wb_staff",db:e,dict:"wb"})}},downloadBlob(){let
+    e=Wb.getObject("download");if(e){let a=Wb.getRow({sql:"select full_name, photo
+    from wb_staff where sid={?$sid?}",blob:true,params:e});if(a?.photo)Wb.exportData(a.photo,a.full_name+".png");else
+    Wb.raise("Photo not found.");return true}else return false},checkUser(){Wb.send(Wb.getRow("select
+    1 from wb_user where user_name={?username?}")?"failed":"ok")},selectAdminStaff(){let
+    e;e="select sid,full_name as text,code as subtext from wb_staff where user_id='admin'";if(Params.search){Wb.setLike("search");e+="
+    and full_name like {?search?}"}Wb.sendRowx(e)},selectNoneAdminStaff(){let e;e="select
+    sid,full_name as text,code as subtext from wb_staff where user_id<>'admin'";if(Params.search){Wb.setLike("search");e+="
+    and full_name like {?search?}"}Wb.sendRowx(e)},selectReport1(){Wb.sendRowx("select
+    * from wb_report_demo1")}};actions[Params.xaction]();
+tags: ''
+text: module
+title: ''

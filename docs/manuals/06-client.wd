@@ -1,0 +1,379 @@
+##Client-Side Development.Interaction with the Server
+Client-side code typically runs in a browser, while server-side code runs on a backend application server. During application development, it is often necessary to transfer data from the client to the server or retrieve data from the server to the client.
+#Retrieving Server Data Statically
+Retrieving server data statically means obtaining server data synchronously during the generation of the client-side module page. The advantage of this method is reducing the number of interactions between the frontend and backend.
+To retrieve data this way, you first need to set parameters in the server-side {#serverScript|Wb.Module.serverScript} code, then reference the parameter values using the "_$name$_" syntax in client-side scripts, properties, or events.
+For example, the following method retrieves the currently logged-in username from the server in a client-side script:
+First, write code in {#serverScript|Wb.Module.serverScript}:
+
+     Wb.set('myName', Wb.encode(Wb.username)); // Encode the current username into a quoted string and set it to the myName parameter
+
+Then, write code in the client-side {#initialize|Wb.Module.initialize}:
+
+     app.currentUserName = _$myName$_; // Reference the server-side myName parameter via the "_$name$_" syntax
+
+This allows the {{app.currentUserName}} variable to be referenced in all client-side scripts, properties, or events of the module to get the currently logged-in username. Note that this variable is not updated dynamically; the entire module must be refreshed to update the variable value.
+#Retrieving Server Data Dynamically
+Retrieving server data dynamically means obtaining server data through code during client-side runtime after the client-side module page has been generated. The advantage of this method is convenience and flexibility.
+This method typically uses the {#Wb.ajax} method to retrieve data. When using {#Wb.ajax}, you can specify the {{params}}, {{comps}}, {{form}}, {{data}}, or {{object}} properties to pass client-side parameters
+to the server, then retrieve the content returned by the server in events such as {{success}}.
+For example, the following method uses {#Wb.ajax} to retrieve content returned by the server:
+First, write code in {#serverScript|Wb.Module.serverScript}:
+
+     Wb.send('any data');
+
+Then, write code in client-side scripts, such as the click event of a button:
+
+     Wb.ajax({
+       url: 'm?xwl=path',
+       params: { param1: 'abc', param2: 123 },
+       success(resp) {
+         //If resp is a JSON string, it can be converted to a JSON object via the Wb.decode method or by setting the json parameter to true in the ajax method
+         Wb.tip(resp);
+       }
+     });
+
+#Using WebSocket
+The system provides the {#Wb.Socket} class for sending and receiving data. The difference between using WebSocket and {#Wb.ajax} is that the server can actively send data to the client after a WebSocket connection is established.
+The method to create a WebSocket connection is as follows:
+-Add a {#socket|Wb.Socket} control.
+-Set the {#Wb.Socket.name} property to identify this WebSocket.
+-If you need to send content to a specified server-side module via WebSocket, set the "xwl" property. This step can be omitted if only receiving server messages.
+-Use the {#Wb.Socket.send} method to send arbitrary content when sending messages. This is only meaningful if the "xwl" property is set; otherwise, content sent to the server will be discarded.
+-Listen for content sent by the server within the {#Wb.Socket.message} event when receiving messages. The server can use the {#Wb.send} method to send content, such as {{Wb.send('msg', 'socketName');}}
+See the {#%web-socket|ide?openModule=example/comps/web-socket.xwl} example for details.
+
+#Other Methods
+Data can also be transferred and retrieved using methods such as {#Wb.submit|Wb-Client.submit} or {#Wb.download}.
+##Client-Side Development.Creating Interfaces
+An interface refers to the visual part where users interact with software, including the layout, design, elements of a web page, and the interaction modes between them. In WebBuilder, interfaces can be created in multiple ways.
+#Creating Interfaces by Setting HTML or Adding Elements
+Each component has an {#html|Wb.Component.html} property, which can be set to configure the page via HTML. For example, add a {#Wb.Component} and configure the html property as:
+
+     $html:<ul class="my-class">
+     <li>item1</li>
+     <li>item2</li>
+     <li>item3</li>
+     </ul>
+
+Add a click event to the element:
+
+     component1.query('ul').onclick =  e => Wb.tip('clicked');
+     component1.mon(component.query('ul'), 'click', e => Wb.tip('clicked'));
+
+A list interface is defined for the component through the above method. You can also set html or create elements via code:
+
+     // Not recommended, easy to cause XSS injection vulnerabilities
+     component1.html = `<ul>
+      <li>item1</li>
+      <li>item2</li>
+      <li>item3</li>
+      </ul>`;
+     // Recommended method
+     let div, ul;
+     div = component1.el.addEl();
+     ul = div.addTag('ul');
+     ul.addTag('li').textContent = 'item1';
+     ul.addTag('li').textContent = 'item2';
+     ul.addTag('li').textContent = 'item3';
+     // Dynamically create elements via code after fetching remote data through Ajax
+     listEl = panel1.el.query('[cid=list]');
+     Wb.ajax({
+       url: 'demo-source?xaction=staffFirstRow',
+       json: true,
+       success(resp) {
+         listEl.addEl().textContent = 'Code:';
+         listEl.addEl().textContent = resp.code;
+         listEl.addEl().textContent = 'Name:';
+         listEl.addEl().textContent = resp.full_name;
+       }
+     });
+
+#Creating Interfaces via Templates
+A {#Template|Wb.Template} refers to defining an HTML framework and referencing dynamically changing content through the "{name}" syntax. Each component has a {#tpl|Wb.Component.tpl} property, which can be set to configure the page via a template. For example, add a {#Wb.Component} and configure the tpl property as:
+
+     $html:<div class="w-grid2" style="grid-template-columns: 8em 1fr;">
+       <div>Code:</div>
+       <div>{code}</div>
+       <div>Name:</div>
+       <div>{full_name}</div>
+     </div>
+
+Then, populate data into the template by statically setting the {#tplData|Wb.Component.tplData} property or dynamically calling the {#update|Wb.Component.update} method. For example:
+
+     component1.update({code: '10001', full_name: 'Terri Duffy'});
+
+#Creating Interfaces via Components
+Components have specific functions, encapsulate multiple elements, and provide a series of properties, events, and methods. For example, the {#text|Wb.Text} control encapsulates multiple elements to achieve simple, flexible, and rich text editing functions.
+The following code can dynamically create a form containing multiple components after fetching remote data via Ajax:
+
+     let panel = app.compPagePanel;
+     Wb.ajax({
+       url: 'demo-source?xaction=staffFirstRow',
+       json: true,
+       success(data) {
+         panel.add({ cname: 'displayField', cid: 'code', text: 'Code', value: data.code });
+         panel.add({ cname: 'text', cid: 'full_name', text: 'Name', value: data.full_name });
+         panel.add({ cname: 'component', html: 'WebBuilder components' });
+       }
+     });
+
+For related examples, see: {#%create-page|ide?openModule=example/basic/create-page.xwl}
+##Client-Side Development.Page Components.Component
+A {#Component|Wb.Component} is the base class for visual components.
+#Common Properties, Methods, and Events of Components
+-The simple class name of a component is specified by the {#cname|Wb.Base.cname} property, which determines the type of component created via a configuration object.
+-Visibility is set by the {#visible|Wb.Component.visible} property.
+-Disabled state is set by the {#disabled|Wb.Component.disabled} property.
+-The width of a component is set by the {#width|Wb.Component.width} property, and the height by the {#height|Wb.Component.height} property.
+-The style of a component is set by the {#cls|Wb.Component.cls} property.
+-Accessing the {#el|Wb.Component.el} property retrieves the DOM element associated with the component.
+-When the container's layout is a flexible layout such as "row" or "column", setting the {#alignSelf|Wb.Component.alignSelf} and {#justifySelf|Wb.Component.justifySelf} properties configures the component's alignment.
+-When setting properties or events in the IDE, custom properties can be set in the {#tagProperties|Wb.Component.tagProperties} property, and custom events in the {#tagEvents|Wb.Component.tagEvents} property.
+-Use the {#add|Wb.Container.add} method within a container to add components, specifying a configuration object to create the component.
+-Use the {#remove|Wb.Component.remove} or {#destroy|Wb.Component.destroy} method to remove or destroy a component.
+-Code executed after the component is ready can be placed in the {#ready|Wb.Component.ready} event.
+#Component Creation
+Components can be created statically during the design phase or dynamically via code during runtime.
+Taking adding a {#Textbox|Wb.Text} to a {#Panel|Wb.Panel} as an example, the following code can dynamically create and add a textbox to the panel:
+
+     panel.add({cname: 'text', text: 'label'}); // Add via configuration object
+     panel.add(new Wb.Text({text: 'label'})); // Add via instance
+     panel.insert(2, {cname: 'text', text: 'label'}); // Insert a new textbox at the 2nd child component position
+     panel.insertBefore({cname: 'text', text: 'label'}, text1); // Insert a new textbox before text1
+     panel.insertAfter(new Wb.Text({text: 'label'}), text1); // Insert a new textbox after text1
+
+#Component Removal
+Removing a component means detaching it from its parent component; the removed component can be added to a container again. Use the {#remove|Wb.Component.remove} method to remove a component. For example, the following code removes a button:
+
+     button.remove();
+
+#Component Destruction
+Destroying a component means detaching, dismantling, and releasing it from its parent component. All its child and subordinate components are destroyed simultaneously, and the destroyed component cannot be reused. Destroyed components that are no longer referenced will be garbage collected. Use the {#destroy|Wb.Component.destroy} method to destroy a component and release resources when it is no longer needed. Components added to a container are usually automatically destroyed when the container is destroyed. For example, the following code destroys a button:
+
+     button.destroy();
+
+#Component Classification
+Components are mainly classified into:
+-Component Base Class: The base class for all components, see {#Wb.Component} for details.
+-Containers: Used to hold one or more subordinate components, including {#Wb.Container}, {#Wb.Panel}, {#Wb.Fieldset}, {#Wb.Window}, {#Wb.Tab}, {#Wb.Card}, {#Wb.TabCt}, etc.
+-Controls: {#Wb.Control} components for inputting and retrieving data, including {#Wb.Text}, {#Wb.Number}, {#Wb.Select}, {#Wb.Check}, {#Wb.Radio}, etc.
+-Views: The base class for all view components is {#Wb.View}, including {#Wb.Grid}, {#Wb.Tree}, {#Wb.ListView}, etc.
+-Others: Components not included in the above categories, including {#Wb.Chart}, {#Wb.Socket}, {#Wb.Xwl}, etc.
+#Components and DOM Elements
+Each WebBuilder page {#Component|Wb.Component} is associated with a top-level DOM element, which can be retrieved via the component's {#el|Wb.Component.el} property. When rendering third-party controls into a component, they can be rendered directly to the component's el; all associated DOM elements are deleted when the component is {#destroyed|Wb.Component.destroy}.
+##Client-Side Development.Page Components.Container
+Containers are used to hold one or more subordinate components and apply different layouts to them. Common container controls include {#container|Wb.container} and {#panel|Wb.Panel}; the former is a regular container, while the latter has a title bar, top toolbar {#tbar|Wb.Panel.tbar}, bottom toolbar {#bbar|Wb.Panel.bbar}, and other elements.
+#Using the Viewport Component
+The {#Viewport Component|Wb.Viewport} is a full-screen {#Panel|Wb.Panel}, typically used as the top-level component within a module.
+#Using the Window Component
+A {#Window|Wb.Window} is a pop-up, draggable, and resizable panel component, often used as a dialog box. Windows used as dialogs are usually displayed modally and contain "OK" and "Cancel" buttons at the bottom. A window can be quickly set as a dialog by setting its {#dialog|Wb.Window.dialog}, {#resetDialog|Wb.Window.resetDialog}, or {#clearDialog|Wb.Window.clearDialog} property to true. Clicking the OK button of a dialog triggers the {#ok|Wb.Window.ok} event. By default, clicking OK validates all component values in the window; this default validation can be disabled by setting {#noVerify|Wb.Component.noVerify} to false. Window components are usually added directly to the module's node to display independently of the entire module.
+Windows are hidden by default and are usually displayed via code, such as after clicking a button, using the following code:
+
+     app.window1.show();
+
+Windows are hidden by default when closed; to destroy a window on close, set the window's {#closeAction|Wb.Window.closeAction} to "destroy".
+#Using the Tab Component
+A {#Tab|Wb.Tab} is a container component for paged display. {#Card|Wb.Card} components are usually added directly under this container as each page, and components such as textboxes, buttons, and grids are then added within the {#Card|Wb.Card}. Each card represents a page of the tab component; adding multiple cards creates multiple pages for the tab. Set the card's {#title|Wb.Card.title} property as the page title and the {#icon|Wb.Card.icon} property as the page icon.
+#Interface Layout
+An interface typically consists of {#Container Components|Wb.Container} and non-container components. Any components, including container components, can be added under a container component, and containers can be nested within containers. Non-container components cannot have child components. The layout mode of a container is determined by its {#layout|Wb.Container.layout} property, which defines the layout by setting the {#cls|Element.cls} property on the container's {#bodyEl|Wb.Container.bodyEl} element, implemented entirely via CSS.
+For layout examples, refer to: {#%layout|ide?openModule=example/basic/layout.xwl}.
+#User Interface Composition
+A typical user interface usually consists of a top toolbar, a client area container, and windows. The toolbar provides functional buttons and search boxes, the client area container displays the main page, and windows provide pop-up interactive interfaces.
+Each module usually contains a [viewport] control, added directly to the module's root node to represent a full-screen container within the module. Select the tbar property under the [viewport] control, then click [Add Wb.Toolbar] in the property editor to create a built-in top toolbar under the viewport. {#item|Wb.Item} components can be added as tool buttons within the toolbar, and controls such as {#text|Wb.Text} or {#select|Wb.Select} can be added as search boxes.
+Common UI layouts include:
+-Full Screen: Subordinate components fill the entire viewport. For example, a grid added under a viewport fills the viewport. Set the viewport's layout property to "fit" to achieve this.
+-Left Sidebar + Client Area: Fixed-width left sidebar, adaptive-width client area. For example, a tree, splitter, and grid added sequentially under a viewport. The tree acts as the left sidebar, and the grid as the client area. Set the viewport's layout to "row", the tree's width to "20em", and the grid's flex to 1.
+-Bottom Bar + Client Area: Fixed-height bottom bar, adaptive-height client area. For example, a grid, splitter, and panel added sequentially under a viewport. The panel acts as the bottom bar, and the grid as the client area. Set the viewport's layout to "column", the grid's flex to 1, and the panel's height to "20em".
+-Form: Multiple components displayed in a form style, usually in a vertical single or multi-column layout. For example, multiple editing controls added under a viewport to form a form. Set the viewport's layout to "form", "form1", "grid", "grid1", or "grid2"; "grid1" is recommended.
+-Combination and Nesting of the Above Layouts: Multiple containers can be added to achieve combined and nested layouts.
+#Visual Design
+Select any container component and click the [UI Designer] button on the toolbar to perform visual design on the container. Drag components to adjust their order within the container; dragging a component to the first half of a target component inserts it before the target. Multiple components can be selected in the designer by holding Ctrl/Shift and clicking or drawing a box.
+##Client-Side Development.Page Components.Edit Control
+Edit {#Control|Wb.Control} components are used for inputting and retrieving data, including subclasses such as {#Textbox|Wb.Text}, {#Numberbox|Wb.Number}, and {#Selectbox|Wb.Select}.
+#Control Label
+Each control has a built-in label. The {#text|Wb.Control.text} property is a plain text label, and the {#html|Wb.Control.html} property is an HTML label. Label alignment is set by the {#labelAlign|Wb.Control.labelAlign} property; setting {#labelUp|Wb.Control.labelUp} displays the label above the control. Label width is set by the {#labelWidth|Wb.Control.labelWidth} property.
+#Getting and Setting Values
+Controls typically include a {#value|Wb.Control.value} property for storing and retrieving values. Additionally, values can be retrieved via the {#getValue|Wb.Control.getValue} method and set via the {#setValue|Wb.Control.setValue} method.
+For example:
+
+     control.value = 'abc'; // Set value via the value property
+     let value = control.value; // Get value via the value property
+     value = control?.getValue(); // Get value via getValue, usually with the optional chaining operator "?."; otherwise, use the value property directly
+     control?.setValue('abc');  // Set value via setValue, usually with the optional chaining operator "?."; otherwise, use the value property directly
+
+Use the {#clear|Wb.Control.clear} method to clear the control value and the {#reset|Wb.Control.reset} method to reset it.
+#Textbox Controls
+Textbox controls include {#Textbox|Wb.Text}, {#Numberbox|Wb.Number}, {#TextArea|Wb.TextArea}, etc.
+Common properties, methods, and events:
+-Read-only state is set by the {#readonly|Wb.Text.readonly} property.
+-Input prompt information is set by the {#placeholder|Wb.Text.placeholder} property.
+-Setting the {#password|Wb.Text.password} property converts the textbox to a password field.
+-Setting the {#clearButton|Wb.Text.clearButton} property adds a clear button to the textbox.
+-The predefined value type of the textbox is set by the {#valueType|Wb.Text.valueType} property, such as "email", "filename", "url", etc.
+-Custom value validation is implemented by setting the {#validator|Wb.Text.validator} property.
+-The {#change|Wb.Text.change} event is triggered when the value changes.
+For textbox-related examples, see: {#%input|ide?openModule=example/comps/input.xwl}
+#Dropdown Controls
+Dropdown controls include {#Wb.Trigger}, {#Wb.Picker}, {#Wb.Select}, etc. They inherit from textbox controls and thus have all the above properties, methods, and events.
+Common properties, methods, and events:
+-Editability is set by the {#editable|Wb.Trigger.editable} property.
+-The dropdown component is set by the {#picker|Wb.Picker.picker} property.
+-The {#beforecollapse|Wb.Picker.beforecollapse} event is triggered before expanding the dropdown; returning {{false}} prevents expansion.
+-The {#triggerclick|Wb.Trigger.triggerclick} event is triggered when the trigger button is clicked.
+A {#Dropdown|Wb.Select} displays data via dropdown items, with the default dropdown component being {#Wb.SelectView}.
+Dropdown data can come from {#data|Wb.Select.data} (local data) or {#url|Wb.Select.url} (remote data URL). Dropdown data can be an object list or an array list, such as:
+
+     [{field1: 'abc', field2: 123}, {field1: 'def', field2: 456}] // Object list
+     [['name1', 'value1'], ['name2', 'value2'], ['name3', 'value3']] // Array list
+
+When using a data list, the first field is the name by default, and the second is the value.
+Dropdown item content is specified by the {#textField|Wb.Select.textField} property by default, and item values by the {#valueField|Wb.Select.valueField} property. Item content can also be custom-rendered by setting {#itemTpl|Wb.Select.itemTpl} or {#itemTplFn|Wb.Select.itemTplFn}.
+Setting the {#keyName|Wb.Select.keyName} property configures a preset dropdown list, with data specified in the {#%Key Value Editor|kve}.
+To set or retrieve multiple values (e.g., name, code, and ID of a selected person), use the {#bindField|Wb.Select.bindField} or {#valueMap|Wb.Select.valueMap} property.
+Set {#multiSelect|Wb.Select.multiSelect} to true for multi-selection. Set {#treePicker|Wb.Select.treePicker} to true for a tree-structured dropdown.
+For dropdown-related examples, see: {#%select|ide?openModule=example/comps/select.xwl}
+##Client-Side Development.Page Components.View, Grid, and Tree
+{#View|Wb.View} components generate a list of specified content items based on data, including subclasses such as {#Grid|Wb.Grid}, {#Tree|Wb.Tree}, and {#ListView|Wb.ListView}.
+#View Data
+View data can be specified via {#data|Wb.View.data}, {#localData|Wb.View.localData}, or {#url|Wb.View.url}.
+Set the {#data|Wb.View.data} property to read/write current page data.
+Set the {#localData|Wb.View.localData} property to read/write local paginated data; call the {#load|Wb.View.load} method to update the view after dynamically setting localData.
+Set the {#url} property to read remote data, updated via the {#load|Wb.View.load} or {#reload|Wb.View.reload} methods. The {#autoLoad|Wb.View.autoLoad} property configures automatic remote data loading when the view is ready.
+Three ways to pass parameters to the backend during remote data loading:
+-Set static parameters via the {#params|Wb.View.params} property.
+-Pass parameters when loading data via the {#load|Wb.View.load} method, e.g., {{view.load({params: {param1: 'abc', param2: 123}});}}
+-Set params input parameters in the {#beforeload|Wb.View.beforeload} event, e.g., {{params.param1 = 'abc';}}
+#View Data Rendering
+View data rendering is specified via the {#itemTpl|Wb.View.itemTpl} (custom HTML template) or {#itemTplFn|Wb.View.itemTplFn} (custom function) property. Once the rendering mode is defined, the view is rendered based on the data.
+#View Item
+A {#View Item|Wb.ViewItem} is each displayed entry in the view, such as a grid row or tree node. When rendering content, the view generates items based on associated data, with each item corresponding to a record in the data source. Manipulating view items allows
+manipulating view content. View item data has specific-named fields with special meanings, such as "_icon" for the icon name; see the {#data|Wb.ViewItem.data} property for details.
+Use the {#set|Wb.ViewItem.set} method to set view item data, which re-renders the item based on the configured template.
+#Adding and Deleting Data
+There are two ways to add data to a view: adding view item objects or view item data (the latter is a simplification of the former):
+Add or insert view item objects:
+
+     view.add({itemCls: 'mycls', data: {field1: 'abc', field2: 123}}); // Add
+     view.insert(index, item); // Insert
+     view.insertBefore(item, refItem); // Insert before the specified item
+     view.insertAfter(item, refItem); // Insert after the specified item
+
+Add or insert view item data:
+
+     view.addData({field1: 'abc', field2: 123}); // Add
+     view.insertData(index, item); // Insert
+     view.insertDataBefore(item, refItem); // Insert before the specified item
+     view.insertDataAfter(item, refItem); // Insert after the specified item
+
+To delete data from a view, retrieve the target view item and call its {#destroy|Wb.Component.destroy} or {#remove|Wb.Component.remove} method.
+
+     view.selection.destroy(); // Delete the selected item
+     app.grid1.find(rec => rec.data.user_name=='demo2')?.destroy(); // Delete the first record with user_name "demo2" in the grid
+
+#Grid
+A {#Grid|Wb.Grid} is a 2D row-column view. No rendering template is needed; grids render data by defining the {#columns|Wb.Grid.columns} property. Each {#column|Wb.Column} in columns represents a grid column, configurable with title, width, alignment, display format, and custom render functions.
+Each row in the grid is a {#Grid Item|Wb.GridItem} component, inheriting from view items. Manipulating grid items allows manipulating grid data.
+#Tree
+A {#Tree|Wb.Tree} is a hierarchically multi-level grid, inheriting from grids with similar operations.
+Each node in the tree is a {#Tree Item|Wb.TreeItem} component, a container component. Adding/deleting nodes under a node is the same as view operations:
+
+     node = tree.addData({text: 'folder'}); // Add a folder node under the tree
+     node.addData({text: 'abc', _icon: 'module', _leaf: true}); // Add a leaf node under the parent node
+     node.destroy(); // Delete the node
+
+##Client-Side Development.Page Components.Toolbar and Menu
+{#Toolbar|Wb.Toolbar} and {#Menu|Wb.Menu} are common interactive components. {#Item|Wb.Item} components are usually added under them as toolbar buttons or menu items.
+Toolbars and menus are container components, so besides {#Item|Wb.Item}, components such as {#Textbox|Wb.Text} and {#Selectbox|Wb.Select} can also be added.
+#Using Toolbars
+Toolbars can be used as regular containers with a default "row" layout. Components added to a toolbar without the {#cname|Wb.Base.cname} property default to {#tool|Wb.Tool}. More commonly, toolbars are embedded as child components of panels in {#tbar|Wb.Panel.tbar}.
+#Using Menus
+Menus can be associated with a button's {#menu|Wb.Button} property as dropdown menus, or with any component's {#contextMenu|Wb.Component} property as pop-up context menus. Additionally, menus
+can be displayed anywhere using the {#showAt|Wb.Component.showAt} or {#showBy|Wb.Component.showBy} method.
+#Using Item Components
+{#Item|Wb.Item} components are usually added under toolbars or menus, defaulting to {#Wb.Tool} when added to toolbars. {#Item|Wb.Item} inherits from buttons and thus has all button features.
+##Client-Side Development.Modular Development
+When developing complex client-side applications via JavaScript, modular development can be used, including the following methods:
+-Using js files
+-Using mjs files
+-Using xwl files
+#Using js Files
+This method is suitable for placing commonly used code in js files, loaded globally statically via the "sys.app.links" property of {#%Configuration|config} or dynamically via the {#Wb.load|Wb-Client.load} method.
+The following demonstrates how to write and use js files.
+First, create the js file wb/js/test.js:
+
+     Cls['My.Util'] = class myUtil extends Wb.Base {
+       /**
+        * Perform add.
+        * @param {Number} value1 Value 1
+        * @param {Number} value2 Value 2
+        * @return {Number} The result
+        */
+        static add(value1, value2) {
+          return value1 + value2;
+        }
+     }
+
+To call this js file:
+
+     Wb.load('wb/js/test.js', f => My.Util.add(1, 3)); // The My.Util class can be used directly without Wb.load if configured for global static loading.
+
+To load a js file before module execution in an xwl module file, set the module's {#links|Wb.Module.links} property.
+#Using mjs Files
+mjs files are standard JavaScript module files for grouping specific functionality code. This method is suitable for placing infrequently used code in mjs files, loaded via the {#Wb.loadModule} method when needed.
+The following demonstrates how to write and use mjs files.
+First, create the mjs file wb/js/test.mjs:
+
+     class Util {
+       /**
+        * Perform add.
+        * @param {Number} value1 Value 1
+        * @param {Number} value2 Value 2
+        * @return {Number} The result
+        */
+        static add(value1, value2) {
+          return value1 + value2;
+        }
+     }
+     export default Util;
+
+To call this mjs file:
+
+     Wb.loadModule('wb/js/test.mjs', module => Wb.tip(module.default.add(3, 5)));
+
+#Using xwl Files
+This method is mainly used to run modules and retrieve the client-side app object.
+-{#Wb.open}: Runs a module file.
+-{#Wb.openNormal}: Runs a module file and allows users to manually refresh it in the container.
+-{#Wb.run|Wb-Client.run}: Runs a module file and returns the module's app object in the callback.
+-Statically reference an Xwl module using the {#Wb.Xwl} component.
+Run the user management module file with the following code:
+
+     Wb.open({ url: 'm?xwl=admin/user' }); // Open the user management module
+     Wb.openNormal('dbe'); // Open the database explorer and allow page refresh
+
+Run the database explorer and add its tree to viewport1:
+First, create test.xwl, add a viewport control with layout "fit", then write code in the module's initialize event:
+
+     Wb.run({
+       url: 'm?xwl=admin/dbe', success(scope) {
+         app.dbeModule = scope; // Save the dbe module's app to the current module's dbeModule property
+         app.viewport1.add(scope.tree); // Add the dbe module's tree to viewport1
+         Wb.tip('Max Return Rows: ' + scope.maxRows);  // Access the maxRows variable in the dbe module's app
+       }
+     });
+
+For an example of statically loading a module using the {#Wb.Xwl} control, see: {#%xwl-static-load|ide?openModule=example/load/xwl-static-load.xwl}
+
+For related examples, see: {#%client-load-module|ide?openModule=example/load/client-load-module.xwl}
+##Client-Side Development.Drag and Drop
+Drag and drop is a common operation in client-side interface applications. The system provides relevant properties and API methods to quickly implement drag-and-drop functionality.
+#Dragging Components Within a Container
+Each container component has an {#itemsSortable|Wb.Container.itemsSortable} property. Setting this to true enables dragging components within the container.
+#Dragging Items Within a View
+Dragging items within a view includes grid rows or tree nodes. Set the view's {#draggable|Wb.View.draggable} and {#droppable|Wb.View.droppable} properties to true to enable
+item dragging. Setting {#dropGroup|Wb.Component.dropGroup} to a specified value restricts the source and target views for dragging between different views. The {#itemdrag|Wb.View.itemdrag} event
+configures whether an item can be dropped and the drag mode. The {#itemdrop|Wb.View.itemdrop} event executes actions after an item is dropped.
+#Asynchronous Drag and Drop
+Asynchronous drag and drop means performing remote operations after dragging and dropping only upon success. For views requiring asynchronous drag-and-drop, set {#draggable|Wb.View.draggable} to {{"{autoDrop: false }"}}, then call {{draggable.acceptDrop()}} after the remote operation succeeds to drop the item.
+For related examples, see: {#%drag-drop|ide?openModule=example/basic/drag-drop.xwl}

@@ -1,0 +1,12 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Edit department
+  serverScript: function main(){Wb.sync({tableName:"wb_dept",update:Params})}main();
+tags: ''
+text: module
+title: ''

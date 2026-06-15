@@ -1,0 +1,131 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  finalize: app.panel1.setLoginFocus();
+hideInMenu: 'false'
+icon: ''
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _expanded: true
+    _icon: toolbar
+    cls: Wb.Toolbar
+    items:
+    - _icon: logo
+      cls: Wb.Icon
+      properties:
+        cid: logoIcon
+        fontSize: 3em
+        icon: geejing
+      text: logoIcon
+    - _expanded: true
+      _icon: label
+      cls: Wb.Label
+      properties:
+        cid: titleLabel
+        fontSize: 2em
+        style: 'font-weight: bold; color: #333;'
+        text: _$title$_
+      text: titleLabel
+    - _icon: right1
+      cls: Wb.Fill
+      properties:
+        cid: fill1
+        visible: '@!Globals.smallScreen'
+      text: fill1
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: window.open('https://www.geejing.com');
+      properties:
+        cid: websiteItem
+        fontSize: 1.5em
+        icon: earth
+        plainIcon: 'true'
+        tip: '@Str.officialWebsite'
+        visible: '@!Globals.smallScreen'
+      text: websiteItem
+    - _icon: space
+      cls: Wb.Space
+      properties:
+        cid: space1
+        visible: '@!Globals.smallScreen'
+      text: space1
+    - _expanded: false
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: window.location = 'mailto:contact@geejing.com';
+      properties:
+        cid: emailItem
+        fontSize: 1.5em
+        icon: mail
+        plainIcon: 'true'
+        tip: '@Str.email'
+        visible: '@!Globals.smallScreen'
+      text: emailItem
+    properties:
+      cid: tbar
+      isProperty: 'true'
+      padding: 'true'
+    text: tbar
+  - _expanded: true
+    _icon: panel
+    cls: Wb.Panel
+    events:
+      ready: |-
+        let form = Wb.createLoginPanel(this, f => location.replace('home'), false, _$verifyCode$_);
+        if (_$showTip$_)
+          form.add({ cname: 'displayField', icon: 'info', value: Str.firstLoginTip });
+    properties:
+      cid: panel1
+      cls: w-limit-width
+      style: box-shadow:#00000055 0px 2px 10px 5px
+    text: panel1
+  - _expanded: true
+    _icon: toolbar
+    cls: Wb.Toolbar
+    items:
+    - _icon: label
+      cls: Wb.Label
+      properties:
+        cid: copyrightLabel
+        fontSize: .8em
+        style: color:#555
+        text: Copyright © Geejing, All Rights Reserved.
+      text: copyrightLabel
+    properties:
+      cid: bbar
+      isProperty: 'true'
+      layout: hmiddle
+      padding: 'true'
+    text: bbar
+  properties:
+    autoScroll: 'true'
+    bodyStyle: 'background-color:#959595;background-image: repeating-linear-gradient(40deg,rgba(0,0,255,0.2)
+      2px,transparent 2.5px),repeating-linear-gradient(126deg,rgba(255,0,0,0.2) 2px,transparent
+      2.5px),repeating-linear-gradient(238deg,rgba(0,255,0,0.2) 2px,transparent 2.5px);'
+    border: 'false'
+    cid: viewport1
+    layout: middle
+  text: viewport1
+properties:
+  cid: module
+  loginRequired: 'false'
+  remark: Default index page
+  serverScript: |-
+    Wb.set({
+      title: Wb.getConfig('sys.app.title'),
+      verifyCode: Wb.getConfig('sys.session.verifyCode'),
+      showTip: !Config.isDemo && !!Wb.getRecord("select 1 from wb_user where user_name='admin' and login_times=0")
+    });
+  theme: 'true'
+  title: _$title$_
+tags: '{url: ''index'', newWin: true}'
+text: module
+title: ''

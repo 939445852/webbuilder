@@ -1,0 +1,48 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.make(app,[{cname:"menu",cid:"sharedContextMenu",items:[{icon:"cube",cid:"showTargetItem",text:"Show
+    target",events:{click(e,t){Wb.tip("Popup context menu from "+this.contextTarget.getClosestComp().cid)}}},{cname:"line",cid:"line1"},{icon:"add",cid:"item1",text:Str.add},{icon:"edit",cid:"item2",text:Str.edit},{icon:"delete",cid:"item3",text:Str.del}]}]);Wb.make(app,{cname:"viewport",layout:"grid1",cid:"viewport1",items:[{cname:"label",cid:"mainLabel",cls:"w-title3",text:"Toolbar
+    and menu"},{cname:"title",title:"Toolbar",cid:"toolbarTitle"},{cname:"container",layout:"grid1",cid:"toolbarCt",frame:true,items:[{cname:"label",cid:"commonToolBarLabel",text:"Common
+    toolbar"},{cname:"toolbar",border:true,cid:"commonToolbar",items:[{icon:"add",tip:"Add
+    new item",text:Str.add,cid:"addItem"},{icon:"delete",cid:"deleteItem",text:Str.del},{icon:"keyboard",text:"Bind
+    key",keys:"Ctrl+K",cid:"shortCutKeyItem",events:{click(e,t){Wb.tip(this.cid+"
+    clicked")}}},{icon:"property",disabled:true,text:"Disabled",cid:"disabledItem"},{icon:"menu",cid:"menuItem",text:"Menu",menu:{cname:"menu",items:[{cid:"item1",text:"Menu
+    item 1"},{cid:"item2",text:"Menu item 2"},{cid:"item3",text:"Menu item 3"}]}},{cname:"divider",cid:"divider1"},{cname:"trigger",triggerIcon:"module",cid:"trigger1",events:{triggerclick(e,t){Wb.tip(this.cid+"
+    clicked")}}},{icon:"data",alignSelf:"center",tip:"Centered button",cid:"centerAlignItem"},{cname:"fill",cid:"fill1"},{icon:"calendar",cid:"fillRightItem"}]},{cname:"label",cid:"overflowedToolbarLabel",text:"Overflowed
+    toolbar"},{cname:"toolbar",border:true,width:"25em",overflowMenu:true,resizable:true,cid:"overflowedToolbar",frame:true,items:[{icon:"calculator",cid:"item1",text:"item
+    1"},{icon:"add1",cid:"item2",text:"item 2"},{icon:"broadcast",cid:"menuTextItem",menuText:"MenuText
+    Item"},{icon:"click",cid:"item3",text:"item 3"},{icon:"lantern",cid:"item4",text:"item
+    4"},{icon:"mail",cid:"item5",text:"item 5"}]},{cname:"label",cid:"centeredShrinkToolbarLabel",text:"Centered
+    shrink toolbar"},{cname:"toolbar",border:true,resizable:true,shrink:true,justify:"center",width:"25em",cid:"centeredShrinkToolbar",frame:true,items:[{icon:"book1",cid:"item1",text:"Item1"},{icon:"card",cid:"item2",text:"Item2"},{icon:"cube",cid:"item3",text:"Item3"}]},{cname:"label",cid:"verticalToolbarLabel",text:"Vertical
+    toolbar"},{cname:"toolbar",vertical:true,cid:"verticalToolbar",frame:true,maxWidth:"10em",items:[{icon:"book1",cid:"item1",text:"Item1"},{icon:"card",cid:"item2",text:"Item2
+    Card"},{icon:"cube",cid:"item3",text:"Item3"}]},{cname:"label",cid:"menuStyleToolbarLabel",text:"Menu
+    style toolbar"},{cname:"toolbar",type:"menu",cid:"menuStyleToolbar",frame:true,maxWidth:"10em",items:[{icon:"book1",cid:"item1",text:"Item1"},{icon:"card",cid:"item2",text:"Item2
+    Card"},{icon:"cube",cid:"item3",text:"Item3"}]}]},{cname:"title",title:"Menu",cid:"menuTitle"},{cname:"container",layout:"form",cid:"menuCt",frame:true,items:[{cname:"toolbar",layout:"center",cid:"toolbar1",frame:true,items:[{cid:"item1",text:"Menu
+    Item",menu:{cname:"menu",items:[{icon:"briefcase",cid:"iconItem",text:"Menu item
+    1"},{img:"sitemap",cid:"imgItem",text:"Menu item 1"},{cname:"divider",cid:"divider1"},{icon:"download",disabled:true,text:"Disabled",cid:"disabledItem"},{cname:"container",layout:"row",cls:"w-mi-margin",cid:"container1",gap:".2em",items:[{cname:"slider",minValue:12,flex:1,maxValue:50,focusable:false,tabIndex:null,text:Str.fontSize,cid:"fsSlider"},{cname:"button",icon:"refresh",focusable:false,tabIndex:undefined,tip:Str.reset,type:"tool",cid:"resetBtn"}]},{keys:"Ctrl+L",cid:"bindKeyItem",text:"Bind
+    key item",events:{click(e,t){Wb.tip(this.cid+" clicked")}}},{cname:"space",cid:"space1"},{cid:"subMenuItem",text:"Sub
+    menu",menu:{cname:"menu",items:[{cid:"item1",text:"Item 1"},{cid:"item2",text:"Item
+    2"},{cid:"item3",text:"Item 3"}]}}]}}]},{cname:"button",icon:"menu",cid:"menuButton",text:"Menu
+    Button",menu:{cname:"menu",items:[{checked:false,cid:"uncheckItem",text:"Unchecked
+    item",events:{checkchange(e,t){Wb.tip(this.cid+" checked is "+e)}}},{checked:true,cid:"checkedItem",text:"Checked
+    Item"},{cname:"line",cid:"line1"},{checked:true,text:"Grouped item1",checkGroup:"group1",cid:"groupedItem1"},{checked:false,text:"Grouped
+    item2",checkGroup:"group1",cid:"groupedItem2"},{checked:false,text:"Grouped item3",checkGroup:"group1",cid:"groupedItem3"},{cname:"line",cid:"line2"},{ellipsis:true,cid:"ellipsisItem",text:"Ellipsis
+    Item (means to show dialog)"},{cname:"line",cid:"line3"},{clickHide:false,cid:"noHideItem",text:"Click
+    not to hide menu",events:{click(e,t){Wb.tip("clicked")}}}]}},{cname:"container",layout:"center",padding:true,textSelectable:false,width:"20em",text:"Please
+    click the mouse context menu button to show context menu",cid:"contextMenuCt",frame:true,height:"5em",contextMenu:{cname:"menu",items:[{icon:"book1",cid:"item1",text:"Menu
+    item 1"},{cid:"item2",text:"Menu item 2"},{cid:"item3",text:"Menu item 3"}]}},{cname:"container",layout:"center",padding:true,contextMenu:app.sharedContextMenu,text:"Shared
+    context menu comp1",cid:"sharedContextMenuCt1",frame:true,height:"5em"},{cname:"container",layout:"center",padding:true,contextMenu:app.sharedContextMenu,text:"Shared
+    context menu comp2",cid:"sharedContextMenuCt2",frame:true,height:"5em"},{cname:"toolbar",layout:"column",alignSelf:"start",defaults:{alignSelf:"start",menu:{defaultAlign:"tl-tr?",defaultOffset:[3,0]}},fontSize:"1.6em",plainIcon:true,cid:"menuToolbar",frame:true,items:[{icon:"card",cid:"item1",menu:{cname:"menu",items:[{cid:"item1",text:"Menu
+    item 1"},{cid:"item2",text:"Menu item 2"},{cid:"item3",text:"Menu item 3"}]}},{icon:"grid",cid:"item2",menu:{cname:"menu",items:[{cid:"item1",text:"Menu
+    item 1"},{cid:"item2",text:"Menu item 2"},{cid:"item3",text:"Menu item 3"}]}},{icon:"text1",cid:"item3",menu:{cname:"menu",items:[{cid:"item1",text:"Menu
+    item 1"},{cid:"item2",text:"Menu item 2"},{cid:"item3",text:"Menu item 3"}]}}]}]}]});
+hideInMenu: 'false'
+icon: toolbar
+img: ''
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

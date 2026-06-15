@@ -1,0 +1,14 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Get modules by role
+  serverScript: function main(){let e,i,l,t,o,n,s,m,r,d,u,a,c=0,b=[],f=Params.search;r=(g,W)=>{g.each((g=>{if(g.isModuleFile&&!g.isMinFile){t=g.modulePath;l=t.slice(0,-4);if(o&&e.includes(l)||!o&&!e.includes(l)){i=Xwl.get(t);if(i.loginRequired){n=Wb.optText(i.title);m=g.normalName;if(f&&!n.includes(f)&&!m.includes(f))return;c++;d=i.icon;u=i.img;if(u)u="wb/images/"+u+".png";if(!u&&!d)d="module";b.push({text:W+(n||m),subtext:i.remark,path:l,_icon:d,_img:u})}}}else
+    if(g.isFolder){a=new Wb.File(g,"index.json");s=(a.exists?Wb.optText(a.object.title):null)||g.name;if(W)s=W+s;r(g,s+"/")}}))};o=Wb.getBool("inRole");e=Wb.getAllRecords("select
+    module_path from wb_perm where role_id={?role_id?}")?.pluck(0);r(Wb.File.moduleFolder,"");b.mixSort("text");Wb.send({items:b.slice(Wb.getInt("_from"),Wb.getInt("_to")+1),total:c})}main();
+tags: ''
+text: module
+title: ''

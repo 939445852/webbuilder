@@ -1,0 +1,70 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: 'Wb.make(app,{cname:"menu",autoDestroy:false,isProperty:true,cid:"shareMenu",items:[{cid:"item1",text:"Item1",events:{click(e,t){Wb.tip("Set
+    "+app.popupRecord.data.full_name)}}},{cid:"item2",text:"Item2"},{cid:"item3",text:"Item3"}]});Wb.make(app,{cname:"viewport",layout:"grid1",cid:"viewport1",items:[{cname:"label",cid:"mainLabel",cls:"w-title3",text:"Grid"},{cname:"title",title:"Common
+    remote grid",cid:"commonRemoteGridTitle"},{cname:"grid",pageSize:10,url:"demo-source?xaction=staffAllDict",cid:"commonRemoteGrid",height:"15em",pagingBar:{cname:"pagingBar",showPageEdit:false}},{cname:"title",title:"Miscillaneous
+    grid",cid:"miscGridTitle"},{cname:"grid",exportTitle:"Staff List",columnsSortable:true,resizable:true,stateData:"_$004V7KE4QVEXI$_",stateId:"wb.miscGrid",exportFilename:"staff-list",pageSize:10,localData:[{_icon:"user1",code:"10001",full_name:"Terri
+    Duffy",gender:"Female",birth_date:"2002-07-01".dateValue,salary:28743,checked:1,email:"terri0@geejing.com"},{_icon:"user",code:"10002",full_name:"Roberto
+    Tamburello",gender:"Male",birth_date:"1986-12-13".dateValue,salary:16453,checked:0,email:"roberto0@geejing.com"},{_icon:"user",code:"10003",full_name:"Michael
+    Sullivan",gender:"Male",birth_date:"1991-07-17".dateValue,salary:32893,checked:1,email:"michael8@geejing.com"},{_icon:"user1",code:"10004",full_name:"Sharon
+    Salavaria",gender:"Female",birth_date:"1973-06-03".dateValue,salary:63237,checked:0,email:"sharon0@geejing.com"},{_icon:"user1",code:"10005",full_name:"Gail
+    Erickson",gender:"Female",birth_date:"1964-10-29".dateValue,salary:63219.5,checked:1,email:"gail0@geejing.com"},{_icon:"user",code:"10006",full_name:"Jossef
+    Goldberg",gender:"Male",birth_date:"1971-04-11".dateValue,salary:23130,checked:0,email:"jossef0@geejing.com"},{_icon:"user",code:"10007",full_name:"Ovidiu
+    Cracium",gender:"Male",birth_date:"1990-02-18".dateValue,salary:83231,checked:0,email:"ovidiu0@geejing.com"},{_icon:"user1",code:"10008",full_name:"Janice
+    Galvin",gender:"Female",birth_date:"2001-06-29".dateValue,salary:152310,checked:0,email:"janice0@geejing.com"},{_icon:"user",code:"10009",full_name:"Thierry
+    D''Hers",gender:"Male",birth_date:"1971-08-29".dateValue,salary:2383,checked:1,email:"thierry0@geejing.com"},{_icon:"user",code:"10010",subtext:"Sub
+    text",full_name:"Brian Welcker",gender:"Male",birth_date:"1989-07-08".dateValue,salary:98313,checked:1,email:"brian3@geejing.com"},{_icon:"user",code:"10011",full_name:"Stephen
+    Jiang",gender:"Male",birth_date:"1963-11-17".dateValue,salary:53231,checked:0,email:"stephen0@geejing.com"},{_icon:"user",code:"10012",full_name:"Syed
+    Abbas",gender:"Male",birth_date:"1987-02-11".dateValue,salary:38925.8,checked:1,_disabled:true,email:"syed0@geejing.com"}],captureClass:".w-btn",sorters:"full_name",showIcon:true,cid:"miscGrid",frame:true,height:"20em",columns:[{cname:"column",cid:"rowNumCol",freeze:true,rowNum:true},{cname:"column",width:"8em",fieldName:"code",freeze:true,text:"Code",summaryRender(e,t,a,i){return"Total:"},cid:"codeCol"},{cname:"column",cid:"personalCol",text:"Personal",items:[{cname:"column",cid:"commonCol",text:"Common",items:[{cname:"column",summary:"count",fieldName:"full_name",summaryRender(e,t,a,i){return
+    e+" P"},titleAutoWrap:"normal",width:-1,html:"<span class=''w-error-color''>Full
+    name</span>",autoWrap:"normal",align:"center",render(e,t,a,i){i.setStyle("background","linear-gradient(to
+    right, rgb(142 36 159) "+t.salary/1800+"%, rgb(85, 85, 85) 0%)","important");i.setStyle("color","#fff");return
+    e},cid:"fullNameCol",titleAlign:"center"},{cname:"column",width:"8em",fieldName:"gender",text:"Gender",render(e,t,a,i){let
+    l=i.addEl("w-center").addEl("w-ta-center");l.style=`color:#fff;width:5em;background:${e=="Male"?"#ff5d8d":"#095c09"}`;l.textContent=e},cid:"genderCol"}]},{cname:"column",width:"12em",fieldName:"birth_date",text:"Birth_date",render(e,t,a,i){if(e<"1974-1-1".dateValue){i.parentNode.cls=e<"1968-1-1".dateValue?"w-succ-bgcolor-row":"w-warn-bgcolor-row";e+="
+    *"}i.insertCellIcon("time",e)},cid:"birthDateCol"}]},{cname:"column",summary:"sum",fieldName:"salary",summaryRender(e,t,a,i){let
+    l=t.full_name;if(l==null)return"";else return"Avg: "+a.formatValue(e/l)},text:"Salary",align:"right",type:"usd",cid:"salaryCol",titleAlign:"right"},{cname:"column",checkBox:"int",fieldName:"checked",checkRefresh:true,cid:"checkCol1",menuText:"Check"},{cname:"column",checkBox:"roTrue",cid:"checkCol2",fieldName:"checked"},{cname:"column",checkBox:"roAll",cid:"checkCol3",fieldName:"checked"},{cname:"column",width:"5em",text:"Toggle",render(e,t,a,i){let
+    l=this;e=l.data.checked;l.addFooter({cname:"toggle",returnType:"int",value:e,toggleAlign:"center",clickToggle:true,events:{change(e){l.set("checked",e);app.checkCol1.syncHeaderCheck()}}},i)},cid:"toggleCol"},{cname:"column",width:"8em",text:"Link",render(e,t,a,i){let
+    l=i.addEl("my-link","a");i.cls="w-ta-center";l.textContent="Download"},cid:"linkCol"},{cname:"column",width:"8em",freeze:true,text:"Actions",cid:"actionsCol",buttons:[{icon:"gear",tip:"Set",cid:"setItem",events:{click(e,t){Wb.tip("Set
+    "+this.data.code+", "+this.gridItem.data.code)}}},{icon:"share2",tip:"Add",cid:"shareItem",events:{click(e,t){Wb.tip("Share
+    "+this.data.code)}}},{icon:"menu",cid:"menuItem",events:{click(e,t){app.popupRecord=this.parent.parent;app.shareMenu.showBy(this)}}}]}],contextMenu:{cname:"menu",items:[{icon:"grid",cid:"showRowColumnItem",text:"Show
+    row column",events:{click(e,t){let a,i,l;a=this.contextTarget;i=app.miscGrid.findItemByEl(a);l=app.miscGrid.findColumnByEl(a);if(i&&l)Wb.tip("Row
+    code is "+i.data.code+" and column field name is "+l.fieldName)}}},{cid:"item2",text:"Other
+    item"}]},events:{click(e,t){let a=e.target.closest(".my-link");if(a){let e=this.findItemByEl(a);Wb.tip(a.textContent+"
+    clicked at "+e.data.full_name)}},itemdblclick(e,t,a){Wb.tip(e.data.full_name+"
+    row double clicked")},beforesort(e,t,a){}}},{cname:"container",layout:"form",padding:false,cid:"container1",items:[{cname:"button",cid:"testfrozenBtn",text:"Test
+    frozen columns",events:{click(e,t){app.fullNameCol.width=app.miscGrid.width;Wb.toast("Now
+    please scroll horizontally to test the left and right frozen columns.")}}},{cname:"button",cid:"sortDataBtn",text:"Sort
+    Data",events:{click(e,t){app.miscGrid.sort({name:"code",desc:true})}}},{cname:"button",cid:"sortItemsBtn",text:"Sort
+    Items",events:{click(e,t){app.miscGrid.sortItems(((e,t)=>Wb.mixCompare(e.data.code,t.data.code)))}}}]},{cname:"component",textSelectable:false,html:"<div>Feature
+    List:</div>\n<ul>\n  <li>Columns sortable, resizable, draggable and freezable.</li>\n  <li>Arbitrary
+    multi-Level Headers.</li>\n  <li>Customize cell rendering.</li>\n  <li>Rows and
+    columns highlighing.</li>\n  <li>Local data pagination.</li>\n  <li>Bind buttons
+    or any controls to cells.</li>\n  <li>Multiple styles of check columns.</li>\n  <li>Customize
+    columns and persistence to the database.</li>\n  <li>Summary row.</li>\n</ul>",cid:"miscDescComp"},{cname:"title",title:"Editable
+    grid",cid:"editableGridTitle"},{cname:"grid",enterAppend:true,arrowDownAppend:true,columnsSortable:true,editable:true,pageSize:10,enterAsTab:true,sorters:[{name:"gender",desc:true},"salary"],url:"demo-source?xaction=staffAllDict",cid:"editableGrid",frame:true,height:"15em",multiSelect:true,tbar:{cname:"toolbar",items:[{icon:"add",text:Str.add,keys:"Ctrl+E",cid:"addBtn",events:{click(e,t){app.editableGrid.addRecord()}}},{icon:"edit",text:Str.edit,keys:"Ctrl+J",cid:"editBtn",events:{click(e,t){let
+    a=app.editableGrid.firstItem;if(a){a.set({code:"code",full_name:"new name"});app.editableGrid.startEdit(a,"code");a.highlight()}}}},{icon:"delete",text:Str.del,keys:"Ctrl+D",cid:"delBtn",events:{click(e,t){app.editableGrid.delRecords()}}},{cname:"divider",cid:"divider1"},{icon:"save",text:Str.save,keys:"Ctrl+S",cid:"saveBtn",events:{click(e,t){app.editableGrid.sync({url:xpath,success(){Wb.tipDone(Str.save)}})}}}]}},{cname:"title",title:"Database
+    side pagination",cid:"dbPaginationTitle"},{cname:"label",cid:"dbPaginationLabel",text:"This
+    example demonstrates database side pagination."},{cname:"grid",pagingBar:"pageNums",pageSize:10,url:"demo-source?xaction=staffDbPaging",cid:"dbPaginationGrid",height:"15em"},{cname:"title",title:"No
+    pagination",cid:"noPagingTitle"},{cname:"grid",pageSize:-1,url:"demo-source?xaction=staffAllDict",cid:"noPagingGrid",height:"15em"},{cname:"title",title:"Merge
+    rows and columns",cid:"mergeTitle"},{cname:"label",cid:"mergeLabel",text:"Merge
+    f1 rows and merge f1, f2 columns, see f1Col and f2Col properties."},{cname:"grid",url:"demo-source?xaction=selectReport1",cid:"mergeGrid",columns:[{cname:"column",cid:"rowCol",rowNum:true},{cname:"column",fieldName:"f1",mergeColsGroup:"mergeTotal",mergeRows:true,width:"12em",autoWrap:"normal",text:"f1",cid:"f1Col"},{cname:"column",width:"14em",fieldName:"f2",text:"f2",mergeColsGroup:"mergeTotal",cid:"f2Col"},{cname:"column",cid:"f3Col",fieldName:"f3",text:"f3"},{cname:"column",cid:"f4Col",fieldName:"f4",text:"f4"},{cname:"column",cid:"f5Col",fieldName:"f5",text:"f5"},{cname:"column",cid:"f6Col",fieldName:"f6",text:"f6"},{cname:"column",cid:"f7Col",fieldName:"f7",text:"f7"},{cname:"column",cid:"f8Col",fieldName:"f8",text:"f8"},{cname:"column",cid:"f9Col",fieldName:"f9",text:"f9"},{cname:"column",cid:"f10Col",fieldName:"f10",text:"f10"}]},{cname:"title",title:"Drag-drop
+    rows",cid:"dragDropTitle"},{cname:"grid",droppable:"demo.dragDropGrid",draggable:true,pageSize:10,url:"demo-source?xaction=staffAllDict",cid:"dragDropGrid",height:"30em",multiSelect:true,events:{itemdrop(e,t,a){let
+    i=e.source.length;Wb.tip(e.source.length+" "+(i>1?"items":"item")+" dropped.")},itemdrag(e,t,a){if(e.source.some((e=>e.data.code=="10009"))||e.dest.data.code=="10001"){e.allowDrop=false}}}},{cname:"title",title:"Property
+    grid",cid:"propertyGridTitle"},{cname:"grid",pagingBar:false,editable:true,cid:"propertyGrid",frame:true,localData:[{name:"String",value:"abc"},{name:"Integer",value:123},{name:"Float",value:456.78},{name:"Date",value:(new
+    Date).datePart},{name:"Boolean",value:true}],columns:[{cname:"column",fieldName:"name",text:"Name",render(e,t,a,i){i.addCls("w-fixed-cell");return
+    e},cid:"nameCol"},{cname:"column",width:-1,fieldName:"value",text:"Value",align:"left",cid:"valueCol"}],events:{beforeedit(e,t,a,i){if(t.fieldName=="value"){app.editors??={String:new
+    Wb.Text,Integer:new Wb.Number({decimalCount:0}),Float:new Wb.Number,Date:new Wb.Date,Boolean:new
+    Wb.BoolSelect};t.editor=app.editors[e.data.name]??app.editors.String}}}}]});'
+hideInMenu: 'false'
+icon: grid
+img: ''
+properties:
+  cid: module
+  description: demo-source=example/common/demo-source.xwl
+stateMap:
+  wb.miscGrid: 004V7KE4QVEXI
+tags: ''
+text: module
+title: ''

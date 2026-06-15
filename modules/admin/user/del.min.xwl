@@ -1,0 +1,13 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Delete users
+  serverScript: function main(){const e=Wb.UserUtil.reservedName;let s=Wb.getObject("del"),r;s.forEach((s=>(r=s.$user_name)&&e.includes(r)&&Wb.raise(Str.cannotDelete.format(r))));Wb.sync({tableName:"wb_user",del:s});Wb.sql({sql:"delete
+    from wb_user_role where user_id={?$sid?}",params:s});s.forEach((e=>Sessions.invalidate(e.$sid)))}main();
+tags: ''
+text: module
+title: ''

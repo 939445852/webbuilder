@@ -1,0 +1,22 @@
+{
+  "title": "@myWorkflow",
+  "icon": "",
+  "img": "",
+  "hideInMenu": "true",
+  "items": [
+    "select.xwl",
+    "view.xwl",
+    "view-progress.xwl",
+    "get-his-nodes.xwl",
+    "get-start-form.xwl",
+    "terminate.xwl",
+    "start.xwl",
+    "pass.xwl",
+    "back.xwl",
+    "reject.xwl",
+    "transfer.xwl",
+    "sign-before.xwl",
+    "sign-after.xwl",
+    "util.mjs"
+  ]
+}

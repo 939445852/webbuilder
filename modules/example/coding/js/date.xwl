@@ -1,0 +1,79 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+items:
+- _expanded: true
+  _icon: edit
+  cls: Wb.CodeEditor
+  properties:
+    cid: codeEditor1
+    full: 'true'
+    readonly: 'true'
+    value: |-
+      //This example demonstrates date. Only extended members are demonstrated, and native members are described at:
+      //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date
+
+      let date1 = new Date(), date2 = date1.addDay(3), date3 = date1.addDay(10);
+
+      //Date add/subtract
+      date1.addMilliSec(3); //add milliseconds
+      date1.addMilliSec(-3); //Subtract milliseconds
+      date1.addSecond(3); //add seconds
+      date1.addMinute(3); //add minutes
+      date1.addHour(3); //add hours
+      date1.addDay(3); //add days
+      date1.addMonth(3); //add months
+      date1.addYear(3); //add years
+
+      //Prototype functions
+      date1.equals(date2); //Determines whether the current date is equal to the specified date.
+      date1.equalsDate(date2); //Determines whether the current date is equal to the specified date, only compare date part.
+      date1.equalsMonth(date2); //Determines whether the current date is equal to the specified date, only compare year and month.
+      date2.between(date1, date3); //Determines whether the current date is between the specified start and end date.
+      date2.elapse(date1); //Gets the number of milliseconds from the current date to the specified date
+
+      //Formatting
+      //output like: "2023-03-02 10:24:03.672"
+      date1.format('y-MM-dd HH:mm:ss.S');
+      //to date value in text, region independent.
+      date1.textValue;
+      //equals to textValue property
+      date1.toString();
+      //to local date text in 4-digit year and 2-digit month days, in some regions output: "2021/03/09"
+      date1.dateText;
+      //to local time text in 24-hour 2-digit hours, minutes, and seconds, in some regions output: "15:03:23"
+      date1.timeText;
+      //to local time text in 12-hour 2-digit hours, minutes, and seconds, in some regions output: "PM 02:15:29"
+      date1.timeText12;
+      //to local date time text in 4-digit year and 2-digit month days, 24-hour 2-digit hours, minutes, and seconds,
+      //in some regions output: "2021/03/09 15:01:10"
+      date1.dateTimeText;
+      //to local date time text in 4-digit year and 2-digit month days, 14-hour 2-digit hours, minutes, and seconds,
+      //in some regions output: "2022/10/06 PM 02:17:06"
+      date1.dateTimeText12;
+      //similar to the dateTimeText property. If hours, minutes, seconds are 0, only the date part is displayed.
+      date1.autoText;
+      //similar to the dateTimeText property, with 3-digit millisecond, in some regions output: "2021/03/09 15:01:10.120"
+      date1.dateTimeMilliText;
+      //similar to the dateTimeText12 property, with 3-digit millisecond, in some regions output: "2021/03/09 PM 02:17:06.120"
+      date1.dateTimeMilliText12;
+
+      //Getter properties
+      date1.isLeapYear; //Determines whether it is a leap year
+      date1.monthFirstDate; //Return the date of the first day of the month
+      date1.monthLastDate; //Return the date of the last day of the month
+      date1.monthDays; //Return the number of days in the month
+      date1.mondayDate; //Return the date value of the Monday of the week. Monday as the first day of the week.
+      date1.sundayDate; //Return the date value of the Sunday of the week. Sunday as the first day of the week.
+      date1.datePart; //Return the date part, the time part is set to 0.
+      date1.timePart; //Return the time part, the date part is set to "1900-01-01".
+    wrapBorder: '0'
+  text: codeEditor1
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

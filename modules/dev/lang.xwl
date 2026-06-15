@@ -1,0 +1,126 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  beforeunload: |-
+    if (!app.saveBtn.disabled)
+      return false;
+  initialize: |-
+    Wb.apply(app, {
+      /**
+       * Fires after the table data is changed. @priv
+       */
+      onChange() {
+        app.saveBtn.disabled = false;
+      },
+      /**
+       * Save grid data.
+       * @param {Function} [callback] Callback function after success.
+       */
+      save(callback) {
+        app.grid1.sync({
+          url: xpath + '/actions&xaction=save',
+          success() {
+            app.saveBtn.disabled = true;
+            callback?.();
+          }
+        });
+      }
+    });
+hideInMenu: 'false'
+icon: book
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _expanded: true
+    _icon: toolbar
+    cls: Wb.Toolbar
+    items:
+    - _expanded: false
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: 'app.grid1.addRecord({ type: ''string'' });'
+      properties:
+        cid: addBtn
+        icon: add
+        keys: Ctrl+E
+        text: '@Str.add'
+      text: addBtn
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: app.grid1.delRecords();
+      properties:
+        cid: delBtn
+        icon: delete
+        keys: Ctrl+D
+        text: '@Str.del'
+      text: delBtn
+    - _icon: divider
+      cls: Wb.Divider
+      properties:
+        cid: divider2
+      text: divider2
+    - _expanded: false
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: app.save();
+      properties:
+        cid: saveBtn
+        disabled: 'true'
+        icon: save
+        keys: Ctrl+S
+        text: '@Str.save'
+      text: saveBtn
+    - _icon: divider
+      cls: Wb.Divider
+      properties:
+        cid: divider1
+      text: divider1
+    - _icon: text
+      cls: Wb.Text
+      events:
+        change: 'app.grid1.delayLoad({ comps: app.search });'
+      properties:
+        cid: search
+        clearButton: 'true'
+        flex: '1'
+        maxWidth: 20em
+        minWidth: 5em
+        placeholder: '@Str.search'
+      text: search
+    properties:
+      cid: tbar
+      isProperty: 'true'
+    text: tbar
+  - _expanded: true
+    _icon: grid
+    cls: Wb.Grid
+    events:
+      beforeload: return this.saveConfirm(app.saveBtn, app.save);
+      editing: app.onChange();
+      itemchange: app.onChange();
+    properties:
+      cid: grid1
+      editable: 'true'
+      keyFields: name,type
+      multiSelect: 'true'
+      stateId: wb.lang
+      url: '@xpath + ''/actions&xaction=select'''
+    text: grid1
+  properties:
+    cid: viewport1
+    layout: fit
+  text: viewport1
+properties:
+  cid: module
+  remark: Multilingual editor
+tags: ''
+text: module
+title: '@langMng'

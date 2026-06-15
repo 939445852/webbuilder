@@ -1,0 +1,9 @@
+{
+  "title": "@sysinfo",
+  "icon": "",
+  "img": "",
+  "hideInMenu": "true",
+  "items": [
+    "select.xwl"
+  ]
+}

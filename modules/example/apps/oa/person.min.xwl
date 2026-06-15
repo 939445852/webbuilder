@@ -1,0 +1,28 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.make(app,{cname:"window",layout:"column",resetDialog:true,padding:true,gap:true,width:"60em",autoScroll:true,cid:"editWin",items:[{cname:"fieldset",icon:"address-book",layout:"grid2",title:"General
+    Information",collapsible:true,autoGrid:true,cid:"generalFieldSet",items:[{cname:"text",text:"Code",maxLength:5,required:true,cid:"code"},{cname:"fileInput",browseMode:true,browseHeight:"8em",text:"Photo",gridRow:"span
+    3",accept:".png",cid:"photo"},{cname:"text",required:true,cid:"full_name",text:"Full
+    name"},{cname:"select",bindField:"user_id",forceSelect:true,text:"Username",valueField:"sid",required:true,url:"m?xwl=sys/dialog/user-selector/select",cid:"user_name",subtextField:"display_name",textField:"user_name"},{cname:"select",clearButton:true,gridColumn:"span
+    2",valueMap:{sid:"dept_id",dept_name:"dept_name",dept_code:"dept_code"},treePicker:true,text:"Dept
+    name",valueField:"sid",required:true,url:"m?xwl=sys/dialog/dept-selector/select",cid:"dept_name",subtextField:"dept_code",textField:"dept_name"},{cname:"date",cid:"birth_date",text:"Birth
+    date"},{cname:"select",keyName:"gender",cid:"gender",text:"Gender"},{cname:"number",minValue:0,text:"Height",decimalCount:0,maxValue:999,cid:"height"},{cname:"text",cid:"email",text:"Email",valueType:"email"},{cname:"number",decimalCount:2,cid:"salary",text:"Salary"}]},{cname:"fieldset",icon:"text1",layout:"fit",title:"Personal
+    Resume",collapsible:true,flex:1,cid:"resumeFieldSet",items:[{cname:"textArea",minHeight:"10em",cid:"cv"}]}]});Wb.make(app,{cname:"viewport",autoContextMenu:true,layout:"row",cid:"viewport1",tbar:{cname:"toolbar",items:[{icon:"add",text:Str.add,keys:"Ctrl+E",cid:"addBtn",events:{click(e,t){let
+    a;app.grid1.insertRecord({url:xpath+"/add",failure(e){Wb.checkExists(e,"wb_staff_code",app.editWin.down("code"))}},app.editWin);a=app.tree1.selectionData;if(a?.sid)app.dept_name.value=Wb.applyWith({},a,"sid,dept_code,dept_name")}}},{icon:"edit",text:Str.edit,keys:"Ctrl+J",cid:"editBtn",events:{click(e,t){let
+    a=app.grid1.selection;app.grid1.editRecord({url:xpath+"/edit",failure(e){Wb.checkExists(e,"wb_staff_code",app.editWin.down("code"))}},app.editWin);if(a)app.editWin.down("photo").preview(xpath+"/get-photo&sid="+a.data.sid+"&"+Wb.getId())}}},{icon:"delete",text:Str.del,keys:"Ctrl+D",cid:"delBtn",events:{click(e,t){app.grid1.removeRecords(xpath+"/del","code")}}},{cname:"divider",cid:"divider1"},{cname:"text",minWidth:"5em",clearButton:true,placeholder:Str.search,flex:1,cid:"search",maxWidth:"20em",events:{change(e,t,a){let
+    d;if(e)d={searchText:e};else d={searchDeptId:app.tree1.selectionData?.sid};app.grid1.delayLoad({params:d})}}}]},bbar:{cname:"displayField",icon:"info1",padding:true,value:"This
+    module demonstrates database CRUD"},items:[{cname:"tree",width:"18em",autoSelect:true,url:xpath+"/select-dept",cid:"tree1",textField:"dept_name",events:{selectionchange(e){app.grid1.load({params:{searchDeptId:app.tree1.selectionData?.sid}})}}},{cname:"splitter",cid:"splitter1"},{cname:"grid",columnsSortable:true,flex:1,stateData:"_$004V7KE4QVEXF$_",stateId:"wb.oa.person",autoLoad:false,sorters:"code",url:xpath+"/select",cid:"grid1",multiSelect:true,columns:[{cname:"column",cid:"rowNumCol",rowNum:true},{cname:"column",width:"5em",fieldName:"code",text:"Code",cid:"codeCol"},{cname:"column",width:"13em",fieldName:"full_name",text:"Full
+    name",cid:"fullNameCol"},{cname:"column",cid:"usernameCol",fieldName:"user_name",text:"Username"},{cname:"column",width:"13em",fieldName:"dept_name",text:"Department",render(e,t,a,d){Wb.Column.addSubText(d,e,t.dept_code)},cid:"deptCol"},{cname:"column",cid:"birthDateCol",fieldName:"birth_date",text:"Birth
+    date"},{cname:"column",width:"6em",fieldName:"gender",text:"Gender",keyValue:true,cid:"genderCol"},{cname:"column",width:"6em",fieldName:"height",text:"Height",cid:"heightCol"},{cname:"column",width:"18em",fieldName:"email",text:"Email",cid:"emailCol"},{cname:"column",width:"9em",fieldName:"salary",text:"Salary",type:"usd",cid:"salaryCol"},{cname:"column",width:"15em",fieldName:"cv",sortable:false,text:"CV",cid:"cvCol"},{cname:"column",width:"15em",fieldName:"photo",sortable:false,text:"Photo",render(e,t,a,d){if(e)Wb.Column.createDownload(d,a.fieldName,t.full_name+".png")},cid:"photoCol"}],events:{itemdblclick(e,t,a){app.editBtn.fireEvent("click")}}}]});
+hideInMenu: 'false'
+icon: user3
+img: ''
+properties:
+  cid: module
+stateMap:
+  wb.oa.person: 004V7KE4QVEXF
+tags: ''
+text: module
+title: Person Management

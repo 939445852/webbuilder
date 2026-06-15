@@ -1,0 +1,33 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Select departments
+  serverScript: |-
+    function main() {
+      let searchClause = '', query = Params.query, firstItem, sql, rows;
+
+      if (query) {
+        Wb.setLike('query');
+        searchClause = 'and (dept_code like {?query?} or dept_name like {?query?})'
+      } else {
+        Params.parent_id = Params.sid || '0';
+        searchClause = 'and a.parent_id={?parent_id?}';
+      }
+      sql = `
+            select a.sid, a.dept_code, a.dept_name, 'folder1' as "_icon",
+            case when (select count(*) from wb_dept b where b.parent_id=a.sid)>0 then 1 else 0 end as items
+            from wb_dept a where a.status=1 ${searchClause} order by a.dept_code
+            `;
+      rows = Wb.getRows({ sql, rs: query ? 100 : -1 });
+      if (!query && !Params.sid && (firstItem = rows[0]) && rows.length == 1)
+        firstItem._expanded = true;
+      Wb.send(rows);
+    }
+    main();
+tags: ''
+text: module
+title: ''

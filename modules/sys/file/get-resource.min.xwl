@@ -1,0 +1,12 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Get files in resource path
+  serverScript: Wb.File.checkContains("|wb/system/resource",Params.path);Wb.run("./get");
+tags: ''
+text: module
+title: ''

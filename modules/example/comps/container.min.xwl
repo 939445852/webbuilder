@@ -1,0 +1,46 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.make(app,{cname:"viewport",layout:"grid1",cid:"viewport1",items:[{cname:"label",cid:"mainLabel",cls:"w-title3",text:"Containers"},{cname:"title",title:"Container",cid:"containerTitle"},{cname:"container",layout:"grid",cid:"containerCt",frame:true,items:[{cname:"container",layout:"grid1",cid:"commonCt",frame:true,items:[{cname:"line",title:"Common
+    Container",cid:"descLine"},{cname:"text",cid:"text1",text:"text"},{cname:"number",labelSeparator:"-",text:"Custom
+    Label Separator",labelUp:true,cid:"number1"},{cname:"date",labelSeparator:false,text:"No
+    Label Separator",labelUp:true,cid:"date1"}]},{cname:"container",layout:"grid1",labelUp:true,labelAlign:"center",cid:"customLabelCt",frame:true,items:[{cname:"line",title:"Custom
+    Label Align",cid:"descLine"},{cname:"text",cid:"defaultText",text:"Default to
+    parent"},{cname:"text",text:"Left Common",labelUp:false,labelAlign:"left",cid:"leftCommonText"},{cname:"text",text:"Right
+    Common",labelUp:false,labelAlign:"right",cid:"rightCommonText"},{cname:"text",text:"Left
+    Above",labelUp:true,labelAlign:"left",cid:"leftAboveText"},{cname:"text",text:"Right
+    Above",labelUp:true,labelAlign:"right",cid:"rightAboveText"}]}]},{cname:"title",title:"Panel",cid:"panelTitle"},{cname:"container",layout:"form",cid:"panelCt",frame:true,items:[{cname:"panel",layout:"grid1",html:"Common
+    Panel",cid:"commonPanel"},{cname:"panel",layout:"grid1",closable:true,width:"30em",minimizable:true,title:"Titled
+    Panel",collapsible:true,cid:"titledPanel",maximizable:true,minimize(){Wb.tip("Do
+    minimize")},items:[{cname:"text",cid:"text1",text:"text"},{cname:"number",cid:"number1",text:"number"},{cname:"date",cid:"date1",text:"date"}]},{cname:"panel",layout:"grid1",buttonAlign:"center",defaults:{labelWidth:"5em"},minButtonWidth:"6em",icon:"address-book",title:"Misc
+    Panel",collapsible:true,cid:"miscPanel",frame:true,height:"20em",maximizable:true,tbar:[{cname:"toolbar",cid:"toolbar1",items:[{icon:"add1",cid:"addItem",text:"Add"},{icon:"delete",cid:"delItem",text:"Delete"}]},{cname:"toolbar",fontSize:".8em",cid:"toolbar2",items:[{cname:"label",cid:"label1",text:"Address:"},{cname:"text",flex:1,cid:"text1"},{icon:"play",alignSelf:"stretch",cid:"playBtn"}]}],buttons:[{cname:"button",type:"primary",cid:"okBtn",text:Str.ok},{cname:"button",cid:"cancelBtn",text:Str.cancel}],bbar:{cname:"toolbar",justify:"end",items:[{icon:"menu",cid:"menuItem",menu:{cname:"menu",items:[{cid:"item1",text:"item1"},{cid:"item2",text:"item2"}]}}]},tools:[{icon:"gear",tip:"Set",cid:"setItem"},{icon:"print",tip:"Print",cid:"printItem"},{icon:"pin",tip:"Pin",cid:"pinItem"}],menu:{cname:"menu",items:[{icon:"gear",cid:"setItem",text:"Set
+    Menu"},{icon:"print",cid:"printItem",text:"Print Menu"}]},items:[{cname:"text",cid:"text1",text:"text1"},{cname:"text",cid:"text2",text:"text2"},{cname:"text",cid:"text3",text:"text3"},{cname:"text",cid:"text4",text:"text4"}]}]},{cname:"title",title:"Tree
+    style panels",cid:"treeStyleTitle"},{cname:"container",layout:"column",cid:"treeStyleCt",frame:true,items:[{cname:"panel",layout:"grid1",textSelectable:false,title:"Panel1",collapsible:"tree",cid:"panel1",items:[{cname:"text",cid:"text1"},{cname:"text",cid:"text2"}]},{cname:"panel",collapsed:true,textSelectable:false,text:"Panel2",title:"Panel2",collapsible:"tree",cid:"panel2",height:"5em"},{cname:"panel",textSelectable:false,text:"Panel3",title:"Panel3",collapsible:"tree",cid:"panel3",height:"8em"}]},{cname:"title",title:"Accordion
+    style panels",cid:"accordionStyleTitle"},{cname:"container",layout:"column",cid:"accordionStyleCt",frame:true,height:"20em",items:[{cname:"panel",layout:"grid1",flex:1,icon:"gear",textSelectable:false,title:"Panel1",collapsible:"accordion",cid:"panel1",items:[{cname:"text",cid:"text1"},{cname:"text",cid:"text2"}]},{cname:"panel",collapsed:true,flex:1,icon:"excel",textSelectable:false,text:"Panel2",title:"Panel2",collapsible:"accordion",cid:"panel2"},{cname:"panel",collapsed:true,flex:1,icon:"word",textSelectable:false,text:"Panel3",title:"Panel3",collapsible:"accordion",cid:"panel3"}]},{cname:"title",title:"Plain
+    title panel blocks",cid:"plainTitlePanelBlocksTitle"},{cname:"label",cid:"plainTitlePanelBlocksLabel",text:"A
+    list of panels organized by blocks"},{cname:"container",layout:"grid1",padding:"1em",background:"true",cid:"plainTitlePanelBlocksCt",frame:true,gap:"1em",items:[{cname:"panel",icon:"form",layout:"grid1",plainTitle:true,roundBorder:true,title:"Block
+    1 - Form panel1",cid:"formPanel",items:[{cname:"text",cid:"text1",text:"Text"},{cname:"number",cid:"number1",text:"Number"}]},{cname:"panel",icon:"word",layout:"grid1",plainTitle:true,roundBorder:true,title:"Block
+    2 - Form panel2",cid:"formPanel2",items:[{cname:"text",cid:"text1",text:"Text"},{cname:"number",cid:"number1",text:"Number"}]},{cname:"panel",icon:"excel",layout:"grid1",plainTitle:true,roundBorder:true,title:"Block
+    3 - Form panel3",cid:"formPanel3",items:[{cname:"text",cid:"text1",text:"Text"},{cname:"number",cid:"number1",text:"Number"}]}]},{cname:"title",title:"Fieldset",cid:"fieldsetTitle"},{cname:"container",layout:"form",cid:"fieldsetCt",frame:true,items:[{cname:"fieldset",layout:"grid",title:"Common
+    Fieldset",cid:"comonFieldset",items:[{cname:"text",cid:"nameText",text:"Name"},{cname:"text",cid:"addrText",text:"Address"},{cname:"date",cid:"birthDate",text:"Birth
+    date"}]},{cname:"fieldset",icon:"id-card",layout:"grid",title:"Collapsible Fieldset",collapsible:true,labelAlign:"left",cid:"collapsibleFieldset",items:[{cname:"text",cid:"nameText",text:"Name"},{cname:"text",cid:"addrText",text:"Address"},{cname:"date",cid:"birthDate",text:"Birth
+    date"}]}]},{cname:"title",title:"Tab",cid:"tabTitle"},{cname:"container",layout:"grid1",cid:"tabCt",frame:true,items:[{cname:"label",cid:"commonLabel",text:"Common
+    Tab"},{cname:"tab",width:"48em",cid:"commonTab",height:"10em",items:[{cname:"card",icon:"home",title:"Icon
+    Card",cid:"iconCard"},{cname:"card",img:"support",title:"Image Icon",closable:null,cid:"imageIconCard"},{cname:"card",icon:"loading",title:"Loading",cid:"loadingCard",spin:true},{cname:"card",icon:"calendar",disabled:true,title:"Disabled",cid:"disabledCard"},{cname:"card",icon:"🌻",sortable:false,title:"No
+    Sortable",cid:"noSortableCard"},{cname:"card",tabTip:"This tab card is overflowed",title:"Overflowed",cid:"overflowedCard"}]},{cname:"label",cid:"miscTabLabel",text:"Miscellaneous
+    Tab"},{cname:"tab",clipTabText:true,resizable:true,width:"30em",shrinkTabButton:true,cid:"miscTab",dblclickFull:true,frame:true,height:"10em",items:[{cname:"card",layout:"center",html:"Try
+    resizing small<br>\nDouble click tab button",title:"Cliped Text",cid:"card1"},{cname:"card",title:"Shrink
+    Tab Button",cid:"card2"},{cname:"card",title:"Card3",cid:"card3"},{cname:"card",title:"Card4",cid:"card4"}]},{cname:"label",cid:"wrappedTabLabel",text:"Wrapped
+    Tab Buttons"},{cname:"tab",width:"20em",wrapTab:true,resizable:true,cid:"wrappedTab",frame:true,height:"10em",items:[{cname:"card",title:"Card1",cid:"card1"},{cname:"card",title:"Card2",cid:"card2"},{cname:"card",title:"Card3",cid:"card3"},{cname:"card",title:"Card4",cid:"card4"},{cname:"card",title:"Card5",cid:"card5"}]},{cname:"label",cid:"bottomLabel",text:"Bottom
+    Tab"},{cname:"tab",tabPosition:"bottom",cid:"bottomTab",height:"10em",items:[{cname:"card",title:"Card1",cid:"card1"},{cname:"card",title:"Card2",cid:"card2"},{cname:"card",title:"Card3",cid:"card3"}]},{cname:"label",cid:"leftLabel",text:"Left
+    Tab"},{cname:"tab",tabPosition:"left",cid:"leftTab",height:"10em",items:[{cname:"card",title:"Card1",cid:"card1"},{cname:"card",title:"Card2",cid:"card2"},{cname:"card",title:"Card3",cid:"card3"}]},{cname:"label",cid:"rightLabel",text:"Right
+    Tab"},{cname:"tab",tabPosition:"right",cid:"rightTab",height:"10em",items:[{cname:"card",title:"Card1",cid:"card1"},{cname:"card",title:"Card2",cid:"card2"},{cname:"card",title:"Card3",cid:"card3"}]}]}]});
+hideInMenu: 'false'
+icon: container
+img: ''
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

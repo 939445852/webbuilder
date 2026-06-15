@@ -1,0 +1,12 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Add department
+  serverScript: function main(){let d={sid:Params.dept_id_disp||Wb.getId()};Wb.set(d);Params.parent_id||="0";Wb.sync({tableName:"wb_dept",insert:Params});d.dept_id_disp=d.sid;Wb.send(d)}main();
+tags: ''
+text: module
+title: ''

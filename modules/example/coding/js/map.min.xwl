@@ -1,0 +1,23 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.make(app,{cname:"codeEditor",readonly:true,wrapBorder:0,value:"//This
+    example demonstrates map. Only extended members are demonstrated, and native members
+    are described at:\n//https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map\n\n//Add,
+    delete and modify\nlet map = new Map([['key1', 'Allen'], ['key2', 'Linda']]);\nmap.set('key',
+    'value'); //Add or modify\nmap.remove('key'); //Delete\n\n//Traverse\nmap.forEach((v,
+    k, map) => console.log(v));\nmap.each((k, v) => { console.log(k, v) }); //each
+    is similar to foreach, each can be interrupted\nmap.some((k, v) => v === 'Linda');
+    //Like Array.some\nmap.every((k, v) => v.includes('e')); //Like Array.every\nmap.find(k
+    => k == 'key2'); //Like Array.find\nmap.filter((k, v) => v.includes('e')); //Like
+    Array.filter",cid:"codeEditor1",full:true});
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  links: '["wb/js/monaco.js"]'
+tags: ''
+text: module
+title: ''

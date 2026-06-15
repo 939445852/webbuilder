@@ -1,0 +1,191 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _icon: label
+      cls: Wb.Label
+      properties:
+        cid: titleLabel
+        text: Approval Form
+        textAlign: center
+        titleType: title2
+      text: titleLabel
+    - _expanded: true
+      _icon: container
+      cls: Wb.Container
+      items:
+      - _icon: box-label
+        cls: Wb.BoxLabel
+        properties:
+          cid: generalLabel
+          gridRow: span 6
+          padding: 'true'
+          text: General
+        text: generalLabel
+      - _icon: text
+        cls: Wb.Text
+        properties:
+          cid: name
+          required: 'true'
+          text: Name
+        text: name
+      - _expanded: true
+        _icon: combo
+        cls: Wb.Select
+        properties:
+          cid: gender
+          keyName: gender
+          required: 'true'
+          text: Gender
+        text: gender
+      - _expanded: true
+        _icon: calendar
+        cls: Wb.Date
+        properties:
+          cid: birthdate
+          required: 'true'
+          text: Birthdate
+        text: birthdate
+      - _expanded: true
+        _icon: text
+        cls: Wb.Text
+        properties:
+          cid: degree
+          text: Degree
+        text: degree
+      - _expanded: true
+        _icon: text
+        cls: Wb.Text
+        properties:
+          cid: university
+          text: University
+        text: university
+      - _expanded: true
+        _icon: text
+        cls: Wb.Text
+        properties:
+          cid: major
+          text: Major
+        text: major
+      - _expanded: true
+        _icon: text
+        cls: Wb.Text
+        properties:
+          cid: department
+          gridColumn: span 2
+          text: Department
+        text: department
+      - _expanded: true
+        _icon: text
+        cls: Wb.Text
+        properties:
+          cid: duty
+          text: Duty
+        text: duty
+      - _expanded: true
+        _icon: text
+        cls: Wb.Text
+        properties:
+          cid: period
+          gridColumn: span 2
+          text: Probation period
+        text: period
+      - _icon: calendar
+        cls: Wb.Date
+        properties:
+          cid: entryDate
+          text: Entry Date
+        text: entryDate
+      - _expanded: true
+        _icon: text
+        cls: Wb.Text
+        properties:
+          cid: project
+          gridColumn: span 2
+          text: Project
+        text: project
+      - _icon: number-edit
+        cls: Wb.Number
+        properties:
+          cid: salary
+          minValue: '1000'
+          prefix: $
+          text: Salary
+        text: salary
+      - _expanded: true
+        _icon: text
+        cls: Wb.Text
+        properties:
+          cid: address
+          gridColumn: span 3
+          text: Address
+        text: address
+      - _icon: box-label
+        cls: Wb.BoxLabel
+        properties:
+          cid: commentsLabel
+          gridRow: span 3
+          padding: 'true'
+          text: Comments
+        text: commentsLabel
+      - _icon: textarea
+        cls: Wb.TextArea
+        properties:
+          cid: office
+          gridColumn: span 3
+          height: 5em
+          text: Office
+        text: office
+      - _icon: textarea
+        cls: Wb.TextArea
+        properties:
+          cid: manager
+          gridColumn: span 3
+          height: 5em
+          text: Manager
+        text: manager
+      - _icon: textarea
+        cls: Wb.TextArea
+        properties:
+          cid: ceo
+          gridColumn: span 3
+          height: 5em
+          text: CEO
+        text: ceo
+      properties:
+        background: 'true'
+        cid: formCt
+        defaults: '({ labelSeparator: false })'
+        frame: 'true'
+        gridTplColumns: auto 1fr 1fr 1fr
+        layout: grid4
+        padding: 'false'
+        tableStyle: 'true'
+        width: 70em
+      text: formCt
+    properties:
+      cid: gridCt
+      frame: 'true'
+      layout: grid1
+    text: gridCt
+  properties:
+    autoScroll: 'true'
+    cid: viewport1
+    layout: middle
+  text: viewport1
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

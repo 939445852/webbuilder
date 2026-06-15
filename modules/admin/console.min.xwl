@@ -1,0 +1,19 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.apply(app,{consoleSize:100,totalSize:0,allowScroll:false,cardVisible:true,toBottom(e){if(e||app.allowScroll&&app.toBottomItem.active){let
+    e=app.viewer1.el;e.scrollTop=e.scrollHeight;app.allowScroll=false}},addData(e){let
+    t=app.viewer1,a=t.el,l=app.consoleSize*1024,o;o=a.addTag("span");o.textContent=e;o.xSize=Math.max(e.length,100);app.totalSize+=o.xSize;if(app.totalSize>l){let
+    e=a.children,t,i=e.length;for(t=0;t<i;t++){o=e[t];app.totalSize-=o.xSize;o.remove();t--;i--;if(app.totalSize<l)break}}app.allowScroll=true;if(app.cardVisible){app.toBottom()}}});Wb.make(app,{cname:"socket",name:"$console",xwl:"admin/console/socket.xwl",cid:"socket1",events:{message(e,t){if(!app.pauseItem.active)app.addData(e.data)}}});Wb.make(app,{cname:"viewport",layout:"fit",autoScroll:true,cid:"viewport1",tbar:{cname:"toolbar",items:[{icon:"pause",text:Str.pause,activeBgColor:false,enableToggle:true,cid:"pauseItem",events:{toggle(e,t){let
+    a=this;a.icon=e?"resume":"pause";a.text=e?Str.resume:Str.pause}}},{icon:"recycle",cid:"clearItem",text:Str.clear,events:{click(e,t){app.viewer1.el.clearChildren();app.totalSize=0}}},{cname:"divider",cid:"divider1"},{icon:"property",cid:"sizeItem",text:Str.size,menu:{cname:"menu",items:[{cname:"container",layout:"row",width:"15em",cid:"container1",gap:".5em",items:[{cname:"slider",minValue:100,flex:1,maxValue:1e4,focusable:false,step:100,tabIndex:null,value:app.consoleSize,cid:"sizeSlider",events:{change(e,t,a){app.consoleSize=e}}},{cname:"label",cid:"kbLabel",text:"KB"}]}]}},{cname:"fill",cid:"fill1"},{icon:"bottom",active:true,tip:"Auto
+    scroll to bottom",activeBgColor:false,cid:"toBottomItem",events:{toggle(e,t){if(e)app.toBottom(true)}}}]},events:{ready(e,t){parentContainer?.on("show",(e=>{app.cardVisible=true;app.toBottom()}));parentContainer?.on("hide",(e=>{app.cardVisible=false}))}},items:[{cname:"viewer",style:"line-height:1.8",cid:"viewer1",cls:"w-pre"}]});
+hideInMenu: 'false'
+icon: console
+img: ''
+properties:
+  cid: module
+  remark: System console
+tags: ''
+text: module
+title: '@console'

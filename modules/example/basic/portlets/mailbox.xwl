@@ -1,0 +1,118 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: mail
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _expanded: true
+    _icon: array
+    cls: Wb.Array
+    items:
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      properties:
+        cid: item1
+        icon: gear
+      text: item1
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      properties:
+        cid: item2
+        icon: preview
+      text: item2
+    - _expanded: true
+      _icon: item
+      cls: Wb.Item
+      events:
+        click: app.mailGrid.close();
+      properties:
+        cid: item3
+        icon: close
+      text: item3
+    properties:
+      cid: tools
+    text: tools
+  - _expanded: true
+    _icon: grid
+    cls: Wb.Grid
+    events:
+      itemclick: Wb.tip('Open email "' + item.data.title + '".');
+    items:
+    - _expanded: true
+      _icon: array
+      cls: Wb.Array
+      items:
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: rowCol
+          rowNum: 'true'
+        text: rowCol
+      - _icon: column
+        cls: Wb.Column
+        properties:
+          cid: dateCol
+          fieldName: date
+          render: |-
+            el.insertCellIcon('mail', value.dateTimeText);
+            el.parentNode.setCls(data.unread, 'w-bold');
+            el.parentNode.cls = 'w-pointer';
+          text: Date
+          width: 15em
+        text: dateCol
+      - _icon: column
+        cls: Wb.Column
+        properties:
+          cid: fromCol
+          fieldName: from
+          text: From
+        text: fromCol
+      - _icon: column
+        cls: Wb.Column
+        properties:
+          cid: titleCol
+          fieldName: title
+          text: Title
+          width: '-1'
+        text: titleCol
+      properties:
+        cid: columns
+      text: columns
+    properties:
+      cid: grid1
+      columnsSortable: 'true'
+      flex: '1'
+      localData: |-
+        [
+          { title: 'Quarterly Sales Report', from: 'sales@geejing.com', date: new Date().addHour(-1), unread: 1 },
+          { title: 'Urgent: Action Required on Contract Amendments', from: 'legal@geejing.com', date: new Date().addHour(-2), unread: 1 },
+          { title: 'Invitation to the Annual Employee Recognition Ceremony', from: 'hr@geejing.com', date: new Date().addHour(-3) },
+          { title: 'Reminder: Product Launch Meeting on Tuesday', from: 'marketing@geejing.com', date: new Date().addHour(-4) },
+          { title: 'Upcoming IT Maintenance', from: 'it@geejing.com', date: new Date().addHour(-5) },
+          { title: 'Customer Feedback Summary', from: 'customer@geejing.com', date: new Date().addHour(-6) },
+          { title: 'New Policy Implementation: Employee Travel Guidelines', from: 'management@geejing.com', date: new Date().addHour(-7) },
+          { title: 'Feedback Request: Recent Website Updates', from: 'dev@geejing.com', date: new Date().addHour(-8) }
+        ]
+      plainTitle: 'true'
+      roundBorder: 'true'
+      sorters: '{name: ''date'', desc: true}'
+    text: grid1
+  properties:
+    cid: viewport1
+    icon: mail
+    layout: fit
+    title: My Emails
+  text: viewport1
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

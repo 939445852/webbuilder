@@ -1,0 +1,12 @@
+{
+  "title": "",
+  "icon": "",
+  "img": "",
+  "hideInMenu": "false",
+  "items": [
+    "hint.xwl",
+    "chart.xwl",
+    "todo.xwl",
+    "mailbox.xwl"
+  ]
+}

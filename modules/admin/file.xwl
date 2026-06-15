@@ -1,0 +1,28 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: file-admin
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _icon: module
+    cls: Wb.Xwl
+    properties:
+      cid: browserXwl
+      path: sys/file/browser.xwl
+    text: browserXwl
+  properties:
+    border: 'false'
+    cid: viewport1
+    layout: fit
+  text: viewport1
+properties:
+  cid: module
+  remark: File management tool
+tags: ''
+text: module
+title: '@fileManager'

@@ -1,0 +1,14 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.make(app,{cname:"viewport",layout:"row",cid:"viewport1",events:{ready(e,t){Wb.run({script:_$user$_,success(e){app.container1.add(e.viewport1)}});Wb.run({script:_$dbe$_,success(e){app.container2.add(e.viewport1)}})}},items:[{cname:"container",layout:"fit",width:"50%",cid:"container1"},{cname:"splitter",cid:"splitter1"},{cname:"container",layout:"fit",flex:1,cid:"container2"}]});
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  serverScript: Wb.set({user:Wb.encode(Wb.execute("user")),dbe:Wb.encode(Wb.execute("admin/dbe"))});
+tags: ''
+text: module
+title: ''

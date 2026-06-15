@@ -1,0 +1,11 @@
+{
+  "title": "@permMng",
+  "icon": "",
+  "img": "",
+  "hideInMenu": "true",
+  "items": [
+    "select-roles.xwl",
+    "select-modules.xwl",
+    "set-actions.xwl"
+  ]
+}

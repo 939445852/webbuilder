@@ -1,0 +1,89 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  serverScript: |-
+    let actions = {
+      /**
+       * Get chats list. @priv
+       */
+      getChats() {
+        Wb.sendRowx({
+          sql: `
+          select a.send_date, a.text_content, a.bin_len, b.userid, c.display_name from
+
+          wb_chats a,
+
+          (
+            select userid, max(sid) as sid from
+            (
+              select sid,from_user as userid from wb_chats where to_user={?sys.userid?}
+              union all
+              select sid,to_user as userid  from wb_chats where from_user={?sys.userid?}
+            ) x
+            group by userid
+          ) b,
+
+          wb_user c
+
+          where a.sid=b.sid and b.userid=c.sid
+          order by a.send_date desc
+        `,
+          clob: 100
+        });
+      },
+      /**
+       * Get chat detail. @priv
+       */
+      getChatDetail() {
+        Wb.sendRows(`
+          select sid,send_date,text_content,bin_len,1 as direction from wb_chats where to_user={?sys.userid?} and from_user={?userid?}
+          union all
+          select sid,send_date,text_content,bin_len,0 as direction from wb_chats where from_user={?sys.userid?} and to_user={?userid?}
+          order by send_date desc
+        `);
+      },
+      /**
+       * Download the chat blob content. @priv
+       */
+      download() {
+        let row = Wb.getRow({ sql: 'select bin_len,text_content,bin_content from wb_chats where sid={?id?}', blob: true });
+        // for download filename purpose
+        Wb.setContentType(row.text_content, null, row.bin_len);
+        Wb.send(row.bin_content);
+      },
+      /**
+       * Get contact user list. @priv
+       */
+      getContacts() {
+        Wb.sendRowx('select sid, user_name, display_name, email from wb_user where sid<>{?sys.userid?} and status=1');
+      },
+      /**
+       * Send message from current user to another user. @priv
+       */
+      sendMessage() {
+        let file = Params.file, toUser = Params.userid, data;
+
+        data = {
+          sid: Wb.getId(),
+          send_date: new Date(),
+          from_user: Wb.userid,
+          bin_len: file?.size,
+          text_content: Params.text
+        }
+        Wb.sync({
+          tableName: 'wb_chats',
+          insert: Wb.apply({ to_user: toUser, bin_content: file?.stream }, data)
+        });
+        data.display_name = Wb.dispname;
+        Wb.send(data, 'wb.chat', toUser);
+        Wb.send(data);
+      }
+    };
+    actions[Params.xaction]();
+tags: ''
+text: module
+title: ''

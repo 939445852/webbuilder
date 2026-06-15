@@ -1,0 +1,17 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Add signature before approval
+  serverScript: |-
+    function main() {
+      const Util = Wb.load('./util.mjs');
+      Util.doAction('signBefore');
+    }
+    main();
+tags: ''
+text: module
+title: ''

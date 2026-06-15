@@ -1,0 +1,31 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'true'
+icon: ''
+img: ''
+properties:
+  cid: module
+  serverScript: let actions={select(){let e=Wb.getObject("download");if(e){let a=Wb.getRow({sql:"select
+    full_name, photo from wb_staff where sid={?$sid?}",blob:true,params:e});if(a?.photo)Wb.exportData(a.photo,a.full_name+".png");else
+    Wb.raise("Photo not found.")}else{let e;e=`\n        select a.*,b.user_name,c.dept_name,c.dept_code
+    from wb_staff a, wb_user b, wb_dept c\n        where a.user_id=b.sid and a.dept_id=c.sid\n        `;if(Params.search){Wb.setLike("search");e+="
+    and (a.full_name like {?search?} or a.code like {?search?} or b.user_name like
+    {?search?})"}e+=Wb.getOrderSql({email:"a.email"});Wb.sendRowx({sql:e,kv:{gender:"gender"}})}},dictSelect(){if(Wb.has("download")){this.select()}else{let
+    e;e=`\n        select a.sid, a.code, a.full_name, a.user_id, b.user_name as user_name_bind,\n        a.dept_id,
+    c.dept_code as dept_code_hide, c.dept_name as dept_name_tree, a.birth_date, a.gender,
+    a.height,\n        a.email, a.salary, a.cv, a.photo from wb_staff a, wb_user b,
+    wb_dept c\n        where a.user_id=b.sid and a.dept_id=c.sid\n        `;if(Params.search){Wb.setLike("search");e+="
+    and (a.full_name like {?search?} or a.code like {?search?} or b.user_name like
+    {?search?})"}e+=Wb.getOrderSql({email:"a.email",user_name_bind:"b.user_name",dept_name_tree:"c.dept_name"});Wb.sendDict(e,"wb,")}},selectUsers(){let
+    e;e="select sid,user_name from wb_user";if(Params.query){Wb.setLike("query");e+="
+    where user_name like {?query?}"}e+=" order by user_name";Wb.sendRows(e)},selectDepts(){let
+    e;e="select sid,dept_name from wb_dept";if(Params.query){Wb.setLike("query");e+="
+    where dept_name like {?query?}"}e+=" order by dept_name";Wb.sendRows(e)},save(){let
+    e,a,s=[];Params.insert?.forEach((t=>{e=Wb.getId();a={sid:e};Wb.apply(t,a);s.push(a)}));Wb.sync({tableName:"wb_staff",insert:Params.insert,update:Params.update,del:Params.del});Wb.send({insert:s})},add(){let
+    e={sid:Wb.getId()};Wb.set(e);Wb.sync({tableName:"wb_staff",insert:Params});Wb.send(e)},edit(){Wb.sync({tableName:"wb_staff",update:Params})},del(){let
+    e=Wb.getObject("del");Wb.sync({tableName:"wb_staff",del:e})},getPhoto(){let e=Wb.getRow({sql:"select
+    photo from wb_staff where sid={?sid?}",blob:true});if(e?.photo)Wb.exportData(e.photo);else
+    Wb.exportData(new Wb.File(true,"wb/images/null.png").stream)}};actions[Params.xaction]();
+tags: ''
+text: module
+title: ''

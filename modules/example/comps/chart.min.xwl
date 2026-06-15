@@ -1,0 +1,29 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: Wb.make(app,{cname:"viewport",layout:"grid1",cid:"viewport1",items:[{cname:"label",cid:"mainLabel",cls:"w-title3",text:"Chart"},{cname:"title",title:"Common
+    chart",cid:"commonTitle"},{cname:"chart",cid:"commonChart",height:"20em",option:{title:{text:"ECharts
+    Getting Started Example"},tooltip:{},xAxis:{data:["shirt","cardigan","chiffon","pants","heels","socks"]},yAxis:{},series:[{name:"sales",type:"bar",data:[5,20,36,10,10,20]}]}},{cname:"title",title:"Manual
+    setOption",cid:"manualSetOptionTitle"},{cname:"chart",cid:"manualSetOptionChart",height:"20em",events:{ready(e,t){this.option={title:{text:"Stacked
+    Area Chart"},tooltip:{trigger:"axis",axisPointer:{type:"cross",label:{backgroundColor:"#6a7985"}}},legend:{data:["Email","Union
+    Ads","Video Ads","Direct","Search Engine"]},toolbox:{feature:{saveAsImage:{}}},grid:{left:"3%",right:"4%",bottom:"3%",containLabel:true},xAxis:[{type:"category",boundaryGap:false,data:["Mon","Tue","Wed","Thu","Fri","Sat","Sun"]}],yAxis:[{type:"value"}],series:[{name:"Email",type:"line",stack:"Total",areaStyle:{},emphasis:{focus:"series"},data:[120,132,101,134,90,230,210]},{name:"Union
+    Ads",type:"line",stack:"Total",areaStyle:{},emphasis:{focus:"series"},data:[220,182,191,234,290,330,310]},{name:"Video
+    Ads",type:"line",stack:"Total",areaStyle:{},emphasis:{focus:"series"},data:[150,232,201,154,190,330,410]},{name:"Direct",type:"line",stack:"Total",areaStyle:{},emphasis:{focus:"series"},data:[320,332,301,334,390,330,320]},{name:"Search
+    Engine",type:"line",stack:"Total",label:{show:true,position:"top"},areaStyle:{},emphasis:{focus:"series"},data:[820,932,901,934,1290,1330,1320]}]}}}},{cname:"title",title:"Load
+    remote data",cid:"remoteTitle"},{cname:"chart",cid:"remoteChart",height:"20em",events:{ready(e,t){this.load({url:xpath+"/get-chart-data",mask:{target:this}})}}},{cname:"button",cid:"manualLoadBtn",text:"Manual
+    load data",events:{click(e,t){app.remoteChart.clear();app.remoteChart.load({params:{foo:"bar"}})}}},{cname:"title",title:"Server
+    rendering chart",cid:"serverRenderTitle"},{cname:"label",cid:"serverRenderLabel",text:"WebBuilder
+    can directly load echarts library in the serverside to create charts, which will
+    bring great convenience. For example, we can use this feature to create charts
+    in the serverside and send them via email."},{cname:"panel",layout:"center",minHeight:"8em",html:"_$chartSvg$_",cid:"serverRenderPanel",events:{ready(e,t){let
+    a=this;Wb.ajax({url:xpath+"/create-chart",mask:{target:a},success(e){a.html=e}})}}}]});
+hideInMenu: 'false'
+icon: chart-bar
+img: ''
+properties:
+  cid: module
+  links: '["wb/libs/echarts.js"]'
+tags: ''
+text: module
+title: ''

@@ -1,0 +1,1408 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: mainLabel
+      cls: w-title3
+      text: Layout
+    text: mainLabel
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: descLabel
+      text: Set the layout property to specify the layout of child components.
+    text: descLabel
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: rowTitle
+      title: Row
+    text: rowTitle
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: commonRowLabel
+      text: Common Row
+    text: commonRowLabel
+  - _expanded: false
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: unsetBtn
+        minWidth: 5em
+        text: Unset
+      text: unsetBtn
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: setWidthBtn
+        text: Set Width
+        width: 10em
+      text: setWidthBtn
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: flex1Btn
+        flex: '1'
+        text: Flex1
+      text: flex1Btn
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: flex2Btn
+        flex: '2'
+        text: Flex2
+      text: flex2Btn
+    - _expanded: true
+      _icon: button
+      cls: Wb.Button
+      properties:
+        cid: customFlexBtn
+        flex: 2 0 12em
+        text: Custom Flex
+      text: customFlexBtn
+    properties:
+      autoScroll: 'true'
+      cid: rowCt
+      frame: 'true'
+      layout: row
+    text: rowCt
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: autoWrapRowLabel
+      text: Row with auto wrap
+    text: autoWrapRowLabel
+  - _expanded: false
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button1
+        text: Button1
+      text: button1
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button2
+        text: Button2
+        width: 20em
+      text: button2
+    - _expanded: true
+      _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button3
+        text: Button3
+        width: 30em
+      text: button3
+    - _expanded: true
+      _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button4
+        text: Button4
+        width: 40em
+      text: button4
+    - _expanded: true
+      _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button5
+        text: Button5
+      text: button5
+    properties:
+      autoScroll: 'true'
+      cid: autoWrapRowCt
+      flexWrap: 'true'
+      frame: 'true'
+      gap: .5em
+      layout: row
+      padding: 'true'
+      resizable: 'true'
+    text: autoWrapRowCt
+  - _expanded: true
+    _icon: label
+    cls: Wb.Label
+    properties:
+      cid: rowWithFlexLabel
+      text: Row with flex
+    text: rowWithFlexLabel
+  - _expanded: false
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: unsetBtn
+        text: Unset
+      text: unsetBtn
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: setWidthBtn
+        text: Set Width
+        width: 10em
+      text: setWidthBtn
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: flex1Btn
+        flex: '1'
+        text: Flex1
+      text: flex1Btn
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: flex2Btn
+        flex: '2'
+        text: Flex2
+      text: flex2Btn
+    - _expanded: true
+      _icon: button
+      cls: Wb.Button
+      properties:
+        cid: customFlexBtn
+        flex: 2 0 12em
+        text: Custom Flex
+      text: customFlexBtn
+    properties:
+      autoScroll: 'true'
+      cid: rowFlexCt
+      frame: 'true'
+      gap: 'true'
+      layout: row
+      padding: 'true'
+    text: rowFlexCt
+  - _expanded: true
+    _icon: label
+    cls: Wb.Label
+    properties:
+      cid: rowWithJustifyCenterLabel
+      text: Row with justify center
+    text: rowWithJustifyCenterLabel
+  - _expanded: false
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _expanded: true
+      _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button1
+        text: Button1
+      text: button1
+    - _expanded: true
+      _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button2
+        text: Button2
+      text: button2
+    - _expanded: false
+      _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button3
+        text: Button3
+      text: button3
+    properties:
+      autoScroll: 'true'
+      cid: rowWithJustifyCenterCt
+      frame: 'true'
+      justify: center
+      layout: row
+    text: rowWithJustifyCenterCt
+  - _expanded: true
+    _icon: label
+    cls: Wb.Label
+    properties:
+      cid: rowWithAlignJustifyLabel
+      text: Row with align and justify
+    text: rowWithAlignJustifyLabel
+  - _expanded: false
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _expanded: true
+      _icon: button
+      cls: Wb.Button
+      properties:
+        alignSelf: start
+        cid: button1
+        text: Button1
+      text: button1
+    - _expanded: true
+      _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button2
+        text: Button2
+      text: button2
+    - _expanded: false
+      _icon: button
+      cls: Wb.Button
+      properties:
+        alignSelf: end
+        cid: button3
+        text: Button3
+      text: button3
+    - _expanded: false
+      _icon: button
+      cls: Wb.Button
+      properties:
+        alignSelf: stretch
+        cid: button4
+        text: Button4
+      text: button4
+    properties:
+      align: center
+      autoScroll: 'true'
+      cid: rowWithAlignJustifyCt
+      frame: 'true'
+      gap: .5em
+      height: 8em
+      justify: end
+      layout: row
+      padding: 'true'
+    text: rowWithAlignJustifyCt
+  - _expanded: true
+    _icon: label
+    cls: Wb.Label
+    properties:
+      cid: rowWithBetweenLabel
+      text: Row with justify between
+    text: rowWithBetweenLabel
+  - _expanded: false
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _expanded: true
+      _icon: button
+      cls: Wb.Button
+      properties:
+        alignSelf: start
+        cid: button1
+        text: Button1
+      text: button1
+    - _expanded: true
+      _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button2
+        text: Button2
+      text: button2
+    - _expanded: false
+      _icon: button
+      cls: Wb.Button
+      properties:
+        alignSelf: end
+        cid: button3
+        text: Button3
+      text: button3
+    - _expanded: false
+      _icon: button
+      cls: Wb.Button
+      properties:
+        alignSelf: stretch
+        cid: button4
+        text: Button4
+      text: button4
+    properties:
+      align: center
+      autoScroll: 'true'
+      cid: rowWithBetweenCt
+      frame: 'true'
+      gap: .5em
+      height: 8em
+      justify: space-between
+      layout: row
+      padding: 'true'
+    text: rowWithBetweenCt
+  - _expanded: true
+    _icon: label
+    cls: Wb.Label
+    properties:
+      cid: rowWithAroundLabel
+      text: Row with justify around
+    text: rowWithAroundLabel
+  - _expanded: false
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _expanded: true
+      _icon: button
+      cls: Wb.Button
+      properties:
+        alignSelf: start
+        cid: button1
+        text: Button1
+      text: button1
+    - _expanded: true
+      _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button2
+        text: Button2
+      text: button2
+    - _expanded: false
+      _icon: button
+      cls: Wb.Button
+      properties:
+        alignSelf: end
+        cid: button3
+        text: Button3
+      text: button3
+    - _expanded: false
+      _icon: button
+      cls: Wb.Button
+      properties:
+        alignSelf: stretch
+        cid: button4
+        text: Button4
+      text: button4
+    properties:
+      align: center
+      autoScroll: 'true'
+      cid: rowWithAroundCt
+      frame: 'true'
+      gap: .5em
+      height: 8em
+      justify: space-around
+      layout: row
+      padding: 'true'
+    text: rowWithAroundCt
+  - _expanded: true
+    _icon: label
+    cls: Wb.Label
+    properties:
+      cid: rowWithFillLabel
+      text: Row with fill
+    text: rowWithFillLabel
+  - _expanded: false
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _expanded: true
+      _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button1
+        text: Button1
+      text: button1
+    - _expanded: true
+      _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button2
+        text: Button2
+      text: button2
+    - _expanded: false
+      _icon: right1
+      cls: Wb.Fill
+      properties:
+        cid: fill1
+      text: fill1
+    - _expanded: true
+      _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button3
+        text: Button3
+      text: button3
+    - _expanded: true
+      _icon: right1
+      cls: Wb.Fill
+      properties:
+        cid: fill2
+      text: fill2
+    - _expanded: false
+      _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button4
+        text: Button4
+      text: button4
+    properties:
+      autoScroll: 'true'
+      cid: rowWithFillCt
+      frame: 'true'
+      layout: row
+    text: rowWithFillCt
+  - _expanded: true
+    _icon: title
+    cls: Wb.Title
+    properties:
+      cid: columnTitle
+      title: Column
+    text: columnTitle
+  - _expanded: false
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: unsetBtn
+        minWidth: 5em
+        text: Unset
+      text: unsetBtn
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: setHeightBtn
+        height: 3em
+        text: Set Height
+      text: setHeightBtn
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: flex1Btn
+        flex: '1'
+        text: Flex1
+      text: flex1Btn
+    - _expanded: true
+      _icon: button
+      cls: Wb.Button
+      properties:
+        cid: customFlexBtn
+        flex: 2 0 1em
+        text: Custom Flex
+      text: customFlexBtn
+    properties:
+      autoScroll: 'true'
+      cid: columnCt
+      frame: 'true'
+      height: 15em
+      layout: column
+      width: 15em
+    text: columnCt
+  - _expanded: true
+    _icon: label
+    cls: Wb.Label
+    properties:
+      cid: plsReferRowLabel
+      text: Please refer to the above Row demos for more Column usages
+    text: plsReferRowLabel
+  - _expanded: true
+    _icon: title
+    cls: Wb.Title
+    properties:
+      cid: rowColBordersTitle
+      title: Row Column borders
+    text: rowColBordersTitle
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _icon: container
+      cls: Wb.Container
+      properties:
+        cid: topCt
+        frame: 'true'
+        height: 5em
+        layout: center
+        text: Top
+      text: topCt
+    - _icon: splitter
+      cls: Wb.Splitter
+      properties:
+        cid: splitter1
+      text: splitter1
+    - _expanded: true
+      _icon: container
+      cls: Wb.Container
+      items:
+      - _icon: container
+        cls: Wb.Container
+        properties:
+          cid: leftCt
+          frame: 'true'
+          layout: center
+          text: Floatable Left
+          width: 10em
+        text: leftCt
+      - _icon: splitter
+        cls: Wb.Splitter
+        properties:
+          cid: splitter2
+          enterShowTarget: 'true'
+        text: splitter2
+      - _icon: container
+        cls: Wb.Container
+        properties:
+          cid: centerCt
+          flex: '1'
+          frame: 'true'
+          layout: center
+          text: Center
+        text: centerCt
+      - _icon: splitter
+        cls: Wb.Splitter
+        properties:
+          cid: splitter3
+        text: splitter3
+      - _icon: container
+        cls: Wb.Container
+        properties:
+          cid: rightCt
+          frame: 'true'
+          layout: center
+          text: Right
+          width: 10em
+        text: rightCt
+      properties:
+        cid: middleCt
+        flex: '1'
+        frame: 'true'
+        layout: row
+      text: middleCt
+    - _icon: splitter
+      cls: Wb.Splitter
+      properties:
+        cid: splitter4
+      text: splitter4
+    - _icon: container
+      cls: Wb.Container
+      properties:
+        cid: bottomCt
+        frame: 'true'
+        height: 5em
+        layout: center
+        text: Bottom
+      text: bottomCt
+    properties:
+      cid: rowColBordersCt
+      frame: 'true'
+      height: 20em
+      layout: column
+    text: rowColBordersCt
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: formTitle
+      title: Form
+    text: formTitle
+  - _expanded: true
+    _icon: label
+    cls: Wb.Label
+    properties:
+      cid: commonFormLabel
+      text: Common Form
+    text: commonFormLabel
+  - _expanded: false
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button1
+        text: Button1
+      text: button1
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button2
+        text: Button2
+        width: 20em
+      text: button2
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button3
+        text: Button3
+        width: 30em
+      text: button3
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button4
+        text: Button4
+      text: button4
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button5
+        text: Button5
+      text: button5
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button6
+        text: Button6
+      text: button6
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button7
+        text: Button7
+        width: 25em
+      text: button7
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button8
+        text: Button8
+      text: button8
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button9
+        text: Button9
+      text: button9
+    properties:
+      cid: formCt
+      frame: 'true'
+      layout: form
+    text: formCt
+  - _expanded: false
+    _icon: label
+    cls: Wb.Label
+    properties:
+      cid: formWithoutGapLabel
+      text: Form without gap
+    text: formWithoutGapLabel
+  - _expanded: false
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button1
+        text: Button1
+      text: button1
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button2
+        text: Button2
+        width: 20em
+      text: button2
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button3
+        text: Button3
+        width: 30em
+      text: button3
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button4
+        text: Button4
+      text: button4
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button5
+        text: Button5
+      text: button5
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button6
+        text: Button6
+      text: button6
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button7
+        text: Button7
+        width: 25em
+      text: button7
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button8
+        text: Button8
+      text: button8
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button9
+        text: Button9
+      text: button9
+    properties:
+      cid: formWithoutGapCt
+      frame: 'true'
+      gap: 'false'
+      layout: form
+      padding: 'true'
+    text: formWithoutGapCt
+  - _expanded: true
+    _icon: label
+    cls: Wb.Label
+    properties:
+      cid: form1Label
+      text: Form1 with textArea vertical flex
+    text: form1Label
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _icon: text
+      cls: Wb.Text
+      properties:
+        cid: text1
+        text: text1
+      text: text1
+    - _icon: textarea
+      cls: Wb.TextArea
+      properties:
+        cid: textArea1
+        flex: '1'
+        minHeight: 3em
+        text: textArea
+      text: textArea1
+    - _icon: text
+      cls: Wb.Text
+      properties:
+        cid: text2
+        text: text2
+      text: text2
+    properties:
+      cid: form1Ct
+      frame: 'true'
+      height: 15em
+      layout: form1
+      resizable: 'true'
+    text: form1Ct
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: gridTitle
+      title: Grid
+    text: gridTitle
+  - _expanded: false
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button1
+        text: Button1
+      text: button1
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button2
+        text: Button2
+      text: button2
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button3
+        text: Button3
+      text: button3
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button4
+        text: Button4
+      text: button4
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button5
+        text: Button5
+      text: button5
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button6
+        text: Button6
+      text: button6
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button7
+        text: Button7
+      text: button7
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button8
+        text: Button8
+      text: button8
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button9
+        text: Button9
+      text: button9
+    properties:
+      cid: gridCt
+      frame: 'true'
+      layout: grid
+    text: gridCt
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: customGridTitle
+      title: Grid with custom gap and padding
+    text: customGridTitle
+  - _expanded: false
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button1
+        text: Button1
+      text: button1
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button2
+        text: Button2
+      text: button2
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button3
+        text: Button3
+      text: button3
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button4
+        text: Button4
+      text: button4
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button5
+        text: Button5
+      text: button5
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button6
+        text: Button6
+      text: button6
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button7
+        text: Button7
+      text: button7
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button8
+        text: Button8
+      text: button8
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button9
+        text: Button9
+      text: button9
+    properties:
+      cid: customGridCt
+      frame: 'true'
+      gap: .5em
+      layout: grid
+      padding: 3em
+    text: customGridCt
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: grid1Title
+      title: Grid with 1 column
+    text: grid1Title
+  - _expanded: false
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button1
+        text: Button1
+      text: button1
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button2
+        text: Button2
+      text: button2
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button3
+        text: Button3
+      text: button3
+    properties:
+      cid: grid1Ct
+      frame: 'true'
+      layout: grid1
+    text: grid1Ct
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: grid5Title
+      title: Grid with 5 columns
+    text: grid5Title
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button1
+        text: Button1
+      text: button1
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button2
+        text: Button2
+      text: button2
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button3
+        gridColumn: span 3
+        text: Span 3
+      text: button3
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button4
+        text: Button4
+      text: button4
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button5
+        gridColumn: span 3
+        gridRow: span 2
+        text: Span 3 / 2
+      text: button5
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button6
+        text: Button6
+      text: button6
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button7
+        text: Button7
+      text: button7
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button8
+        text: Button8
+      text: button8
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button9
+        text: Button9
+      text: button9
+    - _icon: component
+      cls: Wb.Component
+      properties:
+        cid: component1
+      text: component1
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button10
+        text: Button10
+      text: button10
+    - _icon: right1
+      cls: Wb.Fill
+      properties:
+        cid: fill1
+      text: fill1
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button11
+        text: Button11
+      text: button11
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button12
+        text: Button12
+      text: button12
+    - _icon: space
+      cls: Wb.Space
+      properties:
+        cid: space1
+      text: space1
+    - _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button13
+        text: Button13
+      text: button13
+    - _expanded: true
+      _icon: container
+      cls: Wb.Container
+      items:
+      - _icon: button
+        cls: Wb.Button
+        properties:
+          cid: button14
+          text: Sub1
+        text: button14
+      - _icon: button
+        cls: Wb.Button
+        properties:
+          cid: button15
+          text: Sub2
+        text: button15
+      - _icon: button
+        cls: Wb.Button
+        properties:
+          cid: button16
+          text: Sub3
+        text: button16
+      properties:
+        cid: container1
+        defaults: '({ flex: 1 })'
+        gap: .5em
+        gridColumn: span 2
+        layout: row
+      text: container1
+    properties:
+      cid: grid5Ct
+      frame: 'true'
+      layout: grid5
+    text: grid5Ct
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: gridTableStyleTitle
+      title: Grid Table Style
+    text: gridTableStyleTitle
+  - _expanded: false
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _icon: text
+      cls: Wb.Text
+      properties:
+        cid: text1
+        text: text1
+      text: text1
+    - _expanded: true
+      _icon: text
+      cls: Wb.Text
+      properties:
+        cid: text2
+        text: text2
+      text: text2
+    - _expanded: true
+      _icon: text
+      cls: Wb.Text
+      properties:
+        cid: text3
+        text: text3
+      text: text3
+    - _expanded: true
+      _icon: text
+      cls: Wb.Text
+      properties:
+        cid: text4
+        text: text4
+      text: text4
+    - _icon: right1
+      cls: Wb.Fill
+      properties:
+        cid: fill1
+      text: fill1
+    - _expanded: true
+      _icon: text
+      cls: Wb.Text
+      properties:
+        cid: text5
+        text: text5
+      text: text5
+    - _expanded: true
+      _icon: text
+      cls: Wb.Text
+      properties:
+        cid: text6
+        gridColumn: span 2
+        text: text6
+      text: text6
+    - _icon: line
+      cls: Wb.Line
+      properties:
+        cid: line1
+        dashed: 'true'
+        dimTitle: 'true'
+        title: Split Line
+      text: line1
+    - _expanded: true
+      _icon: text
+      cls: Wb.Text
+      properties:
+        cid: text7
+        text: text7
+      text: text7
+    - _expanded: true
+      _icon: text
+      cls: Wb.Text
+      properties:
+        cid: text8
+        text: text8
+      text: text8
+    - _expanded: true
+      _icon: space
+      cls: Wb.Space
+      properties:
+        cid: space1
+      text: space1
+    - _icon: button
+      cls: Wb.Button
+      events:
+        click: app.gridTableStyleCt.tableStyle = !app.gridTableStyleCt.tableStyle;
+      properties:
+        cid: toggleTableStyleBtn
+        text: Toggle Table Style
+      text: toggleTableStyleBtn
+    properties:
+      cid: gridTableStyleCt
+      frame: 'true'
+      layout: grid3
+      tableStyle: 'true'
+    text: gridTableStyleCt
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: gridLastRowAutoFit
+      title: Grid Last Row Auto Fit
+    text: gridLastRowAutoFit
+  - _expanded: false
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _icon: text
+      cls: Wb.Text
+      properties:
+        cid: text1
+        text: text1
+      text: text1
+    - _expanded: true
+      _icon: text
+      cls: Wb.Text
+      properties:
+        cid: text2
+        text: text2
+      text: text2
+    - _expanded: true
+      _icon: text
+      cls: Wb.Text
+      properties:
+        cid: text3
+        text: text3
+      text: text3
+    - _expanded: true
+      _icon: text
+      cls: Wb.Text
+      properties:
+        cid: text4
+        text: text4
+      text: text4
+    - _icon: textarea
+      cls: Wb.TextArea
+      properties:
+        cid: textArea1
+        gridColumn: span 2
+      text: textArea1
+    properties:
+      cid: gridLastRowAutoFitCt
+      frame: 'true'
+      gridTplRows: auto auto 1fr
+      height: 15em
+      layout: grid2
+    text: gridLastRowAutoFitCt
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: fitTitle
+      title: Fit
+    text: fitTitle
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _expanded: true
+      _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button1
+        text: Auto fit to container
+      text: button1
+    properties:
+      cid: fitCt
+      frame: 'true'
+      height: 5em
+      layout: fit
+      padding: 1em
+      width: 15em
+    text: fitCt
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: centerTitle
+      title: Center
+    text: centerTitle
+  - _expanded: true
+    _icon: label
+    cls: Wb.Label
+    properties:
+      cid: centerDescLabel
+      text: The center point of the child control is always located at the center
+        point of the container, crop components when it overflow.
+    text: centerDescLabel
+  - _expanded: false
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _expanded: true
+      _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button1
+        height: 3em
+        text: Center
+        width: 20em
+      text: button1
+    properties:
+      autoScroll: 'true'
+      cid: centerCt
+      frame: 'true'
+      height: 5em
+      layout: center
+      resizable: 'true'
+    text: centerCt
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: middleTitle
+      title: Middle
+    text: middleTitle
+  - _expanded: true
+    _icon: label
+    cls: Wb.Label
+    properties:
+      cid: middleDesc
+      text: Center horizontally and vertically. Do not crop components when it overflow.
+    text: middleDesc
+  - _expanded: false
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _expanded: true
+      _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button1
+        height: 3em
+        text: Middle
+        width: 20em
+      text: button1
+    properties:
+      autoScroll: 'true'
+      cid: middleCt
+      frame: 'true'
+      height: 5em
+      layout: middle
+      resizable: 'true'
+    text: middleCt
+  - _expanded: true
+    _icon: label
+    cls: Wb.Label
+    properties:
+      cid: hmiddleDesc
+      text: Center horizontally. Do not crop components when it overflow.
+    text: hmiddleDesc
+  - _expanded: false
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _expanded: true
+      _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button1
+        height: 3em
+        text: hMiddle
+        width: 20em
+      text: button1
+    properties:
+      autoScroll: 'true'
+      cid: hmiddleCt
+      frame: 'true'
+      height: 5em
+      layout: hmiddle
+      resizable: 'true'
+    text: hmiddleCt
+  - _expanded: true
+    _icon: label
+    cls: Wb.Label
+    properties:
+      cid: vmiddleDesc
+      text: Center vertically. Do not crop components when it overflow.
+    text: vmiddleDesc
+  - _expanded: false
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _expanded: true
+      _icon: button
+      cls: Wb.Button
+      properties:
+        cid: button1
+        height: 3em
+        text: vMiddle
+        width: 20em
+      text: button1
+    properties:
+      autoScroll: 'true'
+      cid: vmiddleCt
+      frame: 'true'
+      height: 8em
+      layout: vmiddle
+      resizable: 'true'
+    text: vmiddleCt
+  properties:
+    cid: viewport1
+    layout: grid1
+  text: viewport1
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

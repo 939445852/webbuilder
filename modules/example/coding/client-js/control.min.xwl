@@ -1,0 +1,60 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+events:
+  initialize: 'Wb.make(app,{cname:"codeEditor",readonly:true,wrapBorder:0,value:"//Access
+    components and controls\n\n//General properties and functions\nlet text = control.text;
+    //Get label text of the control\ncontrol.text = ''text label''; //Text label\ncontrol.html
+    = ''html label''; //HTML label, this property is invalid after setting text property\ncontrol.width
+    = ''10em''; //Set width\ncontrol.height = 80; //Set height\ncontrol.visible =
+    false; //Hide control\ncontrol.hide(); //Same as above\ncontrol?.hide(); //Call
+    hide with optional chaining\ncontrol.visible = true; //Show control\ncontrol.show();
+    //Same as above\ncontrol.appeared = false; //Hide control(not drawn), but still
+    affects layout as normal.\ncontrol.setAppeared(false); //Same as above\ncontrol.disabled
+    = true; //Disable control\ncontrol.setDisabled(true); //Same as above\ncontrol.icon
+    = ''paste''; //Set icon\ncontrol.el.cls = ''cls1 cls2''; //Add cls1, cls2 class
+    name to control''s element\ncontrol.cls = ''cls1 cls2''; //Same as above\nconrols.el.removeCls(''cls1'');
+    //Remove control''s element class name\nconrols.removeCls(''cls1''); //Same as
+    above\ncontrol.el.setStyle(''color'', ''red''); //Set control''s element style\ncontrol.setStyle(''color'',
+    ''red''); //Same as above\ncontrol.el.removeStyle(''color''); //Remove control''s
+    element style\ncontrol.removeStyle(''color''); //Same as above\n\n//Add and delete
+    controls\npanel.insertBefore({ cname: ''text'' }, text1); //Insert a new text
+    box before text1\npanel.insertAfter({ cname: ''text'' }, text1); //Insert a new
+    text box after text1\npanel.insert(2, { cname: ''text'' }); //Insert a new text
+    box at the specific index\npanel.add({ cname: ''button'', text: ''My Button''
+    }); //Add components at the last\npanel.addHeader({ cname: ''text'' }); //Add
+    a text box as a sub-component in the panel header\npanel.addFooter({ cname: ''text''
+    }); //Add a text box as a sub-component in the panel footer\ncontrol.remove();
+    //Remove control (control is reusable)\npanel.removeAll(); //Remove all child
+    components in panel (components are reusable)\ncontrol.destroy(); //Destroy control
+    (Really delete)\npanel.destroyAll(); //Destroy all child components in panel (Really
+    delete)\n\n//Event and DOM listeners\npanel.on(''destroy'', app.onDestroy); //Add
+    component event\npanel.un(''destroy'', app.onDestroy); //Remove component event\npanel.mon(''keydown'',
+    app.onKeyDown); //Add dom listeners to panel''s element\npanel.mun(''keydown'',
+    app.onKeyDown); //Remove dom listeners from panel''s element\npanel.mon(DocEl,
+    ''keydown'', app.onKeyDown); //Add dom listeners to DocEl, the listener will be
+    removed after panel is destroyed.\npanel.mun(DocEl, ''keydown'', app.onKeyDown);
+    //Remove dom listeners from DocEl\n\n//Traverse and find\ncontrol = app.myControl;
+    //Down control by app\ncontrol = panel.find(''nameText''); //Find direct control
+    by cid\ncontrol = panel.find(item => item.visible && item.foo == ''bar''); //Find
+    direct control by function\ncontrol = panel.down(''myControl''); //Down control
+    by cid\ncontrol = panel.down(item => item.visible && item.foo == ''bar''); //Down
+    control by function\ncontrol = panel.children.myControl; //Down control by proxy
+    \"children\"\npanel = text.up(''myPanel''); //Up control by cid\npanel = text.up(item
+    => item.visible && item.foo == ''bar''); //Up control by function\ncomps = panel.filter(fn);
+    //Find all direct comps by function\ncomps = panel.downAll(fn); //Down all comps
+    by function\ncomps = text.upAll(fn); //Up all comps by function\npanel.each(item
+    => console.log(item)); // Each direct child comps\npanel.eachOwned(item => console.log(item));
+    // Each sub-comps\npanel.eachWhole(item => console.log(item)); //Each direct child
+    comps and sub-comps\npanel.cascade(item => console.log(item)); //Cascade comps\npanel.bubble(item
+    => console.log(item)); //Bubble comps\ncontrol = comp.nextSibling; //Gets comp''s
+    next sibling\ncontrol = comp.previousSibling; //Gets comp''s previous sibling",cid:"codeEditor1",full:true});'
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  links: '["wb/js/monaco.js"]'
+tags: ''
+text: module
+title: ''

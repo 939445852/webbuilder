@@ -1,0 +1,255 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: list1
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _icon: label
+    cls: Wb.Label
+    properties:
+      cid: mainLabel
+      cls: w-title3
+      text: Miscellaneous comps
+    text: mainLabel
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: controlCtTitle
+      title: ControlCt
+    text: controlCtTitle
+  - _expanded: true
+    _icon: label
+    cls: Wb.Label
+    properties:
+      cid: controlCtLabel
+      text: Control container, like a control with a label, can also add child controls.
+    text: controlCtLabel
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _expanded: true
+      _icon: model
+      cls: Wb.ControlCt
+      items:
+      - _expanded: true
+        _icon: text
+        cls: Wb.Text
+        properties:
+          cid: text1
+        text: text1
+      - _icon: label
+        cls: Wb.Label
+        properties:
+          cid: label1
+          text: Label
+        text: label1
+      - _expanded: true
+        _icon: button
+        cls: Wb.Button
+        properties:
+          cid: button1
+          text: Button
+        text: button1
+      properties:
+        cid: controlCt
+        layout: form
+        text: Container label
+      text: controlCt
+    - _icon: text
+      cls: Wb.Text
+      properties:
+        cid: controlCtAlignText
+        text: Other control
+      text: controlCtAlignText
+    properties:
+      cid: controlCtCt
+      frame: 'true'
+      layout: grid1
+    text: controlCtCt
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: scrolledCtTitle
+      title: ScrolledCt
+    text: scrolledCtTitle
+  - _expanded: true
+    _icon: label
+    cls: Wb.Label
+    properties:
+      cid: scrolledCtLabel
+      text: Scrolled container can automatically scroll without scrollbar.
+    text: scrolledCtLabel
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _expanded: true
+      _icon: position
+      cls: Wb.ScrolledCt
+      items:
+      - _icon: button
+        cls: Wb.Button
+        properties:
+          cid: button1
+          text: Button1
+        text: button1
+      - _icon: button
+        cls: Wb.Button
+        properties:
+          cid: button2
+          text: Button2
+        text: button2
+      - _icon: button
+        cls: Wb.Button
+        properties:
+          cid: button3
+          text: Button3
+        text: button3
+      - _icon: button
+        cls: Wb.Button
+        properties:
+          cid: button4
+          text: Button4
+        text: button4
+      - _icon: button
+        cls: Wb.Button
+        properties:
+          cid: button5
+          text: Button5
+        text: button5
+      - _icon: button
+        cls: Wb.Button
+        properties:
+          cid: button6
+          text: Button6
+        text: button6
+      properties:
+        cid: scrolledCt
+        gap: 'true'
+        layout: row
+        padding: 'true'
+        width: 30em
+      text: scrolledCt
+    properties:
+      cid: scrolledCtCt
+      frame: 'true'
+      layout: grid1
+    text: scrolledCtCt
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: carouselTitle
+      title: Carousel
+    text: carouselTitle
+  - _expanded: true
+    _icon: label
+    cls: Wb.Label
+    properties:
+      cid: carouselLabel
+      text: Automatic carousel play container.
+    text: carouselLabel
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _expanded: true
+      _icon: play1
+      cls: Wb.Carousel
+      items:
+      - _icon: component
+        cls: Wb.Component
+        properties:
+          background: '#f88'
+          cid: component1
+          cls: w-center
+          style: color:#fff
+          text: Comp1
+        text: component1
+      - _icon: component
+        cls: Wb.Component
+        properties:
+          background: '#8f8'
+          cid: component2
+          cls: w-center
+          style: color:#000
+          text: Comp2
+        text: component2
+      - _icon: component
+        cls: Wb.Component
+        properties:
+          background: '#ababf7'
+          cid: component3
+          cls: w-center
+          style: color:#fff
+          text: Comp3
+        text: component3
+      - _icon: component
+        cls: Wb.Component
+        properties:
+          background: '#3bdbd9'
+          cid: component4
+          cls: w-center
+          style: color:#fff
+          text: Comp4
+        text: component4
+      properties:
+        cid: carousel1
+        frame: 'true'
+        height: 8em
+        interval: '2000'
+      text: carousel1
+    properties:
+      cid: carouselCt
+      frame: 'true'
+      layout: grid1
+    text: carouselCt
+  - _icon: title
+    cls: Wb.Title
+    properties:
+      cid: progressBarTitle
+      title: ProgressBar
+    text: progressBarTitle
+  - _expanded: true
+    _icon: label
+    cls: Wb.Label
+    properties:
+      cid: progressBarLabel
+      text: Display progress through graphics and text.
+    text: progressBarLabel
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _icon: progress
+      cls: Wb.ProgressBar
+      properties:
+        cid: progressBar1
+        value: '35'
+      text: progressBar1
+    - _icon: progress
+      cls: Wb.ProgressBar
+      properties:
+        cid: progressBar2
+        progressText: Copying files
+        value: '68.5'
+      text: progressBar2
+    properties:
+      cid: progressBarCt
+      frame: 'true'
+      layout: grid1
+    text: progressBarCt
+  properties:
+    cid: viewport1
+    layout: grid1
+  text: viewport1
+properties:
+  cid: module
+tags: ''
+text: module
+title: ''

@@ -1,0 +1,14 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Export data to the client
+  serverScript: Wb.checkDemo();function main(){let e,t=Params.tableName,a=new java.io.BufferedWriter(new
+    java.io.OutputStreamWriter(new Classes.GZIPOutputStream(response.getOutputStream()),"utf-8"));Wb.setContentType(t+".wbt",true);e=Params.data;if(e)e=Wb.decodeBase64(e);else
+    e="select * from "+t;Wb.sql({sql:e,db:Params.db,blob:"text",fn(e){a.write(Wb.encode(e));a.write("\n")}});a.close()}main();
+tags: ''
+text: module
+title: ''

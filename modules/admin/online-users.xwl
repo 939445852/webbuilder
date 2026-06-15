@@ -1,0 +1,180 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: earth
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _expanded: true
+    _icon: grid
+    cls: Wb.Grid
+    events:
+      selectionchange: |-
+        let userid = this.selection?.data.userid;
+
+        if (userid)
+          app.sessionGrid.load({ params: { userid } });
+    items:
+    - _expanded: true
+      _icon: array
+      cls: Wb.Array
+      items:
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: rowCol
+          rowNum: 'true'
+        text: rowCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: usernameCol
+          fieldName: username
+          render: |-
+            let ct = data.sessions;
+            if (ct > 1)
+              return value + ' (' + ct + ')';
+            else
+              return value;
+          text: '@Str.username'
+          width: 12em
+        text: usernameCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: dispnameCol
+          fieldName: dispname
+          text: '@Str.displayName'
+          width: 12em
+        text: dispnameCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: ipCol
+          fieldName: ip
+          text: '@Str.ip'
+          width: 18em
+        text: ipCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: createTimeCol
+          fieldName: createTime
+          text: '@Str.createTime'
+          width: 13em
+        text: createTimeCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: lastAccessTimeCol
+          fieldName: lastAccessTime
+          text: '@Str.lastAccessTime'
+          width: 13em
+        text: lastAccessTimeCol
+      properties:
+        cid: columns
+      text: columns
+    - _expanded: true
+      _icon: toolbar
+      cls: Wb.Toolbar
+      items:
+      - _expanded: true
+        _icon: item
+        cls: Wb.Item
+        events:
+          click: app.userGrid.removeRecords(xpath + '/remove-sessions', 'username',
+            null, null, null, Str.logout);
+        properties:
+          cid: delItem
+          icon: delete
+          text: '@Str.logout'
+        text: delItem
+      properties:
+        cid: tbar
+        isProperty: 'true'
+      text: tbar
+    properties:
+      autoSelect: 'true'
+      cid: userGrid
+      flex: '1'
+      multiSelect: 'true'
+      textSelectable: 'true'
+      url: '@xpath + ''/select-users'''
+    text: userGrid
+  - _icon: splitter
+    cls: Wb.Splitter
+    properties:
+      cid: splitter1
+    text: splitter1
+  - _expanded: true
+    _icon: grid
+    cls: Wb.Grid
+    items:
+    - _expanded: true
+      _icon: array
+      cls: Wb.Array
+      items:
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: rowCol
+          rowNum: 'true'
+        text: rowCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: ipCol
+          fieldName: ip
+          text: '@Str.ip'
+          width: 18em
+        text: ipCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: createTimeCol
+          fieldName: createTime
+          text: '@Str.createTime'
+          width: 13em
+        text: createTimeCol
+      - _expanded: true
+        _icon: column
+        cls: Wb.Column
+        properties:
+          cid: lastAccessTimeCol
+          fieldName: lastAccessTime
+          text: '@Str.lastAccessTime'
+          width: 13em
+        text: lastAccessTimeCol
+      properties:
+        cid: columns
+      text: columns
+    properties:
+      autoLoad: 'false'
+      cid: sessionGrid
+      height: 14em
+      textSelectable: 'true'
+      url: '@xpath + ''/select-sessions'''
+    text: sessionGrid
+  properties:
+    cid: viewport1
+    layout: column
+  text: viewport1
+properties:
+  cid: module
+  remark: View online users
+tags: ''
+text: module
+title: '@onlineUsers'

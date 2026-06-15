@@ -1,0 +1,73 @@
+_expanded: true
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+items:
+- _expanded: true
+  _icon: viewport
+  cls: Wb.Viewport
+  items:
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _icon: module
+      cls: Wb.Xwl
+      properties:
+        cid: userXwl
+        container: '({ padding: ''.5em'' })'
+        path: admin/user.xwl
+        ready: |-
+          // parentApp in user.xwl is app of this module
+          // parentContainer in user.xwl is Wb.Container of the user.xwl wrapper
+          scope.viewport1.title = 'User Module'; // same as app.userXwl.viewport1.title = 'User Module';
+          container.border = 1;
+      text: userXwl
+    properties:
+      cid: container1
+      layout: fit
+      width: 50%
+    text: container1
+  - _expanded: true
+    _icon: splitter
+    cls: Wb.Splitter
+    properties:
+      cid: splitter1
+    text: splitter1
+  - _expanded: true
+    _icon: container
+    cls: Wb.Container
+    items:
+    - _icon: module
+      cls: Wb.Xwl
+      properties:
+        cid: dbeXwl
+        container: '({ padding: ''.5em'' })'
+        path: admin/dbe.xwl
+        ready: |-
+          scope.viewport1.title = 'DBE Module';
+          container.border = 1;
+      text: dbeXwl
+    properties:
+      cid: container2
+      flex: '1'
+      layout: fit
+    text: container2
+  properties:
+    cid: viewport1
+    layout: row
+  text: viewport1
+properties:
+  cid: module
+  description: |-
+    Please note that since the xwl module can be recursively loaded,
+    its dependent js/css resources need to be explicitly loaded in the module's links property
+  links: |-
+    [
+      "wb/js/monaco.js"
+    ]
+tags: ''
+text: module
+title: ''

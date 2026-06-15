@@ -1,0 +1,10 @@
+{
+  "title": "",
+  "icon": "",
+  "img": "",
+  "hideInMenu": "true",
+  "items": [
+    "create-chart.xwl",
+    "get-chart-data.xwl"
+  ]
+}

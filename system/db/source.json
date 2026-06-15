@@ -1,0 +1,26 @@
+{
+  "system": {
+    "desc": "Embedded derby database",
+    "driverClassName": "org.apache.derby.jdbc.EmbeddedDriver",
+    "url": "jdbc:derby:$$wb/system/db/derby;create=true",
+    "disableConnectionPooling": false,
+    "cacheState": true,
+    "autoCommitOnReturn": true,
+    "rollbackOnReturn": true,
+    "maxTotal": 200,
+    "maxIdle": 10,
+    "testOnCreate": false,
+    "testOnBorrow": false,
+    "testOnReturn": false,
+    "testWhileIdle": false,
+    "logExpiredConnections": false,
+    "lifo": true,
+    "poolPreparedStatements": false,
+    "accessToUnderlyingConnectionAllowed": false,
+    "removeAbandonedOnMaintenance": false,
+    "removeAbandonedOnBorrow": false,
+    "logAbandoned": false,
+    "abandonedUsageTracking": false,
+    "fastFailValidation": false
+  }
+}

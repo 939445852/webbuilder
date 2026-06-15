@@ -1,0 +1,14 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Save desktop
+  serverScript: function main(){let{value:e,asDefault:t}=Params;if(!e.portlets){let
+    t=Wb.getResource(["desktop","desktop"],[null,"system"]);t=t[0]??t[1];if(t?.portlets)e.portlets=t.portlets}if(t)Wb.permitx("set-resource-all")&&Wb.run("set-resource-all");else
+    Wb.permitx("set-resource")&&Wb.run("set-resource")}main();
+tags: ''
+text: module
+title: ''

@@ -1,0 +1,36 @@
+_icon: module
+cls: Wb.Module
+hideInMenu: 'false'
+icon: ''
+img: ''
+properties:
+  cid: module
+  remark: Select config items
+  serverScript: |-
+    function main() {
+      let items = [], path = Params.path + '.', pos = path.length, name, value, type,
+        object = new Wb.File(true, 'wb/system/config.json').object;
+
+      Wb.each(object, (k, v) => {
+        if (k.startsWith(path)) {
+          name = k.substr(pos);
+          if (!name.includes('.')) {
+            v = object[k];
+            value = v.value;
+            type = v.type;
+            if (type == 'object' || type == 'array')
+              value = Wb.encode(value);
+            items.push({
+              name, value, type, list: Wb.encode(v.list),
+              desc: v?.[Str.lang] ?? v?.text
+            });
+          }
+        }
+      });
+      items.mixSort('name');
+      Wb.send(items);
+    }
+    main();
+tags: ''
+text: module
+title: ''
